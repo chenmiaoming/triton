@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <cstring>
 #include <iterator>
 #include <numeric>
 
@@ -37,6 +39,44 @@ static Attribute pickDescriptorLoadStoreLayout(int numWarps, int threadsPerWarp,
   int maxVectorSize = 128 / type.getElementTypeBitWidth();
 
   int vectorSize = std::min(numElemsPerThread, maxVectorSize);
+
+  // EXPERIMENT ONLY: allow explicit override of descriptor load contiguous sizePerThread
+  const char *expEnv = std::getenv("TRITON_TMA_REDUCTION_LAYOUT_EXPERIMENT");
+  if (expEnv && std::strlen(expEnv) > 0 && std::strcmp(expEnv, "default") != 0) {
+    char *end = nullptr;
+    long forcedVec = std::strtol(expEnv, &end, 10);
+    if (*end != '\0' || forcedVec < 1) {
+      llvm::report_fatal_error(
+          llvm::Twine("candidate invalid: invalid TRITON_TMA_REDUCTION_LAYOUT_EXPERIMENT value '") + expEnv + "'");
+    }
+    // Validation:
+    // 1. Must not exceed 128 bits / element bitwidth
+    if (forcedVec > maxVectorSize) {
+      llvm::report_fatal_error(
+          llvm::Twine("candidate invalid: forced vector size ") + llvm::Twine(forcedVec) +
+          " exceeds maxVectorSize " + llvm::Twine(maxVectorSize));
+    }
+    // 2. Must not exceed numElemsPerThread
+    if (forcedVec > numElemsPerThread) {
+      llvm::report_fatal_error(
+          llvm::Twine("candidate invalid: forced vector size ") + llvm::Twine(forcedVec) +
+          " exceeds numElemsPerThread " + llvm::Twine(numElemsPerThread));
+    }
+    // 3. Contiguous dimension size must be divisible by forcedVec
+    int64_t contiguousDim = shapePerCTA.back();
+    if (contiguousDim % forcedVec != 0) {
+      llvm::report_fatal_error(
+          llvm::Twine("candidate invalid: contiguous dimension ") + llvm::Twine(contiguousDim) +
+          " not divisible by forced vector size " + llvm::Twine(forcedVec));
+    }
+    // 4. Must be a power of 2
+    if ((forcedVec & (forcedVec - 1)) != 0) {
+      llvm::report_fatal_error(
+          llvm::Twine("candidate invalid: forced vector size ") + llvm::Twine(forcedVec) +
+          " is not a power of 2");
+    }
+    vectorSize = forcedVec;
+  }
   SmallVector<unsigned> sizePerThread(type.getRank(), 1);
   sizePerThread.back() = vectorSize;
 
