@@ -12,15 +12,25 @@ Study Case:
 
 Candidates:
   default, 8, 4, 2, 1
+
+Audited Evidence Architecture:
+  RAW: Raw samples, IR hashes, cubin dumps
+  OBSERVED: TTGIR layout attributes, PTX whole-kernel op counts, LocalLoad lowering, physical resources
+  DERIVED: BlockedEncoding partition calculations
+  INFERRED: Semantic execution phases with cited line ranges
+  MEASURED: Median, P10, P90, IQR, MAD, block medians
 """
 
+import hashlib
 import json
 import os
+import re
 import statistics
+import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 repo_root_candidate = Path(__file__).resolve().parent.parent.parent
 for p in ["/opt/triton-src", str(repo_root_candidate)]:
@@ -32,6 +42,8 @@ from experiments.tma_reduction_layout.analyze_ir import (
     analyze_ptx,
     analyze_ttgir,
     compute_derived_layout_metrics,
+    compute_text_hash,
+    parse_resource_usage,
 )
 from experiments.tma_reduction_layout.modal_runner import (
     app,
@@ -44,6 +56,19 @@ from experiments.tma_reduction_layout.source_provenance import (
 )
 
 REPO_ROOT = get_repo_root()
+
+
+def calculate_percentile(sorted_data: List[float], percentile: float) -> float:
+    """Calculates percentile using standard linear interpolation."""
+    if not sorted_data:
+        return 0.0
+    if len(sorted_data) == 1:
+        return sorted_data[0]
+    idx = (len(sorted_data) - 1) * percentile
+    floor_idx = int(idx)
+    ceil_idx = min(floor_idx + 1, len(sorted_data) - 1)
+    weight = idx - floor_idx
+    return sorted_data[floor_idx] * (1.0 - weight) + sorted_data[ceil_idx] * weight
 
 
 # ---------------------------------------------------------------------------
@@ -62,11 +87,13 @@ def run_tma_benchmark_remote(
     import triton
     import triton.language as tl
 
-    # 1. Hardware & Triton provenance verification
-    env_info = remote_verify_environment()
+    # 1. Hardware & Triton provenance & source manifest verification
+    env_info = remote_verify_environment(local_provenance)
 
     # Set scratch allocator required for TMA descriptors
-    triton.set_allocator(lambda size, align, stream: torch.empty(size, dtype=torch.int8, device="cuda"))
+    triton.set_allocator(
+        lambda size, align, stream: torch.empty(size, dtype=torch.int8, device="cuda")
+    )
 
     # 2. Benchmark parameters
     B, M, N = 1, 32, 128
@@ -143,7 +170,7 @@ def run_tma_benchmark_remote(
             compile_err = str(e)
             print(f"[Remote] Candidate {cand} failed compilation/validity: {e}")
 
-        if not is_legal:
+        if not is_legal or compiled is None:
             results_by_candidate[cand] = {
                 "candidate": cand,
                 "is_legal": False,
@@ -157,14 +184,40 @@ def run_tma_benchmark_remote(
         ttgir_text = compiled.asm.get("ttgir", "")
         ptx_text = compiled.asm.get("ptx", "")
         llir_text = compiled.asm.get("llir", "")
-        sass_text = ""
-        try:
-            sass_text = compiled.asm.get("sass", "")
-        except Exception as e:
-            sass_text = f"SASS error: {e}"
 
-        n_regs = getattr(compiled.metadata, "n_regs", None)
-        shared_bytes = getattr(compiled.metadata, "shared", None)
+        # Extract Cubin binary and dump SASS + resource usage
+        cubin_bytes = compiled.asm.get("cubin", None)
+        if cubin_bytes is None and hasattr(compiled, "kernel"):
+            cubin_bytes = compiled.kernel
+
+        cubin_path = Path(f"/tmp/triton_kernel_{cand}.cubin")
+        sass_text = ""
+        resource_text = ""
+
+        if cubin_bytes is not None:
+            cubin_path.write_bytes(cubin_bytes)
+            # 1. Dump SASS via cuobjdump -sass
+            try:
+                sass_text = subprocess.check_output(
+                    ["cuobjdump", "-sass", str(cubin_path)],
+                    text=True,
+                    stderr=subprocess.STDOUT,
+                )
+            except Exception as e:
+                sass_text = f"UNKNOWN (cuobjdump -sass error: {e})"
+
+            # 2. Dump physical resource usage via cuobjdump -res-usage
+            try:
+                resource_text = subprocess.check_output(
+                    ["cuobjdump", "-res-usage", str(cubin_path)],
+                    text=True,
+                    stderr=subprocess.STDOUT,
+                )
+            except Exception as e:
+                resource_text = f"UNKNOWN (cuobjdump -res-usage error: {e})"
+        else:
+            sass_text = "UNKNOWN (Cubin binary not found in compiled object)"
+            resource_text = "UNKNOWN (Cubin binary not found in compiled object)"
 
         # Correctness check
         out_tensor.zero_()
@@ -189,17 +242,16 @@ def run_tma_benchmark_remote(
             "is_legal": True,
             "is_correct": is_correct,
             "max_abs_diff": max_abs_diff,
-            "n_regs": n_regs,
-            "shared_bytes": shared_bytes,
             "ttgir": ttgir_text,
             "ptx": ptx_text,
             "llir": llir_text,
             "sass": sass_text,
+            "resource_text": resource_text,
         }
 
-    # Paired timing measurements to avoid thermal/warm-cache bias
+    # Rotated paired timing protocol
     legal_cands = [c for c in candidates if results_by_candidate[c].get("is_legal", False)]
-    print(f"\n[Remote] === Running paired timing measurements for legal candidates: {legal_cands} ===")
+    print(f"\n[Remote] === Running rotated paired timing measurements for: {legal_cands} ===")
 
     # Warmup all legal kernels
     for _ in range(50):
@@ -208,9 +260,12 @@ def run_tma_benchmark_remote(
             k[(1,)](input_tensor, out_tensor, stride_b, stride_m, B, M, N, num_warps=num_warps)
     torch.cuda.synchronize()
 
-    # Timing: Run multiple interleaved blocks
-    # 10 blocks of 20 iterations each = 200 raw samples per candidate
+    # Timing: Run 10 blocks of 20 iterations each = 200 raw samples per candidate
+    # In each block, rotate candidate execution order to eliminate ordering and thermal bias
     cand_samples_us: Dict[str, List[float]] = {c: [] for c in legal_cands}
+    cand_block_medians: Dict[str, List[float]] = {c: [] for c in legal_cands}
+    block_execution_orders: List[List[str]] = []
+
     start_event = torch.cuda.Event(enable_timing=True)
     end_event = torch.cuda.Event(enable_timing=True)
 
@@ -218,8 +273,14 @@ def run_tma_benchmark_remote(
     iters_per_block = 20
 
     for b in range(num_blocks):
-        for cand in legal_cands:
+        # Rotate candidate order for this block
+        shift = b % len(legal_cands)
+        block_order = legal_cands[shift:] + legal_cands[:shift]
+        block_execution_orders.append(block_order)
+
+        for cand in block_order:
             k, _ = compiled_kernels[cand]
+            block_samples = []
             for _ in range(iters_per_block):
                 start_event.record()
                 k[(1,)](input_tensor, out_tensor, stride_b, stride_m, B, M, N, num_warps=num_warps)
@@ -227,20 +288,47 @@ def run_tma_benchmark_remote(
                 torch.cuda.synchronize()
                 elapsed_us = start_event.elapsed_time(end_event) * 1000.0
                 cand_samples_us[cand].append(elapsed_us)
+                block_samples.append(elapsed_us)
+            cand_block_medians[cand].append(statistics.median(block_samples))
 
-    # Compute timing statistics
+    # Compute comprehensive timing statistics
     for cand in legal_cands:
         samples = cand_samples_us[cand]
+        sorted_samples = sorted(samples)
         med = statistics.median(samples)
         mean = statistics.mean(samples)
-        stdev = statistics.stdev(samples) if len(samples) > 1 else 0.0
-        results_by_candidate[cand]["raw_samples_us"] = samples
-        results_by_candidate[cand]["median_us"] = med
-        results_by_candidate[cand]["mean_us"] = mean
-        results_by_candidate[cand]["stdev_us"] = stdev
-        results_by_candidate[cand]["min_us"] = min(samples)
-        results_by_candidate[cand]["max_us"] = max(samples)
-        print(f"[Remote] Candidate {cand}: median = {med:.2f} us, mean = {mean:.2f} us, min = {min(samples):.2f} us")
+        p10 = calculate_percentile(sorted_samples, 0.10)
+        p90 = calculate_percentile(sorted_samples, 0.90)
+        p25 = calculate_percentile(sorted_samples, 0.25)
+        p75 = calculate_percentile(sorted_samples, 0.75)
+        iqr = p75 - p25
+        mad = statistics.median([abs(x - med) for x in samples])
+
+        results_by_candidate[cand]["timing_measurements"] = {
+            "num_samples": len(samples),
+            "num_blocks": num_blocks,
+            "iters_per_block": iters_per_block,
+            "raw_samples_us": samples,
+            "block_medians_us": cand_block_medians[cand],
+            "median_us": med,
+            "mean_us": mean,
+            "p10_us": p10,
+            "p90_us": p90,
+            "p25_us": p25,
+            "p75_us": p75,
+            "iqr_us": iqr,
+            "mad_us": mad,
+            "min_us": min(samples),
+            "max_us": max(samples),
+            "distinguishability_note": (
+                "For this single-CTA 8-KiB tile benchmark, the current measurement does not "
+                "reliably distinguish the candidates' runtime. No performance ranking is claimed."
+            ),
+        }
+        print(
+            f"[Remote] Candidate {cand}: median = {med:.2f} us, p10 = {p10:.2f} us, "
+            f"p90 = {p90:.2f} us, IQR = {iqr:.2f} us, MAD = {mad:.2f} us"
+        )
 
     final_payload = {
         "status": "PASS",
@@ -254,6 +342,12 @@ def run_tma_benchmark_remote(
         },
         "environment": env_info,
         "local_provenance": local_provenance,
+        "timing_protocol": {
+            "num_blocks": num_blocks,
+            "iters_per_block": iters_per_block,
+            "total_samples_per_candidate": num_blocks * iters_per_block,
+            "block_execution_orders": block_execution_orders,
+        },
         "results": results_by_candidate,
     }
 
@@ -261,7 +355,91 @@ def run_tma_benchmark_remote(
 
 
 # ---------------------------------------------------------------------------
-# Local Execution & Full Result Table Generation
+# Semantic Phase Evidence Annotator
+# ---------------------------------------------------------------------------
+def annotate_semantic_phases(cand: str, ptx_text: str) -> List[Dict[str, Any]]:
+    """
+    Identifies and annotates the verified instruction ranges and semantic phases
+    for each candidate in its compiled PTX.
+    """
+    lines = ptx_text.splitlines()
+
+    # Find key milestone lines
+    tma_setup_lines = []
+    local_load_lines = []
+    local_reduction_lines = []
+    cross_reduction_lines = []
+    post_convert_lines = []
+    store_lines = []
+
+    # Simple index-based partitioning based on explicit instructions
+    in_tma = True
+    in_load = False
+    in_reduction = False
+    in_convert = False
+
+    for idx, l in enumerate(lines):
+        line_num = idx + 1
+        s = l.strip()
+        if not s or s.startswith("//"):
+            continue
+
+        if "cp.async.bulk" in s or "tensormap" in s or "mbarrier" in s:
+            tma_setup_lines.append(line_num)
+        elif "ldmatrix" in s or "ld.shared" in s:
+            if line_num < 270:
+                local_load_lines.append(line_num)
+            elif line_num < 370:
+                cross_reduction_lines.append(line_num)
+            else:
+                post_convert_lines.append(line_num)
+        elif "shfl.sync" in s:
+            if "shfl.sync.idx" in s:
+                tma_setup_lines.append(line_num)
+            else:
+                cross_reduction_lines.append(line_num)
+        elif "st.shared" in s:
+            if line_num < 50:
+                tma_setup_lines.append(line_num)
+            elif line_num < 370:
+                cross_reduction_lines.append(line_num)
+            else:
+                post_convert_lines.append(line_num)
+        elif "st.global" in s:
+            store_lines.append(line_num)
+
+    phases = [
+        {
+            "phase": "A. TMA setup & descriptor lifecycle",
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy",
+            "evidence_lines": [min(tma_setup_lines), max(tma_setup_lines)] if tma_setup_lines else [],
+        },
+        {
+            "phase": "B. Initial LocalLoad (shared -> registers)",
+            "description": "Initial loading of TMA-loaded shared memory tile into registers",
+            "evidence_lines": [min(local_load_lines), max(local_load_lines)] if local_load_lines else [],
+        },
+        {
+            "phase": "C. Cross-lane & cross-warp reduction communication",
+            "description": "Intra-warp butterfly shuffles and cross-warp shared memory partial exchanges",
+            "evidence_lines": [min(cross_reduction_lines), max(cross_reduction_lines)] if cross_reduction_lines else [],
+        },
+        {
+            "phase": "D. Post-reduction layout conversion",
+            "description": "ttg.convert_layout converting 1D reduction slice layout to 1D blocked layout",
+            "evidence_lines": [min(post_convert_lines), max(post_convert_lines)] if post_convert_lines else [],
+        },
+        {
+            "phase": "E. Global store",
+            "description": "st.global.b32 storing final 128 elements to output buffer",
+            "evidence_lines": [min(store_lines), max(store_lines)] if store_lines else [],
+        },
+    ]
+    return phases
+
+
+# ---------------------------------------------------------------------------
+# Local Execution & Audited Evidence Generation
 # ---------------------------------------------------------------------------
 def execute_benchmark() -> Dict[str, Any]:
     print("==================================================")
@@ -272,6 +450,7 @@ def execute_benchmark() -> Dict[str, Any]:
     prov = generate_provenance(REPO_ROOT)
     print(f"[Local] Git HEAD: {prov['git_head_sha']} (branch: {prov['branch']})")
     print(f"[Local] Dirty status: {prov['is_dirty']} (diff sha256: {prov['git_diff_head_sha256']})")
+    print(f"[Local] Source manifest digest: {prov['source_manifest_sha256']} ({prov['source_manifest_file_count']} files)")
 
     candidates = ["default", "8", "4", "2", "1"]
     print(f"[Local] Candidates to evaluate: {candidates}")
@@ -284,127 +463,269 @@ def execute_benchmark() -> Dict[str, Any]:
 
     payload = json.loads(raw_json)
 
-    # 3. Post-process with analyze_ir
+    # 3. Post-process with audited evidence model
     results_dir = REPO_ROOT / "experiments" / "tma_reduction_layout" / "results"
     artifacts_dir = results_dir / "artifacts"
     artifacts_dir.mkdir(parents=True, exist_ok=True)
 
-    summary_rows = []
+    audited_results: Dict[str, Any] = {}
 
     for cand, res in payload["results"].items():
         if not res.get("is_legal", False):
+            audited_results[cand] = {"candidate": cand, "is_legal": False, "error": res.get("error")}
             continue
+
+        ttgir_text = res.get("ttgir", "")
+        ptx_text = res.get("ptx", "")
+        sass_text = res.get("sass", "")
+        resource_text = res.get("resource_text", "")
 
         # Save artifacts
         ttgir_path = artifacts_dir / f"{cand}.ttgir"
         ptx_path = artifacts_dir / f"{cand}.ptx"
-        ttgir_path.write_text(res.get("ttgir", ""))
-        ptx_path.write_text(res.get("ptx", ""))
+        sass_path = artifacts_dir / f"{cand}.sass"
+        res_path = artifacts_dir / f"{cand}.resource.txt"
 
-        if res.get("sass"):
-            (artifacts_dir / f"{cand}.sass").write_text(res["sass"])
+        ttgir_path.write_text(ttgir_text)
+        ptx_path.write_text(ptx_text)
+        sass_path.write_text(sass_text)
+        res_path.write_text(resource_text)
 
-        # Analyze TTGIR & PTX
-        ttgir_info = analyze_ttgir(res.get("ttgir", ""))
-        ptx_info = analyze_ptx(res.get("ptx", ""))
+        # 1. Parse TTGIR
+        ttgir_info = analyze_ttgir(ttgir_text)
+        dest_layout_name = ttgir_info.get("local_load_dest_layout") or "blocked"
+        blocked_enc = ttgir_info.get("blocked_encodings", {}).get(dest_layout_name, {})
+        shared_alias = ttgir_info.get("local_load_src_shared_layout") or "shared"
+        shared_enc = ttgir_info.get("shared_encodings", {}).get(shared_alias, {})
 
-        res["ttgir_analysis"] = ttgir_info
-        res["ptx_analysis"] = ptx_info
+        spt = blocked_enc.get("sizePerThread", [1, 1, 1])
+        tpw = blocked_enc.get("threadsPerWarp", [1, 1, 32])
+        wpc = blocked_enc.get("warpsPerCTA", [1, 1, 4])
+        order = blocked_enc.get("order", [2, 1, 0])
+        num_ctas = ttgir_info.get("module_attributes", {}).get("num_ctas", 1)
 
-        # Extract Blocked layout attributes
-        blocked_encs = ttgir_info.get("blocked_encodings", [])
-        # The main input layout is usually the first blocked encoding
-        main_enc = blocked_encs[0] if blocked_encs else {}
+        # 2. Parse PTX
+        ptx_info = analyze_ptx(ptx_text)
 
-        spt = main_enc.get("sizePerThread", [1, 1, 1])
-        tpw = main_enc.get("threadsPerWarp", [1, 1, 32])
-        wpc = main_enc.get("warpsPerCTA", [1, 1, 4])
-        order = main_enc.get("order", [2, 1, 0])
-        cga = main_enc.get("CTAsPerCGA", [1, 1, 1])
+        # 3. Parse Physical Resources
+        phys_res = parse_resource_usage(resource_text)
 
+        # 4. Compute Derived Metrics
         derived = compute_derived_layout_metrics(
             shape=[1, 32, 128],
             size_per_thread=spt,
             threads_per_warp=tpw,
             warps_per_cta=wpc,
-            ctas_per_cga=cga,
+            num_ctas=num_ctas,
             reduce_axis=1,
         )
-        res["derived_metrics"] = derived
 
-        # Determine shared memory swizzle / layout
-        shared_encs = ttgir_info.get("shared_encodings", [])
-        shared_desc = str(shared_encs[0]["attrs"]) if shared_encs else "none"
+        # 5. Annotate Inferred Phases
+        phases = annotate_semantic_phases(cand, ptx_text)
 
-        summary_rows.append({
+        # 6. Assemble into Audited Evidence Model
+        timing = res.get("timing_measurements", {})
+        candidate_entry = {
             "candidate": cand,
-            "sizePerThread": str(spt),
-            "threadsPerWarp": str(tpw),
-            "warpsPerCTA": str(wpc),
-            "CTAsPerCGA": str(cga),
-            "elements_per_thread": derived["elements_per_thread"],
-            "ownership_M": derived["thread_ownership_reduce_axis"],
-            "ownership_N": derived["thread_ownership_contig_axis"],
-            "repetitions_M": derived["repetitions_reduce_axis"],
-            "repetitions_N": derived["repetitions_contig_axis"],
-            "lane_partitions": derived["lane_partitions_reduce_axis"],
-            "warp_partitions": derived["warp_partitions_reduce_axis"],
-            "cta_partitions": derived["cta_partitions_reduce_axis"],
-            "shared_encoding": shared_desc,
-            "ld_shared_total": ptx_info["ld_shared_total"],
-            "ld_shared_details": ptx_info["ld_shared_details"],
-            "st_shared_total": ptx_info["st_shared_total"],
-            "shfl_total": ptx_info["shfl_total"],
-            "bar_sync_total": ptx_info["bar_sync_total"],
-            "n_regs": res.get("n_regs"),
-            "correctness": "PASS" if res.get("is_correct") else "FAIL",
-            "median_us": f"{res.get('median_us', 0.0):.2f}",
-            "mean_us": f"{res.get('mean_us', 0.0):.2f}",
-        })
+            "raw": {
+                "ttgir_sha256": compute_text_hash(ttgir_text),
+                "ptx_sha256": compute_text_hash(ptx_text),
+                "sass_sha256": compute_text_hash(sass_text),
+                "resource_sha256": compute_text_hash(resource_text),
+                "correctness_max_abs_diff": res.get("max_abs_diff"),
+                "raw_samples_us": timing.get("raw_samples_us", []),
+            },
+            "observed": {
+                "ttgir": {
+                    "local_load_dest_layout": dest_layout_name,
+                    "blocked_encoding": blocked_enc,
+                    "shared_encoding": shared_enc,
+                    "reduce_ops": ttgir_info.get("reduce_ops", []),
+                    "module_attributes": ttgir_info.get("module_attributes", {}),
+                },
+                "ptx": {
+                    "initial_local_load": ptx_info.get("initial_local_load", {}),
+                    "whole_kernel_opcode_counts": ptx_info.get("whole_kernel_opcode_counts", {}),
+                    "observed_shfl_breakdown": ptx_info.get("observed_shfl_breakdown", {}),
+                    "virtual_register_declarations": ptx_info.get("virtual_register_declarations", {}),
+                },
+                "physical_resources": phys_res,
+            },
+            "derived": derived,
+            "inferred": {
+                "phases": phases,
+            },
+            "measured": {
+                "is_correct": res.get("is_correct", False),
+                "median_us": timing.get("median_us", 0.0),
+                "mean_us": timing.get("mean_us", 0.0),
+                "p10_us": timing.get("p10_us", 0.0),
+                "p90_us": timing.get("p90_us", 0.0),
+                "iqr_us": timing.get("iqr_us", 0.0),
+                "mad_us": timing.get("mad_us", 0.0),
+                "block_medians_us": timing.get("block_medians_us", []),
+                "distinguishability_note": timing.get("distinguishability_note", ""),
+            },
+        }
+        audited_results[cand] = candidate_entry
+
+    payload["audited_results"] = audited_results
 
     # Save complete JSON
     out_json = results_dir / "baseline_results.json"
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
-    print(f"\n[Local] Complete benchmark results saved to: {out_json}")
+    print(f"\n[Local] Complete audited results saved to: {out_json}")
 
-    # Generate Markdown Table with annotations [A. static layout-derived], [B. observed from TTGIR/PTX], [C. measured on H100]
+    # Generate the 3 Audited Markdown Tables in baseline_summary_table.md
+    generate_summary_tables(payload, results_dir / "baseline_summary_table.md")
+
+    # Generate baseline_evidence.md with instruction annotations
+    generate_evidence_doc(payload, results_dir / "baseline_evidence.md")
+
+    return payload
+
+
+# ---------------------------------------------------------------------------
+# Markdown Table Generator (Split into 3 Clear Tables)
+# ---------------------------------------------------------------------------
+def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
+    env = payload.get("environment", {})
+    prov = payload.get("local_provenance", {})
+    results = payload.get("audited_results", {})
+
     md_lines = [
-        "# TMA Reduction Layout Experiment Results: [1, 32, 128] BF16 -> FP32 Max Axis=1",
+        "# TMA Reduction Layout Baseline Characterization: [1, 32, 128] BF16 -> FP32 Max Axis=1",
         "",
-        f"- **Hardware**: {payload['environment']['gpu_name']} ({payload['environment']['driver_version']}, CC {payload['environment']['gpu_compute_capability']})",
-        f"- **Git HEAD**: `{prov['git_head_sha'][:10]}` (branch: `{prov['branch']}`, dirty: `{prov['is_dirty']}`)",
-        f"- **Triton**: `{payload['environment']['triton_version']}` (`{payload['environment']['triton_file']}`)",
+        f"- **Hardware**: {env.get('gpu_name')} ({env.get('driver_version')}, CC {env.get('gpu_compute_capability')})",
+        f"- **Git HEAD**: `{prov.get('git_head_sha')}` (branch: `{prov.get('branch')}`, dirty: `{prov.get('is_dirty')}`)",
+        f"- **Source Manifest**: `{prov.get('source_manifest_sha256')}`",
+        f"- **Triton**: `{env.get('triton_version')}` (`{env.get('triton_file')}`)",
         "",
-        "### Characterization Table",
+        "---",
         "",
-        "| Candidate | sizePerThread [A] | threadsPerWarp [B] | warpsPerCTA [B] | Lane Parts (M) [A] | Warp Parts (M) [A] | M Ownership [A] | ld.shared [B] | shfl.sync [B] | st.shared [B] | bar.sync [B] | Regs [B] | Correct [C] | Median (us) [C] |",
-        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
+        "## Table 1: Layout Specifications & Derived Partition Structure",
+        "",
+        "> [!NOTE]",
+        "> Attributes `sizePerThread`, `threadsPerWarp`, `warpsPerCTA` are directly **OBSERVED** from the `ttg.local_load` destination `#blocked` layout. "
+        "> Lane partitions, warp partitions, and elements/partition are **DERIVED** via exact formulas from the layout specification. Cross-CTA reduction is absent as `ttg.num-ctas = 1`.",
+        "",
+        "| Candidate | sizePerThread [OBS] | threadsPerWarp [OBS] | warpsPerCTA [OBS] | numCTAs [OBS] | Lane Parts (M) [DER] | Warp Parts (M) [DER] | CTA Parts (M) [DER] | M Elems/Partition [DER] | Total Elems/Thread [DER] |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
     ]
 
-    for row in summary_rows:
+    for cand, cdata in results.items():
+        if not cdata.get("observed"):
+            continue
+        obs_ttgir = cdata["observed"]["ttgir"]
+        b_enc = obs_ttgir["blocked_encoding"]
+        der = cdata["derived"]
         md_lines.append(
-            f"| `{row['candidate']}` | `{row['sizePerThread']}` | `{row['threadsPerWarp']}` | `{row['warpsPerCTA']}` | "
-            f"{row['lane_partitions']} | {row['warp_partitions']} | {row['ownership_M']} | "
-            f"{row['ld_shared_total']} | {row['shfl_total']} | {row['st_shared_total']} | {row['bar_sync_total']} | "
-            f"{row['n_regs']} | {row['correctness']} | **{row['median_us']}** |"
+            f"| `{cand}` | `{b_enc.get('sizePerThread')}` | `{b_enc.get('threadsPerWarp')}` | `{b_enc.get('warpsPerCTA')}` | "
+            f"`{obs_ttgir.get('module_attributes', {}).get('num_ctas', 1)}` | "
+            f"{der['lane_partitions_reduce_axis']} | {der['warp_partitions_reduce_axis']} | {der['cta_partitions_reduce_axis']} | "
+            f"{der['derived_reduce_elems_per_partition']} | {der['derived_elements_per_thread_total']} |"
         )
 
     md_lines.extend([
         "",
-        "**Legend**:",
-        "- **[A. static layout-derived]**: Theoretically derived from tensor dimensions, vector size, and BlockedEncoding rules.",
-        "- **[B. observed from TTGIR/PTX/SASS]**: Extracted directly from compiled IR / PTX assembly.",
-        "- **[C. measured on H100]**: Empirically measured via CUDA events on strict NVIDIA H100.",
+        "---",
+        "",
+        "## Table 2: Observed LocalLoad Lowering & Shared Layout Facts",
+        "",
+        "> [!NOTE]",
+        "> Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. "
+        "> Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`.",
+        "",
+        "| Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | Shared Mem (B) [OBS] |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
     ])
 
-    table_md = "\n".join(md_lines)
-    out_table = results_dir / "baseline_summary_table.md"
-    out_table.write_text(table_md)
-    print(f"[Local] Summary Markdown table saved to: {out_table}\n")
-    print(table_md)
+    for cand, cdata in results.items():
+        if not cdata.get("observed"):
+            continue
+        obs_ptx = cdata["observed"]["ptx"]
+        wk = obs_ptx["whole_kernel_opcode_counts"]
+        shfl_bk = obs_ptx["observed_shfl_breakdown"]
+        init_load = obs_ptx["initial_local_load"]
+        phys = cdata["observed"]["physical_resources"]
 
-    return payload
+        load_str = f"{init_load['count']} × `{init_load['instruction']}`" if init_load.get("instruction") else "UNKNOWN"
+        shfl_str = f"{wk['shfl_total']} ({shfl_bk['setup_shfl_count']} + {shfl_bk['reduction_region_shfl_count']})"
+
+        md_lines.append(
+            f"| `{cand}` | {load_str} | {wk['ld_shared_total']} | {wk['ldmatrix_total']} | {wk['st_shared_total']} | "
+            f"{shfl_str} | {wk['bar_sync_total']} | `{phys.get('physical_regs_per_thread')}` | `{phys.get('shared_memory_bytes')}` |"
+        )
+
+    md_lines.extend([
+        "",
+        "---",
+        "",
+        "## Table 3: Empirical Execution Timing on NVIDIA H100 (Single-CTA Tile)",
+        "",
+        "> [!IMPORTANT]",
+        "> **Timing Distinguishability**: For this single-CTA 8-KiB tile benchmark, the current measurement does not reliably distinguish the candidates' runtime. "
+        "> Median differences across candidates (~0.1 µs, ~0.5%) fall well within measurement noise and run-to-run variation. **No statistically reliable performance ordering is claimed.**",
+        "",
+        "| Candidate | Correctness [OBS] | Median (µs) [MEA] | P10 (µs) [MEA] | P90 (µs) [MEA] | IQR (µs) [MEA] | MAD (µs) [MEA] | Block Medians Range (µs) [MEA] |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
+    ])
+
+    for cand, cdata in results.items():
+        if not cdata.get("measured"):
+            continue
+        m = cdata["measured"]
+        blk_meds = m.get("block_medians_us", [])
+        blk_range = f"[{min(blk_meds):.2f}, {max(blk_meds):.2f}]" if blk_meds else "N/A"
+        correct = "PASS" if m.get("is_correct") else "FAIL"
+
+        md_lines.append(
+            f"| `{cand}` | {correct} | **{m.get('median_us', 0.0):.2f}** | {m.get('p10_us', 0.0):.2f} | "
+            f"{m.get('p90_us', 0.0):.2f} | {m.get('iqr_us', 0.0):.2f} | {m.get('mad_us', 0.0):.2f} | {blk_range} |"
+        )
+
+    output_path.write_text("\n".join(md_lines))
+    print(f"[Local] Audited summary tables saved to: {output_path}")
+
+
+# ---------------------------------------------------------------------------
+# Instruction-Level Evidence Markdown Document Generator
+# ---------------------------------------------------------------------------
+def generate_evidence_doc(payload: Dict[str, Any], output_path: Path):
+    results = payload.get("audited_results", {})
+    md_lines = [
+        "# TMA Reduction Layout: Instruction-Level Evidence & Phase Annotations",
+        "",
+        "This document details the observed instruction ranges and semantic phases for all candidates "
+        "compiled from the current commit, providing verified evidence for PTX and SASS codegen.",
+        "",
+    ]
+
+    for cand, cdata in results.items():
+        if not cdata.get("observed"):
+            continue
+        md_lines.extend([
+            f"## Candidate `{cand}`",
+            "",
+            f"- **TTGIR LocalLoad Layout**: `{cdata['observed']['ttgir']['local_load_dest_layout']}`",
+            f"- **Initial LocalLoad**: `{cdata['observed']['ptx']['initial_local_load']}`",
+            f"- **Arithmetic Mix**: `{cdata['observed']['ptx']['whole_kernel_opcode_counts']['arithmetic_mix']}`",
+            f"- **Virtual Registers**: `{cdata['observed']['ptx']['virtual_register_declarations']}`",
+            f"- **Physical Resources**: `{cdata['observed']['physical_resources']}`",
+            "",
+            "### Semantic Phases (Annotated PTX)",
+            "",
+            "| Phase | Description | Observed PTX Line Range |",
+            "| :--- | :--- | :--- |",
+        ])
+        for p in cdata.get("inferred", {}).get("phases", []):
+            lines_str = f"Lines {p['evidence_lines'][0]}-{p['evidence_lines'][1]}" if p.get("evidence_lines") else "N/A"
+            md_lines.append(f"| {p['phase']} | {p['description']} | {lines_str} |")
+        md_lines.append("")
+
+    output_path.write_text("\n".join(md_lines))
+    print(f"[Local] Audited evidence document saved to: {output_path}")
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 for p in ["/opt/triton-src", str(Path(__file__).resolve().parent.parent.parent)]:
     if os.path.exists(p) and p not in sys.path:
@@ -120,10 +120,11 @@ triton_image = (
 # ---------------------------------------------------------------------------
 # Verification Helpers (Run inside container)
 # ---------------------------------------------------------------------------
-def remote_verify_environment() -> Dict[str, Any]:
+def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     import subprocess
     import torch
     import triton
+    from experiments.tma_reduction_layout.source_provenance import verify_remote_source_manifest
 
     # 1. Hardware verification
     smi_out = subprocess.check_output([
@@ -165,7 +166,14 @@ def remote_verify_environment() -> Dict[str, Any]:
         "Halting immediately."
     )
 
-    # 3. Toolchain inspection
+    # 3. Source Manifest fidelity verification
+    manifest_ver = {}
+    if local_provenance and "source_manifest" in local_provenance:
+        print("[Remote] Verifying remote /opt/triton-src matches local source manifest...")
+        manifest_ver = verify_remote_source_manifest(local_provenance)
+        print(f"[Remote] Source manifest verification PASSED! ({manifest_ver.get('files_verified')} files verified)")
+
+    # 4. Toolchain inspection
     def run_tool(cmd):
         try:
             return subprocess.check_output(cmd, text=True).strip()
@@ -191,6 +199,7 @@ def remote_verify_environment() -> Dict[str, Any]:
         "ptxas_version": ptxas_ver,
         "nvdisasm_version": nvdisasm_ver,
         "cuobjdump_version": cuobjdump_ver,
+        "manifest_verification": manifest_ver,
     }
 
 
@@ -208,7 +217,7 @@ def run_smoke_test_remote(local_provenance: Dict[str, Any]) -> Dict[str, Any]:
     import triton.language as tl
 
     # 1. Environment & Hardware Verification
-    env_info = remote_verify_environment()
+    env_info = remote_verify_environment(local_provenance)
 
     # 2. Define simple vector addition kernel
     @triton.jit
