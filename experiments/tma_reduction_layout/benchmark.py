@@ -237,11 +237,15 @@ def run_tma_benchmark_remote(
         is_correct = max_abs_diff < 1e-3
         print(f"[Remote] Candidate {cand}: correctness = {is_correct} (max abs diff: {max_abs_diff})")
 
+        # Extract Triton metadata launch shared memory in bytes
+        triton_launch_shared_bytes = getattr(compiled.metadata, "shared", None)
+
         results_by_candidate[cand] = {
             "candidate": cand,
             "is_legal": True,
             "is_correct": is_correct,
             "max_abs_diff": max_abs_diff,
+            "triton_launch_shared_bytes": triton_launch_shared_bytes,
             "ttgir": ttgir_text,
             "ptx": ptx_text,
             "llir": llir_text,
@@ -355,87 +359,51 @@ def run_tma_benchmark_remote(
 
 
 # ---------------------------------------------------------------------------
-# Semantic Phase Evidence Annotator
+# Audited Semantic Phase Loader (Bound to Artifact Hashes)
 # ---------------------------------------------------------------------------
-def annotate_semantic_phases(cand: str, ptx_text: str) -> List[Dict[str, Any]]:
+def load_and_validate_audited_phases(
+    cand: str, ptx_sha256: str, ttgir_sha256: str
+) -> Dict[str, Any]:
     """
-    Identifies and annotates the verified instruction ranges and semantic phases
-    for each candidate in its compiled PTX.
+    Loads human-audited semantic phase annotations bound to artifact hashes.
+    Fails if the compiled PTX or TTGIR SHA256 does not match the audited record.
     """
-    lines = ptx_text.splitlines()
+    annotations_path = (
+        REPO_ROOT
+        / "experiments"
+        / "tma_reduction_layout"
+        / "audited_phase_annotations.json"
+    )
+    if not annotations_path.exists():
+        raise FileNotFoundError(
+            f"Audited annotations file not found at: {annotations_path}"
+        )
 
-    # Find key milestone lines
-    tma_setup_lines = []
-    local_load_lines = []
-    local_reduction_lines = []
-    cross_reduction_lines = []
-    post_convert_lines = []
-    store_lines = []
+    data = json.loads(annotations_path.read_text(encoding="utf-8"))
+    cand_ann = data.get("annotations", {}).get(cand)
+    if not cand_ann:
+        raise KeyError(f"No audited phase annotations found for candidate '{cand}' in {annotations_path}")
 
-    # Simple index-based partitioning based on explicit instructions
-    in_tma = True
-    in_load = False
-    in_reduction = False
-    in_convert = False
+    expected_ptx_sha = cand_ann.get("ptx_sha256")
+    expected_ttgir_sha = cand_ann.get("ttgir_sha256")
 
-    for idx, l in enumerate(lines):
-        line_num = idx + 1
-        s = l.strip()
-        if not s or s.startswith("//"):
-            continue
+    if expected_ptx_sha != ptx_sha256:
+        raise RuntimeError(
+            f"CRITICAL: PTX hash mismatch for candidate {cand}!\n"
+            f"Expected (audited): {expected_ptx_sha}\n"
+            f"Actual (artifact):  {ptx_sha256}\n"
+            "Semantic phase line ranges must be re-audited and updated in audited_phase_annotations.json!"
+        )
 
-        if "cp.async.bulk" in s or "tensormap" in s or "mbarrier" in s:
-            tma_setup_lines.append(line_num)
-        elif "ldmatrix" in s or "ld.shared" in s:
-            if line_num < 270:
-                local_load_lines.append(line_num)
-            elif line_num < 370:
-                cross_reduction_lines.append(line_num)
-            else:
-                post_convert_lines.append(line_num)
-        elif "shfl.sync" in s:
-            if "shfl.sync.idx" in s:
-                tma_setup_lines.append(line_num)
-            else:
-                cross_reduction_lines.append(line_num)
-        elif "st.shared" in s:
-            if line_num < 50:
-                tma_setup_lines.append(line_num)
-            elif line_num < 370:
-                cross_reduction_lines.append(line_num)
-            else:
-                post_convert_lines.append(line_num)
-        elif "st.global" in s:
-            store_lines.append(line_num)
+    if expected_ttgir_sha != ttgir_sha256:
+        raise RuntimeError(
+            f"CRITICAL: TTGIR hash mismatch for candidate {cand}!\n"
+            f"Expected (audited): {expected_ttgir_sha}\n"
+            f"Actual (artifact):  {ttgir_sha256}\n"
+            "Semantic phase line ranges must be re-audited and updated in audited_phase_annotations.json!"
+        )
 
-    phases = [
-        {
-            "phase": "A. TMA setup & descriptor lifecycle",
-            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy",
-            "evidence_lines": [min(tma_setup_lines), max(tma_setup_lines)] if tma_setup_lines else [],
-        },
-        {
-            "phase": "B. Initial LocalLoad (shared -> registers)",
-            "description": "Initial loading of TMA-loaded shared memory tile into registers",
-            "evidence_lines": [min(local_load_lines), max(local_load_lines)] if local_load_lines else [],
-        },
-        {
-            "phase": "C. Cross-lane & cross-warp reduction communication",
-            "description": "Intra-warp butterfly shuffles and cross-warp shared memory partial exchanges",
-            "evidence_lines": [min(cross_reduction_lines), max(cross_reduction_lines)] if cross_reduction_lines else [],
-        },
-        {
-            "phase": "D. Post-reduction layout conversion",
-            "description": "ttg.convert_layout converting 1D reduction slice layout to 1D blocked layout",
-            "evidence_lines": [min(post_convert_lines), max(post_convert_lines)] if post_convert_lines else [],
-        },
-        {
-            "phase": "E. Global store",
-            "description": "st.global.b32 storing final 128 elements to output buffer",
-            "evidence_lines": [min(store_lines), max(store_lines)] if store_lines else [],
-        },
-    ]
-    return phases
+    return cand_ann.get("phases", {})
 
 
 # ---------------------------------------------------------------------------
@@ -492,6 +460,11 @@ def execute_benchmark() -> Dict[str, Any]:
         res_path.write_text(resource_text)
 
         # 1. Parse TTGIR
+        ttgir_hash = compute_text_hash(ttgir_text)
+        ptx_hash = compute_text_hash(ptx_text)
+        sass_hash = compute_text_hash(sass_text)
+        res_hash = compute_text_hash(resource_text)
+
         ttgir_info = analyze_ttgir(ttgir_text)
         dest_layout_name = ttgir_info.get("local_load_dest_layout") or "blocked"
         blocked_enc = ttgir_info.get("blocked_encodings", {}).get(dest_layout_name, {})
@@ -507,8 +480,11 @@ def execute_benchmark() -> Dict[str, Any]:
         # 2. Parse PTX
         ptx_info = analyze_ptx(ptx_text)
 
-        # 3. Parse Physical Resources
-        phys_res = parse_resource_usage(resource_text)
+        # 3. Parse Physical Resources (distinguishing cuobjdump and Triton launch metadata)
+        phys_res = parse_resource_usage(
+            resource_text,
+            triton_launch_shared_bytes=res.get("triton_launch_shared_bytes"),
+        )
 
         # 4. Compute Derived Metrics
         derived = compute_derived_layout_metrics(
@@ -520,18 +496,18 @@ def execute_benchmark() -> Dict[str, Any]:
             reduce_axis=1,
         )
 
-        # 5. Annotate Inferred Phases
-        phases = annotate_semantic_phases(cand, ptx_text)
+        # 5. Load and validate SHA-bound audited phases (fails if artifact hashes differ)
+        phases = load_and_validate_audited_phases(cand, ptx_hash, ttgir_hash)
 
         # 6. Assemble into Audited Evidence Model
         timing = res.get("timing_measurements", {})
         candidate_entry = {
             "candidate": cand,
             "raw": {
-                "ttgir_sha256": compute_text_hash(ttgir_text),
-                "ptx_sha256": compute_text_hash(ptx_text),
-                "sass_sha256": compute_text_hash(sass_text),
-                "resource_sha256": compute_text_hash(resource_text),
+                "ttgir_sha256": ttgir_hash,
+                "ptx_sha256": ptx_hash,
+                "sass_sha256": sass_hash,
+                "resource_sha256": res_hash,
                 "correctness_max_abs_diff": res.get("max_abs_diff"),
                 "raw_samples_us": timing.get("raw_samples_us", []),
             },
@@ -653,9 +629,13 @@ def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
         load_str = f"{init_load['count']} × `{init_load['instruction']}`" if init_load.get("instruction") else "UNKNOWN"
         shfl_str = f"{wk['shfl_total']} ({shfl_bk['setup_shfl_count']} + {shfl_bk['reduction_region_shfl_count']})"
 
+        regs_val = phys.get("physical_regs_per_thread", {}).get("value", "UNKNOWN")
+        cuobj_smem = phys.get("cuobjdump_shared_bytes", {}).get("value", "UNKNOWN")
+        triton_smem = phys.get("triton_launch_shared_bytes", {}).get("value", "UNKNOWN")
+
         md_lines.append(
             f"| `{cand}` | {load_str} | {wk['ld_shared_total']} | {wk['ldmatrix_total']} | {wk['st_shared_total']} | "
-            f"{shfl_str} | {wk['bar_sync_total']} | `{phys.get('physical_regs_per_thread')}` | `{phys.get('shared_memory_bytes')}` |"
+            f"{shfl_str} | {wk['bar_sync_total']} | `{regs_val}` | `{cuobj_smem}` | `{triton_smem}` |"
         )
 
     md_lines.extend([
@@ -719,9 +699,13 @@ def generate_evidence_doc(payload: Dict[str, Any], output_path: Path):
             "| Phase | Description | Observed PTX Line Range |",
             "| :--- | :--- | :--- |",
         ])
-        for p in cdata.get("inferred", {}).get("phases", []):
-            lines_str = f"Lines {p['evidence_lines'][0]}-{p['evidence_lines'][1]}" if p.get("evidence_lines") else "N/A"
-            md_lines.append(f"| {p['phase']} | {p['description']} | {lines_str} |")
+        for phase_name, p in cdata.get("inferred", {}).get("phases", {}).items():
+            if p.get("lines"):
+                l0, l1 = p["lines"]
+                lines_str = f"Lines {l0}-{l1}" if l0 != l1 else f"Line {l0}"
+            else:
+                lines_str = p.get("status", "no standalone PTX sequence identified")
+            md_lines.append(f"| {phase_name} | {p.get('description', '')} | {lines_str} |")
         md_lines.append("")
 
     output_path.write_text("\n".join(md_lines))

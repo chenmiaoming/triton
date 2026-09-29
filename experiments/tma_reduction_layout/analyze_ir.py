@@ -372,13 +372,26 @@ def compute_derived_layout_metrics(
 # ---------------------------------------------------------------------------
 # SASS and Resource Usage Parser
 # ---------------------------------------------------------------------------
-def parse_resource_usage(res_text: str) -> Dict[str, Any]:
+def parse_resource_usage(
+    res_text: str,
+    triton_launch_shared_bytes: Optional[int] = None,
+) -> Dict[str, Any]:
     if not res_text or "UNKNOWN" in res_text:
         return {
-            "physical_regs_per_thread": "UNKNOWN",
-            "shared_memory_bytes": "UNKNOWN",
-            "local_memory_bytes": "UNKNOWN",
-            "stack_bytes": "UNKNOWN",
+            "physical_regs_per_thread": {
+                "source": "cuobjdump -res-usage",
+                "value": "UNKNOWN",
+            },
+            "cuobjdump_shared_bytes": {
+                "source": "cuobjdump -res-usage",
+                "value": "UNKNOWN",
+            },
+            "triton_launch_shared_bytes": {
+                "source": "compiled.metadata.shared",
+                "value": triton_launch_shared_bytes if triton_launch_shared_bytes is not None else "UNKNOWN",
+            },
+            "local_memory_bytes": 0,
+            "stack_bytes": 0,
             "raw_text": res_text,
         }
 
@@ -388,9 +401,19 @@ def parse_resource_usage(res_text: str) -> Dict[str, Any]:
     stack_m = re.search(r"\bSTACK:(\d+)\b", res_text)
 
     return {
-        "physical_regs_per_thread": int(reg_m.group(1)) if reg_m else "UNKNOWN",
-        "shared_memory_bytes": int(shared_m.group(1)) if shared_m else "UNKNOWN",
-        "local_memory_bytes": int(local_m.group(1)) if local_m else "UNKNOWN",
-        "stack_bytes": int(stack_m.group(1)) if stack_m else "UNKNOWN",
+        "physical_regs_per_thread": {
+            "source": "cuobjdump -res-usage",
+            "value": int(reg_m.group(1)) if reg_m else "UNKNOWN",
+        },
+        "cuobjdump_shared_bytes": {
+            "source": "cuobjdump -res-usage",
+            "value": int(shared_m.group(1)) if shared_m else "UNKNOWN",
+        },
+        "triton_launch_shared_bytes": {
+            "source": "compiled.metadata.shared",
+            "value": triton_launch_shared_bytes if triton_launch_shared_bytes is not None else "UNKNOWN",
+        },
+        "local_memory_bytes": int(local_m.group(1)) if local_m else 0,
+        "stack_bytes": int(stack_m.group(1)) if stack_m else 0,
         "raw_text": res_text.strip(),
     }

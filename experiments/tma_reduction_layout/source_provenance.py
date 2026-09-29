@@ -178,24 +178,28 @@ def verify_remote_source_manifest(
 ) -> Dict[str, Any]:
     """
     Runs inside the remote Modal container.
-    Verifies that files in remote_root match the local source manifest.
+    Verifies that all files in the local upload/source manifest exist at the exact
+    same paths in remote_root with identical SHA256 hashes.
+    Post-build extra files generated on the remote container are recorded separately
+    and do not cause failure.
     """
     assert remote_root.exists(), f"Remote source directory {remote_root} does not exist!"
 
-    remote_manifest = compute_source_manifest(remote_root)
-    remote_manifest_sha256 = compute_manifest_digest(remote_manifest)
     local_manifest_sha256 = local_provenance.get("source_manifest_sha256", "")
     local_manifest = local_provenance.get("source_manifest", {})
 
-    missing_files = []
-    mismatched_files = []
+    missing_files: List[str] = []
+    mismatched_files: List[Dict[str, str]] = []
+    remote_source_subset_manifest: Dict[str, str] = {}
 
+    # Verify every file from the local source manifest
     for rel_path, local_hash in local_manifest.items():
         remote_file = remote_root / rel_path
         if not remote_file.exists():
             missing_files.append(rel_path)
         else:
             remote_hash = hash_file(remote_file)
+            remote_source_subset_manifest[rel_path] = remote_hash
             if remote_hash != local_hash:
                 mismatched_files.append({
                     "path": rel_path,
@@ -203,27 +207,47 @@ def verify_remote_source_manifest(
                     "remote_sha256": remote_hash,
                 })
 
+    remote_source_subset_sha256 = compute_manifest_digest(remote_source_subset_manifest)
+
+    # Compute full remote manifest to identify post-build generated files
+    remote_full_manifest = compute_source_manifest(remote_root)
+    remote_full_manifest_sha256 = compute_manifest_digest(remote_full_manifest)
+
+    local_keys = set(local_manifest.keys())
+    remote_full_keys = set(remote_full_manifest.keys())
+    remote_extra_files = sorted(list(remote_full_keys - local_keys))
+
     verification_passed = (
-        len(missing_files) == 0 and len(mismatched_files) == 0
+        len(missing_files) == 0
+        and len(mismatched_files) == 0
+        and remote_source_subset_sha256 == local_manifest_sha256
     )
 
     if not verification_passed:
         err_msg = (
-            f"CRITICAL: Remote source verification failed!\n"
+            f"CRITICAL: Remote uploaded source-file fidelity verification failed!\n"
             f"Missing files ({len(missing_files)}): {missing_files[:5]}\n"
             f"Mismatched files ({len(mismatched_files)}): {mismatched_files[:5]}\n"
             f"Local manifest digest: {local_manifest_sha256}\n"
-            f"Remote manifest digest: {remote_manifest_sha256}"
+            f"Remote subset digest:  {remote_source_subset_sha256}"
         )
         raise RuntimeError(err_msg)
 
     return {
         "status": "PASS",
-        "remote_manifest_sha256": remote_manifest_sha256,
+        "uploaded_source_fidelity_verified": True,
+        "verification_statement": (
+            "Every file in the local upload/source manifest was found at the "
+            "same path in /opt/triton-src and had identical bytes."
+        ),
         "local_manifest_sha256": local_manifest_sha256,
+        "remote_source_subset_sha256": remote_source_subset_sha256,
+        "remote_full_manifest_sha256": remote_full_manifest_sha256,
         "files_verified": len(local_manifest),
         "missing_count": len(missing_files),
         "mismatched_count": len(mismatched_files),
+        "remote_extra_file_count": len(remote_extra_files),
+        "remote_extra_files": remote_extra_files,
     }
 
 

@@ -23,6 +23,10 @@ Every factual statement, metric, and conclusion recorded in this repository must
 - **Unknown values remain UNKNOWN**: Do not extrapolate or guess missing measurements.
 - **PTX virtual registers are NOT physical register allocation**: PTX `.reg .b32 %r<N>` declarations indicate virtual register index bounds, not physical registers per thread.
 - **Whole-kernel opcode counts must NOT be labeled as reduction-specific**: Global PTX counts encompass TMA lifecycle, setup, LocalLoad, reduction arithmetic, layout conversion, and stores.
+- **Semantic PTX phase attribution must not be inferred from absolute line number thresholds**: Phases must be human-audited and grounded in instruction sequences.
+- **Phase annotations must be bound to artifact hashes**: When IR or PTX artifacts change, phase annotations must fail validation until re-audited.
+- **cuobjdump SHARED and Triton launch-time shared-memory metadata are distinct quantities**: Static ELF shared memory (`cuobjdump -res-usage`) and launch-time dynamic shared memory (`compiled.metadata.shared`) must not be conflated.
+- **Source fidelity verifies uploaded files, not the entire post-build directory**: A remote post-build source tree may contain generated files; source fidelity means all uploaded source-manifest files match byte-for-byte, not that the entire post-build directory tree is identical.
 
 ---
 

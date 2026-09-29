@@ -169,9 +169,12 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
     # 3. Source Manifest fidelity verification
     manifest_ver = {}
     if local_provenance and "source_manifest" in local_provenance:
-        print("[Remote] Verifying remote /opt/triton-src matches local source manifest...")
+        print("[Remote] Verifying uploaded source-file fidelity in /opt/triton-src...")
         manifest_ver = verify_remote_source_manifest(local_provenance)
-        print(f"[Remote] Source manifest verification PASSED! ({manifest_ver.get('files_verified')} files verified)")
+        print(
+            f"[Remote] Uploaded source-file fidelity verified: {manifest_ver.get('files_verified')} files "
+            f"match local manifest byte-for-byte ({manifest_ver.get('remote_extra_file_count')} post-build extra files recorded)."
+        )
 
     # 4. Toolchain inspection
     def run_tool(cmd):
