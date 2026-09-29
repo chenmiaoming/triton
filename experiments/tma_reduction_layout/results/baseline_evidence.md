@@ -17,7 +17,7 @@ This document details the observed instruction ranges and semantic phases for al
 | tma_setup_and_descriptor | TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy | Lines 36-211 |
 | initial_local_load | Initial loading of TMA-loaded shared memory tile into registers (4 x ld.shared.v4.b32) | Lines 224-227 |
 | thread_local_reduction_arithmetic | Thread-local reduction arithmetic: 12 x max.bf16x2 and 8 x cvt.f32.bf16 | Lines 232-255 |
-| cross_thread_reduction_communication | Cross-lane & cross-warp reduction communication: intra-warp butterfly shuffles (lines 259-280), cross-warp shared exchange (lines 290-301), and cross-warp butterfly shuffles (lines 302-371) | Lines 258-371 |
+| cross_thread_reduction_communication | Cross-thread reduction communication: intra-warp butterfly reduction (lines 259-280) -> cross-warp shared-memory exchange / synchronization (lines 290-301) -> intra-warp butterfly reduction of the exchanged partials (lines 302-371) | Lines 258-371 |
 | post_reduction_convert_layout | ttg.convert_layout shared-memory redistribution converting reduction slice layout to blocked1 layout via st.shared/ld.shared/ldmatrix | Lines 374-405 |
 | global_store | st.global.b32 storing final 128 float elements to output buffer | Line 408 |
 
@@ -36,7 +36,7 @@ This document details the observed instruction ranges and semantic phases for al
 | tma_setup_and_descriptor | TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy | Lines 36-211 |
 | initial_local_load | Initial loading of TMA-loaded shared memory tile into registers (4 x ld.shared.v4.b32) | Lines 224-227 |
 | thread_local_reduction_arithmetic | Thread-local reduction arithmetic: 12 x max.bf16x2 and 8 x cvt.f32.bf16 | Lines 232-255 |
-| cross_thread_reduction_communication | Cross-lane & cross-warp reduction communication: intra-warp butterfly shuffles (lines 259-280), cross-warp shared exchange (lines 290-301), and cross-warp butterfly shuffles (lines 302-371) | Lines 258-371 |
+| cross_thread_reduction_communication | Cross-thread reduction communication: intra-warp butterfly reduction (lines 259-280) -> cross-warp shared-memory exchange / synchronization (lines 290-301) -> intra-warp butterfly reduction of the exchanged partials (lines 302-371) | Lines 258-371 |
 | post_reduction_convert_layout | ttg.convert_layout shared-memory redistribution converting reduction slice layout to blocked1 layout via st.shared/ld.shared/ldmatrix | Lines 374-405 |
 | global_store | st.global.b32 storing final 128 float elements to output buffer | Line 408 |
 
@@ -55,7 +55,7 @@ This document details the observed instruction ranges and semantic phases for al
 | tma_setup_and_descriptor | TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy | Lines 36-211 |
 | initial_local_load | Initial loading of TMA-loaded shared memory tile into registers (8 x ld.shared.v2.b32) | Lines 227-234 |
 | thread_local_reduction_arithmetic | Thread-local reduction arithmetic: 14 x max.bf16x2 and 4 x cvt.f32.bf16 | Lines 241-260 |
-| cross_thread_reduction_communication | Cross-warp reduction communication: cross-warp shared exchange (lines 266-275), 8 x shfl.sync.bfly.b32 and max.f32 (lines 276-309) | Lines 266-309 |
+| cross_thread_reduction_communication | Cross-thread reduction communication: cross-warp shared-memory exchange (lines 266-275) -> intra-warp shfl.sync.bfly reduction (lines 276-309: 8 x shfl.sync.bfly.b32, 8 x max.f32) | Lines 266-309 |
 | post_reduction_convert_layout | ttg.convert_layout shared-memory redistribution converting reduction slice layout to blocked1 layout via st.shared/ld.shared/ldmatrix (lines 312-331) | Lines 312-331 |
 | global_store | st.global.b32 storing final 128 float elements to output buffer | Line 334 |
 
@@ -74,7 +74,7 @@ This document details the observed instruction ranges and semantic phases for al
 | tma_setup_and_descriptor | TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy | Lines 36-211 |
 | initial_local_load | Initial loading of TMA-loaded shared memory tile into registers (4 x ldmatrix.sync.aligned.m8n8.x4.shared.b16) | Lines 229-232 |
 | thread_local_reduction_arithmetic | Thread-local reduction arithmetic: 15 x max.bf16x2 and 2 x cvt.f32.bf16 | Lines 236-256 |
-| cross_thread_reduction_communication | Cross-warp reduction communication: shared exchange (lines 264-275), 2 x shfl.sync.bfly.b32 and 2 x max.f32 (lines 276-281) | Lines 264-281 |
+| cross_thread_reduction_communication | Cross-thread reduction communication: cross-warp shared-memory exchange (lines 264-275) -> intra-warp shfl.sync.bfly reduction (lines 276-281: 2 x shfl.sync.bfly.b32, 2 x max.f32) | Lines 264-281 |
 | post_reduction_convert_layout | ttg.convert_layout shared-memory redistribution converting reduction slice layout to blocked1 layout via st.shared/ld.shared (lines 284-308) | Lines 284-308 |
 | global_store | st.global.b32 storing final 128 float elements to output buffer | Line 311 |
 
@@ -93,6 +93,6 @@ This document details the observed instruction ranges and semantic phases for al
 | tma_setup_and_descriptor | TMA descriptor creation, mbarrier setup, proxy fencing, and async bulk copy | Lines 36-211 |
 | initial_local_load | Initial loading of TMA-loaded shared memory tile into registers (32 x ld.shared.b16) | Lines 220-265 |
 | thread_local_reduction_arithmetic | Thread-local reduction tree: 31 x max.bf16 and 1 x cvt.f32.bf16 (reduction completes entirely in thread-local bf16) | Lines 270-301 |
-| cross_thread_reduction_communication | Reduction is 100% thread-local; no intra-warp shuffles or cross-warp shared exchange are generated | no standalone PTX sequence identified |
+| cross_thread_reduction_communication | For this layout and this artifact, each output element's M-axis reduction is thread-local: no reduction-region shfl.sync or cross-warp shared-memory exchange is generated. | no standalone PTX sequence identified |
 | post_reduction_convert_layout | Thread-local scalar reduction output is directly assigned to the target store register without shared-memory redistribution | no standalone PTX sequence identified |
 | global_store | st.global.b32 storing final 128 float elements to output buffer | Line 308 |

@@ -21,9 +21,11 @@ for p in ["/opt/triton-src", str(Path(__file__).resolve().parent.parent.parent)]
 import modal
 
 from experiments.tma_reduction_layout.source_provenance import (
+    MODAL_SOURCE_IGNORE_PATTERNS,
     generate_provenance,
     get_repo_root,
     save_provenance,
+    verify_remote_source_manifest,
 )
 
 REPO_ROOT = get_repo_root()
@@ -91,22 +93,7 @@ triton_image = (
         REPO_ROOT,
         remote_path="/opt/triton-src",
         copy=True,
-        ignore=[
-            ".git",
-            ".git/**",
-            ".venv",
-            ".venv/**",
-            "build",
-            "build/**",
-            "**/__pycache__",
-            "**/__pycache__/**",
-            "**/.pytest_cache",
-            "**/.pytest_cache/**",
-            "experiments/tma_reduction_layout/results",
-            "experiments/tma_reduction_layout/results/**",
-            "**/*.egg-info",
-            "**/*.egg-info/**",
-        ],
+        ignore=MODAL_SOURCE_IGNORE_PATTERNS,
     )
     .run_commands(
         "python3 -m pip uninstall -y triton pytorch-triton || true",
@@ -173,7 +160,7 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
         manifest_ver = verify_remote_source_manifest(local_provenance)
         print(
             f"[Remote] Uploaded source-file fidelity verified: {manifest_ver.get('files_verified')} files "
-            f"match local manifest byte-for-byte ({manifest_ver.get('remote_extra_file_count')} post-build extra files recorded)."
+            f"match local manifest with identical bytes ({manifest_ver.get('remote_extra_file_count')} post-build extra files recorded)."
         )
 
     # 4. Toolchain inspection

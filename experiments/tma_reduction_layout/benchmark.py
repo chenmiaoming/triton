@@ -37,18 +37,25 @@ for p in ["/opt/triton-src", str(repo_root_candidate)]:
     if os.path.exists(p) and p not in sys.path:
         sys.path.insert(0, p)
 
-import modal
+try:
+    import modal
+    from experiments.tma_reduction_layout.modal_runner import (
+        app,
+        remote_verify_environment,
+        triton_image,
+    )
+except ImportError:
+    modal = None
+    app = None
+    remote_verify_environment = None
+    triton_image = None
+
 from experiments.tma_reduction_layout.analyze_ir import (
     analyze_ptx,
     analyze_ttgir,
     compute_derived_layout_metrics,
     compute_text_hash,
     parse_resource_usage,
-)
-from experiments.tma_reduction_layout.modal_runner import (
-    app,
-    remote_verify_environment,
-    triton_image,
 )
 from experiments.tma_reduction_layout.source_provenance import (
     generate_provenance,
@@ -74,12 +81,7 @@ def calculate_percentile(sorted_data: List[float], percentile: float) -> float:
 # ---------------------------------------------------------------------------
 # Remote GPU Benchmark Function (Runs on strict H100)
 # ---------------------------------------------------------------------------
-@app.function(
-    image=triton_image,
-    gpu="H100!:1",
-    timeout=1200,
-)
-def run_tma_benchmark_remote(
+def _run_tma_benchmark_impl(
     candidates: List[str],
     local_provenance: Dict[str, Any],
 ) -> str:
@@ -358,6 +360,16 @@ def run_tma_benchmark_remote(
     return json.dumps(final_payload)
 
 
+if app is not None:
+    run_tma_benchmark_remote = app.function(
+        image=triton_image,
+        gpu="H100!:1",
+        timeout=1200,
+    )(_run_tma_benchmark_impl)
+else:
+    run_tma_benchmark_remote = _run_tma_benchmark_impl
+
+
 # ---------------------------------------------------------------------------
 # Audited Semantic Phase Loader (Bound to Artifact Hashes)
 # ---------------------------------------------------------------------------
@@ -563,9 +575,9 @@ def execute_benchmark() -> Dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Markdown Table Generator (Split into 3 Clear Tables)
+# Canonical Markdown Summary & Evidence Renderers
 # ---------------------------------------------------------------------------
-def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
+def render_summary(payload: Dict[str, Any]) -> str:
     env = payload.get("environment", {})
     prov = payload.get("local_provenance", {})
     results = payload.get("audited_results", {})
@@ -583,8 +595,7 @@ def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
         "## Table 1: Layout Specifications & Derived Partition Structure",
         "",
         "> [!NOTE]",
-        "> Attributes `sizePerThread`, `threadsPerWarp`, `warpsPerCTA` are directly **OBSERVED** from the `ttg.local_load` destination `#blocked` layout. "
-        "> Lane partitions, warp partitions, and elements/partition are **DERIVED** via exact formulas from the layout specification. Cross-CTA reduction is absent as `ttg.num-ctas = 1`.",
+        "> Attributes `sizePerThread`, `threadsPerWarp`, `warpsPerCTA` are directly **OBSERVED** from the `ttg.local_load` destination `#blocked` layout. Lane partitions, warp partitions, and elements/partition are **DERIVED** via exact formulas from the layout specification. Cross-CTA reduction is absent as `ttg.num-ctas = 1`.",
         "",
         "| Candidate | sizePerThread [OBS] | threadsPerWarp [OBS] | warpsPerCTA [OBS] | numCTAs [OBS] | Lane Parts (M) [DER] | Warp Parts (M) [DER] | CTA Parts (M) [DER] | M Elems/Partition [DER] | Total Elems/Thread [DER] |",
         "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
@@ -610,8 +621,7 @@ def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
         "## Table 2: Observed LocalLoad Lowering & Shared Layout Facts",
         "",
         "> [!NOTE]",
-        "> Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. "
-        "> Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`.",
+        "> Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`. For this artifact, 8200 B is consistent with: 8192 B TMA tile storage (1 * 32 * 128 * 2 B) + 8 B mbarrier storage.",
         "| Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | cuobjdump SHARED (B) [OBS] | Triton metadata.shared (B) [OBS] |",
         "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
     ])
@@ -644,8 +654,7 @@ def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
         "## Table 3: Empirical Execution Timing on NVIDIA H100 (Single-CTA Tile)",
         "",
         "> [!IMPORTANT]",
-        "> **Timing Distinguishability**: For this single-CTA 8-KiB tile benchmark, the current measurement does not reliably distinguish the candidates' runtime. "
-        "> Median differences across candidates (~0.1 µs, ~0.5%) fall well within measurement noise and run-to-run variation. **No statistically reliable performance ordering is claimed.**",
+        "> **Timing Distinguishability**: For this single-CTA 8-KiB tile benchmark, the current measurement protocol does not establish a reliable performance difference among the candidates. No performance ordering is supported by this run.",
         "",
         "| Candidate | Correctness [OBS] | Median (µs) [MEA] | P10 (µs) [MEA] | P90 (µs) [MEA] | IQR (µs) [MEA] | MAD (µs) [MEA] | Block Medians Range (µs) [MEA] |",
         "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
@@ -664,14 +673,12 @@ def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
             f"{m.get('p90_us', 0.0):.2f} | {m.get('iqr_us', 0.0):.2f} | {m.get('mad_us', 0.0):.2f} | {blk_range} |"
         )
 
-    output_path.write_text("\n".join(md_lines))
-    print(f"[Local] Audited summary tables saved to: {output_path}")
+    return "\n".join(md_lines)
 
 
-# ---------------------------------------------------------------------------
-# Instruction-Level Evidence Markdown Document Generator
-# ---------------------------------------------------------------------------
-def generate_evidence_doc(payload: Dict[str, Any], output_path: Path):
+def render_evidence(
+    payload: Dict[str, Any], annotations: Optional[Dict[str, Any]] = None
+) -> str:
     results = payload.get("audited_results", {})
     md_lines = [
         "# TMA Reduction Layout: Instruction-Level Evidence & Phase Annotations",
@@ -698,7 +705,14 @@ def generate_evidence_doc(payload: Dict[str, Any], output_path: Path):
             "| Phase | Description | Observed PTX Line Range |",
             "| :--- | :--- | :--- |",
         ])
-        for phase_name, p in cdata.get("inferred", {}).get("phases", {}).items():
+
+        phases = {}
+        if annotations and "annotations" in annotations and cand in annotations["annotations"]:
+            phases = annotations["annotations"][cand].get("phases", {})
+        else:
+            phases = cdata.get("inferred", {}).get("phases", {})
+
+        for phase_name, p in phases.items():
             if p.get("lines"):
                 l0, l1 = p["lines"]
                 lines_str = f"Lines {l0}-{l1}" if l0 != l1 else f"Line {l0}"
@@ -707,7 +721,31 @@ def generate_evidence_doc(payload: Dict[str, Any], output_path: Path):
             md_lines.append(f"| {phase_name} | {p.get('description', '')} | {lines_str} |")
         md_lines.append("")
 
-    output_path.write_text("\n".join(md_lines))
+    return "\n".join(md_lines)
+
+
+def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
+    content = render_summary(payload)
+    output_path.write_text(content, encoding="utf-8")
+    print(f"[Local] Audited summary tables saved to: {output_path}")
+
+
+def generate_evidence_doc(
+    payload: Dict[str, Any],
+    output_path: Path,
+    annotations: Optional[Dict[str, Any]] = None,
+):
+    if annotations is None:
+        annotations_path = (
+            REPO_ROOT
+            / "experiments"
+            / "tma_reduction_layout"
+            / "audited_phase_annotations.json"
+        )
+        if annotations_path.exists():
+            annotations = json.loads(annotations_path.read_text(encoding="utf-8"))
+    content = render_evidence(payload, annotations)
+    output_path.write_text(content, encoding="utf-8")
     print(f"[Local] Audited evidence document saved to: {output_path}")
 
 

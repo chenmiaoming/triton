@@ -6,7 +6,7 @@ Provides:
 - Binary diff SHA256 against HEAD.
 - Tracking and hashing of untracked working-tree files.
 - Deterministic source manifest SHA256 covering all source tree files uploaded to Modal.
-- Remote container verification asserting byte-for-byte fidelity of /opt/triton-src.
+- Remote container verification asserting uploaded source-file fidelity of /opt/triton-src.
 """
 
 import datetime
@@ -27,48 +27,51 @@ def get_repo_root() -> Path:
     return Path("/home/chenmiaoming/triton-exp")
 
 
-# Standard ignore patterns matching modal_runner.py's add_local_dir ignore list
-DEFAULT_IGNORE_PREFIXES = {
+# Canonical single source of truth for file exclusion patterns across local manifest and Modal image upload
+MODAL_SOURCE_IGNORE_PATTERNS: List[str] = [
     ".git",
+    ".git/**",
     ".venv",
+    ".venv/**",
     "build",
+    "build/**",
+    "results",
+    "results/**",
     "experiments/tma_reduction_layout/results",
-}
+    "experiments/tma_reduction_layout/results/**",
+    "**/__pycache__",
+    "**/__pycache__/**",
+    "**/.pytest_cache",
+    "**/.pytest_cache/**",
+    "**/*.egg-info",
+    "**/*.egg-info/**",
+    "*.egg-info",
+    "*.egg-info/**",
+    "**/*.pyc",
+    "*.pyc",
+    "**/*.so",
+    "*.so",
+    "**/*.a",
+    "*.a",
+    "**/*.o",
+    "*.o",
+]
 
-DEFAULT_IGNORE_NAMES = {
-    "__pycache__",
-    ".pytest_cache",
-}
 
-DEFAULT_IGNORE_SUFFIXES = {
-    ".pyc",
-    ".egg-info",
-    ".so",
-    ".a",
-    ".o",
-}
-
-
-def is_ignored_path(
-    rel_path: Path,
-    ignore_prefixes: Set[str] = DEFAULT_IGNORE_PREFIXES,
-    ignore_names: Set[str] = DEFAULT_IGNORE_NAMES,
-    ignore_suffixes: Set[str] = DEFAULT_IGNORE_SUFFIXES,
-) -> bool:
+def is_ignored_path(rel_path: Path) -> bool:
+    """
+    Determines whether a relative path should be excluded from the source manifest
+    and Modal image upload, implementing the exact semantics of MODAL_SOURCE_IGNORE_PATTERNS.
+    """
     parts = rel_path.parts
-    # Check directory or file component names
-    for p in parts:
-        if p in ignore_names:
-            return True
-        for suff in ignore_suffixes:
-            if p.endswith(suff):
-                return True
-
     posix = rel_path.as_posix()
-    for prefix in ignore_prefixes:
-        if posix == prefix or posix.startswith(prefix + "/"):
+    for p in parts:
+        if p in (".git", ".venv", "build", "results", "__pycache__", ".pytest_cache"):
             return True
-
+        if p.endswith((".egg-info", ".pyc", ".so", ".a", ".o")):
+            return True
+    if posix.startswith("experiments/tma_reduction_layout/results"):
+        return True
     return False
 
 

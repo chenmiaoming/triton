@@ -10,7 +10,7 @@
 ## Table 1: Layout Specifications & Derived Partition Structure
 
 > [!NOTE]
-> Attributes `sizePerThread`, `threadsPerWarp`, `warpsPerCTA` are directly **OBSERVED** from the `ttg.local_load` destination `#blocked` layout. > Lane partitions, warp partitions, and elements/partition are **DERIVED** via exact formulas from the layout specification. Cross-CTA reduction is absent as `ttg.num-ctas = 1`.
+> Attributes `sizePerThread`, `threadsPerWarp`, `warpsPerCTA` are directly **OBSERVED** from the `ttg.local_load` destination `#blocked` layout. Lane partitions, warp partitions, and elements/partition are **DERIVED** via exact formulas from the layout specification. Cross-CTA reduction is absent as `ttg.num-ctas = 1`.
 
 | Candidate | sizePerThread [OBS] | threadsPerWarp [OBS] | warpsPerCTA [OBS] | numCTAs [OBS] | Lane Parts (M) [DER] | Warp Parts (M) [DER] | CTA Parts (M) [DER] | M Elems/Partition [DER] | Total Elems/Thread [DER] |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -25,7 +25,7 @@
 ## Table 2: Observed LocalLoad Lowering & Shared Layout Facts
 
 > [!NOTE]
-> Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. > Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`.
+> Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`. For this artifact, 8200 B is consistent with: 8192 B TMA tile storage (1 * 32 * 128 * 2 B) + 8 B mbarrier storage.
 | Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | cuobjdump SHARED (B) [OBS] | Triton metadata.shared (B) [OBS] |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `default` | 4 × `ld.shared.v4.b32` | 8 | 1 | 7 | 25 (1 + 24) | 14 | `32` | `1024` | `8200` |
@@ -39,7 +39,7 @@
 ## Table 3: Empirical Execution Timing on NVIDIA H100 (Single-CTA Tile)
 
 > [!IMPORTANT]
-> **Timing Distinguishability**: For this single-CTA 8-KiB tile benchmark, the current measurement does not reliably distinguish the candidates' runtime. > Median differences across candidates (~0.1 µs, ~0.5%) fall well within measurement noise and run-to-run variation. **No statistically reliable performance ordering is claimed.**
+> **Timing Distinguishability**: For this single-CTA 8-KiB tile benchmark, the current measurement protocol does not establish a reliable performance difference among the candidates. No performance ordering is supported by this run.
 
 | Candidate | Correctness [OBS] | Median (µs) [MEA] | P10 (µs) [MEA] | P90 (µs) [MEA] | IQR (µs) [MEA] | MAD (µs) [MEA] | Block Medians Range (µs) [MEA] |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |

@@ -26,7 +26,7 @@ Every factual statement, metric, and conclusion recorded in this repository must
 - **Semantic PTX phase attribution must not be inferred from absolute line number thresholds**: Phases must be human-audited and grounded in instruction sequences.
 - **Phase annotations must be bound to artifact hashes**: When IR or PTX artifacts change, phase annotations must fail validation until re-audited.
 - **cuobjdump SHARED and Triton launch-time shared-memory metadata are distinct quantities**: Static ELF shared memory (`cuobjdump -res-usage`) and launch-time dynamic shared memory (`compiled.metadata.shared`) must not be conflated.
-- **Source fidelity verifies uploaded files, not the entire post-build directory**: A remote post-build source tree may contain generated files; source fidelity means all uploaded source-manifest files match byte-for-byte, not that the entire post-build directory tree is identical.
+- **Source fidelity verifies uploaded files, not the entire post-build directory**: A remote post-build source tree may contain generated files; every file in the local upload/source manifest is verified at the same remote path with identical bytes. The complete post-build remote tree is not expected to match the local tree because the build may generate additional files.
 
 ---
 
@@ -65,7 +65,8 @@ All data in this repository is categorized into five distinct tiers:
      ```
   4. Remote runtime assertions strictly verify:
      - `triton.__file__` begins with `/opt/triton-src`
-     - Remote source manifest matches the local source manifest byte-for-byte.
+     - Every file in the local upload/source manifest is verified at the same remote path with identical bytes.
+       The complete post-build remote tree is not expected to match the local tree because the build may generate additional files.
      - GPU is strictly NVIDIA H100 with Compute Capability (9, 0) via `gpu="H100!:1"`.
 
 ---

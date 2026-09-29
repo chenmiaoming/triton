@@ -19,11 +19,19 @@
         },
         "thread_local_reduction_arithmetic": {
           "lines": [232, 255],
+          "opcode_counts": {
+            "max.bf16x2": 12,
+            "cvt.f32.bf16": 8
+          },
           "description": "Thread-local reduction arithmetic: 12 x max.bf16x2 and 8 x cvt.f32.bf16"
         },
         "cross_thread_reduction_communication": {
           "lines": [258, 371],
-          "description": "Cross-lane & cross-warp reduction communication: intra-warp butterfly shuffles (lines 259-280), cross-warp shared exchange (lines 290-301), and cross-warp butterfly shuffles (lines 302-371)"
+          "opcode_counts": {
+            "shfl.sync.bfly.b32": 24,
+            "max.f32": 24
+          },
+          "description": "Cross-thread reduction communication: intra-warp butterfly reduction (lines 259-280) -> cross-warp shared-memory exchange / synchronization (lines 290-301) -> intra-warp butterfly reduction of the exchanged partials (lines 302-371)"
         },
         "post_reduction_convert_layout": {
           "lines": [374, 405],
@@ -53,11 +61,19 @@
         },
         "thread_local_reduction_arithmetic": {
           "lines": [232, 255],
+          "opcode_counts": {
+            "max.bf16x2": 12,
+            "cvt.f32.bf16": 8
+          },
           "description": "Thread-local reduction arithmetic: 12 x max.bf16x2 and 8 x cvt.f32.bf16"
         },
         "cross_thread_reduction_communication": {
           "lines": [258, 371],
-          "description": "Cross-lane & cross-warp reduction communication: intra-warp butterfly shuffles (lines 259-280), cross-warp shared exchange (lines 290-301), and cross-warp butterfly shuffles (lines 302-371)"
+          "opcode_counts": {
+            "shfl.sync.bfly.b32": 24,
+            "max.f32": 24
+          },
+          "description": "Cross-thread reduction communication: intra-warp butterfly reduction (lines 259-280) -> cross-warp shared-memory exchange / synchronization (lines 290-301) -> intra-warp butterfly reduction of the exchanged partials (lines 302-371)"
         },
         "post_reduction_convert_layout": {
           "lines": [374, 405],
@@ -87,11 +103,19 @@
         },
         "thread_local_reduction_arithmetic": {
           "lines": [241, 260],
+          "opcode_counts": {
+            "max.bf16x2": 14,
+            "cvt.f32.bf16": 4
+          },
           "description": "Thread-local reduction arithmetic: 14 x max.bf16x2 and 4 x cvt.f32.bf16"
         },
         "cross_thread_reduction_communication": {
           "lines": [266, 309],
-          "description": "Cross-warp reduction communication: cross-warp shared exchange (lines 266-275), 8 x shfl.sync.bfly.b32 and max.f32 (lines 276-309)"
+          "opcode_counts": {
+            "shfl.sync.bfly.b32": 8,
+            "max.f32": 8
+          },
+          "description": "Cross-thread reduction communication: cross-warp shared-memory exchange (lines 266-275) -> intra-warp shfl.sync.bfly reduction (lines 276-309: 8 x shfl.sync.bfly.b32, 8 x max.f32)"
         },
         "post_reduction_convert_layout": {
           "lines": [312, 331],
@@ -121,11 +145,19 @@
         },
         "thread_local_reduction_arithmetic": {
           "lines": [236, 256],
+          "opcode_counts": {
+            "max.bf16x2": 15,
+            "cvt.f32.bf16": 2
+          },
           "description": "Thread-local reduction arithmetic: 15 x max.bf16x2 and 2 x cvt.f32.bf16"
         },
         "cross_thread_reduction_communication": {
           "lines": [264, 281],
-          "description": "Cross-warp reduction communication: shared exchange (lines 264-275), 2 x shfl.sync.bfly.b32 and 2 x max.f32 (lines 276-281)"
+          "opcode_counts": {
+            "shfl.sync.bfly.b32": 2,
+            "max.f32": 2
+          },
+          "description": "Cross-thread reduction communication: cross-warp shared-memory exchange (lines 264-275) -> intra-warp shfl.sync.bfly reduction (lines 276-281: 2 x shfl.sync.bfly.b32, 2 x max.f32)"
         },
         "post_reduction_convert_layout": {
           "lines": [284, 308],
@@ -155,12 +187,16 @@
         },
         "thread_local_reduction_arithmetic": {
           "lines": [270, 301],
+          "opcode_counts": {
+            "max.bf16": 31,
+            "cvt.f32.bf16": 1
+          },
           "description": "Thread-local reduction tree: 31 x max.bf16 and 1 x cvt.f32.bf16 (reduction completes entirely in thread-local bf16)"
         },
         "cross_thread_reduction_communication": {
           "lines": null,
           "status": "no standalone PTX sequence identified",
-          "description": "Reduction is 100% thread-local; no intra-warp shuffles or cross-warp shared exchange are generated"
+          "description": "For this layout and this artifact, each output element's M-axis reduction is thread-local: no reduction-region shfl.sync or cross-warp shared-memory exchange is generated."
         },
         "post_reduction_convert_layout": {
           "lines": null,

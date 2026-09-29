@@ -3819,7 +3819,7 @@
               258,
               371
             ],
-            "description": "Cross-lane & cross-warp reduction communication: intra-warp butterfly shuffles (lines 259-280), cross-warp shared exchange (lines 290-301), and cross-warp butterfly shuffles (lines 302-371)"
+            "description": "Cross-thread reduction communication: intra-warp butterfly reduction (lines 259-280) -> cross-warp shared-memory exchange / synchronization (lines 290-301) -> intra-warp butterfly reduction of the exchanged partials (lines 302-371)"
           },
           "post_reduction_convert_layout": {
             "lines": [
@@ -4368,7 +4368,7 @@
               258,
               371
             ],
-            "description": "Cross-lane & cross-warp reduction communication: intra-warp butterfly shuffles (lines 259-280), cross-warp shared exchange (lines 290-301), and cross-warp butterfly shuffles (lines 302-371)"
+            "description": "Cross-thread reduction communication: intra-warp butterfly reduction (lines 259-280) -> cross-warp shared-memory exchange / synchronization (lines 290-301) -> intra-warp butterfly reduction of the exchanged partials (lines 302-371)"
           },
           "post_reduction_convert_layout": {
             "lines": [
@@ -4838,7 +4838,7 @@
               266,
               309
             ],
-            "description": "Cross-warp reduction communication: cross-warp shared exchange (lines 266-275), 8 x shfl.sync.bfly.b32 and max.f32 (lines 276-309)"
+            "description": "Cross-thread reduction communication: cross-warp shared-memory exchange (lines 266-275) -> intra-warp shfl.sync.bfly reduction (lines 276-309: 8 x shfl.sync.bfly.b32, 8 x max.f32)"
           },
           "post_reduction_convert_layout": {
             "lines": [
@@ -5279,7 +5279,7 @@
               264,
               281
             ],
-            "description": "Cross-warp reduction communication: shared exchange (lines 264-275), 2 x shfl.sync.bfly.b32 and 2 x max.f32 (lines 276-281)"
+            "description": "Cross-thread reduction communication: cross-warp shared-memory exchange (lines 264-275) -> intra-warp shfl.sync.bfly reduction (lines 276-281: 2 x shfl.sync.bfly.b32, 2 x max.f32)"
           },
           "post_reduction_convert_layout": {
             "lines": [
@@ -5701,7 +5701,7 @@
           "cross_thread_reduction_communication": {
             "lines": null,
             "status": "no standalone PTX sequence identified",
-            "description": "Reduction is 100% thread-local; no intra-warp shuffles or cross-warp shared exchange are generated"
+            "description": "For this layout and this artifact, each output element's M-axis reduction is thread-local: no reduction-region shfl.sync or cross-warp shared-memory exchange is generated."
           },
           "post_reduction_convert_layout": {
             "lines": null,
