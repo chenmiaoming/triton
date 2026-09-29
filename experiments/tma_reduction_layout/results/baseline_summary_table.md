@@ -1,8 +1,8 @@
 # TMA Reduction Layout Baseline Characterization: [1, 32, 128] BF16 -> FP32 Max Axis=1
 
 - **Hardware**: NVIDIA H100 80GB HBM3 (580.95.05, CC [9, 0])
-- **Git HEAD**: `3c6d6d1b64db6f077b4a19a6aba487b3ae4bfead` (branch: `explore/tma-reduction-layout`, dirty: `False`)
-- **Source Manifest**: `2bd2d1c377f832daa43612dbdbeffb2a71ab50ea6f3526ee3a4c332edbd092aa`
+- **Git HEAD**: `e6df4ea43ea75c632ad54ad0698fd7b300590ac3` (branch: `explore/tma-reduction-layout`, dirty: `False`)
+- **Source Manifest**: `cdceb86aa28fe5057ceefee69e3f2760db764810921ccb7d5b2ae6ae2b6607d6`
 - **Triton**: `3.9.0` (`/opt/triton-src/python/triton/__init__.py`)
 
 ---
@@ -26,14 +26,13 @@
 
 > [!NOTE]
 > Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. > Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`.
-
-| Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | Shared Mem (B) [OBS] |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `default` | 4 × `ld.shared.v4.b32` | 8 | 1 | 7 | 25 (1 + 24) | 14 | `32` | `1024` |
-| `8` | 4 × `ld.shared.v4.b32` | 8 | 1 | 7 | 25 (1 + 24) | 14 | `32` | `1024` |
-| `4` | 8 × `ld.shared.v2.b32` | 10 | 1 | 4 | 9 (1 + 8) | 10 | `25` | `1024` |
-| `2` | 4 × `ldmatrix.sync.aligned.m8n8.x4.shared.b16` | 3 | 4 | 5 | 3 (1 + 2) | 10 | `23` | `1024` |
-| `1` | 32 × `ld.shared.b16` | 32 | 0 | 1 | 1 (1 + 0) | 4 | `32` | `1024` |
+| Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | cuobjdump SHARED (B) [OBS] | Triton metadata.shared (B) [OBS] |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `default` | 4 × `ld.shared.v4.b32` | 8 | 1 | 7 | 25 (1 + 24) | 14 | `32` | `1024` | `8200` |
+| `8` | 4 × `ld.shared.v4.b32` | 8 | 1 | 7 | 25 (1 + 24) | 14 | `32` | `1024` | `8200` |
+| `4` | 8 × `ld.shared.v2.b32` | 10 | 1 | 4 | 9 (1 + 8) | 10 | `25` | `1024` | `8200` |
+| `2` | 4 × `ldmatrix.sync.aligned.m8n8.x4.shared.b16` | 3 | 4 | 5 | 3 (1 + 2) | 10 | `23` | `1024` | `8200` |
+| `1` | 32 × `ld.shared.b16` | 32 | 0 | 1 | 1 (1 + 0) | 4 | `32` | `1024` | `8200` |
 
 ---
 
@@ -44,8 +43,8 @@
 
 | Candidate | Correctness [OBS] | Median (µs) [MEA] | P10 (µs) [MEA] | P90 (µs) [MEA] | IQR (µs) [MEA] | MAD (µs) [MEA] | Block Medians Range (µs) [MEA] |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `default` | PASS | **22.27** | 21.76 | 23.23 | 0.65 | 0.32 | [21.97, 23.10] |
-| `8` | PASS | **22.24** | 21.86 | 22.79 | 0.45 | 0.22 | [22.11, 22.43] |
-| `4` | PASS | **22.27** | 21.79 | 22.92 | 0.58 | 0.29 | [21.95, 22.64] |
-| `2` | PASS | **22.21** | 21.69 | 22.79 | 0.54 | 0.26 | [21.81, 22.34] |
-| `1` | PASS | **22.24** | 21.76 | 22.94 | 0.55 | 0.29 | [22.08, 22.48] |
+| `default` | PASS | **22.82** | 21.43 | 28.56 | 1.70 | 0.74 | [21.58, 23.41] |
+| `8` | PASS | **22.56** | 21.31 | 29.64 | 2.06 | 0.90 | [21.46, 23.41] |
+| `4` | PASS | **22.56** | 21.31 | 28.45 | 1.92 | 0.93 | [21.76, 23.30] |
+| `2` | PASS | **22.82** | 21.37 | 26.67 | 1.62 | 0.83 | [21.60, 23.46] |
+| `1` | PASS | **22.75** | 21.50 | 30.06 | 1.92 | 0.93 | [21.49, 23.50] |

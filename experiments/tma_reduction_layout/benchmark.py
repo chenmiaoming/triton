@@ -612,9 +612,8 @@ def generate_summary_tables(payload: Dict[str, Any], output_path: Path):
         "> [!NOTE]",
         "> Shared memory descriptor layout is `#ttg.nvmma_shared` with `swizzlingByteWidth=128, elementBitWidth=16`. "
         "> Opcode counts represent whole-kernel occurrences across all phases. Physical registers are extracted via `cuobjdump -res-usage`.",
-        "",
-        "| Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | Shared Mem (B) [OBS] |",
-        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
+        "| Candidate | Initial LocalLoad Lowering [OBS] | ld.shared (Total) [OBS] | ldmatrix (Total) [OBS] | st.shared (Total) [OBS] | shfl.sync (Setup + Reduct) [OBS] | bar.sync (Total) [OBS] | Physical Regs/Thread [OBS] | cuobjdump SHARED (B) [OBS] | Triton metadata.shared (B) [OBS] |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
     ])
 
     for cand, cdata in results.items():
