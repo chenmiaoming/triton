@@ -16,6 +16,11 @@ Checks:
 6. Canonical Markdown equivalence (exact string match for rendered summary and evidence).
 7. Modal & manifest ignore policy consistency on synthetic test paths.
 8. Uploaded source manifest subset fidelity (local manifest digest == remote subset digest).
+9. Phase 2 B-Saturation pilot results & extended saturation canonical markdown.
+10. Phase 2 30-Config Steady-State sweep results (150 combinations, re-derived transitions, canonical CSV & MD).
+11. Phase 2 representative artifacts fidelity & byte-for-byte SHA256 bindings.
+12. Offline marginal analysis formula consistency & canonical markdown.
+13. Corrected fixed-binary saturation pilot runs (3 allocations, fixed-binary invariance, telemetry, canonical MD).
 
 Exits with code 0 on complete consistency, or non-zero on any failure.
 """
@@ -52,6 +57,12 @@ from experiments.tma_reduction_layout.phase2_benchmark import (
     generate_sweep_csv,
     generate_sweep_markdown,
     generate_extended_saturation_markdown,
+    render_corrected_pilot_summary_markdown,
+)
+from experiments.tma_reduction_layout.marginal_analysis import (
+    compute_marginal_analysis,
+    linear_regression,
+    render_marginal_analysis_markdown,
 )
 from experiments.tma_reduction_layout.analyze_ir import compute_derived_layout_metrics
 
@@ -95,7 +106,7 @@ def validate():
     annotations = ann_raw.get("annotations", {})
 
     # Check 1: Branch and Run Metadata Sanity
-    print("[1/8] Validating branch & run metadata sanity...")
+    print("[1/13] Validating branch & run metadata sanity...")
     prov = data.get("local_provenance", {})
     is_dirty = prov.get("is_dirty")
     if is_dirty is not False:
@@ -114,7 +125,7 @@ def validate():
     print(f"  working tree is_dirty: {is_dirty}")
 
     # Check 2: Artifact hashes vs baseline_results.json
-    print("[2/8] Validating artifact hashes against baseline_results.json...")
+    print("[2/13] Validating artifact hashes against baseline_results.json...")
     for cand in candidates:
         if cand not in audited:
             errors.append(f"Candidate '{cand}' missing in baseline_results.json audited_results.")
@@ -137,7 +148,7 @@ def validate():
                 errors.append(f"SHA mismatch for {cand}.{ext}: disk={actual_sha} vs json={expected_sha}")
 
     # Check 3: Audited Phase Annotations & Mechanical Instruction Verification
-    print("[3/8] Validating audited phase annotations and mechanical instruction counts...")
+    print("[3/13] Validating audited phase annotations and mechanical instruction counts...")
     standard_phase_order = [
         "tma_setup_and_descriptor",
         "initial_local_load",
@@ -232,7 +243,7 @@ def validate():
                         )
 
     # Check 4: default vs forced-8 bit-for-bit equivalence
-    print("[4/8] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
+    print("[4/13] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
     default_ptx_sha = compute_sha256((ARTIFACTS_DIR / "default.ptx").read_text(encoding="utf-8"))
     c8_ptx_sha = compute_sha256((ARTIFACTS_DIR / "8.ptx").read_text(encoding="utf-8"))
     if default_ptx_sha != c8_ptx_sha:
@@ -244,7 +255,7 @@ def validate():
         errors.append(f"default.ttgir ({default_ttgir_sha}) != 8.ttgir ({c8_ttgir_sha})")
 
     # Check 5: Re-parse resource.txt files
-    print("[5/8] Validating resource.txt parsing consistency...")
+    print("[5/13] Validating resource.txt parsing consistency...")
     for cand in candidates:
         res_file = ARTIFACTS_DIR / f"{cand}.resource.txt"
         res_text = res_file.read_text(encoding="utf-8")
@@ -263,7 +274,7 @@ def validate():
             errors.append(f"cuobjdump SHARED mismatch for '{cand}': parsed={actual_smem} vs json={expected_smem}")
 
     # Check 6: Canonical Markdown Verification
-    print("[6/8] Validating canonical Markdown generation against committed docs...")
+    print("[6/13] Validating canonical Markdown generation against committed docs...")
     rendered_summary = render_summary(data)
     committed_summary = (RESULTS_DIR / "baseline_summary_table.md").read_text(encoding="utf-8")
     if rendered_summary != committed_summary:
@@ -279,7 +290,7 @@ def validate():
         )
 
     # Check 7: Modal & Source Manifest Ignore Policy Consistency
-    print("[7/8] Validating unified Modal & manifest ignore policy on synthetic paths...")
+    print("[7/13] Validating unified Modal & manifest ignore policy on synthetic paths...")
     synthetic_cases: List[Tuple[str, bool]] = [
         ("foo.so", True),
         ("foo.o", True),
@@ -314,7 +325,7 @@ def validate():
         pass
 
     # Check 8: Source subset manifest digest matches local source manifest
-    print("[8/11] Validating uploaded source-manifest subset digest fidelity...")
+    print("[8/13] Validating uploaded source-manifest subset digest fidelity...")
     env_ver = data.get("environment", {}).get("manifest_verification", {})
     if env_ver:
         local_sha = env_ver.get("local_manifest_sha256")
@@ -327,7 +338,7 @@ def validate():
         print(f"  Remote post-build extra files count: {env_ver.get('remote_extra_file_count')}")
 
     # Check 9: Phase 2 B-Saturation Pilot Consistency
-    print("[9/11] Validating Phase 2 B-Saturation pilot results...")
+    print("[9/13] Validating Phase 2 B-Saturation pilot results...")
     sat_json_path = SATURATION_DIR / "results.json"
     sat_md_path = SATURATION_DIR / "summary.md"
     if not sat_json_path.exists():
@@ -385,7 +396,7 @@ def validate():
             print("  Verified Phase 2 extended saturation pilot data and canonical markdown.")
 
     # Check 10: Phase 2 30-Config Sweep Consistency
-    print("[10/11] Validating Phase 2 30-Config Steady-State sweep results...")
+    print("[10/13] Validating Phase 2 30-Config Steady-State sweep results...")
     # 10.1 Synthetic unit test of transition classification
     try:
         assert test_classify_structural_transitions() is True
@@ -497,7 +508,7 @@ def validate():
         print("  Verified Phase 2 sweep (150 combinations, candidate legality, re-derived transitions, canonical CSV & MD).")
 
     # Check 11: Phase 2 Representative Artifact Fidelity & Hash-Binding
-    print("[11/11] Validating Phase 2 representative artifacts fidelity and hash binding...")
+    print("[11/13] Validating Phase 2 representative artifacts fidelity and hash binding...")
     if not REPRESENTATIVES_DIR.exists():
         errors.append(f"Representative cases directory missing: {REPRESENTATIVES_DIR}")
     else:
@@ -526,6 +537,127 @@ def validate():
                         errors.append(f"SHA mismatch for {art_file}: actual={actual_sha} vs expected={expected_sha}")
         print(f"  Verified {len(case_dirs)} representative cases with exact byte-for-byte SHA256 bindings.")
 
+    # Check 12: Offline Marginal Analysis Consistency
+    print("[12/13] Validating offline marginal analysis consistency and canonical markdown...")
+    mar_json_path = SATURATION_DIR / "marginal_analysis.json"
+    mar_md_path = SATURATION_DIR / "marginal_analysis.md"
+    if not mar_json_path.exists():
+        errors.append(f"Missing {mar_json_path}")
+    elif not mar_md_path.exists():
+        errors.append(f"Missing {mar_md_path}")
+    else:
+        mar_data = json.loads(mar_json_path.read_text(encoding="utf-8"))
+        for cfg_k, cfg_data in mar_data.get("configs", {}).items():
+            for cand, cdata in cfg_data.get("candidates", {}).items():
+                if not cdata.get("is_legal"):
+                    continue
+                # 1. Recalculate interval slopes
+                islopes = cdata.get("interval_slopes", [])
+                for s_entry in islopes:
+                    dt = s_entry["dt_us"]
+                    db = s_entry["db_ctas"]
+                    exp_slope = (dt / db) * 1000.0
+                    act_slope = s_entry["slope_ns_per_cta"]
+                    if abs(exp_slope - act_slope) > 1e-4:
+                        errors.append(f"Marginal slope formula mismatch in {cfg_k}, cand={cand}: {act_slope} vs {exp_slope}")
+
+                # 2. Recalculate affine regression fit
+                fit = cdata.get("affine_fit", {})
+                fit_b = [float(x) for x in fit.get("fit_b_points", [])]
+                fit_ys = [fit["intercept_us"] + (fit["marginal_ns_per_cta"] / 1000.0) * b + res for b, res in zip(fit_b, fit["residuals_us"])]
+                recomputed_slope, recomputed_icept, recomputed_r2, _ = linear_regression(fit_b, fit_ys)
+                if abs(recomputed_slope * 1000.0 - fit["marginal_ns_per_cta"]) > 1e-3:
+                    errors.append(f"Marginal ns/CTA recomputation mismatch in {cfg_k}, cand={cand}")
+                if abs(recomputed_icept - fit["intercept_us"]) > 1e-3:
+                    errors.append(f"Intercept recomputation mismatch in {cfg_k}, cand={cand}")
+                if abs(recomputed_r2 - fit["r2"]) > 1e-4:
+                    errors.append(f"R2 recomputation mismatch in {cfg_k}, cand={cand}")
+
+                # 3. Check marginal linear regime boolean
+                last_two_delta = cdata.get("last_two_slope_delta_pct")
+                expected_regime = (last_two_delta is not None and abs(last_two_delta) < 5.0 and fit["r2"] >= 0.99)
+                if cdata.get("marginal_linear_regime_observed") != expected_regime:
+                    errors.append(f"marginal_linear_regime_observed mismatch in {cfg_k}, cand={cand}: expected={expected_regime}")
+
+        canonical_mar_md = render_marginal_analysis_markdown(mar_data)
+        actual_mar_md = mar_md_path.read_text(encoding="utf-8")
+        if canonical_mar_md != actual_mar_md:
+            errors.append("marginal_analysis.md does not match canonical render_marginal_analysis_markdown() output byte-for-byte")
+        else:
+            print("  Verified offline marginal analysis calculations and byte-for-byte markdown.")
+
+    # Check 13: Corrected Fixed-Binary Saturation Pilot Runs & Multi-Invocation Verification
+    print("[13/13] Validating corrected fixed-binary saturation pilot runs (3 allocations) and summary markdown...")
+    cp_json_path = SATURATION_DIR / "corrected_pilot_runs.json"
+    cp_md_path = SATURATION_DIR / "corrected_pilot_summary.md"
+    if not cp_json_path.exists():
+        errors.append(f"Missing {cp_json_path}")
+    elif not cp_md_path.exists():
+        errors.append(f"Missing {cp_md_path}")
+    else:
+        cp_runs = json.loads(cp_json_path.read_text(encoding="utf-8"))
+        expected_run_keys = ["run_1", "run_2", "run_3"]
+        if list(cp_runs.keys()) != expected_run_keys:
+            errors.append(f"Expected runs {expected_run_keys}, got {list(cp_runs.keys())}")
+
+        for rk in expected_run_keys:
+            rdata = cp_runs.get(rk, {})
+            env = rdata.get("environment", {})
+            if "H100" not in env.get("gpu_name", ""):
+                errors.append(f"{rk}: GPU name does not contain H100 ({env.get('gpu_name')})")
+            if env.get("gpu_compute_capability") != [9, 0]:
+                errors.append(f"{rk}: Compute capability mismatch ({env.get('gpu_compute_capability')})")
+            if not isinstance(env.get("l2_cache_bytes"), int) or env.get("l2_cache_bytes") <= 0:
+                errors.append(f"{rk}: l2_cache_bytes invalid ({env.get('l2_cache_bytes')})")
+            telem = env.get("gpu_telemetry", {})
+            for t_key in ["sm_clock_mhz", "memory_clock_mhz", "power_draw_w", "gpu_temperature_c"]:
+                if t_key not in telem:
+                    errors.append(f"{rk}: Missing telemetry key {t_key}")
+
+            for cfg_k, cfg_v in rdata.get("configs", {}).items():
+                m = cfg_v["M"]
+                n = cfg_v["N"]
+                w = cfg_v["num_warps"]
+                b_desc = cfg_v["b_desc"]
+                b_runs = cfg_v["b_runs"]
+                grid_data = cfg_v.get("grid_data", {})
+
+                # Fixed-binary check: artifact hashes identical across all b_runs
+                for cand in ["default", "8", "4", "2", "1"]:
+                    c_first = grid_data.get(str(b_runs[0]), {}).get(cand, {})
+                    if not c_first.get("is_legal"):
+                        continue
+                    first_hashes = c_first.get("compiled_artifact_hashes", {})
+                    for b_other in b_runs[1:]:
+                        other_hashes = grid_data.get(str(b_other), {}).get(cand, {}).get("compiled_artifact_hashes", {})
+                        if other_hashes != first_hashes:
+                            errors.append(
+                                f"{rk} {cfg_k} cand={cand}: Fixed-binary violation! "
+                                f"Hashes for B={b_other} differ from B={b_runs[0]}: {other_hashes} vs {first_hashes}"
+                            )
+
+                # Re-verify marginal analysis
+                man = cfg_v.get("marginal_analysis", {})
+                for cand, cman in man.items():
+                    meds = [grid_data[str(b)][cand]["median_us"] for b in b_runs]
+                    fit_b = [float(b) for b in b_runs[-3:]]
+                    fit_t = meds[-3:]
+                    slope_us, icept_us, r2, _ = linear_regression(fit_b, fit_t)
+                    act_m_ns = cman["affine_fit"]["marginal_ns_per_cta"]
+                    if abs(slope_us * 1000.0 - act_m_ns) > 1e-3:
+                        errors.append(f"{rk} {cfg_k} cand={cand}: marginal slope mismatch: {act_m_ns} vs {slope_us * 1000.0}")
+                    if abs(icept_us - cman["affine_fit"]["intercept_us"]) > 1e-3:
+                        errors.append(f"{rk} {cfg_k} cand={cand}: intercept mismatch")
+                    if abs(r2 - cman["affine_fit"]["r2"]) > 1e-4:
+                        errors.append(f"{rk} {cfg_k} cand={cand}: R2 mismatch")
+
+        canonical_cp_md = render_corrected_pilot_summary_markdown(cp_runs)
+        actual_cp_md = cp_md_path.read_text(encoding="utf-8")
+        if canonical_cp_md != actual_cp_md:
+            errors.append("corrected_pilot_summary.md does not match canonical render_corrected_pilot_summary_markdown() output byte-for-byte")
+        else:
+            print("  Verified corrected fixed-binary pilot runs (3 allocations, fixed-binary invariance, telemetry, canonical MD).")
+
     print("--------------------------------------------------")
     if errors:
         print(f"FAILED with {len(errors)} consistency error(s):")
@@ -533,7 +665,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 11 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 13 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 

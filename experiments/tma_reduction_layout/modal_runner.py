@@ -174,6 +174,35 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
     nvdisasm_ver = run_tool(["nvdisasm", "--version"])
     cuobjdump_ver = run_tool(["cuobjdump", "--version"])
 
+    props = torch.cuda.get_device_properties(0)
+    l2_cache_bytes = getattr(props, "L2_cache_size", None)
+
+    try:
+        telemetry_out = subprocess.check_output(
+            [
+                "nvidia-smi",
+                "--query-gpu=pstate,clocks.current.sm,clocks.current.memory,power.draw,temperature.gpu",
+                "--format=csv,noheader,nounits",
+            ],
+            text=True,
+        ).strip()
+        parts = [p.strip() for p in telemetry_out.split(",")]
+        telemetry = {
+            "pstate": parts[0] if len(parts) > 0 else "UNKNOWN",
+            "sm_clock_mhz": int(parts[1]) if len(parts) > 1 and parts[1].isdigit() else parts[1] if len(parts) > 1 else "UNKNOWN",
+            "memory_clock_mhz": int(parts[2]) if len(parts) > 2 and parts[2].isdigit() else parts[2] if len(parts) > 2 else "UNKNOWN",
+            "power_draw_w": float(parts[3]) if len(parts) > 3 else "UNKNOWN",
+            "gpu_temperature_c": int(parts[4]) if len(parts) > 4 and parts[4].isdigit() else parts[4] if len(parts) > 4 else "UNKNOWN",
+        }
+    except Exception:
+        telemetry = {
+            "pstate": "UNKNOWN",
+            "sm_clock_mhz": "UNKNOWN",
+            "memory_clock_mhz": "UNKNOWN",
+            "power_draw_w": "UNKNOWN",
+            "gpu_temperature_c": "UNKNOWN",
+        }
+
     return {
         "gpu_name": gpu_name,
         "gpu_uuid": gpu_uuid,
@@ -189,7 +218,9 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
         "ptxas_version": ptxas_ver,
         "nvdisasm_version": nvdisasm_ver,
         "cuobjdump_version": cuobjdump_ver,
-        "sm_count": torch.cuda.get_device_properties(0).multi_processor_count,
+        "sm_count": props.multi_processor_count,
+        "l2_cache_bytes": l2_cache_bytes if l2_cache_bytes is not None else "UNKNOWN",
+        "gpu_telemetry": telemetry,
         "manifest_verification": manifest_ver,
     }
 
