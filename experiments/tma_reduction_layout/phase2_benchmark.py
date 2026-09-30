@@ -308,6 +308,214 @@ if app is not None:
         gpu="H100!:1",
         timeout=1800,
     )
+    def run_extended_saturation_remote(
+        prov: Dict[str, Any],
+        b_values: List[int],
+    ) -> str:
+        import os
+        import statistics
+        import torch
+        import triton
+        import triton.language as tl
+
+        env_info = remote_verify_environment(prov)
+        print(f"[Remote Extended Saturation] Hardware: {env_info['gpu_name']} CC: {env_info['gpu_compute_capability']}")
+
+        triton.set_allocator(
+            lambda size, align, stream: torch.empty(size, dtype=torch.int8, device="cuda")
+        )
+
+        test_configs = [
+            (32, 16, 8),
+            (32, 64, 8),
+            (32, 128, 4),
+        ]
+        candidates = ["default", "8", "4", "2", "1"]
+
+        results = {
+            "environment": env_info,
+            "provenance": prov,
+            "b_values": b_values,
+            "configs": {},
+        }
+
+        def get_kernel():
+            @triton.jit
+            def kernel(
+                a_ptr,
+                out_ptr,
+                stride_b,
+                stride_m,
+                B: tl.constexpr,
+                M: tl.constexpr,
+                N: tl.constexpr,
+            ):
+                pid = tl.program_id(0)
+                desc = tl.make_tensor_descriptor(
+                    a_ptr,
+                    shape=[B, M, N],
+                    strides=[stride_b, stride_m, 1],
+                    block_shape=[1, M, N],
+                )
+                x = desc.load([pid, 0, 0])
+                x_fp32 = x.to(tl.float32)
+                y = tl.max(x_fp32, axis=1)
+                offs_n = tl.arange(0, N)
+                tl.store(out_ptr + pid * N + offs_n, tl.reshape(y, [N]))
+
+            return kernel
+
+        for m, n, num_warps in test_configs:
+            cfg_key = f"M{m}_N{n}_w{num_warps}"
+            print(f"\n[Remote Extended Saturation] Testing config: {cfg_key} ...")
+            cfg_results = {
+                "M": m,
+                "N": n,
+                "num_warps": num_warps,
+                "data": {},
+            }
+
+            for b in b_values:
+                print(f"  Testing B = {b} ...")
+                stride_b = m * n
+                stride_m = n
+                input_tensor = torch.randn((b, m, n), device="cuda", dtype=torch.bfloat16)
+                out_tensor = torch.empty((b, n), device="cuda", dtype=torch.float32)
+                ref_out = input_tensor.to(torch.float32).amax(dim=1)
+                input_bytes = b * m * n * 2
+
+                compiled_kernels = {}
+                legal_cands = []
+                cand_meta = {}
+
+                for cand in candidates:
+                    is_legal, err = check_candidate_legality(m, n, num_warps, cand)
+                    if not is_legal:
+                        cand_meta[cand] = {"is_legal": False, "error": err}
+                        continue
+
+                    if cand == "default":
+                        os.environ.pop("TRITON_TMA_REDUCTION_LAYOUT_EXPERIMENT", None)
+                    else:
+                        os.environ["TRITON_TMA_REDUCTION_LAYOUT_EXPERIMENT"] = cand
+                    os.environ["TRITON_CACHE_DIR"] = f"/tmp/triton_cache_ext_{m}_{n}_{num_warps}_{b}_{cand}"
+                    kernel = get_kernel()
+
+                    try:
+                        compiled = kernel.warmup(
+                            input_tensor,
+                            out_tensor,
+                            stride_b,
+                            stride_m,
+                            b,
+                            m,
+                            n,
+                            grid=(b,),
+                            num_warps=num_warps,
+                        )
+                        out_tensor.zero_()
+                        kernel[(b,)](input_tensor, out_tensor, stride_b, stride_m, b, m, n, num_warps=num_warps)
+                        torch.cuda.synchronize()
+                        diff = float(torch.max(torch.abs(out_tensor - ref_out)).item())
+                        is_correct = diff < 1e-3
+                        compiled_kernels[cand] = (kernel, compiled)
+                        legal_cands.append(cand)
+                        cand_meta[cand] = {
+                            "is_legal": True,
+                            "is_correct": is_correct,
+                            "max_diff": diff,
+                        }
+                    except Exception as e:
+                        cand_meta[cand] = {"is_legal": False, "error": str(e)}
+
+                # Timing measurement protocol
+                # Warmup 20 launches
+                for _ in range(20):
+                    for cand in legal_cands:
+                        k, _ = compiled_kernels[cand]
+                        k[(b,)](input_tensor, out_tensor, stride_b, stride_m, b, m, n, num_warps=num_warps)
+                torch.cuda.synchronize()
+
+                num_blocks = 10
+                iters_per_block = 10
+                cand_samples_us = {c: [] for c in legal_cands}
+                cand_block_medians = {c: [] for c in legal_cands}
+
+                start_event = torch.cuda.Event(enable_timing=True)
+                end_event = torch.cuda.Event(enable_timing=True)
+
+                for block_idx in range(num_blocks):
+                    shift = block_idx % len(legal_cands)
+                    block_order = legal_cands[shift:] + legal_cands[:shift]
+                    for cand in block_order:
+                        k, _ = compiled_kernels[cand]
+                        block_samples = []
+                        for _ in range(iters_per_block):
+                            start_event.record()
+                            k[(b,)](input_tensor, out_tensor, stride_b, stride_m, b, m, n, num_warps=num_warps)
+                            end_event.record()
+                            torch.cuda.synchronize()
+                            us = start_event.elapsed_time(end_event) * 1000.0
+                            cand_samples_us[cand].append(us)
+                            block_samples.append(us)
+                        cand_block_medians[cand].append(statistics.median(block_samples))
+
+                b_data = {}
+                for cand in candidates:
+                    if cand not in legal_cands:
+                        b_data[cand] = cand_meta.get(cand, {"is_legal": False})
+                        continue
+                    samples = cand_samples_us[cand]
+                    sorted_samples = sorted(samples)
+                    med = statistics.median(samples)
+                    mean = statistics.mean(samples)
+                    p10 = calculate_percentile(sorted_samples, 0.10)
+                    p90 = calculate_percentile(sorted_samples, 0.90)
+                    p25 = calculate_percentile(sorted_samples, 0.25)
+                    p75 = calculate_percentile(sorted_samples, 0.75)
+                    iqr = p75 - p25
+                    mad = statistics.median([abs(x - med) for x in samples])
+
+                    time_per_cta_ns = (med * 1000.0) / b
+                    effective_gbps = (input_bytes / (med * 1e-6)) / 1e9
+
+                    b_data[cand] = {
+                        "is_legal": True,
+                        "is_correct": cand_meta[cand]["is_correct"],
+                        "max_diff": cand_meta[cand]["max_diff"],
+                        "median_us": med,
+                        "mean_us": mean,
+                        "p10_us": p10,
+                        "p90_us": p90,
+                        "iqr_us": iqr,
+                        "mad_us": mad,
+                        "amortized_grid_time_per_cta_ns": round(time_per_cta_ns, 2),
+                        "time_per_cta_ns": round(time_per_cta_ns, 2),
+                        "effective_gbps": round(effective_gbps, 2),
+                        "block_medians_us": cand_block_medians[cand],
+                        "raw_samples_us": samples,
+                    }
+                    print(f"    cand={cand:7s}: median={med:8.2f} us, {time_per_cta_ns:6.2f} ns/CTA, {effective_gbps:6.1f} GB/s")
+
+                # Relative to default
+                def_med = b_data.get("default", {}).get("median_us")
+                if def_med:
+                    for cand, cinfo in b_data.items():
+                        if cinfo.get("is_legal"):
+                            cinfo["vs_default_pct"] = round((cinfo["median_us"] - def_med) / def_med * 100.0, 2)
+
+                cfg_results["data"][str(b)] = b_data
+
+            results["configs"][cfg_key] = cfg_results
+
+        return json.dumps(results)
+
+
+    @app.function(
+        image=triton_image,
+        gpu="H100!:1",
+        timeout=1800,
+    )
     def run_sweep_remote(
         b_steady: int,
         prov: Dict[str, Any],
@@ -956,6 +1164,120 @@ def generate_pilot_markdown(payload: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def generate_extended_saturation_markdown(payload: Dict[str, Any]) -> str:
+    env = payload.get("environment", {})
+    b_values = payload.get("b_values", [])
+    configs = payload.get("configs", {})
+
+    lines = [
+        "# Phase 2 Extended B-Saturation Pilot Report",
+        "",
+        "## Hardware & Execution Environment",
+        f"- **GPU**: `{env.get('gpu_name')}` (CC: `{env.get('gpu_compute_capability')}`, Driver: `{env.get('driver_version')}`)",
+        f"- **PyTorch / CUDA**: `{env.get('pytorch_version')}` / CUDA `{env.get('torch_cuda_version')}`",
+        f"- **Triton Version**: `{env.get('triton_version')}` (`{env.get('triton_file')}`)",
+        f"- **SM Count**: `{env.get('sm_count', 'UNKNOWN')}`",
+        f"- **Evaluated B (Grid Sizes)**: `{b_values}`",
+        "- **Operational Plateau Criterion**: Two consecutive B doublings where change in `amortized_grid_time_per_cta_ns` is `< 5.0%` (`| (t_{2B} - t_B) / t_B | < 0.05`).",
+        "",
+        "> [!NOTE]",
+        "> `amortized_grid_time_per_cta_ns` represents total grid execution time divided by CTA count.",
+        "> It is a throughput-normalization metric, not the execution latency of one CTA.",
+        "",
+        "## 1. Per-Configuration Saturation Analysis",
+    ]
+
+    candidates_order = ["default", "8", "4", "2", "1"]
+    plateau_summary = {}
+
+    for cfg_key, cfg in configs.items():
+        m = cfg["M"]
+        n = cfg["N"]
+        w = cfg["num_warps"]
+        data = cfg.get("data", {})
+
+        lines.extend([
+            "",
+            f"### Configuration: `{cfg_key}` (`M={m}, N={n}, num_warps={w}`)",
+            "",
+            "| B (Grid) | Candidate | Total Median (us) | Amortized Time/CTA (ns) | Effective GB/s | vs Default (%) | Step Delta vs Prev B (%) |",
+            "| :--- | :--- | :---: | :---: | :---: | :---: | :---: |",
+        ])
+
+        prev_t_cta = {}
+        cand_series = {c: [] for c in candidates_order}
+
+        for b in b_values:
+            b_data = data.get(str(b), {})
+            for cand in candidates_order:
+                cinfo = b_data.get(cand, {})
+                if not cinfo.get("is_legal", False):
+                    lines.append(f"| {b} | {cand} | INVALID | - | - | - | {cinfo.get('error', 'INVALID')} |")
+                    continue
+                med = cinfo.get("median_us", 0.0)
+                t_cta = cinfo.get("amortized_grid_time_per_cta_ns", 0.0)
+                gbps = cinfo.get("effective_gbps", 0.0)
+                vs_def = cinfo.get("vs_default_pct", 0.0)
+                vs_def_str = f"{vs_def:+.2f}%" if cand != "default" else "0.00% (base)"
+
+                cand_series[cand].append((b, t_cta))
+
+                step_str = "baseline"
+                if cand in prev_t_cta:
+                    p = prev_t_cta[cand]
+                    pct = (t_cta - p) / p * 100.0 if p > 0 else 0.0
+                    step_str = f"{pct:+.2f}%"
+                prev_t_cta[cand] = t_cta
+
+                lines.append(f"| {b} | {cand} | {med:.2f} | {t_cta:.2f} | {gbps:.1f} | {vs_def_str} | {step_str} |")
+
+        # Operational Plateau Criterion Evaluation for default
+        lines.extend([
+            "",
+            "#### Doubling Steps & Operational Criterion Evaluation (`default` candidate):",
+        ])
+
+        def_series = cand_series["default"]
+        deltas = []
+        for i in range(1, len(def_series)):
+            b_prev, t_prev = def_series[i - 1]
+            b_curr, t_curr = def_series[i]
+            d_pct = (t_curr - t_prev) / t_prev * 100.0 if t_prev > 0 else 0.0
+            deltas.append((b_prev, b_curr, d_pct))
+            meets = abs(d_pct) < 5.0
+            lines.append(f"- Doubling Step {i} (`B={b_prev} -> {b_curr}`): `{d_pct:+.2f}%` ({'meets <5%' if meets else 'exceeds 5%'})")
+
+        plateau_found = False
+        plateau_b = None
+        for i in range(len(deltas) - 1):
+            s1 = deltas[i]
+            s2 = deltas[i + 1]
+            if abs(s1[2]) < 5.0 and abs(s2[2]) < 5.0:
+                plateau_found = True
+                plateau_b = s1[1]
+                lines.append(f"\n> **Operational Criterion Met**: Consecutive doublings `{s1[0]}->{s1[1]}` ({s1[2]:+.2f}%) and `{s2[0]}->{s2[1]}` ({s2[2]:+.2f}%) both show `< 5.0%` change. Plateau established at **B = {plateau_b}**.")
+                break
+
+        if not plateau_found:
+            lines.append("\n> **Operational Criterion NOT Met**: No two consecutive doubling steps exhibited `< 5.0%` change within tested B range.")
+        plateau_summary[cfg_key] = {"plateau_found": plateau_found, "plateau_b": plateau_b}
+
+    lines.extend([
+        "",
+        "## 2. Cross-Configuration Plateau Synthesis",
+        "",
+        "| Configuration | Operational Criterion Met? | Plateau B | Status |",
+        "| :--- | :---: | :---: | :--- |",
+    ])
+    for cfg_k, pinfo in plateau_summary.items():
+        found_str = "YES" if pinfo["plateau_found"] else "NO"
+        b_str = str(pinfo["plateau_b"]) if pinfo["plateau_b"] else "None (<=65536)"
+        status = "Steady state established" if pinfo["plateau_found"] else "Throughput not fully saturated"
+        lines.append(f"| `{cfg_k}` | {found_str} | {b_str} | {status} |")
+
+    return "\n".join(lines)
+
+
 def generate_sweep_csv(enriched_payload: Dict[str, Any]) -> str:
     rows = [
         "# Note: amortized_grid_time_per_cta_ns is total grid execution time divided by CTA count. It is a throughput-normalization metric, not the latency of one CTA.",
@@ -1208,12 +1530,13 @@ def select_and_save_representatives(
 def main():
     parser = argparse.ArgumentParser(description="Phase 2 TMA Reduction Layout Multi-CTA Benchmark")
     parser.add_argument("--pilot", action="store_true", help="Run B-saturation pilot only")
+    parser.add_argument("--extended-saturation", action="store_true", help="Run extended B-saturation pilot across [4096, 8192, 16384, 32768, 65536] on 3 configs")
     parser.add_argument("--sweep", action="store_true", help="Run 30-config steady-state sweep only")
     parser.add_argument("--all", action="store_true", help="Run pilot and sweep end-to-end")
     parser.add_argument("--b-steady", type=int, default=4096, help="B_STEADY grid size for sweep (default: 4096)")
     args = parser.parse_args()
 
-    if not args.pilot and not args.sweep and not args.all:
+    if not args.pilot and not args.sweep and not args.all and not args.extended_saturation:
         args.all = True
 
     prov = generate_provenance(REPO_ROOT)
@@ -1227,6 +1550,21 @@ def main():
     rep_dir.mkdir(parents=True, exist_ok=True)
 
     b_steady = args.b_steady
+
+    if args.extended_saturation:
+        print("==================================================")
+        print("Running Phase 2 Extended B-Saturation Pilot")
+        print("==================================================")
+        b_values = [4096, 8192, 16384, 32768, 65536]
+        with modal.enable_output():
+            with app.run():
+                ext_raw_json = run_extended_saturation_remote.remote(prov, b_values)
+
+        ext_payload = json.loads(ext_raw_json)
+        (sat_dir / "extended_results.json").write_text(json.dumps(ext_payload, indent=2), encoding="utf-8")
+        ext_md = generate_extended_saturation_markdown(ext_payload)
+        (sat_dir / "extended_summary.md").write_text(ext_md, encoding="utf-8")
+        print(f"[Local] Extended saturation results written to {sat_dir}")
 
     if args.pilot or args.all:
         print("==================================================")

@@ -51,6 +51,7 @@ from experiments.tma_reduction_layout.phase2_benchmark import (
     test_classify_structural_transitions,
     generate_sweep_csv,
     generate_sweep_markdown,
+    generate_extended_saturation_markdown,
 )
 from experiments.tma_reduction_layout.analyze_ir import compute_derived_layout_metrics
 
@@ -352,6 +353,36 @@ def validate():
                     if abs(t_cta - expected_t_cta) > 0.1:
                         errors.append(f"Pilot amortized_grid_time_per_cta_ns mismatch for B={b}, cand={cand}: {t_cta} vs {expected_t_cta}")
         print("  Verified Phase 2 saturation pilot data and formula consistency.")
+
+        # Check extended saturation pilot if present
+        ext_json_path = SATURATION_DIR / "extended_results.json"
+        ext_md_path = SATURATION_DIR / "extended_summary.md"
+        if ext_json_path.exists():
+            ext_data = json.loads(ext_json_path.read_text(encoding="utf-8"))
+            ext_env = ext_data.get("environment", {})
+            if ext_env.get("gpu_compute_capability") != [9, 0]:
+                errors.append(f"Extended pilot GPU compute capability mismatch: {ext_env.get('gpu_compute_capability')}")
+            ext_b_vals = ext_data.get("b_values", [])
+            if ext_b_vals != [4096, 8192, 16384, 32768, 65536]:
+                errors.append(f"Extended pilot b_values mismatch: expected [4096, 8192, 16384, 32768, 65536], got {ext_b_vals}")
+            for cfg_k, cfg_v in ext_data.get("configs", {}).items():
+                for b in ext_b_vals:
+                    b_dict = cfg_v.get("data", {}).get(str(b), {})
+                    for cand, cinfo in b_dict.items():
+                        if cinfo.get("is_legal", False):
+                            med = cinfo.get("median_us", 0.0)
+                            t_cta = cinfo.get("amortized_grid_time_per_cta_ns", 0.0)
+                            expected_t_cta = (med * 1000.0) / b
+                            if abs(t_cta - expected_t_cta) > 0.1:
+                                errors.append(f"Extended pilot amortized time mismatch for {cfg_k}, B={b}, cand={cand}: {t_cta} vs {expected_t_cta}")
+            if ext_md_path.exists():
+                canonical_ext_md = generate_extended_saturation_markdown(ext_data)
+                actual_ext_md = ext_md_path.read_text(encoding="utf-8")
+                if canonical_ext_md != actual_ext_md:
+                    errors.append("extended_summary.md does not match canonical generate_extended_saturation_markdown() output byte-for-byte")
+            else:
+                errors.append(f"Missing {ext_md_path}")
+            print("  Verified Phase 2 extended saturation pilot data and canonical markdown.")
 
     # Check 10: Phase 2 30-Config Sweep Consistency
     print("[10/11] Validating Phase 2 30-Config Steady-State sweep results...")
