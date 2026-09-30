@@ -21,6 +21,7 @@ Checks:
 11. Phase 2 representative artifacts fidelity & byte-for-byte SHA256 bindings.
 12. Offline marginal analysis formula consistency & canonical markdown.
 13. Corrected fixed-binary saturation pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).
+14. Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.
 
 Exits with code 0 on complete consistency, or non-zero on any failure.
 """
@@ -65,6 +66,10 @@ from experiments.tma_reduction_layout.marginal_analysis import (
     render_marginal_analysis_markdown,
 )
 from experiments.tma_reduction_layout.analyze_ir import compute_derived_layout_metrics
+from experiments.tma_reduction_layout.phase3_structural_analysis import (
+    render_summary_markdown as render_phase3_summary_markdown,
+    render_hypotheses_markdown as render_phase3_hypotheses_markdown,
+)
 
 
 def compute_sha256(text: str) -> str:
@@ -106,7 +111,7 @@ def validate():
     annotations = ann_raw.get("annotations", {})
 
     # Check 1: Branch and Run Metadata Sanity
-    print("[1/13] Validating branch & run metadata sanity...")
+    print("[1/14] Validating branch & run metadata sanity...")
     prov = data.get("local_provenance", {})
     is_dirty = prov.get("is_dirty")
     if is_dirty is not False:
@@ -125,7 +130,7 @@ def validate():
     print(f"  working tree is_dirty: {is_dirty}")
 
     # Check 2: Artifact hashes vs baseline_results.json
-    print("[2/13] Validating artifact hashes against baseline_results.json...")
+    print("[2/14] Validating artifact hashes against baseline_results.json...")
     for cand in candidates:
         if cand not in audited:
             errors.append(f"Candidate '{cand}' missing in baseline_results.json audited_results.")
@@ -148,7 +153,7 @@ def validate():
                 errors.append(f"SHA mismatch for {cand}.{ext}: disk={actual_sha} vs json={expected_sha}")
 
     # Check 3: Audited Phase Annotations & Mechanical Instruction Verification
-    print("[3/13] Validating audited phase annotations and mechanical instruction counts...")
+    print("[3/14] Validating audited phase annotations and mechanical instruction counts...")
     standard_phase_order = [
         "tma_setup_and_descriptor",
         "initial_local_load",
@@ -243,7 +248,7 @@ def validate():
                         )
 
     # Check 4: default vs forced-8 bit-for-bit equivalence
-    print("[4/13] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
+    print("[4/14] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
     default_ptx_sha = compute_sha256((ARTIFACTS_DIR / "default.ptx").read_text(encoding="utf-8"))
     c8_ptx_sha = compute_sha256((ARTIFACTS_DIR / "8.ptx").read_text(encoding="utf-8"))
     if default_ptx_sha != c8_ptx_sha:
@@ -255,7 +260,7 @@ def validate():
         errors.append(f"default.ttgir ({default_ttgir_sha}) != 8.ttgir ({c8_ttgir_sha})")
 
     # Check 5: Re-parse resource.txt files
-    print("[5/13] Validating resource.txt parsing consistency...")
+    print("[5/14] Validating resource.txt parsing consistency...")
     for cand in candidates:
         res_file = ARTIFACTS_DIR / f"{cand}.resource.txt"
         res_text = res_file.read_text(encoding="utf-8")
@@ -274,7 +279,7 @@ def validate():
             errors.append(f"cuobjdump SHARED mismatch for '{cand}': parsed={actual_smem} vs json={expected_smem}")
 
     # Check 6: Canonical Markdown Verification
-    print("[6/13] Validating canonical Markdown generation against committed docs...")
+    print("[6/14] Validating canonical Markdown generation against committed docs...")
     rendered_summary = render_summary(data)
     committed_summary = (RESULTS_DIR / "baseline_summary_table.md").read_text(encoding="utf-8")
     if rendered_summary != committed_summary:
@@ -290,7 +295,7 @@ def validate():
         )
 
     # Check 7: Modal & Source Manifest Ignore Policy Consistency
-    print("[7/13] Validating unified Modal & manifest ignore policy on synthetic paths...")
+    print("[7/14] Validating unified Modal & manifest ignore policy on synthetic paths...")
     synthetic_cases: List[Tuple[str, bool]] = [
         ("foo.so", True),
         ("foo.o", True),
@@ -325,7 +330,7 @@ def validate():
         pass
 
     # Check 8: Source subset manifest digest matches local source manifest
-    print("[8/13] Validating uploaded source-manifest subset digest fidelity...")
+    print("[8/14] Validating uploaded source-manifest subset digest fidelity...")
     env_ver = data.get("environment", {}).get("manifest_verification", {})
     if env_ver:
         local_sha = env_ver.get("local_manifest_sha256")
@@ -338,7 +343,7 @@ def validate():
         print(f"  Remote post-build extra files count: {env_ver.get('remote_extra_file_count')}")
 
     # Check 9: Phase 2 B-Saturation Pilot Consistency
-    print("[9/13] Validating Phase 2 B-Saturation pilot results...")
+    print("[9/14] Validating Phase 2 B-Saturation pilot results...")
     sat_json_path = SATURATION_DIR / "results.json"
     sat_md_path = SATURATION_DIR / "summary.md"
     if not sat_json_path.exists():
@@ -396,7 +401,7 @@ def validate():
             print("  Verified Phase 2 extended saturation pilot data and canonical markdown.")
 
     # Check 10: Phase 2 30-Config Sweep Consistency
-    print("[10/13] Validating Phase 2 30-Config Steady-State sweep results...")
+    print("[10/14] Validating Phase 2 30-Config Steady-State sweep results...")
     # 10.1 Synthetic unit test of transition classification
     try:
         assert test_classify_structural_transitions() is True
@@ -508,7 +513,7 @@ def validate():
         print("  Verified Phase 2 sweep (150 combinations, candidate legality, re-derived transitions, canonical CSV & MD).")
 
     # Check 11: Phase 2 Representative Artifact Fidelity & Hash-Binding
-    print("[11/13] Validating Phase 2 representative artifacts fidelity and hash binding...")
+    print("[11/14] Validating Phase 2 representative artifacts fidelity and hash binding...")
     if not REPRESENTATIVES_DIR.exists():
         errors.append(f"Representative cases directory missing: {REPRESENTATIVES_DIR}")
     else:
@@ -538,7 +543,7 @@ def validate():
         print(f"  Verified {len(case_dirs)} representative cases with exact byte-for-byte SHA256 bindings.")
 
     # Check 12: Offline Marginal Analysis Consistency
-    print("[12/13] Validating offline marginal analysis consistency and canonical markdown...")
+    print("[12/14] Validating offline marginal analysis consistency and canonical markdown...")
     mar_json_path = SATURATION_DIR / "marginal_analysis.json"
     mar_md_path = SATURATION_DIR / "marginal_analysis.md"
     if not mar_json_path.exists():
@@ -587,7 +592,7 @@ def validate():
             print("  Verified offline marginal analysis calculations and byte-for-byte markdown.")
 
     # Check 13: Corrected Fixed-Binary Saturation Pilot Runs & Multi-Invocation Verification
-    print("[13/13] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
+    print("[13/14] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
     cp_json_path = SATURATION_DIR / "corrected_pilot_runs.json"
     cp_md_path = SATURATION_DIR / "corrected_pilot_summary.md"
     EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -675,6 +680,168 @@ def validate():
         else:
             print("  Verified corrected fixed-binary pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).")
 
+    # Check 14: Phase 3 Structural Evidence, Canonical Artifact Bindings, Equivalence, and Hypotheses
+    print("[14/14] Validating Phase 3 structural evidence, canonical artifact bindings, equivalence, and hypotheses...")
+    phase3_dir = RESULTS_DIR / "phase3"
+    canonical_dir = phase3_dir / "fixed_binary_artifacts" / "canonical"
+    p3_ann_path = EXP_DIR / "phase3_audited_annotations.json"
+    p3_equiv_path = phase3_dir / "artifact_equivalence_report.json"
+    p3_pos_neg_path = phase3_dir / "structural_comparison" / "positive_vs_negative.json"
+    p3_summary_md_path = phase3_dir / "structural_comparison" / "summary.md"
+    p3_hypotheses_md_path = phase3_dir / "hypotheses.md"
+
+    expected_p3_configs = {
+        "M32_N64_w8": ["default", "8", "4", "2", "1"],
+        "M32_N128_w4": ["default", "8", "4", "2", "1"],
+        "M32_N16_w8": ["default", "2", "1"],
+    }
+
+    # 14.1 Validate existence and non-emptiness of canonical artifacts
+    for cfg_k, cands in expected_p3_configs.items():
+        cfg_canon_dir = canonical_dir / cfg_k
+        if not cfg_canon_dir.exists():
+            errors.append(f"Phase 3 canonical dir missing: {cfg_canon_dir}")
+            continue
+        for cand in cands:
+            for ext in ["ptx", "ttgir", "sass", "resource.txt", "cubin.sha256"]:
+                f_path = cfg_canon_dir / f"{cand}.{ext}"
+                if not f_path.exists():
+                    errors.append(f"Phase 3 canonical artifact missing: {f_path}")
+                else:
+                    content = f_path.read_text(encoding="utf-8").strip()
+                    if not content:
+                        errors.append(f"Phase 3 canonical artifact empty: {f_path}")
+                    elif ext in ["ptx", "ttgir", "sass"]:
+                        file_sha = compute_sha256(f_path.read_text(encoding="utf-8"))
+                        if file_sha == EMPTY_SHA256:
+                            errors.append(f"Phase 3 canonical artifact has empty sha: {f_path}")
+                    elif ext == "cubin.sha256":
+                        if len(content) != 64 or content == EMPTY_SHA256 or not all(c in "0123456789abcdefABCDEF" for c in content):
+                            errors.append(f"Phase 3 canonical cubin hash invalid: {f_path} -> {content}")
+
+    # 14.2 Validate cross-run invariance of canonical artifacts vs run_1, run_2, run_3
+    fixed_arts_dir = phase3_dir / "fixed_binary_artifacts"
+    for rk in ["run_1", "run_2", "run_3"]:
+        for cfg_k, cands in expected_p3_configs.items():
+            for cand in cands:
+                for ext in ["ptx", "ttgir", "sass", "resource.txt", "cubin.sha256"]:
+                    run_f = fixed_arts_dir / rk / cfg_k / f"{cand}.{ext}"
+                    canon_f = canonical_dir / cfg_k / f"{cand}.{ext}"
+                    if run_f.exists() and canon_f.exists():
+                        if run_f.read_text(encoding="utf-8") != canon_f.read_text(encoding="utf-8"):
+                            errors.append(f"Phase 3 artifact mismatch between {rk} and canonical: {run_f} vs {canon_f}")
+
+    # 14.3 Validate phase3_audited_annotations.json bindings and structure
+    if not p3_ann_path.exists():
+        errors.append(f"Missing {p3_ann_path}")
+    else:
+        p3_ann_data = json.loads(p3_ann_path.read_text(encoding="utf-8"))
+        p3_cfgs = p3_ann_data.get("configurations", {})
+        for cfg_k, cands in expected_p3_configs.items():
+            if cfg_k not in p3_cfgs:
+                errors.append(f"Phase 3 annotations missing config {cfg_k}")
+                continue
+            for cand in cands:
+                if cand not in p3_cfgs[cfg_k]:
+                    errors.append(f"Phase 3 annotations missing {cfg_k} candidate {cand}")
+                    continue
+                cand_data = p3_cfgs[cfg_k][cand]
+                ptx_f = canonical_dir / cfg_k / f"{cand}.ptx"
+                ttgir_f = canonical_dir / cfg_k / f"{cand}.ttgir"
+                sass_f = canonical_dir / cfg_k / f"{cand}.sass"
+                res_f = canonical_dir / cfg_k / f"{cand}.resource.txt"
+                cubin_sha_f = canonical_dir / cfg_k / f"{cand}.cubin.sha256"
+
+                if ptx_f.exists() and compute_sha256(ptx_f.read_text(encoding="utf-8")) != cand_data.get("ptx_sha256"):
+                    errors.append(f"Phase 3 PTX SHA binding mismatch in annotations: {cfg_k} {cand}")
+                if ttgir_f.exists() and compute_sha256(ttgir_f.read_text(encoding="utf-8")) != cand_data.get("ttgir_sha256"):
+                    errors.append(f"Phase 3 TTGIR SHA binding mismatch in annotations: {cfg_k} {cand}")
+                if sass_f.exists() and compute_sha256(sass_f.read_text(encoding="utf-8")) != cand_data.get("sass_sha256"):
+                    errors.append(f"Phase 3 SASS SHA binding mismatch in annotations: {cfg_k} {cand}")
+                if res_f.exists() and compute_sha256(res_f.read_text(encoding="utf-8")) != cand_data.get("resource_sha256"):
+                    errors.append(f"Phase 3 resource SHA binding mismatch in annotations: {cfg_k} {cand}")
+                if cubin_sha_f.exists() and cubin_sha_f.read_text(encoding="utf-8").strip() != cand_data.get("cubin_sha256"):
+                    errors.append(f"Phase 3 cubin SHA binding mismatch in annotations: {cfg_k} {cand}")
+
+                # Check phase lines and non-overlapping bounds
+                if ptx_f.exists():
+                    ptx_lines = ptx_f.read_text(encoding="utf-8").splitlines()
+                    total_ptx_lines = len(ptx_lines)
+                    prev_end = 0
+                    for p_name, p_info in cand_data.get("phases", {}).items():
+                        plines = p_info.get("lines")
+                        if not plines or plines == [0, 0]:
+                            continue
+                        start, end = plines[0], plines[1]
+                        if not (1 <= start <= end <= total_ptx_lines):
+                            errors.append(f"Phase 3 line bounds error {cfg_k} {cand} {p_name}: [{start}, {end}] vs total {total_ptx_lines}")
+                        if start < prev_end:
+                            errors.append(f"Phase 3 phase ordering error {cfg_k} {cand} {p_name}: {start} < {prev_end}")
+                        prev_end = end
+                        if "instruction" in p_info and "count" in p_info:
+                            act_c = count_opcode_in_range(ptx_lines, start, end, p_info["instruction"])
+                            if act_c != p_info["count"]:
+                                errors.append(f"Phase 3 opcode count mismatch {cfg_k} {cand} {p_name}: expected {p_info['count']}, found {act_c}")
+                        if "opcode_counts" in p_info:
+                            for opc, exp_c in p_info["opcode_counts"].items():
+                                act_c = count_opcode_in_range(ptx_lines, start, end, opc)
+                                if act_c != exp_c:
+                                    errors.append(f"Phase 3 opcode_counts mismatch {cfg_k} {cand} {p_name} {opc}: expected {exp_c}, found {act_c}")
+
+    # 14.4 Validate artifact_equivalence_report.json
+    if not p3_equiv_path.exists():
+        errors.append(f"Missing {p3_equiv_path}")
+    else:
+        equiv_data = json.loads(p3_equiv_path.read_text(encoding="utf-8"))
+        for cfg_k, cands in expected_p3_configs.items():
+            if cfg_k not in equiv_data.get("configurations", {}):
+                errors.append(f"Equivalence report missing {cfg_k}")
+                continue
+            for cand in cands:
+                cand_eq = equiv_data["configurations"][cfg_k].get(cand, {})
+                if not cand_eq.get("reduction_region_instructions_equal"):
+                    errors.append(f"Equivalence report: reduction_region_instructions_equal is not true for {cfg_k} {cand}")
+                if cand_eq.get("classification") != "full_artifact_differs_reduction_region_equivalent":
+                    errors.append(f"Equivalence report: unexpected classification for {cfg_k} {cand}: {cand_eq.get('classification')}")
+
+    # 14.5 Validate canonical regeneration of summary.md and hypotheses.md
+    if not p3_pos_neg_path.exists():
+        errors.append(f"Missing {p3_pos_neg_path}")
+    if not p3_summary_md_path.exists():
+        errors.append(f"Missing {p3_summary_md_path}")
+    if not p3_hypotheses_md_path.exists():
+        errors.append(f"Missing {p3_hypotheses_md_path}")
+
+    if p3_pos_neg_path.exists() and p3_summary_md_path.exists() and p3_hypotheses_md_path.exists():
+        curr_ds = json.loads(p3_pos_neg_path.read_text(encoding="utf-8"))
+        
+        expected_summary_md = render_phase3_summary_markdown(curr_ds)
+        actual_summary_md = p3_summary_md_path.read_text(encoding="utf-8").strip()
+        if expected_summary_md.strip() != actual_summary_md:
+            errors.append("Phase 3 summary.md does not match canonical render_summary_markdown(ds) byte-for-byte")
+
+        expected_hypotheses_md = render_phase3_hypotheses_markdown(curr_ds)
+        actual_hypotheses_md = p3_hypotheses_md_path.read_text(encoding="utf-8").strip()
+        if expected_hypotheses_md.strip() != actual_hypotheses_md:
+            errors.append("Phase 3 hypotheses.md does not match canonical render_hypotheses_markdown(ds) byte-for-byte")
+
+        # 14.6 Validate hypotheses format and discipline
+        hypotheses_text = p3_hypotheses_md_path.read_text(encoding="utf-8")
+        observed_sections = re.findall(r"\*\*OBSERVED\*\*:(.*?)(?=\*\*DERIVED\*\*|\*\*HYPOTHESIS\*\*|\Z)", hypotheses_text, re.DOTALL)
+        for idx, obs_sec in enumerate(observed_sections):
+            for banned in ["dram saturation", "hbm saturation", "hbm3 saturation", "memory bus saturation", "dram bandwidth saturation"]:
+                if banned in obs_sec.lower():
+                    errors.append(f"Hypotheses OBSERVED section {idx+1} contains unmeasured saturation assertion: '{banned}'")
+
+        status_matches = re.findall(r"\*\*STATUS\*\*:\s*`([^`]+)`", hypotheses_text)
+        if len(status_matches) != 4:
+            errors.append(f"Expected 4 STATUS tags in hypotheses.md, found {len(status_matches)}")
+        for st in status_matches:
+            if st != "UNVERIFIED / PENDING_DIFFERENTIAL_MICROBENCH":
+                errors.append(f"Invalid STATUS tag in hypotheses.md: '{st}'")
+
+        print("  Verified Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.")
+
     print("--------------------------------------------------")
     if errors:
         print(f"FAILED with {len(errors)} consistency error(s):")
@@ -682,7 +849,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 13 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 14 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 

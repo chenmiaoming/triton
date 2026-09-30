@@ -14,9 +14,9 @@
 
 | Run ID | GPU UUID | Driver | SM Count | L2 Cache (bytes) | SM Clock (MHz) | Memory Clock (MHz) | Power (W) | Temp (°C) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `run_1` | `GPU-a59752c5-ebb5-1dac-f887-c2e3c1f81aff` | `580.95.05` | `132` | `52428800` | `345` | `2619` | `72.31` | `30` |
-| `run_2` | `GPU-a59752c5-ebb5-1dac-f887-c2e3c1f81aff` | `580.95.05` | `132` | `52428800` | `1980` | `2619` | `121.04` | `32` |
-| `run_3` | `GPU-a59752c5-ebb5-1dac-f887-c2e3c1f81aff` | `580.95.05` | `132` | `52428800` | `1980` | `2619` | `121.2` | `33` |
+| `run_1` | `GPU-5b7caa5e-1704-95d2-13ba-1402ab37403b` | `580.95.05` | `132` | `52428800` | `345` | `2619` | `69.48` | `33` |
+| `run_2` | `GPU-5b7caa5e-1704-95d2-13ba-1402ab37403b` | `580.95.05` | `132` | `52428800` | `1980` | `2619` | `123.77` | `33` |
+| `run_3` | `GPU-5b7caa5e-1704-95d2-13ba-1402ab37403b` | `580.95.05` | `132` | `52428800` | `1980` | `2619` | `123.93` | `33` |
 
 ## 2. Working Set & Cache Regime
 
@@ -40,21 +40,21 @@
 
 | Configuration | Candidate | PTX SHA256 (12 char) | TTGIR SHA256 (12 char) | Verified Fixed Across All B? |
 | :--- | :--- | :---: | :---: | :---: |
-| `M32_N16_w8` | `default` | `bdd1dc86e385...` | `f7de141dff65...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N16_w8` | `default` | `619b029db352...` | `0de355016b19...` | **YES** (single compiled specialization reused across all B) |
 | `M32_N16_w8` | `8` | - | - | INVALID: forcedVec 8 > numElemsPerThread (2) |
 | `M32_N16_w8` | `4` | - | - | INVALID: forcedVec 4 > numElemsPerThread (2) |
-| `M32_N16_w8` | `2` | `bdd1dc86e385...` | `f7de141dff65...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N16_w8` | `1` | `773a766ea315...` | `94eea572a1aa...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N64_w8` | `default` | `2d02e0b822c7...` | `b12774ab2f20...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N64_w8` | `8` | `2d02e0b822c7...` | `b12774ab2f20...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N64_w8` | `4` | `950b23e7cf39...` | `d28dcc41b083...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N64_w8` | `2` | `43d1d7f9b0e7...` | `16fc510cf256...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N64_w8` | `1` | `a6510984fac2...` | `8843f1f28a12...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N128_w4` | `default` | `a107f8e1427c...` | `90c1c4230073...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N128_w4` | `8` | `a107f8e1427c...` | `90c1c4230073...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N128_w4` | `4` | `4e50ef4d7fb0...` | `4c9e7756f484...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N128_w4` | `2` | `12cc9d569a07...` | `2dd683139149...` | **YES** (single compiled specialization reused across all B) |
-| `M32_N128_w4` | `1` | `ca0cbbfa274b...` | `2dd069349c25...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N16_w8` | `2` | `619b029db352...` | `0de355016b19...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N16_w8` | `1` | `6074f635fe38...` | `406868fd7f27...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N64_w8` | `default` | `31663f4aabb9...` | `ef0d3eb5caaa...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N64_w8` | `8` | `31663f4aabb9...` | `ef0d3eb5caaa...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N64_w8` | `4` | `ddd3499f0598...` | `31371b796ccc...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N64_w8` | `2` | `2a213dc209e4...` | `ff4823bfd317...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N64_w8` | `1` | `c1b9ae4324fc...` | `97b4f8fc8990...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N128_w4` | `default` | `882b0bd48de1...` | `e3eb04394b07...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N128_w4` | `8` | `882b0bd48de1...` | `e3eb04394b07...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N128_w4` | `4` | `276e796f62dd...` | `90a380ab4f94...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N128_w4` | `2` | `73f4884d16f7...` | `5a8837f1ff69...` | **YES** (single compiled specialization reused across all B) |
+| `M32_N128_w4` | `1` | `ffda7e816ba7...` | `be8f9501d526...` | **YES** (single compiled specialization reused across all B) |
 
 ## 4. Sequential Invocation Replication & Marginal Slope Separation
 
@@ -64,11 +64,11 @@
 
 | Candidate | run_1 Slope (ns) | run_2 Slope (ns) | run_3 Slope (ns) | Mean Slope (ns) | same-device temporal replication CV (%) | vs Default Mean Slope (%) | Linear Regime? |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | 2.1663 | 2.1621 | 2.1640 | **2.1641** | 0.08% | 0.00% (base) | **YES** |
+| `default` | 2.1896 | 2.2073 | 2.2163 | **2.2044** | 0.50% | 0.00% (base) | **YES** |
 | `8` | - | - | - | - | - | - | INVALID |
 | `4` | - | - | - | - | - | - | INVALID |
-| `2` | 2.1642 | 2.1644 | 2.1638 | **2.1641** | 0.01% | **+0.00%** (near parity) | **YES** |
-| `1` | 2.1006 | 2.1002 | 2.1011 | **2.1007** | 0.02% | **-2.93%** | **YES** |
+| `2` | 2.1832 | 2.2122 | 2.2136 | **2.2030** | 0.64% | **-0.06%** (near parity) | **YES** |
+| `1` | 2.1231 | 2.1552 | 2.1523 | **2.1435** | 0.68% | **-2.76%** | **YES** |
 
 #### B. Fitted Fixed-Time Intercept (µs) & Goodness-of-Fit ($R^2$):
 
@@ -76,11 +76,11 @@
 
 | Candidate | run_1 Intercept (µs) | run_2 Intercept (µs) | run_3 Intercept (µs) | run_1 R² | run_2 R² | run_3 R² |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | 13.3360 | 13.7520 | 13.5040 | 0.999912 | 0.999878 | 0.999877 |
+| `default` | 17.0800 | 17.8400 | 18.0160 | 0.999875 | 0.999961 | 0.999947 |
 | `8` | - | - | - | - | - | - |
 | `4` | - | - | - | - | - | - |
-| `2` | 13.3840 | 13.5920 | 13.3520 | 0.999886 | 0.999875 | 0.999908 |
-| `1` | 13.0000 | 13.3360 | 13.0560 | 0.999856 | 0.999870 | 0.999868 |
+| `2` | 17.6160 | 17.6960 | 18.4480 | 0.999909 | 0.999940 | 0.999983 |
+| `1` | 17.0880 | 16.6880 | 17.6880 | 0.999870 | 0.999892 | 0.999964 |
 
 ### Configuration: `M32_N64_w8` (`M=32, N=64, num_warps=8`)
 
@@ -88,11 +88,11 @@
 
 | Candidate | run_1 Slope (ns) | run_2 Slope (ns) | run_3 Slope (ns) | Mean Slope (ns) | same-device temporal replication CV (%) | vs Default Mean Slope (%) | Linear Regime? |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | 3.8804 | 3.8846 | 3.8816 | **3.8822** | 0.05% | 0.00% (base) | **YES** |
-| `8` | 3.8796 | 3.8795 | 3.8767 | **3.8786** | 0.03% | **-0.09%** (near parity) | **YES** |
-| `4` | 2.4566 | 2.4543 | 2.4519 | **2.4543** | 0.08% | **-36.78%** | **YES** |
-| `2` | 2.2540 | 2.2539 | 2.2531 | **2.2537** | 0.02% | **-41.95%** | **YES** |
-| `1` | 2.2282 | 2.2224 | 2.2242 | **2.2249** | 0.11% | **-42.69%** | **YES** |
+| `default` | 3.9853 | 3.9402 | 3.9094 | **3.9449** | 0.79% | 0.00% (base) | **YES** |
+| `8` | 3.9812 | 3.9356 | 3.9147 | **3.9438** | 0.70% | **-0.03%** (near parity) | **YES** |
+| `4` | 2.4997 | 2.4874 | 2.4690 | **2.4854** | 0.51% | **-37.00%** | **YES** |
+| `2` | 2.2954 | 2.2732 | 2.2611 | **2.2766** | 0.62% | **-42.29%** | **YES** |
+| `1` | 2.2590 | 2.2614 | 2.2439 | **2.2548** | 0.34% | **-42.84%** | **YES** |
 
 #### B. Fitted Fixed-Time Intercept (µs) & Goodness-of-Fit ($R^2$):
 
@@ -100,11 +100,11 @@
 
 | Candidate | run_1 Intercept (µs) | run_2 Intercept (µs) | run_3 Intercept (µs) | run_1 R² | run_2 R² | run_3 R² |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | 16.6400 | 16.6080 | 16.6480 | 0.999999 | 1.000000 | 0.999998 |
-| `8` | 16.7360 | 16.7680 | 16.9280 | 1.000000 | 1.000000 | 1.000000 |
-| `4` | 16.4320 | 16.6800 | 16.8800 | 0.999999 | 1.000000 | 0.999999 |
-| `2` | 16.4160 | 16.4640 | 16.6000 | 0.999999 | 0.999999 | 1.000000 |
-| `1` | 16.3120 | 16.6080 | 16.6400 | 1.000000 | 0.999999 | 0.999998 |
+| `default` | 20.5360 | 21.5360 | 21.1920 | 0.999989 | 1.000000 | 0.999999 |
+| `8` | 20.6480 | 21.5120 | 21.2080 | 0.999997 | 0.999997 | 0.999999 |
+| `4` | 21.3120 | 21.6400 | 21.2880 | 1.000000 | 0.999964 | 0.999987 |
+| `2` | 21.3840 | 21.6720 | 21.1440 | 0.999997 | 0.999993 | 0.999998 |
+| `1` | 21.4480 | 21.1520 | 21.1200 | 0.999998 | 0.999985 | 0.999999 |
 
 ### Configuration: `M32_N128_w4` (`M=32, N=128, num_warps=4`)
 
@@ -112,11 +112,11 @@
 
 | Candidate | run_1 Slope (ns) | run_2 Slope (ns) | run_3 Slope (ns) | Mean Slope (ns) | same-device temporal replication CV (%) | vs Default Mean Slope (%) | Linear Regime? |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | 2.9265 | 2.9246 | 2.9218 | **2.9243** | 0.07% | 0.00% (base) | **YES** |
-| `8` | 2.9283 | 2.9208 | 2.9222 | **2.9237** | 0.11% | **-0.02%** (near parity) | **YES** |
-| `4` | 2.9218 | 2.9223 | 2.9182 | **2.9208** | 0.06% | **-0.12%** (near parity) | **YES** |
-| `2` | 2.9213 | 2.9234 | 2.9186 | **2.9211** | 0.07% | **-0.11%** (near parity) | **YES** |
-| `1` | 2.9230 | 2.9243 | 2.9178 | **2.9217** | 0.10% | **-0.09%** (near parity) | **YES** |
+| `default` | 2.9818 | 3.0003 | 2.9490 | **2.9771** | 0.71% | 0.00% (base) | **YES** |
+| `8` | 2.9853 | 2.9953 | 2.9621 | **2.9809** | 0.47% | **+0.13%** (near parity) | **YES** |
+| `4` | 2.9813 | 3.0012 | 2.9586 | **2.9804** | 0.58% | **+0.11%** (near parity) | **YES** |
+| `2` | 2.9645 | 2.9775 | 2.9621 | **2.9681** | 0.23% | **-0.30%** | **YES** |
+| `1` | 2.9867 | 2.9610 | 2.9618 | **2.9698** | 0.40% | **-0.24%** | **YES** |
 
 #### B. Fitted Fixed-Time Intercept (µs) & Goodness-of-Fit ($R^2$):
 
@@ -124,8 +124,8 @@
 
 | Candidate | run_1 Intercept (µs) | run_2 Intercept (µs) | run_3 Intercept (µs) | run_1 R² | run_2 R² | run_3 R² |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | 18.4560 | 17.4960 | 18.2640 | 0.999994 | 0.999996 | 0.999995 |
-| `8` | 18.3040 | 17.6800 | 18.1440 | 0.999998 | 1.000000 | 1.000000 |
-| `4` | 18.0400 | 17.0560 | 17.9280 | 0.999997 | 1.000000 | 0.999985 |
-| `2` | 17.9680 | 17.0080 | 17.7840 | 1.000000 | 1.000000 | 1.000000 |
-| `1` | 17.9680 | 16.8880 | 17.8720 | 0.999998 | 0.999998 | 0.999999 |
+| `default` | 21.7200 | 22.0720 | 23.4480 | 1.000000 | 0.999999 | 0.999987 |
+| `8` | 21.5120 | 22.2640 | 23.0720 | 1.000000 | 0.999998 | 0.999996 |
+| `4` | 21.6320 | 21.4960 | 23.1280 | 0.999982 | 0.999999 | 1.000000 |
+| `2` | 21.9920 | 22.0480 | 22.6480 | 0.999989 | 0.999988 | 0.999993 |
+| `1` | 21.0560 | 22.7120 | 22.6400 | 0.999966 | 0.999999 | 0.999996 |

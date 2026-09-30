@@ -522,6 +522,7 @@ if app is not None:
         import hashlib
         import os
         import statistics
+        import subprocess
         import time
         import torch
         import triton
@@ -670,20 +671,66 @@ if app is not None:
                     ttgir_sha = hashlib.sha256(ttgir_text.encode("utf-8")).hexdigest()
                     ptx_sha = hashlib.sha256(ptx_text.encode("utf-8")).hexdigest()
 
+                    cubin_bytes = compiled.asm.get("cubin", None)
+                    if cubin_bytes is None and hasattr(compiled, "kernel"):
+                        cubin_bytes = compiled.kernel
+
+                    cubin_sha = hashlib.sha256(cubin_bytes).hexdigest() if cubin_bytes else ""
+                    sass_text = ""
+                    resource_text = ""
+
+                    if cubin_bytes is not None:
+                        tmp_cubin = f"/tmp/triton_{run_id}_{cfg_key}_{cand}.cubin"
+                        with open(tmp_cubin, "wb") as f:
+                            f.write(cubin_bytes)
+                        try:
+                            sass_text = subprocess.check_output(
+                                ["cuobjdump", "-sass", tmp_cubin],
+                                text=True,
+                                stderr=subprocess.STDOUT,
+                            )
+                        except Exception as e:
+                            sass_text = f"ERROR: cuobjdump -sass failed: {e}"
+                        try:
+                            resource_text = subprocess.check_output(
+                                ["cuobjdump", "-res-usage", tmp_cubin],
+                                text=True,
+                                stderr=subprocess.STDOUT,
+                            )
+                        except Exception as e:
+                            resource_text = f"ERROR: cuobjdump -res-usage failed: {e}"
+
+                    sass_sha = hashlib.sha256(sass_text.encode("utf-8")).hexdigest() if sass_text else ""
+                    res_sha = hashlib.sha256(resource_text.encode("utf-8")).hexdigest() if resource_text else ""
+
                     compiled_kernels[cand] = kernel
                     compiled_artifacts[cand] = {
                         "artifact_id": f"{cfg_key}_{cand}",
                         "ttgir_sha256": ttgir_sha,
                         "ptx_sha256": ptx_sha,
+                        "cubin_sha256": cubin_sha,
+                        "sass_sha256": sass_sha,
+                        "resource_sha256": res_sha,
+                        "ttgir_text": ttgir_text,
+                        "ptx_text": ptx_text,
+                        "sass_text": sass_text,
+                        "resource_text": resource_text,
                     }
                     legal_cands.append(cand)
                     cand_meta[cand] = {
                         "is_legal": True,
                         "is_correct": is_correct,
                         "max_diff": diff,
-                        "artifacts": compiled_artifacts[cand],
+                        "artifacts": {
+                            "artifact_id": f"{cfg_key}_{cand}",
+                            "ttgir_sha256": ttgir_sha,
+                            "ptx_sha256": ptx_sha,
+                            "cubin_sha256": cubin_sha,
+                            "sass_sha256": sass_sha,
+                            "resource_sha256": res_sha,
+                        },
                     }
-                    print(f"  Compiled cand={cand:7s} (PTX SHA: {ptx_sha[:12]}..., correct: {is_correct})")
+                    print(f"  Compiled cand={cand:7s} (PTX: {ptx_sha[:12]}..., CUBIN: {cubin_sha[:12]}..., SASS lines: {len(sass_text.splitlines())}, correct: {is_correct})")
                 except Exception as e:
                     cand_meta[cand] = {"is_legal": False, "error": str(e)}
                     print(f"  Compilation failed for cand={cand}: {e}")
@@ -2084,14 +2131,73 @@ def main():
         print("Running Phase 2 Corrected Fixed-Binary Saturation Pilot (3 Sequential Benchmark Invocations)")
         print("==================================================")
         runs_dict = {}
+        fixed_arts_dir = REPO_ROOT / "experiments" / "tma_reduction_layout" / "results" / "phase3" / "fixed_binary_artifacts"
         with modal.enable_output():
             with app.run():
                 for i in [1, 2, 3]:
                     run_id = f"run_{i}"
                     print(f"\n[Local] Starting remote invocation {run_id}/3...")
                     res_raw_json = run_corrected_fixed_binary_pilot_remote.remote(prov, run_id=run_id)
-                    runs_dict[run_id] = json.loads(res_raw_json)
+                    raw_run_data = json.loads(res_raw_json)
+
+                    # Extract and write artifacts to results/phase3/fixed_binary_artifacts/<run_id>/<config>/
+                    for cfg_k, cfg_v in raw_run_data.get("configs", {}).items():
+                        cfg_art_dir = fixed_arts_dir / run_id / cfg_k
+                        cfg_art_dir.mkdir(parents=True, exist_ok=True)
+                        comp_arts = cfg_v.get("compiled_artifacts", {})
+                        for cand, art in comp_arts.items():
+                            if "ttgir_text" in art:
+                                (cfg_art_dir / f"{cand}.ttgir").write_text(art.pop("ttgir_text"), encoding="utf-8")
+                            if "ptx_text" in art:
+                                (cfg_art_dir / f"{cand}.ptx").write_text(art.pop("ptx_text"), encoding="utf-8")
+                            if "sass_text" in art:
+                                (cfg_art_dir / f"{cand}.sass").write_text(art.pop("sass_text"), encoding="utf-8")
+                            if "resource_text" in art:
+                                (cfg_art_dir / f"{cand}.resource.txt").write_text(art.pop("resource_text"), encoding="utf-8")
+                            if "cubin_sha256" in art:
+                                (cfg_art_dir / f"{cand}.cubin.sha256").write_text(art["cubin_sha256"] + "\n", encoding="utf-8")
+
+                    runs_dict[run_id] = raw_run_data
                     print(f"[Local] Completed remote invocation {run_id}.")
+
+        # Check codegen invariance across run_1, run_2, run_3
+        first_cfg_arts = runs_dict["run_1"]["configs"]
+        all_identical = True
+        invariance_details = {}
+        for cfg_k, cfg_v in first_cfg_arts.items():
+            invariance_details[cfg_k] = {}
+            for cand, art1 in cfg_v.get("compiled_artifacts", {}).items():
+                cand_identical = True
+                hashes = {"run_1": art1}
+                for rk in ["run_2", "run_3"]:
+                    art_k = runs_dict[rk]["configs"][cfg_k]["compiled_artifacts"].get(cand, {})
+                    hashes[rk] = art_k
+                    for hkey in ["ttgir_sha256", "ptx_sha256", "cubin_sha256", "sass_sha256"]:
+                        if art1.get(hkey) != art_k.get(hkey):
+                            cand_identical = False
+                            all_identical = False
+                invariance_details[cfg_k][cand] = {
+                    "identical_across_all_runs": cand_identical,
+                    "hashes": hashes,
+                }
+                # If identical across all runs, copy to canonical
+                if cand_identical:
+                    can_dir = fixed_arts_dir / "canonical" / cfg_k
+                    can_dir.mkdir(parents=True, exist_ok=True)
+                    src_dir = fixed_arts_dir / "run_1" / cfg_k
+                    for fname in [f"{cand}.ttgir", f"{cand}.ptx", f"{cand}.sass", f"{cand}.resource.txt", f"{cand}.cubin.sha256"]:
+                        src_f = src_dir / fname
+                        if src_f.exists():
+                            (can_dir / fname).write_text(src_f.read_text(encoding="utf-8"), encoding="utf-8")
+
+        invariance_report = {
+            "observed_identical_codegen_across_all_three_invocations": all_identical,
+            "invocations_evaluated": ["run_1", "run_2", "run_3"],
+            "configurations": invariance_details,
+        }
+        fixed_arts_dir.mkdir(parents=True, exist_ok=True)
+        (fixed_arts_dir / "codegen_invariance_report.json").write_text(json.dumps(invariance_report, indent=2), encoding="utf-8")
+        print(f"[Local] Codegen invariance across runs: {all_identical}")
 
         (sat_dir / "corrected_pilot_runs.json").write_text(json.dumps(runs_dict, indent=2), encoding="utf-8")
         pilot_summary_md = render_corrected_pilot_summary_markdown(runs_dict)

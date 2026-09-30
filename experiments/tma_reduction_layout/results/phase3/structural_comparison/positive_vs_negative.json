@@ -2,6 +2,13 @@
   "metadata": {
     "description": "Phase 3 Mechanism Isolation: Structural Decomposition & Comparison",
     "device": "NVIDIA H100 80GB HBM3 (SM90, CC [9, 0])",
+    "structural_artifact_source": "results/phase3/fixed_binary_artifacts/canonical (bit-for-bit identical across run_1, run_2, run_3)",
+    "performance_source_runs": [
+      "run_1",
+      "run_2",
+      "run_3"
+    ],
+    "throughput_metrics_note": "These are logical-byte throughput metrics (logical bytes / fitted marginal grid time). They are NOT measured DRAM/HBM traffic or hardware bandwidth.",
     "configurations": {
       "M32_N64_w8": "Strong-positive case (large layout sensitivity ~37%-43%)",
       "M32_N128_w4": "Negative/control case (near-zero layout sensitivity ~0.1%)",
@@ -13,16 +20,18 @@
       "M": 32,
       "N": 64,
       "num_warps": 8,
-      "input_bytes_per_cta": 4096,
-      "output_bytes_per_cta": 256,
+      "logical_input_bytes_per_cta": 4096,
+      "logical_output_bytes_per_cta": 256,
       "candidates": {
         "default": {
           "candidate": "default",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "39de4a95f116c1ebc4df835803452c329d9b2f996dc11a0cd50e9070344d59c0",
-            "ptx_sha256": "103b0f4cc5c7d8d409a4e6e86b22ed6611b5859695738a0091bf2bdb95b3bc3b",
-            "sass_sha256": "a74327e53f92bdbf5282747c1af168e13ca719735de70a93c04c43fc908da3ff"
+            "ttgir_sha256": "ef0d3eb5caaa1f714803185ba102e684be1977d4efb6c30980c8600122c0a74e",
+            "ptx_sha256": "31663f4aabb910a1a9b817ce6501398e16263c800726c6a520ce8d83344f0ed3",
+            "sass_sha256": "a4f36cb53137e488d3dc3f9f5e5d58dfcd7a3478645995e5a5056590645d27a1",
+            "resource_sha256": "384867ffa4f9aacf7ddade85f926e7df45863e42fdb61ce640290fb6fbf81e01",
+            "cubin_sha256": "77fc8f1b945964e3c22daf477bbc2119587482caf47618ee56cefcb9c8278489"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -55,19 +64,43 @@
           },
           "localload": {
             "family": "ld.shared.v4.b32",
-            "count": 1
+            "count": 1,
+            "formatted": "1x ld.shared.v4"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 8
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 40,
             "max_f32_total": 40,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 8,
             "st_shared_total": 7,
             "ld_shared_total": 5,
-            "bar_sync_total": 14
+            "bar_sync_total": 14,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "cvt.f32.bf16": 8,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16,
+              "bar.sync": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 7,
+              "shfl.sync.bfly.b32": 24,
+              "max.f32": 24
+            },
+            "post_reduction_convert": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            }
           },
           "resources": {
             "physical_regs": 29,
@@ -83,19 +116,22 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 3.8822,
+            "marginal_slope_ns_per_cta": 3.9449,
+            "temporal_replication_cv_pct": 0.79,
             "vs_default_slope_pct": 0.0,
-            "marginal_dram_gbps": 1055.06,
-            "hbm3_saturation_pct": 31.5
+            "logical_input_throughput_gbps": 1038.29,
+            "logical_io_throughput_gbps": 1103.19
           }
         },
         "8": {
           "candidate": "8",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "39de4a95f116c1ebc4df835803452c329d9b2f996dc11a0cd50e9070344d59c0",
-            "ptx_sha256": "103b0f4cc5c7d8d409a4e6e86b22ed6611b5859695738a0091bf2bdb95b3bc3b",
-            "sass_sha256": "a74327e53f92bdbf5282747c1af168e13ca719735de70a93c04c43fc908da3ff"
+            "ttgir_sha256": "ef0d3eb5caaa1f714803185ba102e684be1977d4efb6c30980c8600122c0a74e",
+            "ptx_sha256": "31663f4aabb910a1a9b817ce6501398e16263c800726c6a520ce8d83344f0ed3",
+            "sass_sha256": "a4f36cb53137e488d3dc3f9f5e5d58dfcd7a3478645995e5a5056590645d27a1",
+            "resource_sha256": "384867ffa4f9aacf7ddade85f926e7df45863e42fdb61ce640290fb6fbf81e01",
+            "cubin_sha256": "77fc8f1b945964e3c22daf477bbc2119587482caf47618ee56cefcb9c8278489"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -128,19 +164,43 @@
           },
           "localload": {
             "family": "ld.shared.v4.b32",
-            "count": 1
+            "count": 1,
+            "formatted": "1x ld.shared.v4"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 8
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 40,
             "max_f32_total": 40,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 8,
             "st_shared_total": 7,
             "ld_shared_total": 5,
-            "bar_sync_total": 14
+            "bar_sync_total": 14,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "cvt.f32.bf16": 8,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16,
+              "bar.sync": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 7,
+              "shfl.sync.bfly.b32": 24,
+              "max.f32": 24
+            },
+            "post_reduction_convert": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            }
           },
           "resources": {
             "physical_regs": 29,
@@ -156,19 +216,22 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 3.8786,
-            "vs_default_slope_pct": -0.09,
-            "marginal_dram_gbps": 1056.06,
-            "hbm3_saturation_pct": 31.5
+            "marginal_slope_ns_per_cta": 3.9438,
+            "temporal_replication_cv_pct": 0.7,
+            "vs_default_slope_pct": -0.03,
+            "logical_input_throughput_gbps": 1038.58,
+            "logical_io_throughput_gbps": 1103.49
           }
         },
         "4": {
           "candidate": "4",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "7df7ead384d8020aad9182a4ed043d32929640f1ed712a784999c45981ac9628",
-            "ptx_sha256": "459ac7687a400cea251787cdbd880d81631e8fc82cd7b465ea72c4967d809dc4",
-            "sass_sha256": "35536a6ebdf90caa653c973bd6cebcd97210c054128ee64b3df16f820316d9b7"
+            "ttgir_sha256": "31371b796ccc4a46efba2fa2b22068ea575e42997470a0193c3ce5c026c2d570",
+            "ptx_sha256": "ddd3499f05981cf0a127a0c6af53f789acf968e84422af4f5ea29d90a1a63880",
+            "sass_sha256": "148f1bb643d2533a3186f8da55bf83e3e6e8da6c95b287c0c4bdc431e6627f13",
+            "resource_sha256": "77fef17c649b8c33732d66494937a5149737c47bc7772e257de593e2bd78bfe0",
+            "cubin_sha256": "08c7fc171c2e811ad3b5876d113f99b15cc57cbb5126720608d7c1fa2fec4ff2"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -201,19 +264,42 @@
           },
           "localload": {
             "family": "ld.shared.v2.b32",
-            "count": 2
+            "count": 2,
+            "formatted": "2x ld.shared.v2"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 2,
-            "cvt_f32_bf16": 4
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 16,
             "max_f32_total": 16,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 2,
+            "cvt_f32_bf16_total": 4,
             "st_shared_total": 4,
             "ld_shared_total": 4,
-            "bar_sync_total": 10
+            "bar_sync_total": 10,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16x2": 2,
+              "cvt.f32.bf16": 4,
+              "bar.sync": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 4,
+              "max.f32": 4
+            },
+            "cross_warp_reduction": {
+              "st.shared.v4.b32": 2,
+              "ld.shared.v4.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 12,
+              "max.f32": 12
+            },
+            "post_reduction_convert": {
+              "st.shared.v4.b32": 1,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            }
           },
           "resources": {
             "physical_regs": 22,
@@ -229,19 +315,22 @@
             "HMNMX2": 2
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.4543,
-            "vs_default_slope_pct": -36.78,
-            "marginal_dram_gbps": 1668.93,
-            "hbm3_saturation_pct": 49.8
+            "marginal_slope_ns_per_cta": 2.4854,
+            "temporal_replication_cv_pct": 0.51,
+            "vs_default_slope_pct": -37.0,
+            "logical_input_throughput_gbps": 1648.06,
+            "logical_io_throughput_gbps": 1751.06
           }
         },
         "2": {
           "candidate": "2",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "0b47ef933c356e07470d20b62f73ef052c9d5218c485d31e07e5d10eb6208de3",
-            "ptx_sha256": "ddbef3e4397d2848a0afa80712816178f62d871ea8acb4fc42b62afb5170950e",
-            "sass_sha256": "7935aa25815065c27bf60bc2ef9ddc4422b96fd5abf3d940d3bc1d0c73378aa7"
+            "ttgir_sha256": "ff4823bfd317068e9e1271c40e1dfd5f990ae3421b20ce566f228bc0bafdb26e",
+            "ptx_sha256": "2a213dc209e463a18f930480d85bf16f341db11c47c09f0858d2fb0685ad71ac",
+            "sass_sha256": "017815af1f6ed3905b9c683e5ed44c27f0531de00bceb0e6b0040a8282f2da0e",
+            "resource_sha256": "c0dfa6fdb61fac93cef5a09ca41e19488916dcd0a57089b505898901519abf21",
+            "cubin_sha256": "4d834a7c5494e402df2579e672babf49333637043f3720c861b97261e967250a"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -274,19 +363,44 @@
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
-            "count": 1
+            "count": 1,
+            "formatted": "1x ldmatrix.x4"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 3,
-            "cvt_f32_bf16": 2
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 8,
             "max_f32_total": 6,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 3,
+            "cvt_f32_bf16_total": 2,
             "st_shared_total": 3,
             "ld_shared_total": 2,
-            "bar_sync_total": 8
+            "bar_sync_total": 8,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16x2": 3,
+              "cvt.f32.bf16": 2,
+              "bar.sync": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "cross_warp_reduction": {
+              "st.shared.v2.b32": 2,
+              "ld.shared.v2.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 6,
+              "max.f32": 6
+            },
+            "post_reduction_convert": {
+              "shfl.sync.idx.b32": 2,
+              "selp.b32": 1,
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            }
           },
           "resources": {
             "physical_regs": 21,
@@ -302,19 +416,22 @@
             "HMNMX2": 1
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.2537,
-            "vs_default_slope_pct": -41.95,
-            "marginal_dram_gbps": 1817.46,
-            "hbm3_saturation_pct": 54.3
+            "marginal_slope_ns_per_cta": 2.2766,
+            "temporal_replication_cv_pct": 0.62,
+            "vs_default_slope_pct": -42.29,
+            "logical_input_throughput_gbps": 1799.19,
+            "logical_io_throughput_gbps": 1911.64
           }
         },
         "1": {
           "candidate": "1",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "9d134c1c3e8a259c445f45615e6aabb459aaaaac85d6305d78eee9ba68951570",
-            "ptx_sha256": "bd1b3fef6b8d84b52e6b4900e4e20a5723b7bfd313c91587d846a6374536618b",
-            "sass_sha256": "b914d23b5ffc93553164130073a5bc541b842a7b9f0c8d3da488efa7b4269160"
+            "ttgir_sha256": "97b4f8fc899091b8adecd2d287bd6721bb1c618b2c426001673ac47bdaccfbb1",
+            "ptx_sha256": "c1b9ae4324fc4f939b4f3aeb1aaa909ddb7d95d5a12cc86cf1a093933c6a32ba",
+            "sass_sha256": "1551a761791c61d3b76bc1c5d76c5df2a184102ab38788f63fcedcb0e0abe515",
+            "resource_sha256": "c0dfa6fdb61fac93cef5a09ca41e19488916dcd0a57089b505898901519abf21",
+            "cubin_sha256": "5a90aee53558f3b24f4a01a626db3daf02b03b05062a30442ad324902c02d1f8"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -347,19 +464,42 @@
           },
           "localload": {
             "family": "ld.shared.b16",
-            "count": 8
+            "count": 8,
+            "formatted": "8x ld.shared.b16"
           },
-          "thread_local_reduction": {
-            "max_bf16": 7,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 1
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 2,
             "max_f32_total": 2,
+            "max_bf16_total": 7,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 1,
             "st_shared_total": 3,
             "ld_shared_total": 10,
-            "bar_sync_total": 8
+            "bar_sync_total": 8,
+            "ldmatrix_total": 0
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16": 7,
+              "cvt.f32.bf16": 1,
+              "bar.sync": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "cross_warp_reduction": {
+              "st.shared.b32": 1,
+              "ld.shared.b32": 1,
+              "bar.sync": 1,
+              "shfl.sync.bfly.b32": 2,
+              "max.f32": 2
+            },
+            "post_reduction_convert": {
+              "st.shared.b32": 1,
+              "bar.sync": 2,
+              "ld.shared.b32": 1
+            }
           },
           "resources": {
             "physical_regs": 21,
@@ -375,10 +515,11 @@
             "HMNMX2": 2
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.2249,
-            "vs_default_slope_pct": -42.69,
-            "marginal_dram_gbps": 1840.97,
-            "hbm3_saturation_pct": 55.0
+            "marginal_slope_ns_per_cta": 2.2548,
+            "temporal_replication_cv_pct": 0.34,
+            "vs_default_slope_pct": -42.84,
+            "logical_input_throughput_gbps": 1816.6,
+            "logical_io_throughput_gbps": 1930.13
           }
         }
       }
@@ -387,16 +528,18 @@
       "M": 32,
       "N": 128,
       "num_warps": 4,
-      "input_bytes_per_cta": 8192,
-      "output_bytes_per_cta": 512,
+      "logical_input_bytes_per_cta": 8192,
+      "logical_output_bytes_per_cta": 512,
       "candidates": {
         "default": {
           "candidate": "default",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "158c8b942c377b8cf542b26f44d89ae931b6a77757c2a5fd8f279aedace438f8",
-            "ptx_sha256": "8d0e3856173bf19f15c46a5e78034b6f2090e22ab28e5a3080b6cd12a4d5d7d3",
-            "sass_sha256": "94239d76b7ebe27c057b7a44a8eeb8858d2e51814b5d20e531dcdb722ee38497"
+            "ttgir_sha256": "e3eb04394b0738208368dac86c7632e5639a650b6cb5b64dbb19d0b501d4b695",
+            "ptx_sha256": "882b0bd48de133f7c3dcfaf5fe87ba347d8f7bf8e18038b4cc7cfc6e8d94c669",
+            "sass_sha256": "1876112c651d1bc61bda3b47a8e55abf2b31371cc459a45eb3672cf3ac6913b4",
+            "resource_sha256": "62ad05a1d6b114402b25f2a785a7161f21df83987e130eae67df1e88d50b5252",
+            "cubin_sha256": "c0fa761e47faf408cd7203f7ad40950ae259bbfea4f8daba1d213dc08f0d61a3"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -429,19 +572,42 @@
           },
           "localload": {
             "family": "ld.shared.v4.b32",
-            "count": 4
+            "count": 4,
+            "formatted": "4x ld.shared.v4"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 12,
-            "cvt_f32_bf16": 8
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 25,
             "max_f32_total": 24,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 12,
+            "cvt_f32_bf16_total": 8,
             "st_shared_total": 7,
             "ld_shared_total": 8,
-            "bar_sync_total": 14
+            "bar_sync_total": 14,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16x2": 12,
+              "cvt.f32.bf16": 8
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 8,
+              "max.f32": 8,
+              "bar.sync": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 7,
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16
+            },
+            "post_reduction_convert": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            }
           },
           "resources": {
             "physical_regs": 32,
@@ -457,19 +623,22 @@
             "HMNMX2": 4
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9243,
+            "marginal_slope_ns_per_cta": 2.9771,
+            "temporal_replication_cv_pct": 0.71,
             "vs_default_slope_pct": 0.0,
-            "marginal_dram_gbps": 2801.34,
-            "hbm3_saturation_pct": 83.6
+            "logical_input_throughput_gbps": 2751.72,
+            "logical_io_throughput_gbps": 2923.7
           }
         },
         "8": {
           "candidate": "8",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "158c8b942c377b8cf542b26f44d89ae931b6a77757c2a5fd8f279aedace438f8",
-            "ptx_sha256": "8d0e3856173bf19f15c46a5e78034b6f2090e22ab28e5a3080b6cd12a4d5d7d3",
-            "sass_sha256": "94239d76b7ebe27c057b7a44a8eeb8858d2e51814b5d20e531dcdb722ee38497"
+            "ttgir_sha256": "e3eb04394b0738208368dac86c7632e5639a650b6cb5b64dbb19d0b501d4b695",
+            "ptx_sha256": "882b0bd48de133f7c3dcfaf5fe87ba347d8f7bf8e18038b4cc7cfc6e8d94c669",
+            "sass_sha256": "1876112c651d1bc61bda3b47a8e55abf2b31371cc459a45eb3672cf3ac6913b4",
+            "resource_sha256": "62ad05a1d6b114402b25f2a785a7161f21df83987e130eae67df1e88d50b5252",
+            "cubin_sha256": "c0fa761e47faf408cd7203f7ad40950ae259bbfea4f8daba1d213dc08f0d61a3"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -502,19 +671,42 @@
           },
           "localload": {
             "family": "ld.shared.v4.b32",
-            "count": 4
+            "count": 4,
+            "formatted": "4x ld.shared.v4"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 12,
-            "cvt_f32_bf16": 8
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 25,
             "max_f32_total": 24,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 12,
+            "cvt_f32_bf16_total": 8,
             "st_shared_total": 7,
             "ld_shared_total": 8,
-            "bar_sync_total": 14
+            "bar_sync_total": 14,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16x2": 12,
+              "cvt.f32.bf16": 8
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 8,
+              "max.f32": 8,
+              "bar.sync": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 7,
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16
+            },
+            "post_reduction_convert": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            }
           },
           "resources": {
             "physical_regs": 32,
@@ -530,19 +722,22 @@
             "HMNMX2": 4
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9237,
-            "vs_default_slope_pct": -0.02,
-            "marginal_dram_gbps": 2801.9,
-            "hbm3_saturation_pct": 83.6
+            "marginal_slope_ns_per_cta": 2.9809,
+            "temporal_replication_cv_pct": 0.47,
+            "vs_default_slope_pct": 0.13,
+            "logical_input_throughput_gbps": 2748.18,
+            "logical_io_throughput_gbps": 2919.94
           }
         },
         "4": {
           "candidate": "4",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "06f3b84d133f2958724ee0bab0ebe68f40c9c9cdad9688466ab74c0f9abe5f31",
-            "ptx_sha256": "dcd43515384942d3718e46f437a0ef93fc5ecd57495b27f84559853723ed5586",
-            "sass_sha256": "66090b9f97cc6b36056b89df634cff3befc1e11ac6e106891042dbca03d7d483"
+            "ttgir_sha256": "90a380ab4f94cbb647f73df8f01340dd514f98f35f4dc58e09be7106e27a6f51",
+            "ptx_sha256": "276e796f62dd0768cf324475c4166d6ed879036ea9c5ef5d3df238c255840259",
+            "sass_sha256": "8183b837d6bb4b2596e661c5ed2e37003df34194558eae1620acf2f5457e92e3",
+            "resource_sha256": "1041529e89bfa04369a346e6ef8fc5a02eae223b639553ec35f68d29954c7b7f",
+            "cubin_sha256": "e14a52cb636e16690b48f6197ae9fac99f6cc58baf6cba6509838ecdc752b275"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -575,19 +770,42 @@
           },
           "localload": {
             "family": "ld.shared.v2.b32",
-            "count": 8
+            "count": 8,
+            "formatted": "8x ld.shared.v2"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 14,
-            "cvt_f32_bf16": 4
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 9,
             "max_f32_total": 8,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 14,
+            "cvt_f32_bf16_total": 4,
             "st_shared_total": 4,
             "ld_shared_total": 10,
-            "bar_sync_total": 10
+            "bar_sync_total": 10,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16x2": 14,
+              "cvt.f32.bf16": 4,
+              "bar.sync": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "cross_warp_reduction": {
+              "st.shared.v4.b32": 2,
+              "ld.shared.v4.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 8,
+              "max.f32": 8
+            },
+            "post_reduction_convert": {
+              "st.shared.v4.b32": 1,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            }
           },
           "resources": {
             "physical_regs": 25,
@@ -603,19 +821,22 @@
             "HMNMX2": 6
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9208,
-            "vs_default_slope_pct": -0.12,
-            "marginal_dram_gbps": 2804.75,
-            "hbm3_saturation_pct": 83.7
+            "marginal_slope_ns_per_cta": 2.9804,
+            "temporal_replication_cv_pct": 0.58,
+            "vs_default_slope_pct": 0.11,
+            "logical_input_throughput_gbps": 2748.65,
+            "logical_io_throughput_gbps": 2920.44
           }
         },
         "2": {
           "candidate": "2",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "c72eb551e521e08bb9cb6c081a2acb39f0ea06ed12cab8fe85a694602ba6c852",
-            "ptx_sha256": "97040c97e12077e7c1585b7a829f1791cd51ef40cb6dd61d845cf87904534ac8",
-            "sass_sha256": "f2bc32a3f9931282a3a0c20bf05f4eadb1f55bea14af9ee02fdeda2a7f945fb2"
+            "ttgir_sha256": "5a8837f1ff6988f0949218448c20ac0506888a122577e9c0f4dfcc9433f7ad5b",
+            "ptx_sha256": "73f4884d16f71cdd66796a693103aa98b82f0ddec4091eb82b1da494053d4dba",
+            "sass_sha256": "e74edf61f48846cddde3cda7558ac44914c23737ce73fce485cdf575e67ba876",
+            "resource_sha256": "352dcd1f51c34b509e843919c60aa3e0a233d26ee19ed6dc192c9c4ea4e8d244",
+            "cubin_sha256": "1a0675d456483dd4220bb03bad22fbeb67f624498d76658d7bf5c97467ba60db"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -648,19 +869,42 @@
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
-            "count": 4
+            "count": 4,
+            "formatted": "4x ldmatrix.x4"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 15,
-            "cvt_f32_bf16": 2
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 3,
             "max_f32_total": 2,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 15,
+            "cvt_f32_bf16_total": 2,
             "st_shared_total": 5,
             "ld_shared_total": 3,
-            "bar_sync_total": 10
+            "bar_sync_total": 10,
+            "ldmatrix_total": 4
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16x2": 15,
+              "cvt.f32.bf16": 2,
+              "bar.sync": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "cross_warp_reduction": {
+              "st.shared.v2.b32": 2,
+              "ld.shared.v2.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 2,
+              "max.f32": 2
+            },
+            "post_reduction_convert": {
+              "st.shared.b32": 2,
+              "bar.sync": 2,
+              "ld.shared.b32": 1
+            }
           },
           "resources": {
             "physical_regs": 23,
@@ -676,19 +920,22 @@
             "HMNMX2": 5
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9211,
-            "vs_default_slope_pct": -0.11,
-            "marginal_dram_gbps": 2804.42,
-            "hbm3_saturation_pct": 83.7
+            "marginal_slope_ns_per_cta": 2.9681,
+            "temporal_replication_cv_pct": 0.23,
+            "vs_default_slope_pct": -0.3,
+            "logical_input_throughput_gbps": 2760.06,
+            "logical_io_throughput_gbps": 2932.56
           }
         },
         "1": {
           "candidate": "1",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "7a3c4f6ded5ca88d14c9fbeddb16944fbcec1289cd6e9e54118066f1118227ed",
-            "ptx_sha256": "36b85834b6a22cd98f4684d3d702c449056116e9d1469bd39f5130e4b717bbfb",
-            "sass_sha256": "10d93da5919bf1285e056748c5b818cc4453ba36181d84c5e49300e518546cb0"
+            "ttgir_sha256": "be8f9501d526c0f3160c41d2279f5885ce86631a1f30126942752403dbf780d2",
+            "ptx_sha256": "ffda7e816ba7786b51e619480f87bba52efb3590af4eb40584b612a537a86fc7",
+            "sass_sha256": "d36f723bde9d65b4f59fd5468919b48a48d84fe422c61dbc2c3a60621fde028d",
+            "resource_sha256": "62ad05a1d6b114402b25f2a785a7161f21df83987e130eae67df1e88d50b5252",
+            "cubin_sha256": "67f9932e9f12d9ea0fab2f42ca8c771645f855849bb78cbec8213401b1b8850d"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -721,19 +968,41 @@
           },
           "localload": {
             "family": "ld.shared.b16",
-            "count": 32
+            "count": 32,
+            "formatted": "32x ld.shared.b16"
           },
-          "thread_local_reduction": {
-            "max_bf16": 31,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 1
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 1,
             "max_f32_total": 0,
+            "max_bf16_total": 31,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 1,
             "st_shared_total": 1,
             "ld_shared_total": 32,
-            "bar_sync_total": 4
+            "bar_sync_total": 4,
+            "ldmatrix_total": 0
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16": 31,
+              "cvt.f32.bf16": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "cross_warp_reduction": {
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0,
+              "shfl.sync": 0,
+              "max.f32": 0
+            },
+            "post_reduction_convert": {
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            }
           },
           "resources": {
             "physical_regs": 32,
@@ -749,10 +1018,11 @@
             "HMNMX2": 6
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9217,
-            "vs_default_slope_pct": -0.09,
-            "marginal_dram_gbps": 2803.84,
-            "hbm3_saturation_pct": 83.7
+            "marginal_slope_ns_per_cta": 2.9698,
+            "temporal_replication_cv_pct": 0.4,
+            "vs_default_slope_pct": -0.24,
+            "logical_input_throughput_gbps": 2758.4,
+            "logical_io_throughput_gbps": 2930.79
           }
         }
       }
@@ -761,16 +1031,18 @@
       "M": 32,
       "N": 16,
       "num_warps": 8,
-      "input_bytes_per_cta": 1024,
-      "output_bytes_per_cta": 64,
+      "logical_input_bytes_per_cta": 1024,
+      "logical_output_bytes_per_cta": 64,
       "candidates": {
         "default": {
           "candidate": "default",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "eb51d53afc904a7b925d9b373143b53fd12fce9dbf741d70d69190fc31c6c5be",
-            "ptx_sha256": "3c9ac000ed0539e6ac007ec66da875b231efa13eb8f50be801c9130d0fd8eb1f",
-            "sass_sha256": "7e2a24f399d8156aca01776adf26c3f394cbc9c1ed34420d3018d7dae40a3675"
+            "ttgir_sha256": "0de355016b192f767111a07cacbec9e683b200a7c19bc39fb883fb1b7cc010f0",
+            "ptx_sha256": "619b029db352d62bc6af8a4f911d73fb3600b6843dda7ae7a6a2ed95842f2286",
+            "sass_sha256": "259cb170bd2a087539bb07f479cb70cd2411cafb31a6874b021461215177b180",
+            "resource_sha256": "77fef17c649b8c33732d66494937a5149737c47bc7772e257de593e2bd78bfe0",
+            "cubin_sha256": "96e2557d195aa04abc14e39c869f2a2ff658c43411dff44cf418d51ea162aedc"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -803,19 +1075,45 @@
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
-            "count": 1
+            "count": 1,
+            "formatted": "1x ldmatrix.x1"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 2
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 12,
             "max_f32_total": 10,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 2,
             "st_shared_total": 3,
             "ld_shared_total": 2,
-            "bar_sync_total": 8
+            "bar_sync_total": 8,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "cvt.f32.bf16": 2,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 4,
+              "max.f32": 4,
+              "bar.sync": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.v2.b32": 2,
+              "ld.shared.v2.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 6,
+              "max.f32": 6
+            },
+            "post_reduction_convert": {
+              "shfl.sync.idx.b32": 2,
+              "selp.b32": 1,
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            }
           },
           "resources": {
             "physical_regs": 22,
@@ -831,19 +1129,22 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.1641,
+            "marginal_slope_ns_per_cta": 2.2044,
+            "temporal_replication_cv_pct": 0.5,
             "vs_default_slope_pct": 0.0,
-            "marginal_dram_gbps": 473.17,
-            "hbm3_saturation_pct": 14.1
+            "logical_input_throughput_gbps": 464.52,
+            "logical_io_throughput_gbps": 493.55
           }
         },
         "2": {
           "candidate": "2",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "eb51d53afc904a7b925d9b373143b53fd12fce9dbf741d70d69190fc31c6c5be",
-            "ptx_sha256": "3c9ac000ed0539e6ac007ec66da875b231efa13eb8f50be801c9130d0fd8eb1f",
-            "sass_sha256": "7e2a24f399d8156aca01776adf26c3f394cbc9c1ed34420d3018d7dae40a3675"
+            "ttgir_sha256": "0de355016b192f767111a07cacbec9e683b200a7c19bc39fb883fb1b7cc010f0",
+            "ptx_sha256": "619b029db352d62bc6af8a4f911d73fb3600b6843dda7ae7a6a2ed95842f2286",
+            "sass_sha256": "259cb170bd2a087539bb07f479cb70cd2411cafb31a6874b021461215177b180",
+            "resource_sha256": "77fef17c649b8c33732d66494937a5149737c47bc7772e257de593e2bd78bfe0",
+            "cubin_sha256": "96e2557d195aa04abc14e39c869f2a2ff658c43411dff44cf418d51ea162aedc"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -876,19 +1177,45 @@
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
-            "count": 1
+            "count": 1,
+            "formatted": "1x ldmatrix.x1"
           },
-          "thread_local_reduction": {
-            "max_bf16": 0,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 2
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 12,
             "max_f32_total": 10,
+            "max_bf16_total": 0,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 2,
             "st_shared_total": 3,
             "ld_shared_total": 2,
-            "bar_sync_total": 8
+            "bar_sync_total": 8,
+            "ldmatrix_total": 1
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "cvt.f32.bf16": 2,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 4,
+              "max.f32": 4,
+              "bar.sync": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.v2.b32": 2,
+              "ld.shared.v2.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 6,
+              "max.f32": 6
+            },
+            "post_reduction_convert": {
+              "shfl.sync.idx.b32": 2,
+              "selp.b32": 1,
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            }
           },
           "resources": {
             "physical_regs": 22,
@@ -904,19 +1231,22 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.1641,
-            "vs_default_slope_pct": 0.0,
-            "marginal_dram_gbps": 473.17,
-            "hbm3_saturation_pct": 14.1
+            "marginal_slope_ns_per_cta": 2.203,
+            "temporal_replication_cv_pct": 0.64,
+            "vs_default_slope_pct": -0.06,
+            "logical_input_throughput_gbps": 464.82,
+            "logical_io_throughput_gbps": 493.88
           }
         },
         "1": {
           "candidate": "1",
           "is_legal": true,
           "hashes": {
-            "ttgir_sha256": "3823ee6c9de2c02e86d13d558dd11b380fe2f8d3886b4310c63c74e76722be9d",
-            "ptx_sha256": "cc8e9a12ff47e6bd6e3436c11312d2d98122543d5178e6ad3b54e7cc03c4aa1e",
-            "sass_sha256": "a539eb7351fae3bf2f878d7034a4bb55ead85ffb4880042d97634c5035780b1d"
+            "ttgir_sha256": "406868fd7f27fe3c917ba119defcad1b21589456192286045ad254c5cfcd978b",
+            "ptx_sha256": "6074f635fe3859d25780bdef9c4cf0c80b1420a62ee39099298a734c6512ec31",
+            "sass_sha256": "4757cd1054c83a337bb7e1c5567889e06f96e2b3e49cd68248b407913d4c8b48",
+            "resource_sha256": "c0dfa6fdb61fac93cef5a09ca41e19488916dcd0a57089b505898901519abf21",
+            "cubin_sha256": "23498520bf447eebb54f4572be48062df021b1079e672e4e53743d0a383085ab"
           },
           "distributed_layout": {
             "sizePerThread": [
@@ -949,19 +1279,42 @@
           },
           "localload": {
             "family": "ld.shared.b16",
-            "count": 2
+            "count": 2,
+            "formatted": "2x ld.shared.b16"
           },
-          "thread_local_reduction": {
-            "max_bf16": 1,
-            "max_bf16x2": 0,
-            "cvt_f32_bf16": 1
-          },
-          "communication": {
+          "whole_kernel_opcode_counts": {
             "shfl_sync_total": 4,
             "max_f32_total": 4,
+            "max_bf16_total": 1,
+            "max_bf16x2_total": 0,
+            "cvt_f32_bf16_total": 1,
             "st_shared_total": 3,
             "ld_shared_total": 4,
-            "bar_sync_total": 8
+            "bar_sync_total": 8,
+            "ldmatrix_total": 0
+          },
+          "phase_counts": {
+            "thread_local_reduction": {
+              "max.bf16": 1,
+              "cvt.f32.bf16": 1,
+              "bar.sync": 1
+            },
+            "intra_warp_reduction": {
+              "shfl.sync.bfly.b32": 1,
+              "max.f32": 1
+            },
+            "cross_warp_reduction": {
+              "st.shared.b32": 2,
+              "ld.shared.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 3,
+              "max.f32": 3
+            },
+            "post_reduction_convert": {
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            }
           },
           "resources": {
             "physical_regs": 21,
@@ -977,10 +1330,11 @@
             "HMNMX2": 1
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.1007,
-            "vs_default_slope_pct": -2.93,
-            "marginal_dram_gbps": 487.47,
-            "hbm3_saturation_pct": 14.6
+            "marginal_slope_ns_per_cta": 2.1435,
+            "temporal_replication_cv_pct": 0.68,
+            "vs_default_slope_pct": -2.76,
+            "logical_input_throughput_gbps": 477.71,
+            "logical_io_throughput_gbps": 507.57
           }
         }
       }
