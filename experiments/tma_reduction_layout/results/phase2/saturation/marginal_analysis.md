@@ -6,15 +6,17 @@
 > When kernel duration satisfies $T(B) = a + b \cdot B$, the amortized grid time $T(B)/B = a/B + b$ continues to decrease towards $b$ as $a/B \to 0$.
 > Consequently, evaluating consecutive doublings of $T(B)/B$ conflates fixed device-side/grid costs with incremental throughput.
 > 
-> The true steady-state throughput of a candidate layout is governed by the incremental marginal cost per additional CTA:
+> The empirical large-B marginal slope per additional CTA is governed by:
 > $$\text{Marginal Slope } b = \frac{\Delta T}{\Delta B} \quad (\text{ns/CTA})$$
 > or the linear slope of the affine regression model $T(B) = \text{intercept\_us} + \text{slope\_us} \cdot B$ over large $B$.
+> The fitted unit `ns/CTA` represents the fitted marginal grid-time slope per additional CTA (throughput normalization), not the execution latency of an individual CTA.
 
 - **Fitted Fixed-Time Intercept**: Labeled as `intercept_us`. Its physical origin is **UNKNOWN** (consistent with fixed device-side costs / initialization; source not isolated). It is not claimed to be CUDA kernel launch overhead.
 - **Operational Criterion for Marginal Linear Regime**:
+  - The affine fit uses three large-B points. R² is a supporting descriptive metric; the adjacent-interval slope stability is the primary operational check.
   - Change between the final two adjacent slope intervals $\left| \frac{(\Delta T/\Delta B)_{\text{last}} - (\Delta T/\Delta B)_{\text{prev}}}{(\Delta T/\Delta B)_{\text{prev}}} \right| < 5.0\%$
   - Affine fit $R^2 \ge 0.99$
-  - When both are met: `marginal_linear_regime_observed = true`.
+  - When both are met: `marginal_linear_regime_observed = true` (indicates an approximately linear marginal regime over the tested B range, not a proof of theoretical hardware saturation).
 
 ## Execution Environment
 - **GPU**: `NVIDIA H100 80GB HBM3` (CC: `[9, 0]`, Driver: `580.95.05`)
@@ -81,34 +83,34 @@ Affine fit performed over the large-$B$ points: `B in [16384, 32768, 65536]`.
 ### A. `M32_N64_w8`: Substantial Marginal Slope Separation
 The empirical marginal cost per additional CTA exhibits significant separation across layout candidates:
 - `default`: **3.9000 ns/CTA** (baseline)
-- `cand 8`:  **3.9188 ns/CTA** (`+0.48%` vs default, parity)
+- `cand 8`:  **3.9188 ns/CTA** (`+0.48%` vs default, near parity; codegen-equivalent in the inspected TTGIR/PTX artifacts)
 - `cand 4`:  **2.4644 ns/CTA** (`-36.81%` vs default)
 - `cand 2`:  **2.2537 ns/CTA** (`-42.21%` vs default)
 - `cand 1`:  **2.2303 ns/CTA** (`-42.81%` vs default)
 
 **Key Observations**:
 1. `default marginal cost >> cand 4 > cand 2 ≈ cand 1` is strongly confirmed by the data.
-2. Candidates 1 and 2 achieve a **>42% reduction in marginal steady-state runtime per CTA** compared to default.
-3. Candidate 8 remains in exact parity with default across all intervals and in marginal slope (`+0.48%`).
-4. The fitted fixed-time intercept is nearly identical across all candidates (~18.3 to 18.7 µs). The performance divergence between default and narrow candidates is almost exclusively driven by the marginal slope term ($b$), proving that layout efficiency differences compound linearly with grid size rather than dissipating.
+2. Candidates 1 and 2 achieve a **>42% reduction in empirical marginal slope per additional CTA** compared to default.
+3. Candidate 8 remains in near parity with default across all intervals and in marginal slope (`+0.48%`), and is codegen-equivalent in the inspected TTGIR/PTX artifacts.
+4. The fitted fixed-time intercept is nearly identical across all candidates (~18.3 to 18.7 µs). The performance divergence between default and narrow candidates is almost exclusively driven by the marginal slope term ($b$), indicating that layout efficiency differences compound linearly with grid size over the tested B range rather than dissipating.
 
 ### B. `M32_N16_w8`: Marginal Slopes in Parity
 - `default`: **2.2897 ns/CTA** (baseline)
-- `cand 2`:  **2.2922 ns/CTA** (`+0.11%` vs default)
+- `cand 2`:  **2.2922 ns/CTA** (`+0.11%` vs default, near parity)
 - `cand 1`:  **2.2405 ns/CTA** (`-2.15%` vs default)
 
-**Observation**: Marginal costs across all legal candidates are within ~2% of default. There is no large layout separation for `M32_N16_w8` in steady state.
+**Observation**: Marginal costs across all legal candidates are within ~2% of default. There is no large layout separation for `M32_N16_w8` in the tested range.
 
-### C. `M32_N128_w4`: Marginal Slopes in Complete Parity
+### C. `M32_N128_w4`: Marginal Slopes in Parity
 - `default`: **2.9741 ns/CTA** (baseline)
-- `cand 8`:  **2.9559 ns/CTA** (`-0.61%` vs default)
-- `cand 4`:  **2.9625 ns/CTA** (`-0.39%` vs default)
-- `cand 2`:  **2.9466 ns/CTA** (`-0.92%` vs default)
-- `cand 1`:  **2.9628 ns/CTA** (`-0.38%` vs default)
+- `cand 8`:  **2.9559 ns/CTA** (`-0.61%` vs default, near parity)
+- `cand 4`:  **2.9625 ns/CTA** (`-0.39%` vs default, near parity)
+- `cand 2`:  **2.9466 ns/CTA** (`-0.92%` vs default, near parity)
+- `cand 1`:  **2.9628 ns/CTA** (`-0.38%` vs default, near parity)
 
-**Observation**: All candidates have identical marginal costs within $\pm 0.9\%$. Layout choice does not alter marginal steady-state throughput in this configuration.
+**Observation**: All candidates have near parity in marginal slope within $\pm 0.9\%$. Layout choice does not noticeably alter the empirical marginal slope in this configuration.
 
 ### D. Marginal Linear Regime Verification
 - In all three configurations, the change between the last two slope intervals ($16384 \to 32768$ vs $32768 \to 65536$) is strictly $< 3.5\%$, well below the $< 5.0\%$ threshold.
 - In all cases, the affine model goodness-of-fit $R^2 \ge 0.9999$.
-- Therefore, **all three configurations have entered the marginal linear steady-state regime** for $B \ge 16384$.
+- Therefore, **all three configurations satisfy the operational criterion for an approximately linear marginal regime** for $B \ge 16384$.

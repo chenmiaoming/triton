@@ -220,7 +220,7 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
         "cuobjdump_version": cuobjdump_ver,
         "sm_count": props.multi_processor_count,
         "l2_cache_bytes": l2_cache_bytes if l2_cache_bytes is not None else "UNKNOWN",
-        "gpu_telemetry": telemetry,
+        "pre_run_gpu_telemetry": telemetry,
         "manifest_verification": manifest_ver,
     }
 

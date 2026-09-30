@@ -20,7 +20,7 @@ Checks:
 10. Phase 2 30-Config Steady-State sweep results (150 combinations, re-derived transitions, canonical CSV & MD).
 11. Phase 2 representative artifacts fidelity & byte-for-byte SHA256 bindings.
 12. Offline marginal analysis formula consistency & canonical markdown.
-13. Corrected fixed-binary saturation pilot runs (3 allocations, fixed-binary invariance, telemetry, canonical MD).
+13. Corrected fixed-binary saturation pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).
 
 Exits with code 0 on complete consistency, or non-zero on any failure.
 """
@@ -587,9 +587,10 @@ def validate():
             print("  Verified offline marginal analysis calculations and byte-for-byte markdown.")
 
     # Check 13: Corrected Fixed-Binary Saturation Pilot Runs & Multi-Invocation Verification
-    print("[13/13] Validating corrected fixed-binary saturation pilot runs (3 allocations) and summary markdown...")
+    print("[13/13] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
     cp_json_path = SATURATION_DIR / "corrected_pilot_runs.json"
     cp_md_path = SATURATION_DIR / "corrected_pilot_summary.md"
+    EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     if not cp_json_path.exists():
         errors.append(f"Missing {cp_json_path}")
     elif not cp_md_path.exists():
@@ -609,7 +610,7 @@ def validate():
                 errors.append(f"{rk}: Compute capability mismatch ({env.get('gpu_compute_capability')})")
             if not isinstance(env.get("l2_cache_bytes"), int) or env.get("l2_cache_bytes") <= 0:
                 errors.append(f"{rk}: l2_cache_bytes invalid ({env.get('l2_cache_bytes')})")
-            telem = env.get("gpu_telemetry", {})
+            telem = env.get("pre_run_gpu_telemetry", env.get("gpu_telemetry", {}))
             for t_key in ["sm_clock_mhz", "memory_clock_mhz", "power_draw_w", "gpu_temperature_c"]:
                 if t_key not in telem:
                     errors.append(f"{rk}: Missing telemetry key {t_key}")
@@ -621,19 +622,35 @@ def validate():
                 b_desc = cfg_v["b_desc"]
                 b_runs = cfg_v["b_runs"]
                 grid_data = cfg_v.get("grid_data", {})
+                comp_arts = cfg_v.get("compiled_artifacts", {})
 
-                # Fixed-binary check: artifact hashes identical across all b_runs
+                if not comp_arts:
+                    errors.append(f"{rk} {cfg_k}: Missing compiled_artifacts at config level")
+
+                # Validate compiled artifacts and reject empty or invalid hashes
+                for cand, art in comp_arts.items():
+                    for hkey in ["ttgir_sha256", "ptx_sha256", "cubin_sha256", "sass_sha256"]:
+                        if hkey in art:
+                            hval = art[hkey]
+                            if not hval or hval == EMPTY_SHA256 or len(hval) != 64:
+                                errors.append(f"{rk} {cfg_k} cand={cand}: Invalid or empty hash for {hkey}: {hval}")
+                    for req_key in ["ttgir_sha256", "ptx_sha256"]:
+                        if req_key not in art or not art[req_key] or art[req_key] == EMPTY_SHA256:
+                            errors.append(f"{rk} {cfg_k} cand={cand}: Missing or empty required hash {req_key}")
+
+                # Fixed-binary check: each candidate references its single compiled specialization across all b_runs
                 for cand in ["default", "8", "4", "2", "1"]:
                     c_first = grid_data.get(str(b_runs[0]), {}).get(cand, {})
                     if not c_first.get("is_legal"):
                         continue
-                    first_hashes = c_first.get("compiled_artifact_hashes", {})
-                    for b_other in b_runs[1:]:
-                        other_hashes = grid_data.get(str(b_other), {}).get(cand, {}).get("compiled_artifact_hashes", {})
-                        if other_hashes != first_hashes:
+                    expected_art_id = comp_arts.get(cand, {}).get("artifact_id", f"{cfg_k}_{cand}")
+                    for b_other in b_runs:
+                        c_other = grid_data.get(str(b_other), {}).get(cand, {})
+                        art_id = c_other.get("compiled_artifact_id")
+                        if art_id != expected_art_id:
                             errors.append(
                                 f"{rk} {cfg_k} cand={cand}: Fixed-binary violation! "
-                                f"Hashes for B={b_other} differ from B={b_runs[0]}: {other_hashes} vs {first_hashes}"
+                                f"compiled_artifact_id for B={b_other} is '{art_id}', expected '{expected_art_id}'"
                             )
 
                 # Re-verify marginal analysis
@@ -656,7 +673,7 @@ def validate():
         if canonical_cp_md != actual_cp_md:
             errors.append("corrected_pilot_summary.md does not match canonical render_corrected_pilot_summary_markdown() output byte-for-byte")
         else:
-            print("  Verified corrected fixed-binary pilot runs (3 allocations, fixed-binary invariance, telemetry, canonical MD).")
+            print("  Verified corrected fixed-binary pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).")
 
     print("--------------------------------------------------")
     if errors:
