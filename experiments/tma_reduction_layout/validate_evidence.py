@@ -45,7 +45,13 @@ from experiments.tma_reduction_layout.source_provenance import (
     MODAL_SOURCE_IGNORE_PATTERNS,
     is_ignored_path,
 )
-from experiments.tma_reduction_layout.phase2_benchmark import check_candidate_legality
+from experiments.tma_reduction_layout.phase2_benchmark import (
+    check_candidate_legality,
+    classify_structural_transitions,
+    test_classify_structural_transitions,
+    generate_sweep_csv,
+    generate_sweep_markdown,
+)
 from experiments.tma_reduction_layout.analyze_ir import compute_derived_layout_metrics
 
 
@@ -341,14 +347,21 @@ def validate():
                 cinfo = b_info.get(cand, {})
                 if cinfo.get("is_legal", False):
                     med = cinfo.get("median_us", 0.0)
-                    t_cta = cinfo.get("time_per_cta_ns", 0.0)
+                    t_cta = cinfo.get("amortized_grid_time_per_cta_ns", cinfo.get("time_per_cta_ns", 0.0))
                     expected_t_cta = (med * 1000.0) / b
                     if abs(t_cta - expected_t_cta) > 0.1:
-                        errors.append(f"Pilot time_per_cta_ns mismatch for B={b}, cand={cand}: {t_cta} vs {expected_t_cta}")
+                        errors.append(f"Pilot amortized_grid_time_per_cta_ns mismatch for B={b}, cand={cand}: {t_cta} vs {expected_t_cta}")
         print("  Verified Phase 2 saturation pilot data and formula consistency.")
 
     # Check 10: Phase 2 30-Config Sweep Consistency
     print("[10/11] Validating Phase 2 30-Config Steady-State sweep results...")
+    # 10.1 Synthetic unit test of transition classification
+    try:
+        assert test_classify_structural_transitions() is True
+        print("  Verified classify_structural_transitions() on synthetic test cases (T1-T5).")
+    except Exception as e:
+        errors.append(f"Synthetic test_classify_structural_transitions failed: {e}")
+
     sweep_json_path = SWEEP_DIR / "results.json"
     sweep_csv_path = SWEEP_DIR / "summary.csv"
     sweep_md_path = SWEEP_DIR / "summary.md"
@@ -361,14 +374,25 @@ def validate():
         errors.append(f"Phase 2 sweep summary markdown missing: {sweep_md_path}")
     else:
         sweep_data = json.loads(sweep_json_path.read_text(encoding="utf-8"))
+        
+        # 10.2 Verify steady_state_established flag and status
+        if sweep_data.get("steady_state_established") is not False:
+            errors.append(f"Expected sweep steady_state_established == False, found {sweep_data.get('steady_state_established')}")
+        if sweep_data.get("status") != "exploratory_multi_cta":
+            errors.append(f"Expected sweep status == 'exploratory_multi_cta', found {sweep_data.get('status')}")
+
         configs = sweep_data.get("configs", {})
         if len(configs) != 30:
             errors.append(f"Phase 2 sweep expected 30 configs, found {len(configs)}")
+
+        b_steady = sweep_data.get("b_steady", 4096)
 
         for cfg_k, cfg in configs.items():
             m = cfg["M"]
             n = cfg["N"]
             w = cfg["num_warps"]
+            def_cand = cfg["candidates"].get("default", {})
+
             for cand, cdata in cfg["candidates"].items():
                 expected_legal, expected_err = check_candidate_legality(m, n, w, cand)
                 actual_legal = cdata.get("is_legal", False)
@@ -396,15 +420,50 @@ def validate():
                     if derived["derived_reduce_elems_per_partition"] != c_derived.get("derived_reduce_elems_per_partition"):
                         errors.append(f"M elems per partition mismatch for {cfg_k}, cand={cand}")
 
+                    # Re-derive structural transitions
+                    recorded_trans = cdata.get("structural_transitions", [])
+                    if cand == "default":
+                        expected_trans = ["BASELINE"]
+                    else:
+                        expected_trans = classify_structural_transitions(def_cand, cdata)
+                    if recorded_trans != expected_trans:
+                        errors.append(
+                            f"Structural transition re-derivation mismatch for {cfg_k}, cand={cand}: "
+                            f"recorded={recorded_trans} vs rederived={expected_trans}"
+                        )
+
+                    # Check amortized grid time
+                    med = cdata.get("measured", {}).get("median_us", 0.0)
+                    t_cta = cdata.get("measured", {}).get("amortized_grid_time_per_cta_ns", 0.0)
+                    expected_t_cta = (med * 1000.0) / b_steady
+                    if abs(t_cta - expected_t_cta) > 0.1:
+                        errors.append(
+                            f"Sweep amortized_grid_time_per_cta_ns mismatch for {cfg_k}, cand={cand}: "
+                            f"{t_cta} vs {expected_t_cta}"
+                        )
+
                     # Check repeated validation status
                     vs_def = cdata.get("measured", {}).get("vs_default_pct", 0.0)
                     if abs(vs_def) > 3.0 and cand != "default":
                         rep = cdata.get("measured", {}).get("repeat_validation")
                         if not rep:
                             errors.append(f"Missing repeat validation for >3% case {cfg_k}, cand={cand}")
-                        elif rep.get("status") not in ["reproduced", "unstable/unresolved"]:
+                        elif rep.get("status") not in ["within_run_gt3_reproduced", "within_run_direction_reproduced", "unstable/unresolved"]:
                             errors.append(f"Invalid repeat validation status for {cfg_k}, cand={cand}: {rep.get('status')}")
-        print("  Verified Phase 2 sweep (150 combinations, candidate legality, derived layouts, repeat runs).")
+
+        # 10.3 Canonical CSV match
+        canonical_csv = generate_sweep_csv(sweep_data)
+        actual_csv = sweep_csv_path.read_text(encoding="utf-8")
+        if canonical_csv != actual_csv:
+            errors.append("Phase 2 sweep summary.csv does not match canonical generate_sweep_csv() output byte-for-byte")
+
+        # 10.4 Canonical Markdown match
+        canonical_md = generate_sweep_markdown(sweep_data)
+        actual_md = sweep_md_path.read_text(encoding="utf-8")
+        if canonical_md != actual_md:
+            errors.append("Phase 2 sweep summary.md does not match canonical generate_sweep_markdown() output byte-for-byte")
+
+        print("  Verified Phase 2 sweep (150 combinations, candidate legality, re-derived transitions, canonical CSV & MD).")
 
     # Check 11: Phase 2 Representative Artifact Fidelity & Hash-Binding
     print("[11/11] Validating Phase 2 representative artifacts fidelity and hash binding...")

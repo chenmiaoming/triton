@@ -189,6 +189,7 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
         "ptxas_version": ptxas_ver,
         "nvdisasm_version": nvdisasm_ver,
         "cuobjdump_version": cuobjdump_ver,
+        "sm_count": torch.cuda.get_device_properties(0).multi_processor_count,
         "manifest_verification": manifest_ver,
     }
 

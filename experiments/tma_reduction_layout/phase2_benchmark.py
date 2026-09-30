@@ -580,19 +580,24 @@ if app is not None:
                     pass2_diff_pct = (pass2_med - retest_def_med) / retest_def_med * 100.0
                     pass1_diff_pct = cand_results[cand]["vs_default_pct"]
 
-                    # Check if same direction reproduces
+                    # Check if within-run repeat pass reproduces
                     same_direction = (pass1_diff_pct * pass2_diff_pct > 0)
-                    reproduced = same_direction and (abs(pass2_diff_pct) > 1.5)
+                    both_gt3 = same_direction and (abs(pass1_diff_pct) > 3.0) and (abs(pass2_diff_pct) > 3.0)
+                    if both_gt3:
+                        status = "within_run_gt3_reproduced"
+                    elif same_direction:
+                        status = "within_run_direction_reproduced"
+                    else:
+                        status = "unstable/unresolved"
 
                     cand_results[cand]["repeat_validation"] = {
                         "pass1_diff_pct": pass1_diff_pct,
                         "pass2_diff_pct": pass2_diff_pct,
                         "pass2_median_us": pass2_med,
                         "same_direction": same_direction,
-                        "reproduced": reproduced,
-                        "status": "reproduced" if reproduced else "unstable/unresolved",
+                        "status": status,
                     }
-                    print(f"[Remote Sweep] {cfg_key} cand={cand} pass1: {pass1_diff_pct:+.2f}%, pass2: {pass2_diff_pct:+.2f}% -> {cand_results[cand]['repeat_validation']['status']}")
+                    print(f"[Remote Sweep] {cfg_key} cand={cand} pass1: {pass1_diff_pct:+.2f}%, pass2: {pass2_diff_pct:+.2f}% -> {status}")
 
             sweep_results["configs"][cfg_key] = {
                 "M": m,
@@ -607,18 +612,22 @@ if app is not None:
 # ---------------------------------------------------------------------------
 # Post-Processing & Evidence Structuring
 # ---------------------------------------------------------------------------
+def get_physical_regs(data: Dict[str, Any]) -> int:
+    val = data.get("observed", {}).get("physical_resources", {}).get("physical_regs_per_thread", {}).get("value")
+    return int(val) if isinstance(val, (int, float)) else 0
+
+
 def classify_structural_transitions(
     def_data: Dict[str, Any],
     cand_data: Dict[str, Any],
 ) -> List[str]:
     """
     Tags structural transitions against default:
-    T1: lane partitions changes but warp partitions unchanged
-    T2: warp partitions decreases but remains >1
-    T3: warp partitions becomes 1
-    T4: LocalLoad lowering switches to ldmatrix
-    T5: physical register count changes materially (|diff| >= 4 or >= 10%)
-    T6: post-reduction shared/layout traffic appears/disappears
+    - T1_lane_change_warp_same: lane partitions changes but warp partitions unchanged
+    - T2_warp_decrease_gt1: warp partitions decreases but remains >1
+    - T3_warp_becomes1: warp partitions becomes 1
+    - T4_ldmatrix_family_change: LocalLoad lowering switches opcode family (e.g. ldmatrix vs ld.shared)
+    - T5_register_count_change: physical register count changes materially (|diff| >= 4 or >= 10%)
     """
     transitions = []
     if not cand_data.get("is_legal", False) or not def_data.get("is_legal", False):
@@ -632,28 +641,23 @@ def classify_structural_transitions(
     def_warp = def_derived.get("warp_partitions_reduce_axis", 1)
     cand_warp = cand_derived.get("warp_partitions_reduce_axis", 1)
 
-    # T1
+    # T1: lane changes, warp unchanged
     if cand_lane != def_lane and cand_warp == def_warp:
-        transitions.append("T1:lanePart_change")
+        transitions.append("T1_lane_change_warp_same")
 
-    # T2
+    # T2: warp decreases but remains > 1
     if cand_warp < def_warp and cand_warp > 1:
-        transitions.append("T2:warpPart_decrease")
+        transitions.append("T2_warp_decrease_gt1")
 
-    # T3
+    # T3: warp becomes 1
     if cand_warp == 1 and def_warp > 1:
-        transitions.append("T3:warpPart_eq_1")
+        transitions.append("T3_warp_becomes1")
 
-    # T4: ldmatrix transition
+    # T4: ldmatrix family change
     def_instr = def_data.get("observed", {}).get("ptx", {}).get("initial_local_load", {}).get("instruction") or ""
     cand_instr = cand_data.get("observed", {}).get("ptx", {}).get("initial_local_load", {}).get("instruction") or ""
     if ("ldmatrix" in cand_instr) != ("ldmatrix" in def_instr):
-        transitions.append("T4:ldmatrix_transition")
-
-def get_physical_regs(data: Dict[str, Any]) -> int:
-    val = data.get("observed", {}).get("physical_resources", {}).get("physical_regs_per_thread", {}).get("value")
-    return int(val) if isinstance(val, (int, float)) else 0
-
+        transitions.append("T4_ldmatrix_family_change")
 
     # T5: physical register count changes
     def_regs = get_physical_regs(def_data)
@@ -662,15 +666,92 @@ def get_physical_regs(data: Dict[str, Any]) -> int:
         diff_regs = abs(cand_regs - def_regs)
         pct = diff_regs / def_regs
         if diff_regs >= 4 or pct >= 0.10:
-            transitions.append(f"T5:regs_change({def_regs}->{cand_regs})")
-
-    # T6: post-reduction shared traffic
-    def_st = def_data.get("observed", {}).get("ptx", {}).get("whole_kernel_opcode_counts", {}).get("st_shared_total", 0)
-    cand_st = cand_data.get("observed", {}).get("ptx", {}).get("whole_kernel_opcode_counts", {}).get("st_shared_total", 0)
-    if def_st != cand_st:
-        transitions.append(f"T6:st_shared_traffic({def_st}->{cand_st})")
+            transitions.append(f"T5_register_count_change({def_regs}->{cand_regs})")
 
     return transitions
+
+
+def test_classify_structural_transitions():
+    """Unit test verifying classify_structural_transitions against synthetic cases for T1-T5."""
+    base_def = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 4, "warp_partitions_reduce_axis": 8},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ld.shared.v4.b32"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 32}},
+        },
+    }
+
+    # Case T1: lane changes, warp unchanged
+    cand_t1 = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 2, "warp_partitions_reduce_axis": 8},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ld.shared.v4.b32"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 32}},
+        },
+    }
+    assert classify_structural_transitions(base_def, cand_t1) == ["T1_lane_change_warp_same"], "T1 test failed"
+
+    # Case T2: warp decreases but remains > 1
+    cand_t2 = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 4, "warp_partitions_reduce_axis": 4},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ld.shared.v4.b32"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 32}},
+        },
+    }
+    assert classify_structural_transitions(base_def, cand_t2) == ["T2_warp_decrease_gt1"], "T2 test failed"
+
+    # Case T3: warp becomes 1
+    cand_t3 = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 4, "warp_partitions_reduce_axis": 1},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ld.shared.v4.b32"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 32}},
+        },
+    }
+    assert classify_structural_transitions(base_def, cand_t3) == ["T3_warp_becomes1"], "T3 test failed"
+
+    # Case T4: ldmatrix family change
+    cand_t4 = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 4, "warp_partitions_reduce_axis": 8},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ldmatrix.sync.aligned.m8n8.x4.shared.b16"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 32}},
+        },
+    }
+    assert classify_structural_transitions(base_def, cand_t4) == ["T4_ldmatrix_family_change"], "T4 test failed"
+
+    # Case T5: physical register count changes (32 -> 24)
+    cand_t5 = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 4, "warp_partitions_reduce_axis": 8},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ld.shared.v4.b32"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 24}},
+        },
+    }
+    assert classify_structural_transitions(base_def, cand_t5) == ["T5_register_count_change(32->24)"], "T5 test failed"
+
+    # Combined case: T1 + T4 + T5
+    cand_combined = {
+        "is_legal": True,
+        "derived": {"lane_partitions_reduce_axis": 1, "warp_partitions_reduce_axis": 8},
+        "observed": {
+            "ptx": {"initial_local_load": {"instruction": "ldmatrix.sync.aligned.m8n8.x4.shared.b16"}},
+            "physical_resources": {"physical_regs_per_thread": {"value": 21}},
+        },
+    }
+    assert classify_structural_transitions(base_def, cand_combined) == [
+        "T1_lane_change_warp_same",
+        "T4_ldmatrix_family_change",
+        "T5_register_count_change(32->21)",
+    ], "Combined test failed"
+    return True
 
 
 def post_process_sweep_payload(raw_payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -825,12 +906,17 @@ def generate_pilot_markdown(payload: Dict[str, Any]) -> str:
         f"- **GPU**: `{env.get('gpu_name')}` (CC: `{env.get('gpu_compute_capability')}`, Driver: `{env.get('driver_version')}`)",
         f"- **PyTorch / CUDA**: `{env.get('pytorch_version')}` / CUDA `{env.get('torch_cuda_version')}`",
         f"- **Triton Version**: `{env.get('triton_version')}` (`{env.get('triton_file')}`)",
+        f"- **SM Count**: `{env.get('sm_count', 'UNKNOWN')}`",
         f"- **Test Shape**: `M={shape.get('M')}, N={shape.get('N')}, num_warps={shape.get('num_warps')}`",
         f"- **Evaluated B**: `{b_values}`",
         "",
-        "## Convergence and Steady-State Analysis",
+        "> [!NOTE]",
+        "> `amortized_grid_time_per_cta_ns` represents total grid execution time divided by CTA count.",
+        "> It is a throughput-normalization metric, not the execution latency of one CTA.",
         "",
-        "| B (Grid Size) | Candidate | Total Median (us) | Time / CTA (ns) | Effective (GB/s) | Delta vs Prev B (%) |",
+        "## Convergence and Grid Amortization Analysis",
+        "",
+        "| B (Grid Size) | Candidate | Total Median (us) | Amortized Time / CTA (ns) | Effective (GB/s) | Delta vs Prev B (%) |",
         "| :--- | :--- | :---: | :---: | :---: | :---: |",
     ]
 
@@ -844,7 +930,7 @@ def generate_pilot_markdown(payload: Dict[str, Any]) -> str:
                 lines.append(f"| {b} | {cand} | INVALID | - | - | - |")
                 continue
             med = c_info.get("median_us", 0.0)
-            t_cta = c_info.get("time_per_cta_ns", 0.0)
+            t_cta = c_info.get("amortized_grid_time_per_cta_ns", c_info.get("time_per_cta_ns", 0.0))
             gbps = c_info.get("effective_gbps", 0.0)
 
             delta_str = "baseline"
@@ -856,20 +942,24 @@ def generate_pilot_markdown(payload: Dict[str, Any]) -> str:
 
             lines.append(f"| {b} | {cand} | {med:.2f} | {t_cta:.1f} | {gbps:.1f} | {delta_str} |")
 
-    # Determine B_STEADY convergence
     lines.extend([
         "",
-        "## B_STEADY Selection Rationale",
-        "Launch overhead and small-grid wave quantization dominate at small B (B=64, 256).",
-        "As B reaches 4096 and 8192, `time / CTA` stabilizes to steady-state execution throughput.",
-        "We select **B_STEADY = 4096** as it saturates the 132 SMs of H100 (31+ CTAs per SM) while maintaining efficient benchmark turnaround.",
+        "## Plateau Evaluation",
+        "At small B (B <= 1024), the measured GPU kernel duration remains nearly flat (~23.6-23.9 us),",
+        "which is consistent with insufficient grid-level work to expose steady-state throughput",
+        "and/or fixed device-side kernel costs. The current experiment does not isolate the source of that fixed cost.",
+        "",
+        "From B=4096 (6.7 ns/CTA) to B=8192 (5.4 ns/CTA), normalized time/CTA decreased by ~20%.",
+        "Therefore, B=4096 did not establish a throughput plateau.",
+        "An extended saturation pilot across larger B is required to identify a true plateau.",
     ])
     return "\n".join(lines)
 
 
 def generate_sweep_csv(enriched_payload: Dict[str, Any]) -> str:
     rows = [
-        "M,N,num_warps,cand,is_legal,LocalLoad,lanePart_M,warpPart_M,derived_M_elems_per_part,regs,median_us,time_per_cta_ns,effective_gbps,vs_default_pct,transitions,repeat_status"
+        "# Note: amortized_grid_time_per_cta_ns is total grid execution time divided by CTA count. It is a throughput-normalization metric, not the latency of one CTA.",
+        "M,N,num_warps,cand,is_legal,LocalLoad,lanePart_M,warpPart_M,derived_M_elems_per_part,regs,median_us,amortized_grid_time_per_cta_ns,effective_gbps,vs_default_pct,transitions,repeat_status"
     ]
     for cfg_key, cfg in enriched_payload["configs"].items():
         m = cfg["M"]
@@ -889,11 +979,11 @@ def generate_sweep_csv(enriched_payload: Dict[str, Any]) -> str:
             regs = get_physical_regs(cdata)
             meas = cdata.get("measured", {})
             med = meas.get("median_us", 0.0)
-            t_cta = meas.get("time_per_cta_ns", 0.0)
+            t_cta = meas.get("amortized_grid_time_per_cta_ns", meas.get("time_per_cta_ns", 0.0))
             gbps = meas.get("effective_gbps", 0.0)
             vs_def = meas.get("vs_default_pct", 0.0)
             transitions = ";".join(cdata.get("structural_transitions", []))
-            rep_status = meas.get("repeat_validation", {}).get("status", "not_triggered") if meas.get("repeat_validation") else "none"
+            rep_status = meas.get("repeat_validation", {}).get("status", "none") if meas.get("repeat_validation") else "none"
 
             rows.append(f"{m},{n},{w},{cand},True,{localload},{lane},{warp},{m_part},{regs},{med:.2f},{t_cta:.2f},{gbps:.2f},{vs_def:+.2f}%,{transitions},{rep_status}")
     return "\n".join(rows)
@@ -905,17 +995,23 @@ def generate_sweep_markdown(enriched_payload: Dict[str, Any]) -> str:
     configs = enriched_payload.get("configs", {})
 
     lines = [
-        "# Phase 2 Multi-CTA Steady-State TMA Reduction Layout Sweep Report",
+        "# Phase 2 Multi-CTA TMA Reduction Layout Sweep Report",
+        "",
+        "> [!NOTE]",
+        "> These data are retained as an exploratory B=4096 multi-CTA sweep (`steady_state_established = false`).",
+        "> The initial saturation pilot did not establish B=4096 as a throughput plateau (from B=4096 to B=8192, normalized time/CTA continued to decrease by ~20%).",
+        "> All `amortized_grid_time_per_cta_ns` metrics represent total grid execution time divided by CTA count. This is a throughput-normalization metric, not the execution latency of one CTA.",
         "",
         "## Execution Environment",
         f"- **GPU**: `{env.get('gpu_name')}` (CC: `{env.get('gpu_compute_capability')}`, Driver: `{env.get('driver_version')}`)",
+        f"- **SM Count**: `{env.get('sm_count', 'UNKNOWN')}`",
         f"- **Grid Configuration**: `grid = (B,) = ({b_steady},)`, each CTA processes `[1, M, N]` tile",
         f"- **Reduction**: BF16 -> FP32 `tl.max(axis=1)` -> write `[B, N]`",
         f"- **Total Configurations**: 30 shape/warp tuples x 5 candidates = 150 combinations",
         "",
         "## 1. Full Structural & Performance Table",
         "",
-        "| M | N | Warps | Cand | Legal | LocalLoad | lanePart[M] | warpPart[M] | Regs | Median (us) | Time/CTA (ns) | vs Default | Transitions | Repeat Status |",
+        "| M | N | Warps | Cand | Legal | LocalLoad | lanePart[M] | warpPart[M] | Regs | Median (us) | Amortized Time/CTA (ns) | vs Default | Transitions | Repeat Status |",
         "| :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- | :--- |",
     ]
 
@@ -941,7 +1037,7 @@ def generate_sweep_markdown(enriched_payload: Dict[str, Any]) -> str:
 
             meas = cdata.get("measured", {})
             med = meas.get("median_us", 0.0)
-            t_cta = meas.get("time_per_cta_ns", 0.0)
+            t_cta = meas.get("amortized_grid_time_per_cta_ns", meas.get("time_per_cta_ns", 0.0))
             vs_def = meas.get("vs_default_pct", 0.0)
             vs_def_str = f"{vs_def:+.2f}%" if cand != "default" else "0.00% (base)"
 
@@ -953,19 +1049,35 @@ def generate_sweep_markdown(enriched_payload: Dict[str, Any]) -> str:
     # Grouped Analyses
     lines.extend([
         "",
-        "## 2. Grouped Structural Analysis",
+        "## 2. Grouped Structural Analysis & Matched Pairs",
         "",
-        "### Group A: Lane Partition Transitions (`lanePart > 1 -> 1`)",
-        "Examines configs where threadsPerWarp[M] changes from >1 to 1 (thread-local along reduction axis M).",
+        "### Observation 1: Prevalence of Lane Partition vs Warp Partition Transitions in >3% Cases",
+        "Across all 15 cases with reproduced >3% performance separation vs default:",
+        "- **11 / 15 cases** exhibit `T1_lane_change_warp_same` (warpPart remains unchanged at 8 while lanePart decreases along reduction axis M).",
+        "- **4 / 15 cases** exhibit `T2_warp_decrease_gt1` (warpPart decreases from 8 to 4 or 2).",
+        "- **0 / 15 cases** exhibit `T3_warp_becomes1`.",
         "",
-        "### Group B: Warp Partition Transitions (`warpPart > 1 -> 1`)",
-        "Examines configs where warpsPerCTA[M] reduces to 1, eliminating cross-warp shared memory reduction exchange.",
+        "This demonstrates that reducing `warpPart` is **NOT necessary** for observing >3% performance gains.",
         "",
-        "### Group C: LocalLoad Instruction Lowering (ld.shared vs ldmatrix)",
-        "Examines the impact of vectorization width forcing the backend to select `ldmatrix.sync.aligned.m8n8.x4` vs `ld.shared.v4.b32` / `ld.shared.v2.b32`.",
+        "### Observation 2: Matched-Pair Comparison Holding `warpPart` Constant",
+        "Consider `M32_N64_w8`:",
+        "- `default`: lanePart[M]=4, warpPart[M]=8, regs=29, median=45.47 us (baseline)",
+        "- `cand 4`:  lanePart[M]=2, warpPart[M]=8, regs=22, median=42.80 us (-5.88%)",
+        "- `cand 2`:  lanePart[M]=1, warpPart[M]=8, regs=21, median=42.18 us (-7.25%)",
+        "- `cand 1`:  lanePart[M]=1, warpPart[M]=4, regs=21, median=42.05 us (-7.53%)",
         "",
-        "### Group D: Post-Reduction Shared Memory / Layout Conversion Traffic",
-        "Examines whether narrower contiguous layouts introduce st.shared / ld.shared traffic after `tt.reduce`.",
+        "Holding `warpPart[M]=8` constant while reducing `lanePart[M]` from 4 to 2 to 1 achieves almost the entire runtime improvement (45.47 us -> 42.18 us). Further decreasing `warpPart[M]` from 8 to 4 only shifts runtime from 42.18 us to 42.05 us (<0.3% delta).",
+        "",
+        "Similar matched pairs occur in `M64_N64_w8` and `M32_N128_w8`:",
+        "In `M64_N64_w8`:",
+        "- `default`: lanePart[M]=4, warpPart[M]=8, regs=32, median=49.44 us (baseline)",
+        "- `cand 4`:  lanePart[M]=2, warpPart[M]=8, regs=22, median=46.38 us (-6.20%)",
+        "- `cand 2`:  lanePart[M]=1, warpPart[M]=8, regs=21, median=46.23 us (-6.49%)",
+        "- `cand 1`:  lanePart[M]=1, warpPart[M]=4, regs=21, median=46.68 us (-5.58%)",
+        "",
+        "> [!NOTE]",
+        "> **Correlation Note**: Reduction-axis lane partition reduction is more strongly correlated with the observed large gains than warp-partition reduction in this sweep.",
+        "> Because changing layout simultaneously affects LocalLoad lowering, intra-warp shuffle patterns, arithmetic mix, and register pressure, this observation represents an empirical correlation, not an isolated causal proof.",
     ])
 
     return "\n".join(lines)
@@ -1002,7 +1114,7 @@ def select_and_save_representatives(
             meas = cdata.get("measured", {})
             diff_pct = meas.get("vs_default_pct", 0.0)
             rep_info = meas.get("repeat_validation")
-            reproduced = rep_info.get("reproduced", False) if rep_info else False
+            reproduced = (rep_info.get("status") in ["within_run_gt3_reproduced", "within_run_direction_reproduced", "reproduced"]) if rep_info else False
             transitions = cdata.get("structural_transitions", [])
 
             # 1. Default faster (diff_pct > +3.0%, i.e. candidate is slower)
@@ -1018,11 +1130,11 @@ def select_and_save_representatives(
                 categories["parity"].append((cfg_key, cand, diff_pct))
 
             # 4. ldmatrix transition
-            if any("T4:ldmatrix_transition" in t for t in transitions):
+            if any("T4_ldmatrix_family_change" in t for t in transitions):
                 categories["ldmatrix_transition"].append((cfg_key, cand, diff_pct))
 
             # 5. warpPart == 1 transition
-            if any("T3:warpPart_eq_1" in t for t in transitions):
+            if any("T3_warp_becomes1" in t for t in transitions):
                 categories["warppart_eq_1"].append((cfg_key, cand, diff_pct))
 
     selected_cases = []
@@ -1066,12 +1178,12 @@ def select_and_save_representatives(
             "",
             f"- **Tile Shape**: `M={cfg['M']}, N={cfg['N']}, num_warps={cfg['num_warps']}`",
             "",
-            "| Candidate | LocalLoad Lowering | lanePart[M] | warpPart[M] | Regs | Median (us) | vs Default | Transitions |",
-            "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |",
+            "| Candidate | LocalLoad Lowering | lanePart[M] | warpPart[M] | Regs | Median (us) | Amortized Time/CTA (ns) | vs Default | Transitions |",
+            "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |",
         ]
         for cand, cdata in cfg["candidates"].items():
             if not cdata.get("is_legal", False):
-                case_md_lines.append(f"| {cand} | INVALID | - | - | - | - | - | {cdata.get('error')} |")
+                case_md_lines.append(f"| {cand} | INVALID | - | - | - | - | - | - | {cdata.get('error')} |")
                 continue
             ptx_info = cdata.get("observed", {}).get("ptx", {})
             ll = ptx_info.get("initial_local_load", {})
@@ -1082,10 +1194,11 @@ def select_and_save_representatives(
             regs = get_physical_regs(cdata)
             meas = cdata.get("measured", {})
             med = meas.get("median_us", 0.0)
+            t_cta = meas.get("amortized_grid_time_per_cta_ns", meas.get("time_per_cta_ns", 0.0))
             vs_def = meas.get("vs_default_pct", 0.0)
             vs_str = f"{vs_def:+.2f}%" if cand != "default" else "0.00% (base)"
             trans = ", ".join(cdata.get("structural_transitions", []))
-            case_md_lines.append(f"| {cand} | `{ll_str}` | {lane} | {warp} | {regs} | {med:.2f} | {vs_str} | {trans} |")
+            case_md_lines.append(f"| {cand} | `{ll_str}` | {lane} | {warp} | {regs} | {med:.2f} | {t_cta:.1f} | {vs_str} | {trans} |")
 
         (case_dir / "case_summary.md").write_text("\n".join(case_md_lines), encoding="utf-8")
 
