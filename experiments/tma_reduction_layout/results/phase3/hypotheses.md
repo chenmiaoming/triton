@@ -59,12 +59,12 @@
 ## Hypothesis 3: LocalLoad-Cost vs Reduction-Communication Trade-Off
 
 - **OBSERVED**:
+  - cand1 contains 8 scalar shared-load PTX instructions, whereas default contains 1 vector shared-load PTX instruction.
   - In `M32_N64_w8`, `default` issues 1x `ld.shared.v4.b32` (128-bit vector load), while `cand4` issues 2x `ld.shared.v2.b32` (64-bit vector loads) and `cand1` issues 8x `ld.shared.b16` (scalar loads).
   - Despite issuing narrower load instructions, `cand4`, `cand2`, and `cand1` all run substantially faster than `default` in `M32_N64_w8`.
 
 - **DERIVED**:
-  - 8 scalar loads require 8 separate instruction issues and address generations vs 1 issue for `ld.shared.v4`.
-  - However, the 128-bit vector load enforces a distributed layout with `threadsPerWarp[M]=4`, requiring 40 whole-kernel shuffles and 14 barriers.
+  - The 128-bit vector load enforces a distributed layout with `threadsPerWarp[M]=4`, requiring 40 whole-kernel shuffles and 14 barriers.
 
 - **HYPOTHESIS**:
   - The cost added by narrower LocalLoad lowering may be smaller than the communication cost removed by the associated layout change in `M32_N64_w8`.
@@ -87,7 +87,7 @@
 
 - **DERIVED**:
   - `bar.sync 0` is a CTA-wide barrier synchronizing all 256 threads across 8 warps.
-  - `shfl.sync.idx` is intra-warp only, synchronizing only threads within a single warp without CTA-wide stall.
+  - `shfl.sync.idx` performs warp-local register data exchange under the instruction's synchronization-mask semantics; unlike bar.sync, it is not a CTA-wide barrier.
 
 - **HYPOTHESIS**:
   - The post-reduction conversion change may contribute materially to the `cand4 -> cand2` throughput improvement.

@@ -22,6 +22,7 @@ Checks:
 12. Offline marginal analysis formula consistency & canonical markdown.
 13. Corrected fixed-binary saturation pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).
 14. Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.
+15. Phase 3 Step B: Reduction-Communication Amplification Microbenchmark (H2 isolation, codegen invariance, telemetry, slope recomputation, canonical MD).
 
 Exits with code 0 on complete consistency, or non-zero on any failure.
 """
@@ -70,6 +71,10 @@ from experiments.tma_reduction_layout.phase3_structural_analysis import (
     render_summary_markdown as render_phase3_summary_markdown,
     render_hypotheses_markdown as render_phase3_hypotheses_markdown,
 )
+from experiments.tma_reduction_layout.microbench_reduction import (
+    generate_design_markdown as render_mb_design_markdown,
+    generate_summary_markdown as render_mb_summary_markdown,
+)
 
 
 def compute_sha256(text: str) -> str:
@@ -111,7 +116,7 @@ def validate():
     annotations = ann_raw.get("annotations", {})
 
     # Check 1: Branch and Run Metadata Sanity
-    print("[1/14] Validating branch & run metadata sanity...")
+    print("[1/15] Validating branch & run metadata sanity...")
     prov = data.get("local_provenance", {})
     is_dirty = prov.get("is_dirty")
     if is_dirty is not False:
@@ -130,7 +135,7 @@ def validate():
     print(f"  working tree is_dirty: {is_dirty}")
 
     # Check 2: Artifact hashes vs baseline_results.json
-    print("[2/14] Validating artifact hashes against baseline_results.json...")
+    print("[2/15] Validating artifact hashes against baseline_results.json...")
     for cand in candidates:
         if cand not in audited:
             errors.append(f"Candidate '{cand}' missing in baseline_results.json audited_results.")
@@ -153,7 +158,7 @@ def validate():
                 errors.append(f"SHA mismatch for {cand}.{ext}: disk={actual_sha} vs json={expected_sha}")
 
     # Check 3: Audited Phase Annotations & Mechanical Instruction Verification
-    print("[3/14] Validating audited phase annotations and mechanical instruction counts...")
+    print("[3/15] Validating audited phase annotations and mechanical instruction counts...")
     standard_phase_order = [
         "tma_setup_and_descriptor",
         "initial_local_load",
@@ -248,7 +253,7 @@ def validate():
                         )
 
     # Check 4: default vs forced-8 bit-for-bit equivalence
-    print("[4/14] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
+    print("[4/15] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
     default_ptx_sha = compute_sha256((ARTIFACTS_DIR / "default.ptx").read_text(encoding="utf-8"))
     c8_ptx_sha = compute_sha256((ARTIFACTS_DIR / "8.ptx").read_text(encoding="utf-8"))
     if default_ptx_sha != c8_ptx_sha:
@@ -260,7 +265,7 @@ def validate():
         errors.append(f"default.ttgir ({default_ttgir_sha}) != 8.ttgir ({c8_ttgir_sha})")
 
     # Check 5: Re-parse resource.txt files
-    print("[5/14] Validating resource.txt parsing consistency...")
+    print("[5/15] Validating resource.txt parsing consistency...")
     for cand in candidates:
         res_file = ARTIFACTS_DIR / f"{cand}.resource.txt"
         res_text = res_file.read_text(encoding="utf-8")
@@ -279,7 +284,7 @@ def validate():
             errors.append(f"cuobjdump SHARED mismatch for '{cand}': parsed={actual_smem} vs json={expected_smem}")
 
     # Check 6: Canonical Markdown Verification
-    print("[6/14] Validating canonical Markdown generation against committed docs...")
+    print("[6/15] Validating canonical Markdown generation against committed docs...")
     rendered_summary = render_summary(data)
     committed_summary = (RESULTS_DIR / "baseline_summary_table.md").read_text(encoding="utf-8")
     if rendered_summary != committed_summary:
@@ -295,7 +300,7 @@ def validate():
         )
 
     # Check 7: Modal & Source Manifest Ignore Policy Consistency
-    print("[7/14] Validating unified Modal & manifest ignore policy on synthetic paths...")
+    print("[7/15] Validating unified Modal & manifest ignore policy on synthetic paths...")
     synthetic_cases: List[Tuple[str, bool]] = [
         ("foo.so", True),
         ("foo.o", True),
@@ -330,7 +335,7 @@ def validate():
         pass
 
     # Check 8: Source subset manifest digest matches local source manifest
-    print("[8/14] Validating uploaded source-manifest subset digest fidelity...")
+    print("[8/15] Validating uploaded source-manifest subset digest fidelity...")
     env_ver = data.get("environment", {}).get("manifest_verification", {})
     if env_ver:
         local_sha = env_ver.get("local_manifest_sha256")
@@ -343,7 +348,7 @@ def validate():
         print(f"  Remote post-build extra files count: {env_ver.get('remote_extra_file_count')}")
 
     # Check 9: Phase 2 B-Saturation Pilot Consistency
-    print("[9/14] Validating Phase 2 B-Saturation pilot results...")
+    print("[9/15] Validating Phase 2 B-Saturation pilot results...")
     sat_json_path = SATURATION_DIR / "results.json"
     sat_md_path = SATURATION_DIR / "summary.md"
     if not sat_json_path.exists():
@@ -401,7 +406,7 @@ def validate():
             print("  Verified Phase 2 extended saturation pilot data and canonical markdown.")
 
     # Check 10: Phase 2 30-Config Sweep Consistency
-    print("[10/14] Validating Phase 2 30-Config Steady-State sweep results...")
+    print("[10/15] Validating Phase 2 30-Config Steady-State sweep results...")
     # 10.1 Synthetic unit test of transition classification
     try:
         assert test_classify_structural_transitions() is True
@@ -513,7 +518,7 @@ def validate():
         print("  Verified Phase 2 sweep (150 combinations, candidate legality, re-derived transitions, canonical CSV & MD).")
 
     # Check 11: Phase 2 Representative Artifact Fidelity & Hash-Binding
-    print("[11/14] Validating Phase 2 representative artifacts fidelity and hash binding...")
+    print("[11/15] Validating Phase 2 representative artifacts fidelity and hash binding...")
     if not REPRESENTATIVES_DIR.exists():
         errors.append(f"Representative cases directory missing: {REPRESENTATIVES_DIR}")
     else:
@@ -543,7 +548,7 @@ def validate():
         print(f"  Verified {len(case_dirs)} representative cases with exact byte-for-byte SHA256 bindings.")
 
     # Check 12: Offline Marginal Analysis Consistency
-    print("[12/14] Validating offline marginal analysis consistency and canonical markdown...")
+    print("[12/15] Validating offline marginal analysis consistency and canonical markdown...")
     mar_json_path = SATURATION_DIR / "marginal_analysis.json"
     mar_md_path = SATURATION_DIR / "marginal_analysis.md"
     if not mar_json_path.exists():
@@ -592,7 +597,7 @@ def validate():
             print("  Verified offline marginal analysis calculations and byte-for-byte markdown.")
 
     # Check 13: Corrected Fixed-Binary Saturation Pilot Runs & Multi-Invocation Verification
-    print("[13/14] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
+    print("[13/15] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
     cp_json_path = SATURATION_DIR / "corrected_pilot_runs.json"
     cp_md_path = SATURATION_DIR / "corrected_pilot_summary.md"
     EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -681,7 +686,7 @@ def validate():
             print("  Verified corrected fixed-binary pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).")
 
     # Check 14: Phase 3 Structural Evidence, Canonical Artifact Bindings, Equivalence, and Hypotheses
-    print("[14/14] Validating Phase 3 structural evidence, canonical artifact bindings, equivalence, and hypotheses...")
+    print("[14/15] Validating Phase 3 structural evidence, canonical artifact bindings, equivalence, and hypotheses...")
     phase3_dir = RESULTS_DIR / "phase3"
     canonical_dir = phase3_dir / "fixed_binary_artifacts" / "canonical"
     p3_ann_path = EXP_DIR / "phase3_audited_annotations.json"
@@ -842,6 +847,158 @@ def validate():
 
         print("  Verified Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.")
 
+    # Check 15: Phase 3 Step B: Reduction-Communication Amplification Microbenchmark
+    print("[15/15] Validating Phase 3 reduction amplification microbenchmark (H2 isolation)...")
+    mb_dir = phase3_dir / "microbench_reduction"
+    mb_design_path = mb_dir / "design.md"
+    mb_val_path = mb_dir / "validation.json"
+    mb_res_path = mb_dir / "results.json"
+    mb_sum_path = mb_dir / "summary.md"
+    mb_arts_dir = mb_dir / "artifacts"
+
+    if not mb_design_path.exists():
+        errors.append(f"Missing {mb_design_path}")
+    if not mb_val_path.exists():
+        errors.append(f"Missing {mb_val_path}")
+    if not mb_res_path.exists():
+        errors.append(f"Missing {mb_res_path}")
+    if not mb_sum_path.exists():
+        errors.append(f"Missing {mb_sum_path}")
+    if not mb_arts_dir.exists():
+        errors.append(f"Missing {mb_arts_dir}")
+
+    if mb_val_path.exists() and mb_res_path.exists() and mb_arts_dir.exists():
+        mb_val_data = json.loads(mb_val_path.read_text(encoding="utf-8"))
+        mb_res_data = json.loads(mb_res_path.read_text(encoding="utf-8"))
+
+        expected_mb_configs = ["M32_N64_w8", "M32_N128_w4"]
+        expected_mb_candidates = ["default", "4"]
+        expected_k_vals = [1, 2, 4, 8]
+        expected_runs = ["run_1", "run_2", "run_3"]
+
+        # 15.1 Artifact completeness and non-empty hash validation
+        for rk in expected_runs:
+            for cfg_k in expected_mb_configs:
+                for cand in expected_mb_candidates:
+                    for k in expected_k_vals:
+                        prefix = f"cand4_K{k}" if cand == "4" else f"default_K{k}"
+                        for ext in ["ptx", "ttgir", "sass", "resource.txt", "cubin.sha256"]:
+                            art_path = mb_arts_dir / rk / cfg_k / f"{prefix}.{ext}"
+                            if not art_path.exists():
+                                errors.append(f"Missing microbench artifact: {art_path}")
+                            else:
+                                art_content = art_path.read_text(encoding="utf-8").strip()
+                                if not art_content:
+                                    errors.append(f"Empty microbench artifact: {art_path}")
+                                elif ext in ["ptx", "ttgir", "sass"]:
+                                    h = compute_sha256(art_path.read_text(encoding="utf-8"))
+                                    if h == EMPTY_SHA256:
+                                        errors.append(f"Empty SHA for microbench artifact: {art_path}")
+                                elif ext == "cubin.sha256":
+                                    if len(art_content) != 64 or art_content == EMPTY_SHA256:
+                                        errors.append(f"Invalid cubin sha in {art_path}: {art_content}")
+
+        # 15.2 Cross-run bit-for-bit codegen invariance
+        if mb_res_data.get("codegen_identical_across_all_runs") is not True:
+            errors.append("results.json codegen_identical_across_all_runs is not True")
+
+        for cfg_k in expected_mb_configs:
+            for cand in expected_mb_candidates:
+                for k in expected_k_vals:
+                    prefix = f"cand4_K{k}" if cand == "4" else f"default_K{k}"
+                    r1_ptx = (mb_arts_dir / "run_1" / cfg_k / f"{prefix}.ptx").read_text(encoding="utf-8")
+                    r1_cubin = (mb_arts_dir / "run_1" / cfg_k / f"{prefix}.cubin.sha256").read_text(encoding="utf-8").strip()
+                    for rk in ["run_2", "run_3"]:
+                        other_ptx = (mb_arts_dir / rk / cfg_k / f"{prefix}.ptx").read_text(encoding="utf-8")
+                        other_cubin = (mb_arts_dir / rk / cfg_k / f"{prefix}.cubin.sha256").read_text(encoding="utf-8").strip()
+                        if r1_ptx != other_ptx:
+                            errors.append(f"PTX codegen mismatch across runs for {cfg_k} {prefix}: run_1 vs {rk}")
+                        if r1_cubin != other_cubin:
+                            errors.append(f"CUBIN sha mismatch across runs for {cfg_k} {prefix}: run_1 vs {rk}")
+
+        # 15.3 Validation invariants
+        for cfg_k in expected_mb_configs:
+            cfg_val = mb_val_data.get(cfg_k, {})
+            for cand in expected_mb_candidates:
+                for k in expected_k_vals:
+                    key = f"{cand}_K{k}"
+                    if key not in cfg_val:
+                        errors.append(f"Missing {key} in validation.json for {cfg_k}")
+                        continue
+                    item = cfg_val[key]
+                    if not item.get("is_correct"):
+                        errors.append(f"Numerical correctness failed in validation.json: {cfg_k} {key}")
+                    if item.get("tma_load_count") != 1:
+                        errors.append(f"TMA count not 1 in {cfg_k} {key}: {item.get('tma_load_count')}")
+                    if not item.get("localload_family_match"):
+                        errors.append(f"LocalLoad family mismatch in {cfg_k} {key}")
+                    if item.get("local_memory_bytes") != 0 or item.get("stack_bytes") != 0:
+                        errors.append(f"Spill detected in {cfg_k} {key}: LOCAL={item.get('local_memory_bytes')}, STACK={item.get('stack_bytes')}")
+                    if not item.get("is_valid_for_isolation"):
+                        errors.append(f"Condition not valid for isolation in {cfg_k} {key}")
+
+                    # Verify mathematical opcode scaling
+                    opc = item.get("opcode_counts", {})
+                    shfl_cnt = opc.get("shfl_sync_bfly", 0)
+                    if cfg_k == "M32_N64_w8":
+                        exp_shfl = (40 if cand == "default" else 16) * k
+                    else:
+                        exp_shfl = (24 if cand == "default" else 8) * k
+                    if shfl_cnt != exp_shfl:
+                        errors.append(f"Opcode shfl scaling mismatch in {cfg_k} {key}: expected {exp_shfl}, got {shfl_cnt}")
+
+        # 15.4 Numerical slope & linear fit recomputation
+        cfg_summary = mb_res_data.get("configuration_summary", {})
+        for cfg_k in expected_mb_configs:
+            if cfg_k not in cfg_summary:
+                errors.append(f"Missing {cfg_k} in results.json configuration_summary")
+                continue
+            cfg_s = cfg_summary[cfg_k]
+            k_scaling = cfg_s.get("k_scaling", {})
+            for str_k, k_info in k_scaling.items():
+                k_val = int(str_k)
+                def_m = k_info["default_marginal_ns_mean"]
+                c4_m = k_info["cand4_marginal_ns_mean"]
+                gap_m = k_info["gap_ns_mean"]
+                if abs(gap_m - (def_m - c4_m)) > 1e-4:
+                    errors.append(f"Gap mean formula mismatch in {cfg_k} K={k_val}: {gap_m} vs {def_m - c4_m}")
+                for r_idx in range(len(expected_runs)):
+                    r_def = k_info["default_marginal_ns_runs"][r_idx]
+                    r_c4 = k_info["cand4_marginal_ns_runs"][r_idx]
+                    r_gap = k_info["gap_ns_runs"][r_idx]
+                    if abs(r_gap - (r_def - r_c4)) > 1e-4:
+                        errors.append(f"Per-run gap mismatch in {cfg_k} K={k_val} run {r_idx+1}")
+
+            # Verify linear fits
+            lin_fits = cfg_s.get("linear_fits", {})
+            gap_vals = [k_scaling[str(k)]["gap_ns_mean"] for k in expected_k_vals]
+            rec_gap_slope, rec_gap_icept, rec_gap_r2, _ = linear_regression([float(k) for k in expected_k_vals], gap_vals)
+            if abs(rec_gap_slope - lin_fits["gap_vs_k_slope"]) > 1e-4:
+                errors.append(f"Gap vs K slope mismatch in {cfg_k}: {rec_gap_slope} vs {lin_fits['gap_vs_k_slope']}")
+            if abs(rec_gap_icept - lin_fits["gap_vs_k_intercept"]) > 1e-4:
+                errors.append(f"Gap vs K intercept mismatch in {cfg_k}")
+            if abs(rec_gap_r2 - lin_fits["gap_vs_k_r2"]) > 1e-4:
+                errors.append(f"Gap vs K R2 mismatch in {cfg_k}")
+
+            # Verify classification
+            cls = cfg_s.get("classification")
+            expected_cls = "AMPLIFIES" if lin_fits["gap_vs_k_slope"] > 0 else "NO_AMPLIFICATION"
+            if cls != expected_cls:
+                errors.append(f"Classification mismatch in {cfg_k}: expected {expected_cls}, got {cls}")
+
+        # 15.5 Canonical Markdown equivalence
+        can_des_md = render_mb_design_markdown()
+        act_des_md = mb_design_path.read_text(encoding="utf-8")
+        if can_des_md != act_des_md:
+            errors.append("design.md does not match canonical generate_design_markdown() output byte-for-byte")
+
+        can_sum_md = render_mb_summary_markdown(mb_res_data)
+        act_sum_md = mb_sum_path.read_text(encoding="utf-8")
+        if can_sum_md != act_sum_md:
+            errors.append("summary.md does not match canonical generate_summary_markdown() output byte-for-byte")
+
+        print("  Verified Phase 3 reduction amplification microbenchmark (H2 isolation, codegen invariance, telemetry, slope recomputation, canonical MD).")
+
     print("--------------------------------------------------")
     if errors:
         print(f"FAILED with {len(errors)} consistency error(s):")
@@ -849,7 +1006,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 14 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 15 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 
