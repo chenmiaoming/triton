@@ -35,12 +35,18 @@ if str(REPO_ROOT) not in sys.path:
 EXP_DIR = REPO_ROOT / "experiments" / "tma_reduction_layout"
 RESULTS_DIR = EXP_DIR / "results"
 ARTIFACTS_DIR = RESULTS_DIR / "artifacts"
+PHASE2_DIR = RESULTS_DIR / "phase2"
+SATURATION_DIR = PHASE2_DIR / "saturation"
+SWEEP_DIR = PHASE2_DIR / "sweep"
+REPRESENTATIVES_DIR = PHASE2_DIR / "representatives"
 
 from experiments.tma_reduction_layout.benchmark import render_evidence, render_summary
 from experiments.tma_reduction_layout.source_provenance import (
     MODAL_SOURCE_IGNORE_PATTERNS,
     is_ignored_path,
 )
+from experiments.tma_reduction_layout.phase2_benchmark import check_candidate_legality
+from experiments.tma_reduction_layout.analyze_ir import compute_derived_layout_metrics
 
 
 def compute_sha256(text: str) -> str:
@@ -301,7 +307,7 @@ def validate():
         pass
 
     # Check 8: Source subset manifest digest matches local source manifest
-    print("[8/8] Validating uploaded source-manifest subset digest fidelity...")
+    print("[8/11] Validating uploaded source-manifest subset digest fidelity...")
     env_ver = data.get("environment", {}).get("manifest_verification", {})
     if env_ver:
         local_sha = env_ver.get("local_manifest_sha256")
@@ -313,6 +319,123 @@ def validate():
         print(f"  Verified {env_ver.get('files_verified')} uploaded files match local manifest with identical bytes.")
         print(f"  Remote post-build extra files count: {env_ver.get('remote_extra_file_count')}")
 
+    # Check 9: Phase 2 B-Saturation Pilot Consistency
+    print("[9/11] Validating Phase 2 B-Saturation pilot results...")
+    sat_json_path = SATURATION_DIR / "results.json"
+    sat_md_path = SATURATION_DIR / "summary.md"
+    if not sat_json_path.exists():
+        errors.append(f"Phase 2 saturation results missing: {sat_json_path}")
+    elif not sat_md_path.exists():
+        errors.append(f"Phase 2 saturation summary markdown missing: {sat_md_path}")
+    else:
+        sat_data = json.loads(sat_json_path.read_text(encoding="utf-8"))
+        sat_env = sat_data.get("environment", {})
+        if sat_env.get("gpu_compute_capability") != [9, 0]:
+            errors.append(f"Phase 2 pilot GPU compute capability mismatch: {sat_env.get('gpu_compute_capability')}")
+        b_vals = sat_data.get("b_values", [])
+        if b_vals != [64, 256, 1024, 4096, 8192]:
+            errors.append(f"Phase 2 pilot b_values mismatch: expected [64, 256, 1024, 4096, 8192], got {b_vals}")
+        for b in b_vals:
+            b_info = sat_data.get("data", {}).get(str(b), {})
+            for cand in ["default", "8", "4", "2", "1"]:
+                cinfo = b_info.get(cand, {})
+                if cinfo.get("is_legal", False):
+                    med = cinfo.get("median_us", 0.0)
+                    t_cta = cinfo.get("time_per_cta_ns", 0.0)
+                    expected_t_cta = (med * 1000.0) / b
+                    if abs(t_cta - expected_t_cta) > 0.1:
+                        errors.append(f"Pilot time_per_cta_ns mismatch for B={b}, cand={cand}: {t_cta} vs {expected_t_cta}")
+        print("  Verified Phase 2 saturation pilot data and formula consistency.")
+
+    # Check 10: Phase 2 30-Config Sweep Consistency
+    print("[10/11] Validating Phase 2 30-Config Steady-State sweep results...")
+    sweep_json_path = SWEEP_DIR / "results.json"
+    sweep_csv_path = SWEEP_DIR / "summary.csv"
+    sweep_md_path = SWEEP_DIR / "summary.md"
+    configs = {}
+    if not sweep_json_path.exists():
+        errors.append(f"Phase 2 sweep results missing: {sweep_json_path}")
+    elif not sweep_csv_path.exists():
+        errors.append(f"Phase 2 sweep summary CSV missing: {sweep_csv_path}")
+    elif not sweep_md_path.exists():
+        errors.append(f"Phase 2 sweep summary markdown missing: {sweep_md_path}")
+    else:
+        sweep_data = json.loads(sweep_json_path.read_text(encoding="utf-8"))
+        configs = sweep_data.get("configs", {})
+        if len(configs) != 30:
+            errors.append(f"Phase 2 sweep expected 30 configs, found {len(configs)}")
+
+        for cfg_k, cfg in configs.items():
+            m = cfg["M"]
+            n = cfg["N"]
+            w = cfg["num_warps"]
+            for cand, cdata in cfg["candidates"].items():
+                expected_legal, expected_err = check_candidate_legality(m, n, w, cand)
+                actual_legal = cdata.get("is_legal", False)
+                if actual_legal != expected_legal:
+                    errors.append(f"Candidate legality mismatch for {cfg_k}, cand={cand}: actual={actual_legal}, expected={expected_legal}")
+                if expected_legal:
+                    if not cdata.get("is_correct", False):
+                        errors.append(f"Numerical correctness failed for {cfg_k}, cand={cand}")
+                    # Re-derive layout metrics
+                    ttg = cdata.get("observed", {}).get("ttgir", {})
+                    b_enc = ttg.get("blocked_encoding", {})
+                    derived = compute_derived_layout_metrics(
+                        shape=[1, m, n],
+                        size_per_thread=b_enc.get("sizePerThread", [1, 1, 1]),
+                        threads_per_warp=b_enc.get("threadsPerWarp", [1, 1, 32]),
+                        warps_per_cta=b_enc.get("warpsPerCTA", [1, 1, w]),
+                        num_ctas=1,
+                        reduce_axis=1,
+                    )
+                    c_derived = cdata.get("derived", {})
+                    if derived["lane_partitions_reduce_axis"] != c_derived.get("lane_partitions_reduce_axis"):
+                        errors.append(f"Lane partitions mismatch for {cfg_k}, cand={cand}")
+                    if derived["warp_partitions_reduce_axis"] != c_derived.get("warp_partitions_reduce_axis"):
+                        errors.append(f"Warp partitions mismatch for {cfg_k}, cand={cand}")
+                    if derived["derived_reduce_elems_per_partition"] != c_derived.get("derived_reduce_elems_per_partition"):
+                        errors.append(f"M elems per partition mismatch for {cfg_k}, cand={cand}")
+
+                    # Check repeated validation status
+                    vs_def = cdata.get("measured", {}).get("vs_default_pct", 0.0)
+                    if abs(vs_def) > 3.0 and cand != "default":
+                        rep = cdata.get("measured", {}).get("repeat_validation")
+                        if not rep:
+                            errors.append(f"Missing repeat validation for >3% case {cfg_k}, cand={cand}")
+                        elif rep.get("status") not in ["reproduced", "unstable/unresolved"]:
+                            errors.append(f"Invalid repeat validation status for {cfg_k}, cand={cand}: {rep.get('status')}")
+        print("  Verified Phase 2 sweep (150 combinations, candidate legality, derived layouts, repeat runs).")
+
+    # Check 11: Phase 2 Representative Artifact Fidelity & Hash-Binding
+    print("[11/11] Validating Phase 2 representative artifacts fidelity and hash binding...")
+    if not REPRESENTATIVES_DIR.exists():
+        errors.append(f"Representative cases directory missing: {REPRESENTATIVES_DIR}")
+    else:
+        case_dirs = [p for p in REPRESENTATIVES_DIR.iterdir() if p.is_dir()]
+        if len(case_dirs) < 3:
+            errors.append(f"Expected at least 3 representative case directories, found {len(case_dirs)}")
+        for cdir in case_dirs:
+            cfg_k = cdir.name
+            if cfg_k not in configs:
+                errors.append(f"Representative case {cfg_k} not in sweep configs")
+                continue
+            cfg = configs[cfg_k]
+            if not (cdir / "case_summary.md").exists():
+                errors.append(f"Missing case_summary.md in {cdir}")
+            for cand, cdata in cfg["candidates"].items():
+                if not cdata.get("is_legal", False):
+                    continue
+                for ext, hash_key in [("ttgir", "ttgir_sha256"), ("ptx", "ptx_sha256"), ("sass", "sass_sha256"), ("resource.txt", "resource_sha256")]:
+                    art_file = cdir / f"{cand}.{ext}"
+                    if not art_file.exists():
+                        errors.append(f"Missing artifact {art_file}")
+                        continue
+                    actual_sha = compute_sha256(art_file.read_text(encoding="utf-8"))
+                    expected_sha = cdata.get("raw", {}).get(hash_key)
+                    if actual_sha != expected_sha:
+                        errors.append(f"SHA mismatch for {art_file}: actual={actual_sha} vs expected={expected_sha}")
+        print(f"  Verified {len(case_dirs)} representative cases with exact byte-for-byte SHA256 bindings.")
+
     print("--------------------------------------------------")
     if errors:
         print(f"FAILED with {len(errors)} consistency error(s):")
@@ -320,7 +443,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 8 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 11 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 
