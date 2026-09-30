@@ -1,0 +1,1119 @@
+{
+  "schema_version": "2.0",
+  "description": "SHA-bound audited PTX semantic phase annotations for Phase 3 representative configs (M32_N64_w8, M32_N128_w4, and M32_N16_w8).",
+  "configurations": {
+    "M32_N64_w8": {
+      "default": {
+        "candidate": "default",
+        "ptx_sha256": "103b0f4cc5c7d8d409a4e6e86b22ed6611b5859695738a0091bf2bdb95b3bc3b",
+        "ttgir_sha256": "39de4a95f116c1ebc4df835803452c329d9b2f996dc11a0cd50e9070344d59c0",
+        "sass_sha256": "a74327e53f92bdbf5282747c1af168e13ca719735de70a93c04c43fc908da3ff",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              207
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              210,
+              220
+            ],
+            "count": 1,
+            "instruction": "ld.shared.v4.b32",
+            "description": "Initial loading of 8 BF16 elements into registers via 1 x ld.shared.v4.b32"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              222,
+              229
+            ],
+            "opcode_counts": {
+              "cvt.f32.bf16": 8,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "description": "Unpack and convert 8 BF16 elements to FP32. Zero thread-local max operations (lanePart[M]=4, 1 elem/thread on M)."
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              233,
+              303
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16,
+              "bar.sync": 1
+            },
+            "offsets": [
+              16,
+              8
+            ],
+            "critical_path_depth": "2 shuffles + 2 max.f32",
+            "description": "2-stage butterfly shuffle reduction across 4 lanes of M within each warp (offsets 16, 8) for all 8 elements."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              306,
+              454
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 6,
+              "shfl.sync.bfly.b32": 24,
+              "max.f32": 24
+            },
+            "description": "2 rounds of cross-warp shared memory exchange (4 st.shared, 4 ld.shared, 6 barriers) combined via 3-stage butterfly shuffles (offsets 4, 2, 1; 24 shfl + 24 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              457,
+              479
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            },
+            "description": "Shared memory layout conversion to blocked1 layout via 2 st.shared.v4, 2 bar.sync, and 1 ldmatrix.x1 reload."
+          },
+          "global_store": {
+            "lines": [
+              480,
+              483
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      },
+      "8": {
+        "candidate": "8",
+        "ptx_sha256": "103b0f4cc5c7d8d409a4e6e86b22ed6611b5859695738a0091bf2bdb95b3bc3b",
+        "ttgir_sha256": "39de4a95f116c1ebc4df835803452c329d9b2f996dc11a0cd50e9070344d59c0",
+        "sass_sha256": "a74327e53f92bdbf5282747c1af168e13ca719735de70a93c04c43fc908da3ff",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              207
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              210,
+              220
+            ],
+            "count": 1,
+            "instruction": "ld.shared.v4.b32",
+            "description": "Initial loading of 8 BF16 elements into registers via 1 x ld.shared.v4.b32"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              222,
+              229
+            ],
+            "opcode_counts": {
+              "cvt.f32.bf16": 8,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "description": "Unpack and convert 8 BF16 elements to FP32. Zero thread-local max operations (lanePart[M]=4, 1 elem/thread on M)."
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              233,
+              303
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16,
+              "bar.sync": 1
+            },
+            "offsets": [
+              16,
+              8
+            ],
+            "critical_path_depth": "2 shuffles + 2 max.f32",
+            "description": "2-stage butterfly shuffle reduction across 4 lanes of M within each warp (offsets 16, 8) for all 8 elements."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              306,
+              454
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 6,
+              "shfl.sync.bfly.b32": 24,
+              "max.f32": 24
+            },
+            "description": "2 rounds of cross-warp shared memory exchange (4 st.shared, 4 ld.shared, 6 barriers) combined via 3-stage butterfly shuffles (offsets 4, 2, 1; 24 shfl + 24 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              457,
+              479
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            },
+            "description": "Shared memory layout conversion to blocked1 layout via 2 st.shared.v4, 2 bar.sync, and 1 ldmatrix.x1 reload."
+          },
+          "global_store": {
+            "lines": [
+              480,
+              483
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      },
+      "4": {
+        "candidate": "4",
+        "ptx_sha256": "459ac7687a400cea251787cdbd880d81631e8fc82cd7b465ea72c4967d809dc4",
+        "ttgir_sha256": "7df7ead384d8020aad9182a4ed043d32929640f1ed712a784999c45981ac9628",
+        "sass_sha256": "35536a6ebdf90caa653c973bd6cebcd97210c054128ee64b3df16f820316d9b7",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              207
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              210,
+              216
+            ],
+            "count": 2,
+            "instruction": "ld.shared.v2.b32",
+            "description": "Initial loading of 8 BF16 elements via 2 x ld.shared.v2.b32 (2 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              220,
+              229
+            ],
+            "opcode_counts": {
+              "max.bf16x2": 2,
+              "cvt.f32.bf16": 4,
+              "bar.sync": 1
+            },
+            "description": "Thread-local packed max.bf16x2 reduction along M (2 elems -> 1 elem) followed by 4 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              233,
+              242
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 4,
+              "max.f32": 4
+            },
+            "offsets": [
+              16
+            ],
+            "critical_path_depth": "1 shuffle + 1 max.f32",
+            "description": "Single-stage butterfly shuffle reduction across 2 lanes of M within each warp (offset 16) for 4 elements."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              245,
+              328
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 2,
+              "ld.shared.v4.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 12,
+              "max.f32": 12
+            },
+            "description": "Single round of cross-warp shared memory exchange (2 st.shared, 2 ld.shared, 3 barriers) combined via 3-stage butterfly shuffles (offsets 4, 2, 1; 12 shfl + 12 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              331,
+              345
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 1,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            },
+            "description": "Shared memory layout conversion via 1 st.shared.v4, 2 bar.sync, and 1 ldmatrix.x1 reload."
+          },
+          "global_store": {
+            "lines": [
+              346,
+              349
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      },
+      "2": {
+        "candidate": "2",
+        "ptx_sha256": "ddbef3e4397d2848a0afa80712816178f62d871ea8acb4fc42b62afb5170950e",
+        "ttgir_sha256": "0b47ef933c356e07470d20b62f73ef052c9d5218c485d31e07e5d10eb6208de3",
+        "sass_sha256": "7935aa25815065c27bf60bc2ef9ddc4422b96fd5abf3d940d3bc1d0c73378aa7",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              206
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              209,
+              220
+            ],
+            "count": 1,
+            "instruction": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
+            "description": "Initial loading via hardware ldmatrix.x4 (4 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              224,
+              232
+            ],
+            "opcode_counts": {
+              "max.bf16x2": 3,
+              "cvt.f32.bf16": 2,
+              "bar.sync": 1
+            },
+            "description": "Thread-local packed max.bf16x2 tree reduction (4 elems -> 1 elem) followed by 2 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "offsets": [],
+            "critical_path_depth": "0",
+            "description": "None. lanePart[M]=1 completely eliminates intra-warp reduction communication along M."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              235,
+              291
+            ],
+            "opcode_counts": {
+              "st.shared.v2.b32": 2,
+              "ld.shared.v2.b32": 2,
+              "bar.sync": 3,
+              "shfl.sync.bfly.b32": 6,
+              "max.f32": 6
+            },
+            "description": "Cross-warp shared memory exchange (2 st.shared.v2, 2 ld.shared.v2, 3 barriers) combined via 3-stage butterfly shuffles (offsets 4, 2, 1; 6 shfl + 6 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              294,
+              306
+            ],
+            "opcode_counts": {
+              "shfl.sync.idx.b32": 2,
+              "selp.b32": 1,
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            },
+            "description": "In-register layout redistribution via 2 x shfl.sync.idx and selp.b32. Completely avoids shared memory stores/loads and barriers."
+          },
+          "global_store": {
+            "lines": [
+              307,
+              310
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      },
+      "1": {
+        "candidate": "1",
+        "ptx_sha256": "bd1b3fef6b8d84b52e6b4900e4e20a5723b7bfd313c91587d846a6374536618b",
+        "ttgir_sha256": "9d134c1c3e8a259c445f45615e6aabb459aaaaac85d6305d78eee9ba68951570",
+        "sass_sha256": "b914d23b5ffc93553164130073a5bc541b842a7b9f0c8d3da488efa7b4269160",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              206
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              209,
+              223
+            ],
+            "count": 8,
+            "instruction": "ld.shared.b16",
+            "description": "Initial loading via 8 x scalar ld.shared.b16 (8 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              227,
+              237
+            ],
+            "opcode_counts": {
+              "max.bf16": 7,
+              "cvt.f32.bf16": 1,
+              "bar.sync": 1
+            },
+            "description": "Thread-local scalar tree reduction (7 x max.bf16) followed by 1 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "offsets": [],
+            "critical_path_depth": "0",
+            "description": "None. lanePart[M]=1 completely eliminates intra-warp reduction communication along M."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              240,
+              264
+            ],
+            "opcode_counts": {
+              "st.shared.b32": 1,
+              "ld.shared.b32": 1,
+              "bar.sync": 2,
+              "shfl.sync.bfly.b32": 2,
+              "max.f32": 2
+            },
+            "description": "4-warp cross-warp combine (1 st.shared, 1 ld.shared, 2 barriers, 2 butterfly shuffles, 2 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              266,
+              273
+            ],
+            "opcode_counts": {
+              "st.shared.b32": 1,
+              "bar.sync": 1,
+              "ld.shared.b32": 1
+            },
+            "description": "Scalar shared-memory layout adjustment via 1 st.shared.b32, 1 bar.sync, and 1 ld.shared.b32."
+          },
+          "global_store": {
+            "lines": [
+              276,
+              283
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      }
+    },
+    "M32_N128_w4": {
+      "default": {
+        "candidate": "default",
+        "ptx_sha256": "8d0e3856173bf19f15c46a5e78034b6f2090e22ab28e5a3080b6cd12a4d5d7d3",
+        "ttgir_sha256": "158c8b942c377b8cf542b26f44d89ae931b6a77757c2a5fd8f279aedace438f8",
+        "sass_sha256": "94239d76b7ebe27c057b7a44a8eeb8858d2e51814b5d20e531dcdb722ee38497",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              214
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              217,
+              230
+            ],
+            "count": 4,
+            "instruction": "ld.shared.v4.b32",
+            "description": "Initial loading of 32 BF16 elements via 4 x ld.shared.v4.b32 (4 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              234,
+              257
+            ],
+            "opcode_counts": {
+              "max.bf16x2": 12,
+              "cvt.f32.bf16": 8
+            },
+            "description": "Thread-local packed max.bf16x2 reduction along M followed by 8 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              261,
+              289
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 8,
+              "max.f32": 8,
+              "bar.sync": 1
+            },
+            "offsets": [
+              16
+            ],
+            "critical_path_depth": "1 shuffle + 1 max.f32",
+            "description": "Single-stage butterfly shuffle reduction across 2 lanes of M within each warp (offset 16)."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              293,
+              377
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 6,
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16
+            },
+            "description": "Cross-warp shared memory exchange (4 st.shared, 4 ld.shared, 6 barriers) combined via 2-stage butterfly shuffles (offsets 2, 1; 16 shfl + 16 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              381,
+              411
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            },
+            "description": "Shared memory layout conversion via 2 st.shared.v4, 2 bar.sync, and 1 ldmatrix.x1 reload."
+          },
+          "global_store": {
+            "lines": [
+              414,
+              414
+            ],
+            "instruction": "st.global.b32",
+            "description": "Direct global memory store to output buffer"
+          }
+        }
+      },
+      "8": {
+        "candidate": "8",
+        "ptx_sha256": "8d0e3856173bf19f15c46a5e78034b6f2090e22ab28e5a3080b6cd12a4d5d7d3",
+        "ttgir_sha256": "158c8b942c377b8cf542b26f44d89ae931b6a77757c2a5fd8f279aedace438f8",
+        "sass_sha256": "94239d76b7ebe27c057b7a44a8eeb8858d2e51814b5d20e531dcdb722ee38497",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              214
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              217,
+              230
+            ],
+            "count": 4,
+            "instruction": "ld.shared.v4.b32",
+            "description": "Initial loading of 32 BF16 elements via 4 x ld.shared.v4.b32 (4 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              234,
+              257
+            ],
+            "opcode_counts": {
+              "max.bf16x2": 12,
+              "cvt.f32.bf16": 8
+            },
+            "description": "Thread-local packed max.bf16x2 reduction along M followed by 8 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              261,
+              289
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 8,
+              "max.f32": 8,
+              "bar.sync": 1
+            },
+            "offsets": [
+              16
+            ],
+            "critical_path_depth": "1 shuffle + 1 max.f32",
+            "description": "Single-stage butterfly shuffle reduction across 2 lanes of M within each warp (offset 16)."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              293,
+              377
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 4,
+              "ld.shared.v4.b32": 4,
+              "bar.sync": 6,
+              "shfl.sync.bfly.b32": 16,
+              "max.f32": 16
+            },
+            "description": "Cross-warp shared memory exchange (4 st.shared, 4 ld.shared, 6 barriers) combined via 2-stage butterfly shuffles (offsets 2, 1; 16 shfl + 16 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              381,
+              411
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 2,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            },
+            "description": "Shared memory layout conversion via 2 st.shared.v4, 2 bar.sync, and 1 ldmatrix.x1 reload."
+          },
+          "global_store": {
+            "lines": [
+              414,
+              414
+            ],
+            "instruction": "st.global.b32",
+            "description": "Direct global memory store to output buffer"
+          }
+        }
+      },
+      "4": {
+        "candidate": "4",
+        "ptx_sha256": "dcd43515384942d3718e46f437a0ef93fc5ecd57495b27f84559853723ed5586",
+        "ttgir_sha256": "06f3b84d133f2958724ee0bab0ebe68f40c9c9cdad9688466ab74c0f9abe5f31",
+        "sass_sha256": "66090b9f97cc6b36056b89df634cff3befc1e11ac6e106891042dbca03d7d483",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              214
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              217,
+              237
+            ],
+            "count": 8,
+            "instruction": "ld.shared.v2.b32",
+            "description": "Initial loading via 8 x ld.shared.v2.b32 (8 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              241,
+              262
+            ],
+            "opcode_counts": {
+              "max.bf16x2": 14,
+              "cvt.f32.bf16": 4,
+              "bar.sync": 1
+            },
+            "description": "Thread-local packed max.bf16x2 tree reduction (8 elems -> 1 elem) followed by 4 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "offsets": [],
+            "critical_path_depth": "0",
+            "description": "None. lanePart[M]=1 completely eliminates intra-warp reduction communication along M."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              269,
+              322
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 2,
+              "ld.shared.v4.b32": 2,
+              "bar.sync": 4,
+              "shfl.sync.bfly.b32": 8,
+              "max.f32": 8
+            },
+            "description": "Cross-warp shared memory exchange (2 st.shared, 2 ld.shared, 4 barriers) combined via 2-stage butterfly shuffles (offsets 2, 1; 8 shfl + 8 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              330,
+              337
+            ],
+            "opcode_counts": {
+              "st.shared.v4.b32": 1,
+              "bar.sync": 2,
+              "ldmatrix.sync.aligned.m8n8.x1.shared.b16": 1
+            },
+            "description": "Shared memory layout conversion via 1 st.shared.v4, 2 bar.sync, and 1 ldmatrix.x1 reload."
+          },
+          "global_store": {
+            "lines": [
+              340,
+              340
+            ],
+            "instruction": "st.global.b32",
+            "description": "Direct global memory store to output buffer"
+          }
+        }
+      },
+      "2": {
+        "candidate": "2",
+        "ptx_sha256": "97040c97e12077e7c1585b7a829f1791cd51ef40cb6dd61d845cf87904534ac8",
+        "ttgir_sha256": "c72eb551e521e08bb9cb6c081a2acb39f0ea06ed12cab8fe85a694602ba6c852",
+        "sass_sha256": "f2bc32a3f9931282a3a0c20bf05f4eadb1f55bea14af9ee02fdeda2a7f945fb2",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              214
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              217,
+              235
+            ],
+            "count": 4,
+            "instruction": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
+            "description": "Initial loading via 4 x hardware ldmatrix.x4 (16 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              239,
+              259
+            ],
+            "opcode_counts": {
+              "max.bf16x2": 15,
+              "cvt.f32.bf16": 2,
+              "bar.sync": 1
+            },
+            "description": "Thread-local packed max.bf16x2 tree reduction (16 elems -> 1 elem) followed by 2 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "offsets": [],
+            "critical_path_depth": "0",
+            "description": "None. lanePart[M]=1 completely eliminates intra-warp reduction communication along M."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              267,
+              293
+            ],
+            "opcode_counts": {
+              "st.shared.v2.b32": 2,
+              "ld.shared.v2.b32": 2,
+              "bar.sync": 4,
+              "shfl.sync.bfly.b32": 2,
+              "max.f32": 2
+            },
+            "description": "2-warp cross-warp shared memory exchange (2 st.shared, 2 ld.shared, 4 barriers, 2 butterfly shuffles, 2 max.f32)."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              301,
+              314
+            ],
+            "opcode_counts": {
+              "st.shared.b32": 2,
+              "bar.sync": 2,
+              "ld.shared.b32": 1
+            },
+            "description": "Scalar shared memory layout redistribution via 2 st.shared.b32, 2 bar.sync, and 1 ld.shared.b32."
+          },
+          "global_store": {
+            "lines": [
+              317,
+              317
+            ],
+            "instruction": "st.global.b32",
+            "description": "Direct global memory store to output buffer"
+          }
+        }
+      },
+      "1": {
+        "candidate": "1",
+        "ptx_sha256": "36b85834b6a22cd98f4684d3d702c449056116e9d1469bd39f5130e4b717bbfb",
+        "ttgir_sha256": "7a3c4f6ded5ca88d14c9fbeddb16944fbcec1289cd6e9e54118066f1118227ed",
+        "sass_sha256": "10d93da5919bf1285e056748c5b818cc4453ba36181d84c5e49300e518546cb0",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              214
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              217,
+              268
+            ],
+            "count": 32,
+            "instruction": "ld.shared.b16",
+            "description": "Initial loading via 32 x scalar ld.shared.b16 (32 elements along M per thread)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              272,
+              304
+            ],
+            "opcode_counts": {
+              "max.bf16": 31,
+              "cvt.f32.bf16": 1
+            },
+            "description": "Thread-local scalar tree reduction (31 x max.bf16) reducing all 32 elements along M locally in registers. Followed by 1 x cvt.f32.bf16."
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 0,
+              "max.f32": 0
+            },
+            "offsets": [],
+            "critical_path_depth": "0",
+            "description": "None. lanePart[M]=1 completely eliminates intra-warp reduction communication along M."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0,
+              "shfl.sync": 0,
+              "max.f32": 0
+            },
+            "description": "None. warpPart[M]=1 completely eliminates cross-warp reduction communication along M."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              0,
+              0
+            ],
+            "opcode_counts": {
+              "st.shared": 0,
+              "ld.shared": 0,
+              "bar.sync": 0
+            },
+            "description": "None. Reduction result is already aligned to output thread layout in registers."
+          },
+          "global_store": {
+            "lines": [
+              314,
+              314
+            ],
+            "instruction": "st.global.b32",
+            "description": "Direct global memory store to output buffer"
+          }
+        }
+      }
+    },
+    "M32_N16_w8": {
+      "default": {
+        "candidate": "default",
+        "ptx_sha256": "3c9ac000ed0539e6ac007ec66da875b231efa13eb8f50be801c9130d0fd8eb1f",
+        "ttgir_sha256": "eb51d53afc904a7b925d9b373143b53fd12fce9dbf741d70d69190fc31c6c5be",
+        "sass_sha256": "7e2a24f399d8156aca01776adf26c3f394cbc9c1ed34420d3018d7dae40a3675",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              208
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              210,
+              220
+            ],
+            "count": 1,
+            "instruction": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
+            "description": "Initial loading of 2 BF16 elements via 1 x ldmatrix.x1 (lanePart[M]=4, warpPart[M]=8)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              221,
+              224
+            ],
+            "opcode_counts": {
+              "cvt.f32.bf16": 2,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "description": "Convert 2 BF16 elements to FP32. Zero thread-local max operations (derived_M_elems_per_thread = 1)."
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              227,
+              250
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 4,
+              "max.f32": 4,
+              "bar.sync": 1
+            },
+            "offsets": [
+              16,
+              8
+            ],
+            "critical_path_depth": "2 shuffles + 2 max.f32",
+            "description": "2-stage butterfly shuffle reduction across 4 lanes of M within each warp (offsets 16, 8)."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              252,
+              312
+            ],
+            "opcode_counts": {
+              "st.shared.v2.b32": 1,
+              "ld.shared.v2.b32": 1,
+              "bar.sync": 2,
+              "shfl.sync.bfly.b32": 6,
+              "max.f32": 6
+            },
+            "description": "Cross-warp shared memory exchange combined via butterfly shuffles."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              313,
+              345
+            ],
+            "opcode_counts": {
+              "st.shared.v2.b32": 1,
+              "ld.shared.v2.b32": 1,
+              "bar.sync": 2,
+              "shfl.sync.idx.b32": 2,
+              "selp.b32": 1
+            },
+            "description": "Epilogue shared exchange and register index shuffle redistribution."
+          },
+          "global_store": {
+            "lines": [
+              347,
+              350
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      },
+      "2": {
+        "candidate": "2",
+        "ptx_sha256": "3c9ac000ed0539e6ac007ec66da875b231efa13eb8f50be801c9130d0fd8eb1f",
+        "ttgir_sha256": "eb51d53afc904a7b925d9b373143b53fd12fce9dbf741d70d69190fc31c6c5be",
+        "sass_sha256": "7e2a24f399d8156aca01776adf26c3f394cbc9c1ed34420d3018d7dae40a3675",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              208
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              210,
+              220
+            ],
+            "count": 1,
+            "instruction": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
+            "description": "Initial loading of 2 BF16 elements via 1 x ldmatrix.x1 (lanePart[M]=4, warpPart[M]=8)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              221,
+              224
+            ],
+            "opcode_counts": {
+              "cvt.f32.bf16": 2,
+              "max.bf16x2": 0,
+              "max.f32": 0
+            },
+            "description": "Convert 2 BF16 elements to FP32. Zero thread-local max operations (derived_M_elems_per_thread = 1)."
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              227,
+              250
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 4,
+              "max.f32": 4,
+              "bar.sync": 1
+            },
+            "offsets": [
+              16,
+              8
+            ],
+            "critical_path_depth": "2 shuffles + 2 max.f32",
+            "description": "2-stage butterfly shuffle reduction across 4 lanes of M within each warp (offsets 16, 8)."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              252,
+              312
+            ],
+            "opcode_counts": {
+              "st.shared.v2.b32": 1,
+              "ld.shared.v2.b32": 1,
+              "bar.sync": 2,
+              "shfl.sync.bfly.b32": 6,
+              "max.f32": 6
+            },
+            "description": "Cross-warp shared memory exchange combined via butterfly shuffles."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              313,
+              345
+            ],
+            "opcode_counts": {
+              "st.shared.v2.b32": 1,
+              "ld.shared.v2.b32": 1,
+              "bar.sync": 2,
+              "shfl.sync.idx.b32": 2,
+              "selp.b32": 1
+            },
+            "description": "Epilogue shared exchange and register index shuffle redistribution."
+          },
+          "global_store": {
+            "lines": [
+              347,
+              350
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      },
+      "1": {
+        "candidate": "1",
+        "ptx_sha256": "cc8e9a12ff47e6bd6e3436c11312d2d98122543d5178e6ad3b54e7cc03c4aa1e",
+        "ttgir_sha256": "3823ee6c9de2c02e86d13d558dd11b380fe2f8d3886b4310c63c74e76722be9d",
+        "sass_sha256": "a539eb7351fae3bf2f878d7034a4bb55ead85ffb4880042d97634c5035780b1d",
+        "phases": {
+          "tma_setup_and_descriptor": {
+            "lines": [
+              12,
+              208
+            ],
+            "description": "TMA descriptor creation, mbarrier setup, proxy fencing, async bulk copy, and wait loop"
+          },
+          "initial_local_load": {
+            "lines": [
+              209,
+              216
+            ],
+            "count": 2,
+            "instruction": "ld.shared.b16",
+            "description": "Initial loading via 2 x scalar ld.shared.b16 (lanePart[M]=2, warpPart[M]=8)"
+          },
+          "thread_local_reduction_arithmetic": {
+            "lines": [
+              221,
+              224
+            ],
+            "opcode_counts": {
+              "max.bf16": 1,
+              "cvt.f32.bf16": 1
+            },
+            "description": "Thread-local scalar max.bf16 reduction (2 elems -> 1 elem) followed by 1 x cvt.f32.bf16"
+          },
+          "intra_warp_reduction_communication": {
+            "lines": [
+              227,
+              230
+            ],
+            "opcode_counts": {
+              "shfl.sync.bfly.b32": 1,
+              "max.f32": 1
+            },
+            "offsets": [
+              16
+            ],
+            "critical_path_depth": "1 shuffle + 1 max.f32",
+            "description": "Single-stage butterfly shuffle reduction across 2 lanes of M within each warp (offset 16)."
+          },
+          "cross_warp_reduction_communication": {
+            "lines": [
+              233,
+              288
+            ],
+            "opcode_counts": {
+              "st.shared.b32": 1,
+              "ld.shared.b32": 1,
+              "bar.sync": 2,
+              "shfl.sync.bfly.b32": 2,
+              "max.f32": 2
+            },
+            "description": "Cross-warp shared memory exchange combined via butterfly shuffles."
+          },
+          "post_reduction_convert_layout": {
+            "lines": [
+              289,
+              328
+            ],
+            "opcode_counts": {
+              "st.shared.b32": 1,
+              "bar.sync": 2,
+              "ld.shared.b32": 1
+            },
+            "description": "Scalar shared-memory layout adjustment."
+          },
+          "global_store": {
+            "lines": [
+              330,
+              333
+            ],
+            "instruction": "@%p7 st.global.b32",
+            "description": "Predicated global memory store to output buffer"
+          }
+        }
+      }
+    }
+  }
+}

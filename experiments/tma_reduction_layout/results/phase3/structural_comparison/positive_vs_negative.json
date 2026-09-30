@@ -1,0 +1,989 @@
+{
+  "metadata": {
+    "description": "Phase 3 Mechanism Isolation: Structural Decomposition & Comparison",
+    "device": "NVIDIA H100 80GB HBM3 (SM90, CC [9, 0])",
+    "configurations": {
+      "M32_N64_w8": "Strong-positive case (large layout sensitivity ~37%-43%)",
+      "M32_N128_w4": "Negative/control case (near-zero layout sensitivity ~0.1%)",
+      "M32_N16_w8": "Weak-effect control case (degenerate vector width / legality)"
+    }
+  },
+  "configurations": {
+    "M32_N64_w8": {
+      "M": 32,
+      "N": 64,
+      "num_warps": 8,
+      "input_bytes_per_cta": 4096,
+      "output_bytes_per_cta": 256,
+      "candidates": {
+        "default": {
+          "candidate": "default",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "39de4a95f116c1ebc4df835803452c329d9b2f996dc11a0cd50e9070344d59c0",
+            "ptx_sha256": "103b0f4cc5c7d8d409a4e6e86b22ed6611b5859695738a0091bf2bdb95b3bc3b",
+            "sass_sha256": "a74327e53f92bdbf5282747c1af168e13ca719735de70a93c04c43fc908da3ff"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              8
+            ],
+            "threadsPerWarp": [
+              1,
+              4,
+              8
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 4,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 1,
+            "derived_N_elems_per_thread": 64,
+            "derived_total_elems_per_thread": 64
+          },
+          "localload": {
+            "family": "ld.shared.v4.b32",
+            "count": 1
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 8
+          },
+          "communication": {
+            "shfl_sync_total": 40,
+            "max_f32_total": 40,
+            "st_shared_total": 7,
+            "ld_shared_total": 5,
+            "bar_sync_total": 14
+          },
+          "resources": {
+            "physical_regs": 29,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 296,
+            "LDS": 13,
+            "STS": 19,
+            "SHFL": 40,
+            "BAR": 14,
+            "FMNMX": 40,
+            "HMNMX2": 0
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 3.8822,
+            "vs_default_slope_pct": 0.0,
+            "marginal_dram_gbps": 1055.06,
+            "hbm3_saturation_pct": 31.5
+          }
+        },
+        "8": {
+          "candidate": "8",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "39de4a95f116c1ebc4df835803452c329d9b2f996dc11a0cd50e9070344d59c0",
+            "ptx_sha256": "103b0f4cc5c7d8d409a4e6e86b22ed6611b5859695738a0091bf2bdb95b3bc3b",
+            "sass_sha256": "a74327e53f92bdbf5282747c1af168e13ca719735de70a93c04c43fc908da3ff"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              8
+            ],
+            "threadsPerWarp": [
+              1,
+              4,
+              8
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 4,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 1,
+            "derived_N_elems_per_thread": 64,
+            "derived_total_elems_per_thread": 64
+          },
+          "localload": {
+            "family": "ld.shared.v4.b32",
+            "count": 1
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 8
+          },
+          "communication": {
+            "shfl_sync_total": 40,
+            "max_f32_total": 40,
+            "st_shared_total": 7,
+            "ld_shared_total": 5,
+            "bar_sync_total": 14
+          },
+          "resources": {
+            "physical_regs": 29,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 296,
+            "LDS": 13,
+            "STS": 19,
+            "SHFL": 40,
+            "BAR": 14,
+            "FMNMX": 40,
+            "HMNMX2": 0
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 3.8786,
+            "vs_default_slope_pct": -0.09,
+            "marginal_dram_gbps": 1056.06,
+            "hbm3_saturation_pct": 31.5
+          }
+        },
+        "4": {
+          "candidate": "4",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "7df7ead384d8020aad9182a4ed043d32929640f1ed712a784999c45981ac9628",
+            "ptx_sha256": "459ac7687a400cea251787cdbd880d81631e8fc82cd7b465ea72c4967d809dc4",
+            "sass_sha256": "35536a6ebdf90caa653c973bd6cebcd97210c054128ee64b3df16f820316d9b7"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              4
+            ],
+            "threadsPerWarp": [
+              1,
+              2,
+              16
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 2,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 2,
+            "derived_N_elems_per_thread": 16,
+            "derived_total_elems_per_thread": 32
+          },
+          "localload": {
+            "family": "ld.shared.v2.b32",
+            "count": 2
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 2,
+            "cvt_f32_bf16": 4
+          },
+          "communication": {
+            "shfl_sync_total": 16,
+            "max_f32_total": 16,
+            "st_shared_total": 4,
+            "ld_shared_total": 4,
+            "bar_sync_total": 10
+          },
+          "resources": {
+            "physical_regs": 22,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 232,
+            "LDS": 12,
+            "STS": 16,
+            "SHFL": 16,
+            "BAR": 10,
+            "FMNMX": 16,
+            "HMNMX2": 2
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.4543,
+            "vs_default_slope_pct": -36.78,
+            "marginal_dram_gbps": 1668.93,
+            "hbm3_saturation_pct": 49.8
+          }
+        },
+        "2": {
+          "candidate": "2",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "0b47ef933c356e07470d20b62f73ef052c9d5218c485d31e07e5d10eb6208de3",
+            "ptx_sha256": "ddbef3e4397d2848a0afa80712816178f62d871ea8acb4fc42b62afb5170950e",
+            "sass_sha256": "7935aa25815065c27bf60bc2ef9ddc4422b96fd5abf3d940d3bc1d0c73378aa7"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              2
+            ],
+            "threadsPerWarp": [
+              1,
+              1,
+              32
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 1,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 4,
+            "derived_N_elems_per_thread": 4,
+            "derived_total_elems_per_thread": 16
+          },
+          "localload": {
+            "family": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
+            "count": 1
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 3,
+            "cvt_f32_bf16": 2
+          },
+          "communication": {
+            "shfl_sync_total": 8,
+            "max_f32_total": 6,
+            "st_shared_total": 3,
+            "ld_shared_total": 2,
+            "bar_sync_total": 8
+          },
+          "resources": {
+            "physical_regs": 21,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 208,
+            "LDS": 10,
+            "STS": 15,
+            "SHFL": 8,
+            "BAR": 8,
+            "FMNMX": 6,
+            "HMNMX2": 1
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.2537,
+            "vs_default_slope_pct": -41.95,
+            "marginal_dram_gbps": 1817.46,
+            "hbm3_saturation_pct": 54.3
+          }
+        },
+        "1": {
+          "candidate": "1",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "9d134c1c3e8a259c445f45615e6aabb459aaaaac85d6305d78eee9ba68951570",
+            "ptx_sha256": "bd1b3fef6b8d84b52e6b4900e4e20a5723b7bfd313c91587d846a6374536618b",
+            "sass_sha256": "b914d23b5ffc93553164130073a5bc541b842a7b9f0c8d3da488efa7b4269160"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              1
+            ],
+            "threadsPerWarp": [
+              1,
+              1,
+              32
+            ],
+            "warpsPerCTA": [
+              1,
+              4,
+              2
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 1,
+            "warpPart_M": 4,
+            "derived_M_elems_per_thread": 8,
+            "derived_N_elems_per_thread": 1,
+            "derived_total_elems_per_thread": 8
+          },
+          "localload": {
+            "family": "ld.shared.b16",
+            "count": 8
+          },
+          "thread_local_reduction": {
+            "max_bf16": 7,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 1
+          },
+          "communication": {
+            "shfl_sync_total": 2,
+            "max_f32_total": 2,
+            "st_shared_total": 3,
+            "ld_shared_total": 10,
+            "bar_sync_total": 8
+          },
+          "resources": {
+            "physical_regs": 21,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 200,
+            "LDS": 18,
+            "STS": 15,
+            "SHFL": 2,
+            "BAR": 8,
+            "FMNMX": 2,
+            "HMNMX2": 2
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.2249,
+            "vs_default_slope_pct": -42.69,
+            "marginal_dram_gbps": 1840.97,
+            "hbm3_saturation_pct": 55.0
+          }
+        }
+      }
+    },
+    "M32_N128_w4": {
+      "M": 32,
+      "N": 128,
+      "num_warps": 4,
+      "input_bytes_per_cta": 8192,
+      "output_bytes_per_cta": 512,
+      "candidates": {
+        "default": {
+          "candidate": "default",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "158c8b942c377b8cf542b26f44d89ae931b6a77757c2a5fd8f279aedace438f8",
+            "ptx_sha256": "8d0e3856173bf19f15c46a5e78034b6f2090e22ab28e5a3080b6cd12a4d5d7d3",
+            "sass_sha256": "94239d76b7ebe27c057b7a44a8eeb8858d2e51814b5d20e531dcdb722ee38497"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              8
+            ],
+            "threadsPerWarp": [
+              1,
+              2,
+              16
+            ],
+            "warpsPerCTA": [
+              1,
+              4,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 2,
+            "warpPart_M": 4,
+            "derived_M_elems_per_thread": 4,
+            "derived_N_elems_per_thread": 64,
+            "derived_total_elems_per_thread": 256
+          },
+          "localload": {
+            "family": "ld.shared.v4.b32",
+            "count": 4
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 12,
+            "cvt_f32_bf16": 8
+          },
+          "communication": {
+            "shfl_sync_total": 25,
+            "max_f32_total": 24,
+            "st_shared_total": 7,
+            "ld_shared_total": 8,
+            "bar_sync_total": 14
+          },
+          "resources": {
+            "physical_regs": 32,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 280,
+            "LDS": 16,
+            "STS": 19,
+            "SHFL": 25,
+            "BAR": 14,
+            "FMNMX": 24,
+            "HMNMX2": 4
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.9243,
+            "vs_default_slope_pct": 0.0,
+            "marginal_dram_gbps": 2801.34,
+            "hbm3_saturation_pct": 83.6
+          }
+        },
+        "8": {
+          "candidate": "8",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "158c8b942c377b8cf542b26f44d89ae931b6a77757c2a5fd8f279aedace438f8",
+            "ptx_sha256": "8d0e3856173bf19f15c46a5e78034b6f2090e22ab28e5a3080b6cd12a4d5d7d3",
+            "sass_sha256": "94239d76b7ebe27c057b7a44a8eeb8858d2e51814b5d20e531dcdb722ee38497"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              8
+            ],
+            "threadsPerWarp": [
+              1,
+              2,
+              16
+            ],
+            "warpsPerCTA": [
+              1,
+              4,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 2,
+            "warpPart_M": 4,
+            "derived_M_elems_per_thread": 4,
+            "derived_N_elems_per_thread": 64,
+            "derived_total_elems_per_thread": 256
+          },
+          "localload": {
+            "family": "ld.shared.v4.b32",
+            "count": 4
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 12,
+            "cvt_f32_bf16": 8
+          },
+          "communication": {
+            "shfl_sync_total": 25,
+            "max_f32_total": 24,
+            "st_shared_total": 7,
+            "ld_shared_total": 8,
+            "bar_sync_total": 14
+          },
+          "resources": {
+            "physical_regs": 32,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 280,
+            "LDS": 16,
+            "STS": 19,
+            "SHFL": 25,
+            "BAR": 14,
+            "FMNMX": 24,
+            "HMNMX2": 4
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.9237,
+            "vs_default_slope_pct": -0.02,
+            "marginal_dram_gbps": 2801.9,
+            "hbm3_saturation_pct": 83.6
+          }
+        },
+        "4": {
+          "candidate": "4",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "06f3b84d133f2958724ee0bab0ebe68f40c9c9cdad9688466ab74c0f9abe5f31",
+            "ptx_sha256": "dcd43515384942d3718e46f437a0ef93fc5ecd57495b27f84559853723ed5586",
+            "sass_sha256": "66090b9f97cc6b36056b89df634cff3befc1e11ac6e106891042dbca03d7d483"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              4
+            ],
+            "threadsPerWarp": [
+              1,
+              1,
+              32
+            ],
+            "warpsPerCTA": [
+              1,
+              4,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 1,
+            "warpPart_M": 4,
+            "derived_M_elems_per_thread": 8,
+            "derived_N_elems_per_thread": 16,
+            "derived_total_elems_per_thread": 128
+          },
+          "localload": {
+            "family": "ld.shared.v2.b32",
+            "count": 8
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 14,
+            "cvt_f32_bf16": 4
+          },
+          "communication": {
+            "shfl_sync_total": 9,
+            "max_f32_total": 8,
+            "st_shared_total": 4,
+            "ld_shared_total": 10,
+            "bar_sync_total": 10
+          },
+          "resources": {
+            "physical_regs": 25,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 232,
+            "LDS": 18,
+            "STS": 16,
+            "SHFL": 9,
+            "BAR": 10,
+            "FMNMX": 8,
+            "HMNMX2": 6
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.9208,
+            "vs_default_slope_pct": -0.12,
+            "marginal_dram_gbps": 2804.75,
+            "hbm3_saturation_pct": 83.7
+          }
+        },
+        "2": {
+          "candidate": "2",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "c72eb551e521e08bb9cb6c081a2acb39f0ea06ed12cab8fe85a694602ba6c852",
+            "ptx_sha256": "97040c97e12077e7c1585b7a829f1791cd51ef40cb6dd61d845cf87904534ac8",
+            "sass_sha256": "f2bc32a3f9931282a3a0c20bf05f4eadb1f55bea14af9ee02fdeda2a7f945fb2"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              2
+            ],
+            "threadsPerWarp": [
+              1,
+              1,
+              32
+            ],
+            "warpsPerCTA": [
+              1,
+              2,
+              2
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 1,
+            "warpPart_M": 2,
+            "derived_M_elems_per_thread": 16,
+            "derived_N_elems_per_thread": 4,
+            "derived_total_elems_per_thread": 64
+          },
+          "localload": {
+            "family": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
+            "count": 4
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 15,
+            "cvt_f32_bf16": 2
+          },
+          "communication": {
+            "shfl_sync_total": 3,
+            "max_f32_total": 2,
+            "st_shared_total": 5,
+            "ld_shared_total": 3,
+            "bar_sync_total": 10
+          },
+          "resources": {
+            "physical_regs": 23,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 224,
+            "LDS": 11,
+            "STS": 17,
+            "SHFL": 3,
+            "BAR": 10,
+            "FMNMX": 2,
+            "HMNMX2": 5
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.9211,
+            "vs_default_slope_pct": -0.11,
+            "marginal_dram_gbps": 2804.42,
+            "hbm3_saturation_pct": 83.7
+          }
+        },
+        "1": {
+          "candidate": "1",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "7a3c4f6ded5ca88d14c9fbeddb16944fbcec1289cd6e9e54118066f1118227ed",
+            "ptx_sha256": "36b85834b6a22cd98f4684d3d702c449056116e9d1469bd39f5130e4b717bbfb",
+            "sass_sha256": "10d93da5919bf1285e056748c5b818cc4453ba36181d84c5e49300e518546cb0"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              1
+            ],
+            "threadsPerWarp": [
+              1,
+              1,
+              32
+            ],
+            "warpsPerCTA": [
+              1,
+              1,
+              4
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 1,
+            "warpPart_M": 1,
+            "derived_M_elems_per_thread": 32,
+            "derived_N_elems_per_thread": 1,
+            "derived_total_elems_per_thread": 32
+          },
+          "localload": {
+            "family": "ld.shared.b16",
+            "count": 32
+          },
+          "thread_local_reduction": {
+            "max_bf16": 31,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 1
+          },
+          "communication": {
+            "shfl_sync_total": 1,
+            "max_f32_total": 0,
+            "st_shared_total": 1,
+            "ld_shared_total": 32,
+            "bar_sync_total": 4
+          },
+          "resources": {
+            "physical_regs": 32,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 232,
+            "LDS": 40,
+            "STS": 13,
+            "SHFL": 1,
+            "BAR": 4,
+            "FMNMX": 0,
+            "HMNMX2": 6
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.9217,
+            "vs_default_slope_pct": -0.09,
+            "marginal_dram_gbps": 2803.84,
+            "hbm3_saturation_pct": 83.7
+          }
+        }
+      }
+    },
+    "M32_N16_w8": {
+      "M": 32,
+      "N": 16,
+      "num_warps": 8,
+      "input_bytes_per_cta": 1024,
+      "output_bytes_per_cta": 64,
+      "candidates": {
+        "default": {
+          "candidate": "default",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "eb51d53afc904a7b925d9b373143b53fd12fce9dbf741d70d69190fc31c6c5be",
+            "ptx_sha256": "3c9ac000ed0539e6ac007ec66da875b231efa13eb8f50be801c9130d0fd8eb1f",
+            "sass_sha256": "7e2a24f399d8156aca01776adf26c3f394cbc9c1ed34420d3018d7dae40a3675"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              2
+            ],
+            "threadsPerWarp": [
+              1,
+              4,
+              8
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 4,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 1,
+            "derived_N_elems_per_thread": 4,
+            "derived_total_elems_per_thread": 4
+          },
+          "localload": {
+            "family": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
+            "count": 1
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 2
+          },
+          "communication": {
+            "shfl_sync_total": 12,
+            "max_f32_total": 10,
+            "st_shared_total": 3,
+            "ld_shared_total": 2,
+            "bar_sync_total": 8
+          },
+          "resources": {
+            "physical_regs": 22,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 232,
+            "LDS": 10,
+            "STS": 15,
+            "SHFL": 12,
+            "BAR": 8,
+            "FMNMX": 10,
+            "HMNMX2": 0
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.1641,
+            "vs_default_slope_pct": 0.0,
+            "marginal_dram_gbps": 473.17,
+            "hbm3_saturation_pct": 14.1
+          }
+        },
+        "2": {
+          "candidate": "2",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "eb51d53afc904a7b925d9b373143b53fd12fce9dbf741d70d69190fc31c6c5be",
+            "ptx_sha256": "3c9ac000ed0539e6ac007ec66da875b231efa13eb8f50be801c9130d0fd8eb1f",
+            "sass_sha256": "7e2a24f399d8156aca01776adf26c3f394cbc9c1ed34420d3018d7dae40a3675"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              2
+            ],
+            "threadsPerWarp": [
+              1,
+              4,
+              8
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 4,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 1,
+            "derived_N_elems_per_thread": 4,
+            "derived_total_elems_per_thread": 4
+          },
+          "localload": {
+            "family": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
+            "count": 1
+          },
+          "thread_local_reduction": {
+            "max_bf16": 0,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 2
+          },
+          "communication": {
+            "shfl_sync_total": 12,
+            "max_f32_total": 10,
+            "st_shared_total": 3,
+            "ld_shared_total": 2,
+            "bar_sync_total": 8
+          },
+          "resources": {
+            "physical_regs": 22,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 232,
+            "LDS": 10,
+            "STS": 15,
+            "SHFL": 12,
+            "BAR": 8,
+            "FMNMX": 10,
+            "HMNMX2": 0
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.1641,
+            "vs_default_slope_pct": 0.0,
+            "marginal_dram_gbps": 473.17,
+            "hbm3_saturation_pct": 14.1
+          }
+        },
+        "1": {
+          "candidate": "1",
+          "is_legal": true,
+          "hashes": {
+            "ttgir_sha256": "3823ee6c9de2c02e86d13d558dd11b380fe2f8d3886b4310c63c74e76722be9d",
+            "ptx_sha256": "cc8e9a12ff47e6bd6e3436c11312d2d98122543d5178e6ad3b54e7cc03c4aa1e",
+            "sass_sha256": "a539eb7351fae3bf2f878d7034a4bb55ead85ffb4880042d97634c5035780b1d"
+          },
+          "distributed_layout": {
+            "sizePerThread": [
+              1,
+              1,
+              1
+            ],
+            "threadsPerWarp": [
+              1,
+              2,
+              16
+            ],
+            "warpsPerCTA": [
+              1,
+              8,
+              1
+            ],
+            "order": [
+              2,
+              1,
+              0
+            ]
+          },
+          "reduction_topology": {
+            "lanePart_M": 2,
+            "warpPart_M": 8,
+            "derived_M_elems_per_thread": 2,
+            "derived_N_elems_per_thread": 1,
+            "derived_total_elems_per_thread": 2
+          },
+          "localload": {
+            "family": "ld.shared.b16",
+            "count": 2
+          },
+          "thread_local_reduction": {
+            "max_bf16": 1,
+            "max_bf16x2": 0,
+            "cvt_f32_bf16": 1
+          },
+          "communication": {
+            "shfl_sync_total": 4,
+            "max_f32_total": 4,
+            "st_shared_total": 3,
+            "ld_shared_total": 4,
+            "bar_sync_total": 8
+          },
+          "resources": {
+            "physical_regs": 21,
+            "static_shared_bytes": 1024
+          },
+          "sass_summary": {
+            "total_sass": 208,
+            "LDS": 12,
+            "STS": 15,
+            "SHFL": 4,
+            "BAR": 8,
+            "FMNMX": 4,
+            "HMNMX2": 1
+          },
+          "performance": {
+            "marginal_slope_ns_per_cta": 2.1007,
+            "vs_default_slope_pct": -2.93,
+            "marginal_dram_gbps": 487.47,
+            "hbm3_saturation_pct": 14.6
+          }
+        }
+      }
+    }
+  }
+}
