@@ -29,6 +29,7 @@ Exits with code 0 on complete consistency, or non-zero on any failure.
 
 import hashlib
 import json
+import math
 import re
 import subprocess
 import sys
@@ -844,6 +845,13 @@ def validate():
         for st in status_matches:
             if st != "UNVERIFIED / PENDING_DIFFERENTIAL_MICROBENCH":
                 errors.append(f"Invalid STATUS tag in hypotheses.md: '{st}'")
+
+        sub_status_matches = re.findall(r"\*\*Sub-Hypothesis Status\*\*:\s*`([^`]+)`", hypotheses_text)
+        if len(sub_status_matches) != 3:
+            errors.append(f"Expected 3 Sub-Hypothesis Status tags in hypotheses.md, found {len(sub_status_matches)}")
+        expected_sub_statuses = ["SUPPORTED_AT_REDUCTION_BODY_LEVEL", "UNVERIFIED", "UNVERIFIED"]
+        if sub_status_matches != expected_sub_statuses:
+            errors.append(f"Sub-hypothesis status mismatch in hypotheses.md: got {sub_status_matches}, expected {expected_sub_statuses}")
 
         print("  Verified Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.")
 
@@ -1882,33 +1890,190 @@ def validate():
                             if len(samples) != 100:
                                 errors.append(f"Expected 100 samples in {r_path.name} {cfg_name} {cand} R={r_str} B={b_str}, got {len(samples)}")
 
-        # 21.3 Cross-Invocation Metrics for Primary (M32_N64_w8)
-        w8_summary = e_res_data.get("cross_invocation_summary", {}).get("configurations", {}).get("M32_N64_w8", {})
-        beta_mean = w8_summary.get("beta", {}).get("mean", 0.0)
-        r2_mean = w8_summary.get("r2", {}).get("mean", 0.0)
-        dg1_mean = w8_summary.get("delta_g_1", {}).get("mean", 0.0)
-        attr_mean = w8_summary.get("attribution_ratio", {}).get("mean", 0.0)
+        # 21.3 Independent Full Recomputation directly from Raw Data
+        def _get_med(samples: List[float]) -> float:
+            s = sorted(samples)
+            n = len(s)
+            return s[n // 2] if n % 2 == 1 else (s[n // 2 - 1] + s[n // 2]) / 2.0
 
-        if beta_mean <= 0.5:
-            errors.append(f"Expected beta_mean > 0.5 for M32_N64_w8, got {beta_mean}")
-        if r2_mean < 0.99:
-            errors.append(f"Expected r2_mean >= 0.99 for M32_N64_w8, got {r2_mean}")
-        if dg1_mean <= 0.5:
-            errors.append(f"Expected delta_g_1_mean > 0.5 for M32_N64_w8, got {dg1_mean}")
-        if attr_mean < 0.70 or attr_mean > 0.85:
-            errors.append(f"Expected attribution_ratio around 76.5% for M32_N64_w8, got {attr_mean*100:.2f}%")
+        def _recomp_mean_std(vals: List[float]) -> Tuple[float, float, Any, str]:
+            m = sum(vals) / len(vals)
+            s = math.sqrt(sum((x - m) ** 2 for x in vals) / (len(vals) - 1)) if len(vals) > 1 else 0.0
+            if abs(m) <= 3.0 * s:
+                cv = "N/A"
+                stab = "near_zero_or_sign_unstable"
+            else:
+                cv = (s / abs(m)) * 100.0
+                stab = "stable"
+            return m, s, cv, stab
 
-        # 21.4 Monotonicity check for M32_N64_w8
-        if not e_res_data.get("h2_evaluation", {}).get("is_monotonic", False):
-            errors.append("M32_N64_w8 expected is_monotonic == True")
-        w8_breakdown = w8_summary.get("r_breakdown", {})
-        g_means = [w8_breakdown[str(r)]["g_r_mean"] for r in [0, 1, 2, 4, 8]]
-        for i in range(len(g_means) - 1):
-            if g_means[i] >= g_means[i+1]:
-                errors.append(f"Monotonicity violation in M32_N64_w8 mean g(R): {g_means}")
-                break
+        b_vals = [16384.0, 32768.0, 65536.0]
+        r_vals = [0, 1, 2, 4, 8]
+        canonical_gap = 1.4279
+        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
 
-        print("  Verified Phase 3 Step E Gluon controlled repeated reduction timing (H2=SUPPORTED_AT_REDUCTION_BODY_LEVEL, 3 H100 runs, beta>0, R2>=0.999, monotonic).")
+        recomputed_runs = []
+        for run_idx, r_path in enumerate(raw_run_paths):
+            run_data = json.loads(r_path.read_text(encoding="utf-8"))
+            rep_run = e_res_data["runs"][run_idx]["configurations"]
+            c_eval = {}
+
+            for cfg in expected_configs:
+                w_cand = run_data["configurations"][cfg]["candidates"]
+                slopes = {"default": {}, "4": {}}
+                for cand in ["default", "4"]:
+                    for R in r_vals:
+                        meds = [_get_med(w_cand[cand]["r_timing"][str(R)][str(int(b))]["samples_us"]) for b in b_vals]
+                        slope, icept, r2, _ = linear_regression(b_vals, meds)
+                        marginal = slope * 1000.0  # ns/CTA
+                        slopes[cand][R] = marginal
+
+                        # Verify minimum grid-fit R^2 >= 0.99
+                        if r2 < 0.99:
+                            errors.append(f"Low grid fit R2 in {r_path.name} {cfg} {cand} R={R}: {r2}")
+
+                        # Compare against reported run slope
+                        rep_slope = rep_run[cfg]["slopes"][cand][str(R)]
+                        if abs(marginal - rep_slope) > 1e-4:
+                            errors.append(f"Marginal slope mismatch in {r_path.name} {cfg} {cand} R={R}: comp={marginal} vs rep={rep_slope}")
+
+                g_r = {R: slopes["default"][R] - slopes["4"][R] for R in r_vals}
+                g_0 = g_r[0]
+                dg_r = {R: g_r[R] - g_0 for R in r_vals}
+                dg_1 = dg_r[1]
+
+                # Per-run strict monotonicity check for Primary M32_N64_w8
+                if cfg == "M32_N64_w8":
+                    for i in range(len(r_vals) - 1):
+                        if g_r[r_vals[i]] >= g_r[r_vals[i + 1]]:
+                            errors.append(f"Strict monotonicity violation in {r_path.name} {cfg} g(R): {g_r}")
+
+                d_01 = g_r[1] - g_r[0]
+                d_12 = g_r[2] - g_r[1]
+                d_24 = (g_r[4] - g_r[2]) / 2.0
+                d_48 = (g_r[8] - g_r[4]) / 4.0
+
+                r_floats = [float(R) for R in r_vals]
+                g_floats = [g_r[R] for R in r_vals]
+                beta, alpha, r2_g, resids_g = linear_regression(r_floats, g_floats)
+                attr = (dg_1 / canonical_gap) if cfg == "M32_N64_w8" else None
+
+                # Check reported incremental deltas
+                rep_inc = rep_run[cfg].get("incremental_deltas", {})
+                for d_k, d_v in [("d_01", d_01), ("d_12", d_12), ("d_24", d_24), ("d_48", d_48)]:
+                    if abs(d_v - rep_inc.get(d_k, 0.0)) > 1e-4:
+                        errors.append(f"Incremental delta mismatch in {r_path.name} {cfg} {d_k}: comp={d_v} vs rep={rep_inc.get(d_k)}")
+
+                # Check reported linear fits
+                rep_fit = rep_run[cfg]["linear_fits"]["g_r_fit"]
+                if abs(beta - rep_fit["beta"]) > 1e-4:
+                    errors.append(f"Beta fit mismatch in {r_path.name} {cfg}: comp={beta} vs rep={rep_fit['beta']}")
+                if abs(alpha - rep_fit["alpha"]) > 1e-4:
+                    errors.append(f"Alpha fit mismatch in {r_path.name} {cfg}: comp={alpha} vs rep={rep_fit['alpha']}")
+                if abs(r2_g - rep_fit["r2"]) > 1e-4:
+                    errors.append(f"R2 fit mismatch in {r_path.name} {cfg}: comp={r2_g} vs rep={rep_fit['r2']}")
+
+                c_eval[cfg] = {
+                    "slopes": slopes,
+                    "g_r": g_r,
+                    "g_0": g_0,
+                    "dg_r": dg_r,
+                    "dg_1": dg_1,
+                    "incremental": {"d_01": d_01, "d_12": d_12, "d_24": d_24, "d_48": d_48},
+                    "beta": beta,
+                    "alpha": alpha,
+                    "r2": r2_g,
+                    "attr": attr,
+                }
+            recomputed_runs.append(c_eval)
+
+        # 21.4 Cross-Run Recomputation & Numerical Equality with Reported Summary
+        for cfg in expected_configs:
+            rep_cfg = e_res_data["cross_invocation_summary"]["configurations"][cfg]
+
+            betas = [r[cfg]["beta"] for r in recomputed_runs]
+            b_m, b_s, b_cv, b_stab = _recomp_mean_std(betas)
+            if abs(b_m - rep_cfg["beta"]["mean"]) > 1e-4 or abs(b_s - rep_cfg["beta"]["std"]) > 1e-4:
+                errors.append(f"Cross-run beta mismatch in {cfg}: comp={b_m}±{b_s} vs rep={rep_cfg['beta']['mean']}±{rep_cfg['beta']['std']}")
+
+            alphas = [r[cfg]["alpha"] for r in recomputed_runs]
+            a_m, a_s, a_cv, a_stab = _recomp_mean_std(alphas)
+            if abs(a_m - rep_cfg["alpha"]["mean"]) > 1e-4:
+                errors.append(f"Cross-run alpha mismatch in {cfg}: comp={a_m} vs rep={rep_cfg['alpha']['mean']}")
+
+            dg1s = [r[cfg]["dg_1"] for r in recomputed_runs]
+            dg1_m, dg1_s, dg1_cv, dg1_stab = _recomp_mean_std(dg1s)
+            if abs(dg1_m - rep_cfg["delta_g_1"]["mean"]) > 1e-4 or abs(dg1_s - rep_cfg["delta_g_1"]["std"]) > 1e-4:
+                errors.append(f"Cross-run delta_g_1 mismatch in {cfg}: comp={dg1_m}±{dg1_s} vs rep={rep_cfg['delta_g_1']['mean']}±{rep_cfg['delta_g_1']['std']}")
+
+            # Verify attribution ratio for primary
+            if cfg == "M32_N64_w8":
+                attrs = [r[cfg]["attr"] for r in recomputed_runs]
+                ar_m, ar_s, ar_cv, ar_stab = _recomp_mean_std(attrs)
+                if abs(ar_m - rep_cfg["attribution_ratio"]["mean"]) > 1e-4:
+                    errors.append(f"Cross-run attribution ratio mismatch in {cfg}: comp={ar_m} vs rep={rep_cfg['attribution_ratio']['mean']}")
+
+            # Verify incremental deltas
+            rep_inc_summary = rep_cfg.get("incremental_deltas", {})
+            for d_k in ["d_01", "d_12", "d_24", "d_48"]:
+                d_vals = [r[cfg]["incremental"][d_k] for r in recomputed_runs]
+                dm, ds, dcv, dstab = _recomp_mean_std(d_vals)
+                rep_dm = rep_inc_summary.get(d_k, {}).get("mean", 0.0)
+                if abs(dm - rep_dm) > 1e-4:
+                    errors.append(f"Cross-run {d_k} mean mismatch in {cfg}: comp={dm} vs rep={rep_dm}")
+
+            # Verify residual table
+            rep_resids = rep_cfg.get("residual_table", [])
+            for row in rep_resids:
+                R = row["R"]
+                obs = rep_cfg["r_breakdown"][str(R)]["g_r_mean"]
+                fit = a_m + b_m * float(R)
+                resid = obs - fit
+                if abs(resid - row["residual"]) > 1e-4:
+                    errors.append(f"Residual mismatch in {cfg} R={R}: comp={resid} vs rep={row['residual']}")
+
+        # 21.5 Device Provenance & Replication Mode Verification
+        device_uuids = [json.loads(p.read_text(encoding="utf-8"))["env_info"].get("gpu_uuid") for p in raw_run_paths]
+        if len(set(device_uuids)) != 1:
+            errors.append(f"Expected identical GPU UUID across runs, got {set(device_uuids)}")
+        if e_res_data.get("cross_invocation_summary", {}).get("replication_mode") != "same-device temporal replication":
+            errors.append("Expected replication_mode == 'same-device temporal replication'")
+
+        # 21.6 Sub-Hypothesis Lineage Verification
+        sub_hyps = e_res_data.get("h2_evaluation", {}).get("sub_hypotheses", {})
+        if sub_hyps.get("H2a", {}).get("status") != "SUPPORTED_AT_REDUCTION_BODY_LEVEL":
+            errors.append(f"H2a status != 'SUPPORTED_AT_REDUCTION_BODY_LEVEL' (got {sub_hyps.get('H2a', {}).get('status')})")
+        if sub_hyps.get("H2b", {}).get("status") != "UNVERIFIED":
+            errors.append(f"H2b status != 'UNVERIFIED' (got {sub_hyps.get('H2b', {}).get('status')})")
+        if sub_hyps.get("H2c", {}).get("status") != "UNVERIFIED":
+            errors.append(f"H2c status != 'UNVERIFIED' (got {sub_hyps.get('H2c', {}).get('status')})")
+
+        # 21.7 Summary Markdown Hygiene & Terminology Invariant Check
+        required_phrases = [
+            "same-device temporal replication",
+            "The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap.",
+            "cross-harness descriptive magnitude comparison, not an additive causal decomposition",
+            "amplification-trend summary",
+            "strong approximately linear amplification over R=0..8",
+            "The input compiler barrier induces candidate-symmetric PTX tied-copy instructions. No additional explicit SASS MOV attributable to those copies was observed after ptxas register coalescing.",
+        ]
+        for req in required_phrases:
+            if req not in e_sum_md:
+                errors.append(f"summary.md missing required scientific wording: '{req}'")
+
+        banned_phrases = [
+            "zero-overhead compiler barrier",
+            "multi-device replication",
+            "independent hardware replication",
+            "constant cost per reduction",
+            "single reduction latency",
+            "exactly linear",
+        ]
+        for ban in banned_phrases:
+            if ban in e_sum_md.lower():
+                errors.append(f"summary.md contains forbidden phrase: '{ban}'")
+
+        print("  Verified Phase 3 Step E Gluon controlled repeated reduction timing (independent raw data recomputation, R2>=0.99, strict per-run monotonicity, near-zero CV discipline, exact wording invariants).")
 
     print("--------------------------------------------------")
     if errors:
