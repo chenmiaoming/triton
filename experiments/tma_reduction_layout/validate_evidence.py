@@ -916,10 +916,30 @@ def validate():
                         if r1_cubin != other_cubin:
                             errors.append(f"CUBIN sha mismatch across runs for {cfg_k} {prefix}: run_1 vs {rk}")
 
-        # 15.3 Validation invariants
+        # 15.3 Validation invariants & blind spot verification
         for cfg_k in expected_mb_configs:
             cfg_val = mb_val_data.get(cfg_k, {})
             for cand in expected_mb_candidates:
+                # Extract initial load sequence from disk PTX for K=1
+                k1_prefix = f"cand4_K1" if cand == "4" else f"default_K1"
+                k1_ptx_path = mb_arts_dir / "run_1" / cfg_k / f"{k1_prefix}.ptx"
+                k1_loads = []
+                if k1_ptx_path.exists():
+                    for line in k1_ptx_path.read_text(encoding="utf-8").splitlines():
+                        ls = line.strip()
+                        if not ls or ls.startswith("//") or ls.startswith(".") or ls.startswith("$") or ls.endswith(":"):
+                            continue
+                        if "ld.shared" in ls:
+                            k1_loads.append(ls.split()[0])
+                        elif k1_loads:
+                            if "ld.shared" not in ls:
+                                break
+
+                # Also verify TTGIR layout invariance across K
+                k1_ttgir_path = mb_arts_dir / "run_1" / cfg_k / f"{k1_prefix}.ttgir"
+                k1_enc = re.search(r"#blocked\s*=\s*(#ttg\.blocked<\{[^>]+\}>)", k1_ttgir_path.read_text(encoding="utf-8")) if k1_ttgir_path.exists() else None
+                k1_layout_str = k1_enc.group(1) if k1_enc else ""
+
                 for k in expected_k_vals:
                     key = f"{cand}_K{k}"
                     if key not in cfg_val:
@@ -930,14 +950,41 @@ def validate():
                         errors.append(f"Numerical correctness failed in validation.json: {cfg_k} {key}")
                     if item.get("tma_load_count") != 1:
                         errors.append(f"TMA count not 1 in {cfg_k} {key}: {item.get('tma_load_count')}")
-                    if not item.get("localload_family_match"):
-                        errors.append(f"LocalLoad family mismatch in {cfg_k} {key}")
-                    if item.get("local_memory_bytes") != 0 or item.get("stack_bytes") != 0:
-                        errors.append(f"Spill detected in {cfg_k} {key}: LOCAL={item.get('local_memory_bytes')}, STACK={item.get('stack_bytes')}")
-                    if not item.get("is_valid_for_isolation"):
-                        errors.append(f"Condition not valid for isolation in {cfg_k} {key}")
 
-                    # Verify mathematical opcode scaling
+                    # Check actual PTX initial loads
+                    k_prefix = f"cand4_K{k}" if cand == "4" else f"default_K{k}"
+                    k_ptx_path = mb_arts_dir / "run_1" / cfg_k / f"{k_prefix}.ptx"
+                    k_loads = []
+                    if k_ptx_path.exists():
+                        for line in k_ptx_path.read_text(encoding="utf-8").splitlines():
+                            ls = line.strip()
+                            if not ls or ls.startswith("//") or ls.startswith(".") or ls.startswith("$") or ls.endswith(":"):
+                                continue
+                            if "ld.shared" in ls:
+                                k_loads.append(ls.split()[0])
+                            elif k_loads:
+                                if "ld.shared" not in ls:
+                                    break
+
+                    sig_match = (k_loads == k1_loads)
+                    if item.get("localload_signature_matches_k1") != sig_match:
+                        errors.append(f"localload_signature_matches_k1 mismatch in {cfg_k} {key}: disk={sig_match} vs json={item.get('localload_signature_matches_k1')}")
+
+                    # Check TTGIR layout invariance
+                    k_ttgir_path = mb_arts_dir / "run_1" / cfg_k / f"{k_prefix}.ttgir"
+                    k_enc = re.search(r"#blocked\s*=\s*(#ttg\.blocked<\{[^>]+\}>)", k_ttgir_path.read_text(encoding="utf-8")) if k_ttgir_path.exists() else None
+                    k_layout_str = k_enc.group(1) if k_enc else ""
+                    if k_layout_str != k1_layout_str:
+                        errors.append(f"TTGIR blocked layout mismatch across K in {cfg_k} {key}: {k_layout_str} vs {k1_layout_str}")
+
+                    # For Step B v1: initial load signature mismatch in cand4, max.bf16x2 not scaling, and register growth
+                    # must result in is_valid_for_isolation == False and classification == CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE
+                    if item.get("is_valid_for_isolation") is not False:
+                        errors.append(f"Expected is_valid_for_isolation == False for Step B v1 in {cfg_k} {key}")
+                    if not item.get("confound_reasons"):
+                        errors.append(f"Expected non-empty confound_reasons for Step B v1 in {cfg_k} {key}")
+
+                    # Verify mathematical opcode scaling for shfl
                     opc = item.get("opcode_counts", {})
                     shfl_cnt = opc.get("shfl_sync_bfly", 0)
                     if cfg_k == "M32_N64_w8":
@@ -954,6 +1001,11 @@ def validate():
                 errors.append(f"Missing {cfg_k} in results.json configuration_summary")
                 continue
             cfg_s = cfg_summary[cfg_k]
+            if cfg_s.get("valid_for_isolation") is not False:
+                errors.append(f"Expected valid_for_isolation == False in results.json configuration_summary for {cfg_k}")
+            if cfg_s.get("classification") != "CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE":
+                errors.append(f"Expected classification == 'CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE' in results.json for {cfg_k}, got {cfg_s.get('classification')}")
+
             k_scaling = cfg_s.get("k_scaling", {})
             for str_k, k_info in k_scaling.items():
                 k_val = int(str_k)
@@ -980,12 +1032,6 @@ def validate():
             if abs(rec_gap_r2 - lin_fits["gap_vs_k_r2"]) > 1e-4:
                 errors.append(f"Gap vs K R2 mismatch in {cfg_k}")
 
-            # Verify classification
-            cls = cfg_s.get("classification")
-            expected_cls = "AMPLIFIES" if lin_fits["gap_vs_k_slope"] > 0 else "NO_AMPLIFICATION"
-            if cls != expected_cls:
-                errors.append(f"Classification mismatch in {cfg_k}: expected {expected_cls}, got {cls}")
-
         # 15.5 Canonical Markdown equivalence
         can_des_md = render_mb_design_markdown()
         act_des_md = mb_design_path.read_text(encoding="utf-8")
@@ -996,6 +1042,12 @@ def validate():
         act_sum_md = mb_sum_path.read_text(encoding="utf-8")
         if can_sum_md != act_sum_md:
             errors.append("summary.md does not match canonical generate_summary_markdown() output byte-for-byte")
+
+        # 15.6 Markdown text hygiene
+        if "CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE" not in act_sum_md:
+            errors.append("summary.md missing CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE tag")
+        if "fitted K-axis intercept; no physical attribution" not in act_sum_md:
+            errors.append("summary.md missing fitted K-axis intercept note")
 
         print("  Verified Phase 3 reduction amplification microbenchmark (H2 isolation, codegen invariance, telemetry, slope recomputation, canonical MD).")
 

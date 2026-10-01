@@ -14,7 +14,7 @@ The benchmark evaluates two strictly matched configurations:
    - Investigates whether reducing lane partitions from 4 to 2 (pruning 24 butterfly shuffles and 8 cross-warp shuffles) amplifies proportionally with $K$.
 2. **Negative Control (`M32_N128_w4`)**: $M=32, N=128, \text{num\_warps}=4$
    - Zero Phase 2 layout sensitivity: default $\approx 2.923$ ns/CTA vs cand4 $\approx 2.920$ ns/CTA ($-0.11\%$ marginal slope).
-   - Also undergoes substantial instruction pruning (removes 8 butterfly shuffles and 8 cross-warp shuffles), but exhibits negligible throughput response.
+   - Also undergoes substantial instruction pruning (removes 16 butterfly shuffles ($24 \times K$ vs $8 \times K$) and 8 cross-warp shuffles), but exhibits negligible throughput response.
    - Validates whether communication pruning is execution-regime dependent rather than universally beneficial.
 
 Candidates tested: strictly `default` and `4` (`cand4`).
@@ -68,5 +68,6 @@ Before timing, compiled artifacts must satisfy 5 invariants:
 
 - `AMPLIFIES`: $\text{gap}(K)$ increases monotonically or linearly with $K$ across all 3 runs with $\Delta \text{gap} / \Delta K > 0$.
 - `NO_AMPLIFICATION`: Opcode counts scale with $K$, but $\text{gap}(K)$ remains flat or near zero.
+- `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`: Initial LocalLoad signature mismatch, non-identical reduction body template, or material register pressure growth.
 - `CONFOUNDED`: Register spill, topology change, or compiler simplification occurs.
 - `UNSTABLE`: Inconsistent direction across invocations.

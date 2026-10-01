@@ -1,5 +1,9 @@
 # Phase 3 Step B: Reduction-Communication Amplification Microbenchmark Summary
 
+> [!WARNING]
+> Step B v1 is retained as an exploratory recurrent-composite amplification experiment.
+> It does NOT isolate repeated copies of the canonical reduction body, because codegen and register allocation change with K.
+
 ## 1. Experimental Overview & Environment
 
 - **Hardware Platform**: NVIDIA H100 80GB HBM3 (SM90, Compute Capability 9.0)
@@ -11,28 +15,31 @@
 
 ## 2. Codegen Invariance & Structural Verification
 
-| Configuration | Candidate | K | Physical REG | LOCAL Spill | STACK Spill | TMA Count | Initial LocalLoad | Shuffles (shfl.bfly) | Barriers (bar.sync) | max.f32 | max.bf16x2 |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: |
-| `M32_N64_w8` | `4` | 1 | 23 | 0 B | 0 B | 1 | `ld.shared.v2.b32` | 16 | 10 | 16 | 2 |
-| `M32_N64_w8` | `4` | 2 | 32 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 32 | 14 | 36 | 2 |
-| `M32_N64_w8` | `4` | 4 | 32 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 64 | 22 | 76 | 2 |
-| `M32_N64_w8` | `4` | 8 | 40 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 128 | 38 | 156 | 2 |
-| `M32_N64_w8` | `default` | 1 | 29 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 40 | 14 | 40 | 0 |
-| `M32_N64_w8` | `default` | 2 | 32 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 80 | 22 | 80 | 0 |
-| `M32_N64_w8` | `default` | 4 | 40 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 160 | 38 | 160 | 0 |
-| `M32_N64_w8` | `default` | 8 | 48 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 320 | 70 | 320 | 0 |
-| `M32_N128_w4` | `4` | 1 | 25 | 0 B | 0 B | 1 | `ld.shared.v2.b32` | 8 | 10 | 8 | 14 |
-| `M32_N128_w4` | `4` | 2 | 55 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 16 | 14 | 44 | 14 |
-| `M32_N128_w4` | `4` | 4 | 71 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 32 | 22 | 116 | 14 |
-| `M32_N128_w4` | `4` | 8 | 86 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 64 | 38 | 260 | 14 |
-| `M32_N128_w4` | `default` | 1 | 31 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 24 | 14 | 24 | 12 |
-| `M32_N128_w4` | `default` | 2 | 56 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 48 | 22 | 72 | 12 |
-| `M32_N128_w4` | `default` | 4 | 72 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 96 | 38 | 168 | 12 |
-| `M32_N128_w4` | `default` | 8 | 116 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 192 | 70 | 360 | 12 |
+| Configuration | Candidate | K | Physical REG | LOCAL Spill | STACK Spill | TMA Count | Initial LocalLoad | Shuffles (shfl.bfly) | Barriers (bar.sync) | max.f32 | max.bf16x2 | LocalLoad Invariant |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: |
+| `M32_N64_w8` | `4` | 1 | 23 | 0 B | 0 B | 1 | `ld.shared.v2.b32` | 16 | 10 | 16 | 2 | Yes |
+| `M32_N64_w8` | `4` | 2 | 32 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 32 | 14 | 36 | 2 | No (signature mismatch) |
+| `M32_N64_w8` | `4` | 4 | 32 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 64 | 22 | 76 | 2 | No (signature mismatch) |
+| `M32_N64_w8` | `4` | 8 | 40 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 128 | 38 | 156 | 2 | No (signature mismatch) |
+| `M32_N64_w8` | `default` | 1 | 29 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 40 | 14 | 40 | 0 | Yes |
+| `M32_N64_w8` | `default` | 2 | 32 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 80 | 22 | 80 | 0 | Yes |
+| `M32_N64_w8` | `default` | 4 | 40 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 160 | 38 | 160 | 0 | Yes |
+| `M32_N64_w8` | `default` | 8 | 48 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 320 | 70 | 320 | 0 | Yes |
+| `M32_N128_w4` | `4` | 1 | 25 | 0 B | 0 B | 1 | `ld.shared.v2.b32` | 8 | 10 | 8 | 14 | Yes |
+| `M32_N128_w4` | `4` | 2 | 55 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 16 | 14 | 44 | 14 | No (signature mismatch) |
+| `M32_N128_w4` | `4` | 4 | 71 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 32 | 22 | 116 | 14 | No (signature mismatch) |
+| `M32_N128_w4` | `4` | 8 | 86 | 0 B | 0 B | 1 | `ld.shared.v4.b16` | 64 | 38 | 260 | 14 | No (signature mismatch) |
+| `M32_N128_w4` | `default` | 1 | 31 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 24 | 14 | 24 | 12 | Yes |
+| `M32_N128_w4` | `default` | 2 | 56 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 48 | 22 | 72 | 12 | No (signature mismatch) |
+| `M32_N128_w4` | `default` | 4 | 72 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 96 | 38 | 168 | 12 | No (signature mismatch) |
+| `M32_N128_w4` | `default` | 8 | 116 | 0 B | 0 B | 1 | `ld.shared.v4.b32` | 192 | 70 | 360 | 12 | No (signature mismatch) |
 
-> [!NOTE]
-> Across all tested conditions, exactly 1 TMA descriptor load and invariant initial LocalLoads were observed.
-> Zero local memory spill (`LOCAL=0`, `STACK=0`) was confirmed across all conditions.
+> [!CAUTION]
+> **Structural Confounds in Step B v1**:
+> 1. **Initial LocalLoad Signature Mismatch**: In `M32_N64_w8 cand4`, the initial load lowered to `2x ld.shared.v2.b32` at $K=1$, but switched to `2x ld.shared.v4.b16` for $K \in \{2, 4, 8\}$. In `M32_N128_w4 default`, initial loads dropped from 4 to 1 vector load.
+> 2. **Non-Identical Incremental Reduction Body**: In `M32_N64_w8 cand4`, `max.bf16x2` count was 2 across all $K \in \{1, 2, 4, 8\}$; incremental iterations ($K > 1$) did not repeat packed BF16 reductions, executing exclusively `max.f32` (+20 per iteration).
+> 3. **Material Register Pressure Growth**: Registers increased from 29 to 48 in `M32_N64_w8 default`, and from 31 to 116 in `M32_N128_w4 default`, introducing potential scheduling and residency confounds.
+> Across all tested conditions, `is_valid_for_isolation = false`.
 
 ## 3. Marginal Slope and Gap Scaling vs K
 
@@ -46,10 +53,11 @@
 | 8 | 20.023 | 9.923 | +10.099 | -50.44% | 0.12% |
 
 - **Linear Gap Fit**: $\text{gap}(K) = 0.121 + (+1.252) \times K$ ($R^2 = 0.9990$)
+  - Note on intercept (0.121): fitted K-axis intercept; no physical attribution.
 - **Default Amplification Slope ($\Delta b / \Delta K$)**: `+2.317` ns/additional CTA/body
 - **Cand4 Amplification Slope ($\Delta b / \Delta K$)**: `+1.064` ns/additional CTA/body
 - **Empirical Differential Amplification ($\Delta \text{gap} / \Delta K$)**: `+1.252` ns/additional CTA/body
-- **Predefined Classification**: `AMPLIFIES`
+- **Classification**: `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`
 
 ### M32_N128_w4 (negative_control)
 
@@ -61,19 +69,23 @@
 | 8 | 11.321 | 8.715 | +2.605 | -23.02% | 0.91% |
 
 - **Linear Gap Fit**: $\text{gap}(K) = -0.429 + (+0.376) \times K$ ($R^2 = 0.9983$)
+  - Note on intercept (-0.429): fitted K-axis intercept; no physical attribution.
 - **Default Amplification Slope ($\Delta b / \Delta K$)**: `+1.214` ns/additional CTA/body
 - **Cand4 Amplification Slope ($\Delta b / \Delta K$)**: `+0.839` ns/additional CTA/body
 - **Empirical Differential Amplification ($\Delta \text{gap} / \Delta K$)**: `+0.376` ns/additional CTA/body
-- **Predefined Classification**: `AMPLIFIES`
+- **Pruned Butterfly Shuffle Scaling**: In `M32_N128_w4`, default issues $24 \times K$ butterfly shuffles and cand4 issues $8 \times K$ (difference $= 16 \times K$). In `M32_N64_w8`, default issues $40 \times K$ and cand4 issues $16 \times K$ (difference $= 24 \times K$). The ratio of pruned butterfly shuffles is $24 / 16 = 1.5\times$ (NOT $3.3\times$). The $3.33\times$ ratio ($1.252 / 0.376$) is the empirical gap amplification slope ratio.
+- **Classification**: `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`
 
 ## 4. Hypothesis Evaluation & Interpretation
 
 ### Hypothesis 2 (H2: Reduction-Communication Cost):
-- **Status**: `SUPPORTED_BY_AMPLIFICATION_EXPERIMENT`
-- **Observation**: In `M32_N64_w8`, the performance gap between `default` and `cand4` amplifies systematically with repeated reduction bodies while initial LocalLoads are held invariant.
+- **Status**: `UNVERIFIED`
+- **Reclassification**: Step B v1 is reclassified as `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`.
+- **Observation**: The default-vs-cand4 gap amplifies in this recurrent composite workload, but the source of amplification is not isolated.
 
 ### Negative Control Contrast (`M32_N128_w4`):
-- **Status**: `AMPLIFIES`
+- **Status**: `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`
+- **Observation**: Although the throughput gap widens from -0.017 ns/CTA at $K=1$ to +2.605 ns/CTA at $K=8$, this workload is confounded by register pressure growth (31 -> 116 regs) and non-invariant load lowerings.
 
 ### Non-Claims & Methodological Boundaries:
 - **No causal proof of individual instruction latency**: We report only empirical incremental slope per additional compiler-generated reduction body ($\Delta b / \Delta K$), not single-instruction latencies.

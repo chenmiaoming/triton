@@ -394,7 +394,7 @@
         "num_physical_regs": 29,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 40,
           "bar_sync": 14,
@@ -403,6 +403,22 @@
           "cvt_f32_bf16": 8,
           "st_shared": 7,
           "ld_shared": 5
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 0,
+          "max_f32": 40,
+          "cvt_f32_bf16": 8
         }
       },
       "default_K2": {
@@ -416,7 +432,7 @@
         "num_physical_regs": 32,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 80,
           "bar_sync": 22,
@@ -425,7 +441,24 @@
           "cvt_f32_bf16": 16,
           "st_shared": 11,
           "ld_shared": 9
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 0,
+          "max_f32": 80,
+          "cvt_f32_bf16": 16
+        },
+        "reduction_body_template_invariant": false
       },
       "default_K4": {
         "candidate": "default",
@@ -438,7 +471,7 @@
         "num_physical_regs": 40,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 160,
           "bar_sync": 38,
@@ -447,7 +480,24 @@
           "cvt_f32_bf16": 32,
           "st_shared": 19,
           "ld_shared": 17
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 0,
+          "max_f32": 160,
+          "cvt_f32_bf16": 32
+        },
+        "reduction_body_template_invariant": false
       },
       "default_K8": {
         "candidate": "default",
@@ -460,7 +510,7 @@
         "num_physical_regs": 48,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 320,
           "bar_sync": 70,
@@ -469,7 +519,24 @@
           "cvt_f32_bf16": 64,
           "st_shared": 35,
           "ld_shared": 33
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 0,
+          "max_f32": 320,
+          "cvt_f32_bf16": 64
+        },
+        "reduction_body_template_invariant": false
       },
       "4_K1": {
         "candidate": "4",
@@ -482,7 +549,7 @@
         "num_physical_regs": 23,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 16,
           "bar_sync": 10,
@@ -491,6 +558,23 @@
           "cvt_f32_bf16": 4,
           "st_shared": 4,
           "ld_shared": 4
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32"
+          ],
+          "count": 2
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 2,
+          "max_f32": 16,
+          "cvt_f32_bf16": 4
         }
       },
       "4_K2": {
@@ -500,11 +584,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b16",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 32,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 32,
           "bar_sync": 14,
@@ -513,7 +597,26 @@
           "cvt_f32_bf16": 12,
           "st_shared": 6,
           "ld_shared": 6
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "count": 2
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 2,
+          "max_f32": 36,
+          "cvt_f32_bf16": 12
+        },
+        "reduction_body_template_invariant": false
       },
       "4_K4": {
         "candidate": "4",
@@ -522,11 +625,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b16",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 32,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 64,
           "bar_sync": 22,
@@ -535,7 +638,26 @@
           "cvt_f32_bf16": 28,
           "st_shared": 10,
           "ld_shared": 10
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "count": 2
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 2,
+          "max_f32": 76,
+          "cvt_f32_bf16": 28
+        },
+        "reduction_body_template_invariant": false
       },
       "4_K8": {
         "candidate": "4",
@@ -544,11 +666,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b16",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 40,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 128,
           "bar_sync": 38,
@@ -557,7 +679,26 @@
           "cvt_f32_bf16": 60,
           "st_shared": 18,
           "ld_shared": 18
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "count": 2
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 2,
+          "max_f32": 156,
+          "cvt_f32_bf16": 60
+        },
+        "reduction_body_template_invariant": false
       }
     },
     "M32_N128_w4": {
@@ -572,7 +713,7 @@
         "num_physical_regs": 31,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 24,
           "bar_sync": 14,
@@ -581,6 +722,25 @@
           "cvt_f32_bf16": 8,
           "st_shared": 7,
           "ld_shared": 8
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "count": 4
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 12,
+          "max_f32": 24,
+          "cvt_f32_bf16": 8
         }
       },
       "default_K2": {
@@ -590,11 +750,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b32",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 56,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 48,
           "bar_sync": 22,
@@ -603,7 +763,25 @@
           "cvt_f32_bf16": 40,
           "st_shared": 11,
           "ld_shared": 12
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 12,
+          "max_f32": 72,
+          "cvt_f32_bf16": 40
+        },
+        "reduction_body_template_invariant": false
       },
       "default_K4": {
         "candidate": "default",
@@ -612,11 +790,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b32",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 72,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 96,
           "bar_sync": 38,
@@ -625,7 +803,25 @@
           "cvt_f32_bf16": 104,
           "st_shared": 19,
           "ld_shared": 20
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 12,
+          "max_f32": 168,
+          "cvt_f32_bf16": 104
+        },
+        "reduction_body_template_invariant": false
       },
       "default_K8": {
         "candidate": "default",
@@ -634,11 +830,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b32",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 116,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 192,
           "bar_sync": 70,
@@ -647,7 +843,25 @@
           "cvt_f32_bf16": 232,
           "st_shared": 35,
           "ld_shared": 36
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b32"
+          ],
+          "count": 1
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 12,
+          "max_f32": 360,
+          "cvt_f32_bf16": 232
+        },
+        "reduction_body_template_invariant": false
       },
       "4_K1": {
         "candidate": "4",
@@ -660,7 +874,7 @@
         "num_physical_regs": 25,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 8,
           "bar_sync": 10,
@@ -669,6 +883,29 @@
           "cvt_f32_bf16": 4,
           "st_shared": 4,
           "ld_shared": 10
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32",
+            "ld.shared.v2.b32"
+          ],
+          "count": 8
+        },
+        "localload_signature_matches_k1": true,
+        "confound_reasons": [
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 14,
+          "max_f32": 8,
+          "cvt_f32_bf16": 4
         }
       },
       "4_K2": {
@@ -678,11 +915,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b16",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 55,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 16,
           "bar_sync": 14,
@@ -691,7 +928,32 @@
           "cvt_f32_bf16": 36,
           "st_shared": 6,
           "ld_shared": 12
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "count": 8
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 14,
+          "max_f32": 44,
+          "cvt_f32_bf16": 36
+        },
+        "reduction_body_template_invariant": false
       },
       "4_K4": {
         "candidate": "4",
@@ -700,11 +962,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b16",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 71,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 32,
           "bar_sync": 22,
@@ -713,7 +975,32 @@
           "cvt_f32_bf16": 100,
           "st_shared": 10,
           "ld_shared": 16
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "count": 8
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 14,
+          "max_f32": 116,
+          "cvt_f32_bf16": 100
+        },
+        "reduction_body_template_invariant": false
       },
       "4_K8": {
         "candidate": "4",
@@ -722,11 +1009,11 @@
         "max_diff": 0.0,
         "tma_load_count": 1,
         "first_shared_load_op": "ld.shared.v4.b16",
-        "localload_family_match": true,
+        "localload_family_match": false,
         "num_physical_regs": 86,
         "local_memory_bytes": 0,
         "stack_bytes": 0,
-        "is_valid_for_isolation": true,
+        "is_valid_for_isolation": false,
         "opcode_counts": {
           "shfl_sync_bfly": 64,
           "bar_sync": 38,
@@ -735,7 +1022,32 @@
           "cvt_f32_bf16": 228,
           "st_shared": 18,
           "ld_shared": 24
-        }
+        },
+        "initial_localload_signature": {
+          "opcodes": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "count": 8
+        },
+        "localload_signature_matches_k1": false,
+        "confound_reasons": [
+          "initial_localload_signature_mismatch",
+          "reduction_arithmetic_lowering_not_amplified",
+          "material_register_pressure_growth"
+        ],
+        "body_structure": {
+          "max_bf16x2": 14,
+          "max_f32": 260,
+          "cvt_f32_bf16": 228
+        },
+        "reduction_body_template_invariant": false
       }
     }
   },
@@ -845,9 +1157,16 @@
         "gap_vs_k_intercept": 0.12069671352818823,
         "gap_vs_k_r2": 0.9989590438180371,
         "default_slope_vs_k": 2.316958707580954,
-        "cand4_slope_vs_k": 1.064485847119965
+        "cand4_slope_vs_k": 1.064485847119965,
+        "intercept_attribution": "fitted K-axis intercept; no physical attribution"
       },
-      "classification": "AMPLIFIES"
+      "classification": "CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE",
+      "valid_for_isolation": false,
+      "confound_reasons": [
+        "initial_localload_signature_mismatch",
+        "reduction_arithmetic_lowering_not_amplified",
+        "material_register_pressure_growth"
+      ]
     },
     "M32_N128_w4": {
       "role": "negative_control",
@@ -954,9 +1273,16 @@
         "gap_vs_k_intercept": -0.42942484398122416,
         "gap_vs_k_r2": 0.9982767454476457,
         "default_slope_vs_k": 1.2144602614948845,
-        "cand4_slope_vs_k": 0.8387474554371729
+        "cand4_slope_vs_k": 0.8387474554371729,
+        "intercept_attribution": "fitted K-axis intercept; no physical attribution"
       },
-      "classification": "AMPLIFIES"
+      "classification": "CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE",
+      "valid_for_isolation": false,
+      "confound_reasons": [
+        "initial_localload_signature_mismatch",
+        "reduction_arithmetic_lowering_not_amplified",
+        "material_register_pressure_growth"
+      ]
     }
   },
   "runs": {

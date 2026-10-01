@@ -561,7 +561,7 @@ def generate_design_markdown() -> str:
         "   - Investigates whether reducing lane partitions from 4 to 2 (pruning 24 butterfly shuffles and 8 cross-warp shuffles) amplifies proportionally with $K$.",
         "2. **Negative Control (`M32_N128_w4`)**: $M=32, N=128, \\text{num\\_warps}=4$",
         "   - Zero Phase 2 layout sensitivity: default $\\approx 2.923$ ns/CTA vs cand4 $\\approx 2.920$ ns/CTA ($-0.11\\%$ marginal slope).",
-        "   - Also undergoes substantial instruction pruning (removes 8 butterfly shuffles and 8 cross-warp shuffles), but exhibits negligible throughput response.",
+        "   - Also undergoes substantial instruction pruning (removes 16 butterfly shuffles ($24 \\times K$ vs $8 \\times K$) and 8 cross-warp shuffles), but exhibits negligible throughput response.",
         "   - Validates whether communication pruning is execution-regime dependent rather than universally beneficial.",
         "",
         "Candidates tested: strictly `default` and `4` (`cand4`).",
@@ -615,6 +615,7 @@ def generate_design_markdown() -> str:
         "",
         "- `AMPLIFIES`: $\\text{gap}(K)$ increases monotonically or linearly with $K$ across all 3 runs with $\\Delta \\text{gap} / \\Delta K > 0$.",
         "- `NO_AMPLIFICATION`: Opcode counts scale with $K$, but $\\text{gap}(K)$ remains flat or near zero.",
+        "- `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`: Initial LocalLoad signature mismatch, non-identical reduction body template, or material register pressure growth.",
         "- `CONFOUNDED`: Register spill, topology change, or compiler simplification occurs.",
         "- `UNSTABLE`: Inconsistent direction across invocations.",
     ]
@@ -627,6 +628,10 @@ def generate_design_markdown() -> str:
 def generate_summary_markdown(results_data: Dict[str, Any]) -> str:
     lines = [
         "# Phase 3 Step B: Reduction-Communication Amplification Microbenchmark Summary",
+        "",
+        "> [!WARNING]",
+        "> Step B v1 is retained as an exploratory recurrent-composite amplification experiment.",
+        "> It does NOT isolate repeated copies of the canonical reduction body, because codegen and register allocation change with K.",
         "",
         "## 1. Experimental Overview & Environment",
         "",
@@ -651,8 +656,8 @@ def generate_summary_markdown(results_data: Dict[str, Any]) -> str:
         "",
         "## 2. Codegen Invariance & Structural Verification",
         "",
-        "| Configuration | Candidate | K | Physical REG | LOCAL Spill | STACK Spill | TMA Count | Initial LocalLoad | Shuffles (shfl.bfly) | Barriers (bar.sync) | max.f32 | max.bf16x2 |",
-        "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: |",
+        "| Configuration | Candidate | K | Physical REG | LOCAL Spill | STACK Spill | TMA Count | Initial LocalLoad | Shuffles (shfl.bfly) | Barriers (bar.sync) | max.f32 | max.bf16x2 | LocalLoad Invariant |",
+        "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: |",
     ])
 
     cval = results_data.get("codegen_validation_summary", {})
@@ -670,15 +675,19 @@ def generate_summary_markdown(results_data: Dict[str, Any]) -> str:
             bar = opc.get("bar_sync", 0)
             mf32 = opc.get("max_f32", 0)
             mbf16 = opc.get("max_bf16x2", 0)
+            ll_inv = "Yes" if v.get("localload_signature_matches_k1", v.get("localload_family_match", False)) else "No (signature mismatch)"
             lines.append(
-                f"| `{cfg_k}` | `{cand}` | {k_val} | {regs} | {loc} B | {stk} B | {tma} | `{ll}` | {shfl} | {bar} | {mf32} | {mbf16} |"
+                f"| `{cfg_k}` | `{cand}` | {k_val} | {regs} | {loc} B | {stk} B | {tma} | `{ll}` | {shfl} | {bar} | {mf32} | {mbf16} | {ll_inv} |"
             )
 
     lines.extend([
         "",
-        "> [!NOTE]",
-        "> Across all tested conditions, exactly 1 TMA descriptor load and invariant initial LocalLoads were observed.",
-        "> Zero local memory spill (`LOCAL=0`, `STACK=0`) was confirmed across all conditions.",
+        "> [!CAUTION]",
+        "> **Structural Confounds in Step B v1**:",
+        "> 1. **Initial LocalLoad Signature Mismatch**: In `M32_N64_w8 cand4`, the initial load lowered to `2x ld.shared.v2.b32` at $K=1$, but switched to `2x ld.shared.v4.b16` for $K \\in \\{2, 4, 8\\}$. In `M32_N128_w4 default`, initial loads dropped from 4 to 1 vector load.",
+        "> 2. **Non-Identical Incremental Reduction Body**: In `M32_N64_w8 cand4`, `max.bf16x2` count was 2 across all $K \\in \\{1, 2, 4, 8\\}$; incremental iterations ($K > 1$) did not repeat packed BF16 reductions, executing exclusively `max.f32` (+20 per iteration).",
+        "> 3. **Material Register Pressure Growth**: Registers increased from 29 to 48 in `M32_N64_w8 default`, and from 31 to 116 in `M32_N128_w4 default`, introducing potential scheduling and residency confounds.",
+        "> Across all tested conditions, `is_valid_for_isolation = false`.",
         "",
         "## 3. Marginal Slope and Gap Scaling vs K",
         "",
@@ -716,10 +725,17 @@ def generate_summary_markdown(results_data: Dict[str, Any]) -> str:
         lines.extend([
             "",
             f"- **Linear Gap Fit**: $\\text{{gap}}(K) = {gap0:.3f} + ({gamma:+.3f}) \\times K$ ($R^2 = {gap_r2:.4f}$)",
+            f"  - Note on intercept ({gap0:.3f}): fitted K-axis intercept; no physical attribution.",
             f"- **Default Amplification Slope ($\\Delta b / \\Delta K$)**: `{beta_def:+.3f}` ns/additional CTA/body",
             f"- **Cand4 Amplification Slope ($\\Delta b / \\Delta K$)**: `{beta_c4:+.3f}` ns/additional CTA/body",
             f"- **Empirical Differential Amplification ($\\Delta \\text{{gap}} / \\Delta K$)**: `{gamma:+.3f}` ns/additional CTA/body",
-            f"- **Predefined Classification**: `{classification}`",
+        ])
+        if cfg_k == "M32_N128_w4":
+            lines.extend([
+                f"- **Pruned Butterfly Shuffle Scaling**: In `M32_N128_w4`, default issues $24 \\times K$ butterfly shuffles and cand4 issues $8 \\times K$ (difference $= 16 \\times K$). In `M32_N64_w8`, default issues $40 \\times K$ and cand4 issues $16 \\times K$ (difference $= 24 \\times K$). The ratio of pruned butterfly shuffles is $24 / 16 = 1.5\\times$ (NOT $3.3\\times$). The $3.33\\times$ ratio ($1.252 / 0.376$) is the empirical gap amplification slope ratio.",
+            ])
+        lines.extend([
+            f"- **Classification**: `{classification}`",
             "",
         ])
 
@@ -727,28 +743,13 @@ def generate_summary_markdown(results_data: Dict[str, Any]) -> str:
         "## 4. Hypothesis Evaluation & Interpretation",
         "",
         "### Hypothesis 2 (H2: Reduction-Communication Cost):",
-    ])
-
-    pos_cls = results_data.get("configuration_summary", {}).get("M32_N64_w8", {}).get("classification")
-    neg_cls = results_data.get("configuration_summary", {}).get("M32_N128_w4", {}).get("classification")
-
-    if pos_cls == "AMPLIFIES":
-        lines.append("- **Status**: `SUPPORTED_BY_AMPLIFICATION_EXPERIMENT`")
-        lines.append("- **Observation**: In `M32_N64_w8`, the performance gap between `default` and `cand4` amplifies systematically with repeated reduction bodies while initial LocalLoads are held invariant.")
-    else:
-        lines.append(f"- **Status**: `{pos_cls}`")
-
-    lines.extend([
+        "- **Status**: `UNVERIFIED`",
+        "- **Reclassification**: Step B v1 is reclassified as `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`.",
+        "- **Observation**: The default-vs-cand4 gap amplifies in this recurrent composite workload, but the source of amplification is not isolated.",
         "",
         "### Negative Control Contrast (`M32_N128_w4`):",
-    ])
-    if neg_cls == "NO_AMPLIFICATION":
-        lines.append("- **Observation**: In `M32_N128_w4`, despite substantial opcode count reduction (8 fewer shuffles and 8 fewer cross-warp reductions per iteration), the throughput gap remains near zero across all $K$.")
-        lines.append("- **Implication**: This indicates that communication pruning does not universally accelerate execution; its visibility depends critically on whether the CTA is in a communication-sensitive execution regime or masked by surrounding execution dynamics.")
-    else:
-        lines.append(f"- **Status**: `{neg_cls}`")
-
-    lines.extend([
+        "- **Status**: `CONFOUNDED_BY_CODEGEN_AND_REGISTER_PRESSURE`",
+        "- **Observation**: Although the throughput gap widens from -0.017 ns/CTA at $K=1$ to +2.605 ns/CTA at $K=8$, this workload is confounded by register pressure growth (31 -> 116 regs) and non-invariant load lowerings.",
         "",
         "### Non-Claims & Methodological Boundaries:",
         "- **No causal proof of individual instruction latency**: We report only empirical incremental slope per additional compiler-generated reduction body ($\\Delta b / \\Delta K$), not single-instruction latencies.",
