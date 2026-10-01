@@ -1052,7 +1052,7 @@ def validate():
         print("  Verified Phase 3 Step B v1 confounded benchmark evidence (confound classification, LocalLoad divergence, telemetry, canonical MD).")
 
     # Check 16: Phase 3 Step B v3 Single-Binary Runtime-K Feasibility
-    print("[16/16] Validating Phase 3 Step B v3 single-binary runtime-K feasibility...")
+    print("[16/17] Validating Phase 3 Step B v3 single-binary runtime-K feasibility...")
     v3_dir = phase3_dir / "v3_runtime_k"
     v3_design_path = v3_dir / "design.md"
     v3_val_path = v3_dir / "validation.json"
@@ -1129,7 +1129,31 @@ def validate():
                 if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
                     errors.append(f"Non-zero spill in {cfg} {cand}: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
 
-        # 16.6 Confound classification & criteria verification
+                # 16.6 Mechanical TTGIR validation
+                ttgir_text = (v3_arts_dir / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                scf_split = ttgir_text.split("scf.for", 1)
+                tma_inside = len(re.findall(r"ttng\.async_tma_copy_global_to_local", scf_split[1])) if len(scf_split) > 1 else 0
+                tma_outside = len(re.findall(r"ttng\.async_tma_copy_global_to_local", scf_split[0]))
+                if tma_inside != 0 or tma_outside != 1:
+                    errors.append(f"Mechanical Criterion A failure in v3 for {cfg} {cand}: outside={tma_outside}, inside={tma_inside}")
+
+                # 16.7 Mechanical PTX loop branch validation
+                ptx_text = (v3_arts_dir / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
+                labels_seen = set()
+                bw_count = 0
+                for l in ptx_text.splitlines():
+                    lbl_m = re.match(r"^\s*(\$L__BB\d+_\d+):", l)
+                    if lbl_m:
+                        labels_seen.add(lbl_m.group(1))
+                    bra_m = re.search(r"(@%p\d+)?\s*bra(?:\.uni)?\s+(\$L__BB\d+_\d+);", l)
+                    if bra_m:
+                        target = bra_m.group(2)
+                        if target in labels_seen:
+                            bw_count += 1
+                if bw_count != 1:
+                    errors.append(f"Expected exactly 1 backward branch in v3 PTX for {cfg} {cand}, got {bw_count}")
+
+        # 16.8 Confound classification & criteria verification
         if v3_val_data.get("overall_status") != "V3_CODEGEN_CONFOUNDED_NOT_ACCEPTED_FOR_TIMING":
             errors.append(f"Expected overall_status == 'V3_CODEGEN_CONFOUNDED_NOT_ACCEPTED_FOR_TIMING', got {v3_val_data.get('overall_status')}")
 
@@ -1138,12 +1162,163 @@ def validate():
             errors.append("Criterion A was not PASS")
         if crit.get("Criterion B (Initial LocalLoad Invariant)") != "FAIL_LOCAL_LOAD_SUNK_INTO_LOOP":
             errors.append("Criterion B was not FAIL_LOCAL_LOAD_SUNK_INTO_LOOP")
-        if crit.get("Criterion C (Reduction Body Template Invariant)") != "FAIL_TEMPLATE_CONFOUNDED_BY_LOCAL_LOAD":
-            errors.append("Criterion C was not FAIL_TEMPLATE_CONFOUNDED_BY_LOCAL_LOAD")
+        if crit.get("Criterion C (Reduction Body Template Invariant)") != "FAIL_REDUCTION_TEMPLATE_MISMATCH":
+            errors.append("Criterion C was not FAIL_REDUCTION_TEMPLATE_MISMATCH")
         if crit.get("Criterion F (Residency & Occupancy Matched)") != "FAIL_RESIDENCY_DISPARITY":
             errors.append("Criterion F was not FAIL_RESIDENCY_DISPARITY")
 
-        print("  Verified Phase 3 Step B v3 single-binary runtime-K feasibility (loop presence, single CUBIN, residency disparity & LocalLoad confounds recorded).")
+        print("  Verified Phase 3 Step B v3 single-binary runtime-K feasibility (mechanical loop checks, single CUBIN, residency disparity & LocalLoad confounds recorded).")
+
+    # Check 17: Phase 3 Step B v4 Preloaded-Register Runtime-K Feasibility & Occupancy Baseline
+    print("[17/17] Validating Phase 3 Step B v4 preloaded-register runtime-K feasibility...")
+    canon_occ_path = phase3_dir / "canonical_occupancy" / "canonical_occupancy.json"
+    v4_dir = phase3_dir / "v4_preloaded_k"
+    v4_design_path = v4_dir / "design.md"
+    v4_val_path = v4_dir / "validation.json"
+    v4_res_path = v4_dir / "results.json"
+    v4_sum_path = v4_dir / "summary.md"
+    v4_arts_dir = v4_dir / "artifacts"
+    v4_raw_path = v4_dir / "raw_results.json"
+
+    if not canon_occ_path.exists():
+        errors.append(f"Missing {canon_occ_path}")
+    if not v4_design_path.exists():
+        errors.append(f"Missing {v4_design_path}")
+    if not v4_val_path.exists():
+        errors.append(f"Missing {v4_val_path}")
+    if not v4_res_path.exists():
+        errors.append(f"Missing {v4_res_path}")
+    if not v4_sum_path.exists():
+        errors.append(f"Missing {v4_sum_path}")
+    if not v4_arts_dir.exists():
+        errors.append(f"Missing {v4_arts_dir}")
+    if not v4_raw_path.exists():
+        errors.append(f"Missing {v4_raw_path}")
+
+    if canon_occ_path.exists() and v4_val_path.exists() and v4_res_path.exists() and v4_raw_path.exists() and v4_arts_dir.exists():
+        canon_occ_data = json.loads(canon_occ_path.read_text(encoding="utf-8"))
+        v4_val_data = json.loads(v4_val_path.read_text(encoding="utf-8"))
+        v4_res_data = json.loads(v4_res_path.read_text(encoding="utf-8"))
+        v4_raw_data = json.loads(v4_raw_path.read_text(encoding="utf-8"))
+
+        dev_lim = canon_occ_data.get("device_limits", {})
+        if dev_lim.get("max_warps_per_sm") != 64:
+            errors.append(f"Expected max_warps_per_sm == 64, got {dev_lim.get('max_warps_per_sm')}")
+
+        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
+        expected_candidates = ["default", "4"]
+
+        # 17.1 Canonical Step A occupancy baseline check
+        canon_res = canon_occ_data.get("canonical_results", {})
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                c_occ = canon_res.get(cfg, {}).get(cand, {}).get("occupancy", {})
+                if c_occ.get("active_warps_per_sm") != 64:
+                    errors.append(f"Canonical {cfg} {cand} active_warps_per_sm != 64 (got {c_occ.get('active_warps_per_sm')})")
+                if c_occ.get("smem_limited") is not False:
+                    errors.append(f"Canonical {cfg} {cand} was unexpectedly smem_limited")
+
+        # 17.2 v4 Artifact completeness, non-empty, and CUBIN SHA binding
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                cand_data = v4_raw_data.get(cfg, {}).get(cand, {})
+                cubin_sha = cand_data.get("cubin_sha256", "")
+                if not cubin_sha or len(cubin_sha) != 64:
+                    errors.append(f"Invalid cubin_sha256 for v4 {cfg} {cand}: {cubin_sha}")
+
+                for ext in ["ptx", "ttgir", "sass", "resource.txt", "cubin.sha256"]:
+                    art_file = v4_arts_dir / cfg / f"{cand}.{ext}"
+                    if not art_file.exists():
+                        errors.append(f"Missing v4 artifact: {art_file}")
+                    else:
+                        content = art_file.read_text(encoding="utf-8").strip()
+                        if not content:
+                            errors.append(f"Empty v4 artifact: {art_file}")
+                        if ext == "cubin.sha256" and content != cubin_sha:
+                            errors.append(f"cubin.sha256 mismatch for v4 {cfg} {cand}: {content} vs {cubin_sha}")
+
+                # 17.3 Single-binary reuse across K
+                spec_check = cand_data.get("specialization_check", {})
+                if spec_check.get("runtime_k_specialized") is not False:
+                    errors.append(f"Expected v4 runtime_k_specialized == False for {cfg} {cand}")
+
+                # 17.4 Numerical correctness across K
+                corr_check = cand_data.get("correctness", {})
+                if not corr_check.get("all_passed"):
+                    errors.append(f"Correctness failed for v4 {cfg} {cand}")
+
+                # 17.5 Zero spills
+                res = cand_data.get("resources", {})
+                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
+                    errors.append(f"Non-zero spill in v4 {cfg} {cand}: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
+
+                # 17.6 Mechanical TTGIR validation
+                ttgir_text = (v4_arts_dir / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                scf_split = ttgir_text.split("scf.for", 1)
+                tma_inside = len(re.findall(r"ttng\.async_tma_copy_global_to_local", scf_split[1])) if len(scf_split) > 1 else 0
+                tma_outside = len(re.findall(r"ttng\.async_tma_copy_global_to_local", scf_split[0]))
+                if tma_inside != 0 or tma_outside != 1:
+                    errors.append(f"Mechanical Criterion A failure in v4 for {cfg} {cand}: outside={tma_outside}, inside={tma_inside}")
+
+                ll_inside = len(re.findall(r"\bttg\.local_load\b", scf_split[1])) if len(scf_split) > 1 else 0
+                ll_outside = len(re.findall(r"\bttg\.local_load\b", scf_split[0]))
+                if ll_inside != 0:
+                    errors.append(f"Mechanical Criterion B failure: ttg.local_load found inside scf.for in v4 for {cfg} {cand} (count={ll_inside})")
+                if ll_outside != 1:
+                    errors.append(f"Mechanical Criterion B failure: expected 1 pre-loop ttg.local_load in v4 for {cfg} {cand} (count={ll_outside})")
+
+                # Layout match with canonical
+                canon_ttgir_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                cb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", canon_ttgir_text)
+                vb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", ttgir_text)
+                cb = re.sub(r"#blocked\d*", "#blocked", cb_m.group(1)) if cb_m else None
+                vb = re.sub(r"#blocked\d*", "#blocked", vb_m.group(1)) if vb_m else None
+                if cb != vb:
+                    errors.append(f"Criterion D failure: layout mismatch for v4 {cfg} {cand}: {vb} vs {cb}")
+
+                # 17.7 Mechanical PTX loop branch validation
+                ptx_text = (v4_arts_dir / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
+                labels_seen = set()
+                bw_count = 0
+                for l in ptx_text.splitlines():
+                    lbl_m = re.match(r"^\s*(\$L__BB\d+_\d+):", l)
+                    if lbl_m:
+                        labels_seen.add(lbl_m.group(1))
+                    bra_m = re.search(r"(@%p\d+)?\s*bra(?:\.uni)?\s+(\$L__BB\d+_\d+);", l)
+                    if bra_m:
+                        target = bra_m.group(2)
+                        if target in labels_seen:
+                            bw_count += 1
+                if bw_count != 1:
+                    errors.append(f"Expected exactly 1 backward branch in v4 PTX for {cfg} {cand}, got {bw_count}")
+
+        # 17.8 Residency comparison
+        w8_def_occ = v4_val_data["v4_evaluations"]["M32_N64_w8"]["default"]["occupancy"]
+        w8_c4_occ = v4_val_data["v4_evaluations"]["M32_N64_w8"]["4"]["occupancy"]
+        if w8_def_occ["blocks_per_sm_actual_smem"] != 6 or w8_c4_occ["blocks_per_sm_actual_smem"] != 8:
+            errors.append(f"Unexpected occupancy values for M32_N64_w8: default={w8_def_occ['blocks_per_sm_actual_smem']}, cand4={w8_c4_occ['blocks_per_sm_actual_smem']}")
+
+        # 17.9 Confound classification & criteria verification
+        if v4_val_data.get("overall_status") != "LOCALLOAD_ISOLATED_BUT_RESIDENCY_CONFOUNDED":
+            errors.append(f"Expected overall_status == 'LOCALLOAD_ISOLATED_BUT_RESIDENCY_CONFOUNDED', got {v4_val_data.get('overall_status')}")
+
+        v4_crit = v4_val_data.get("criteria", {})
+        if v4_crit.get("Criterion A (TMA Descriptor Load Invariant)") != "PASS":
+            errors.append("v4 Criterion A was not PASS")
+        if v4_crit.get("Criterion B (Initial LocalLoad Invariant - Inside Loop == 0)") != "PASS":
+            errors.append("v4 Criterion B was not PASS")
+        if v4_crit.get("Criterion C (Canonical Reduction Body Template Equivalence)") != "PASS":
+            errors.append("v4 Criterion C was not PASS")
+        if v4_crit.get("Criterion D (Distributed Layout Invariance)") != "PASS":
+            errors.append("v4 Criterion D was not PASS")
+        if v4_crit.get("Criterion E (Self-Contained Complete Executable Artifacts)") != "PASS":
+            errors.append("v4 Criterion E was not PASS")
+        if v4_crit.get("Criterion F (Residency & Occupancy Matched)") != "FAIL_RESIDENCY_DISPARITY":
+            errors.append("v4 Criterion F was not FAIL_RESIDENCY_DISPARITY")
+        if v4_crit.get("Criterion J (Sunk LocalLoad Count Inside Loop == 0)") != "PASS":
+            errors.append("v4 Criterion J was not PASS")
+
+        print("  Verified Phase 3 Step B v4 preloaded runtime-loop isolation (0 tile loads inside loop, canonical template matched, residency disparity recorded).")
 
     print("--------------------------------------------------")
     if errors:
@@ -1152,7 +1327,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 16 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 17 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 

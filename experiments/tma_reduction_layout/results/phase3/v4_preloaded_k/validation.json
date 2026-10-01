@@ -1,0 +1,269 @@
+{
+  "title": "Phase 3 Step B v4: Preloaded-Register Runtime-Loop Isolation Audit",
+  "device_limits": {
+    "max_threads_per_sm": 2048,
+    "max_threads_per_block": 1024,
+    "max_registers_per_block": 65536,
+    "max_registers_per_sm": 65536,
+    "max_shared_memory_per_sm": 233472,
+    "warp_size": 32,
+    "max_warps_per_sm": 64
+  },
+  "canonical_occupancy_baseline": {
+    "M32_N64_w8": {
+      "default": {
+        "cubin_sha256": "437e674886320c674cb9a0083ec4fcf186f06bf2154c62326df775b2471340f4",
+        "resources": {
+          "num_regs": 29,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 4104
+        },
+        "occupancy": {
+          "block_size": 256,
+          "blocks_per_sm_actual_smem": 8,
+          "blocks_per_sm_zero_dynamic_smem": 8,
+          "active_warps_per_sm": 64,
+          "smem_limited": false
+        }
+      },
+      "4": {
+        "cubin_sha256": "3bb96f9be2f824ee95e1a7560dc022d844b234392d97eae5eec2338cfdd88028",
+        "resources": {
+          "num_regs": 22,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 4104
+        },
+        "occupancy": {
+          "block_size": 256,
+          "blocks_per_sm_actual_smem": 8,
+          "blocks_per_sm_zero_dynamic_smem": 8,
+          "active_warps_per_sm": 64,
+          "smem_limited": false
+        }
+      }
+    },
+    "M32_N128_w4": {
+      "default": {
+        "cubin_sha256": "de7b2828edc5952898adeac7997f6d2dec8cf3729b22ed320246f5f3b9563245",
+        "resources": {
+          "num_regs": 32,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 8200
+        },
+        "occupancy": {
+          "block_size": 128,
+          "blocks_per_sm_actual_smem": 16,
+          "blocks_per_sm_zero_dynamic_smem": 16,
+          "active_warps_per_sm": 64,
+          "smem_limited": false
+        }
+      },
+      "4": {
+        "cubin_sha256": "d5327bfa02fee66dbe0059007b666a8fb3ea16d2f6fa8904b1d6e17f2acef782",
+        "resources": {
+          "num_regs": 25,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 8200
+        },
+        "occupancy": {
+          "block_size": 128,
+          "blocks_per_sm_actual_smem": 16,
+          "blocks_per_sm_zero_dynamic_smem": 16,
+          "active_warps_per_sm": 64,
+          "smem_limited": false
+        }
+      }
+    }
+  },
+  "v4_evaluations": {
+    "M32_N64_w8": {
+      "default": {
+        "cubin_sha256": "5c7127efd838219eb4c5eb407ac6d93a32c36c15519e1046e190dcf046b394f4",
+        "resources": {
+          "num_regs": 40,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 4104
+        },
+        "occupancy": {
+          "block_size": 256,
+          "blocks_per_sm_actual_smem": 6,
+          "blocks_per_sm_zero_dynamic_smem": 6,
+          "active_warps_per_sm": 48,
+          "smem_limited": false
+        },
+        "ttgir_properties": {
+          "has_scf_for": true,
+          "scf_for_count": 1,
+          "tma_copy_count": 1,
+          "tma_inside_runtime_loop": false,
+          "tma_outside_runtime_loop": 1,
+          "local_load_total_count": 1,
+          "local_load_inside_runtime_loop_count": 0,
+          "local_load_outside_runtime_loop_count": 1,
+          "blocked_layout": "#blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>"
+        },
+        "loop_decomposition": {
+          "total_loop_instructions": 138,
+          "pre_loop_localload_count": 1,
+          "pre_loop_opaque_count": 18,
+          "in_loop_anti_cse_count": 4,
+          "canonical_reduction_count": 123,
+          "accumulator_count": 8,
+          "loop_control_count": 3,
+          "sunk_localload_count": 0
+        },
+        "fingerprint_matched": true,
+        "layout_matched": true
+      },
+      "4": {
+        "cubin_sha256": "a2d3fc5d517e2250eeb350612aef8cd8e0ed7298d1afb9737bf7870426b7b369",
+        "resources": {
+          "num_regs": 32,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 4104
+        },
+        "occupancy": {
+          "block_size": 256,
+          "blocks_per_sm_actual_smem": 8,
+          "blocks_per_sm_zero_dynamic_smem": 8,
+          "active_warps_per_sm": 64,
+          "smem_limited": false
+        },
+        "ttgir_properties": {
+          "has_scf_for": true,
+          "scf_for_count": 1,
+          "tma_copy_count": 1,
+          "tma_inside_runtime_loop": false,
+          "tma_outside_runtime_loop": 1,
+          "local_load_total_count": 1,
+          "local_load_inside_runtime_loop_count": 0,
+          "local_load_outside_runtime_loop_count": 1,
+          "blocked_layout": "#blocked = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>"
+        },
+        "loop_decomposition": {
+          "total_loop_instructions": 75,
+          "pre_loop_localload_count": 2,
+          "pre_loop_opaque_count": 10,
+          "in_loop_anti_cse_count": 4,
+          "canonical_reduction_count": 64,
+          "accumulator_count": 4,
+          "loop_control_count": 3,
+          "sunk_localload_count": 0
+        },
+        "fingerprint_matched": true,
+        "layout_matched": true
+      }
+    },
+    "M32_N128_w4": {
+      "default": {
+        "cubin_sha256": "b17701f7afc35253cab841fb550e27d72cdcf24a8a783955807e834b924aa35e",
+        "resources": {
+          "num_regs": 40,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 8200
+        },
+        "occupancy": {
+          "block_size": 128,
+          "blocks_per_sm_actual_smem": 12,
+          "blocks_per_sm_zero_dynamic_smem": 12,
+          "active_warps_per_sm": 48,
+          "smem_limited": false
+        },
+        "ttgir_properties": {
+          "has_scf_for": true,
+          "scf_for_count": 1,
+          "tma_copy_count": 1,
+          "tma_inside_runtime_loop": false,
+          "tma_outside_runtime_loop": 1,
+          "local_load_total_count": 1,
+          "local_load_inside_runtime_loop_count": 0,
+          "local_load_outside_runtime_loop_count": 1,
+          "blocked_layout": "#blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>"
+        },
+        "loop_decomposition": {
+          "total_loop_instructions": 131,
+          "pre_loop_localload_count": 4,
+          "pre_loop_opaque_count": 30,
+          "in_loop_anti_cse_count": 16,
+          "canonical_reduction_count": 104,
+          "accumulator_count": 8,
+          "loop_control_count": 3,
+          "sunk_localload_count": 0
+        },
+        "fingerprint_matched": true,
+        "layout_matched": true
+      },
+      "4": {
+        "cubin_sha256": "594870919a429eda31aa352bd9a60c933081247cc538cf8eda253824035d887e",
+        "resources": {
+          "num_regs": 29,
+          "local_bytes": 0,
+          "stack_bytes": 0,
+          "static_shared_bytes": 1024,
+          "dynamic_smem_bytes": 8200
+        },
+        "occupancy": {
+          "block_size": 128,
+          "blocks_per_sm_actual_smem": 16,
+          "blocks_per_sm_zero_dynamic_smem": 16,
+          "active_warps_per_sm": 64,
+          "smem_limited": false
+        },
+        "ttgir_properties": {
+          "has_scf_for": true,
+          "scf_for_count": 1,
+          "tma_copy_count": 1,
+          "tma_inside_runtime_loop": false,
+          "tma_outside_runtime_loop": 1,
+          "local_load_total_count": 1,
+          "local_load_inside_runtime_loop_count": 0,
+          "local_load_outside_runtime_loop_count": 1,
+          "blocked_layout": "#blocked = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 1, 32], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>"
+        },
+        "loop_decomposition": {
+          "total_loop_instructions": 80,
+          "pre_loop_localload_count": 8,
+          "pre_loop_opaque_count": 22,
+          "in_loop_anti_cse_count": 16,
+          "canonical_reduction_count": 57,
+          "accumulator_count": 4,
+          "loop_control_count": 3,
+          "sunk_localload_count": 0
+        },
+        "fingerprint_matched": true,
+        "layout_matched": true
+      }
+    }
+  },
+  "criteria": {
+    "Criterion A (TMA Descriptor Load Invariant)": "PASS",
+    "Criterion B (Initial LocalLoad Invariant - Inside Loop == 0)": "PASS",
+    "Criterion C (Canonical Reduction Body Template Equivalence)": "PASS",
+    "Criterion D (Distributed Layout Invariance)": "PASS",
+    "Criterion E (Self-Contained Complete Executable Artifacts)": "PASS",
+    "Criterion F (Residency & Occupancy Matched)": "FAIL_RESIDENCY_DISPARITY",
+    "Criterion G (Loop Body Single Copy)": "PASS",
+    "Criterion H (Single-Binary Runtime-K Invariance)": "PASS",
+    "Criterion I (Numerical Correctness Across K)": "PASS",
+    "Criterion J (Sunk LocalLoad Count Inside Loop == 0)": "PASS",
+    "Criterion K (Anti-CSE Barrier Symmetry)": "PASS",
+    "Criterion L (Accumulator Structural Consistency)": "PASS",
+    "Criterion M (Zero Local Memory & Stack Spills)": "PASS",
+    "Criterion N (Dynamic Smem Limiter Disambiguation)": "PASS"
+  },
+  "overall_status": "LOCALLOAD_ISOLATED_BUT_RESIDENCY_CONFOUNDED"
+}

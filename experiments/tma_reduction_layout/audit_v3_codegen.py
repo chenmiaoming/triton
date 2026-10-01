@@ -10,10 +10,10 @@ Performs rigorous structural audit and criteria verification on v3 single-binary
    - sunk_localload_region (compiler placed ld.shared inside loop)
    - opaque_identity_region (mov.b32 elementwise inline asm barrier)
    - canonical_reduction_region (cvt, shfl, max, smem exchanges)
-   - accumulator_region (add.f32 accumulating into acc)
+   - accumulator_region (add(?:\.[A-Za-z0-9_]+)*\.f32 accumulating into acc)
    - loop_control_region (add.s32, setp, bra)
-5. Assesses template equivalence with Step A canonical reduction body.
-6. Assesses candidate symmetry and residency/occupancy match.
+5. Assesses template equivalence with Step A canonical reduction body via normalized reduction fingerprint.
+6. Mechanically checks Criterion A (single TMA copy outside loop) and Criterion D (exact blocked layout match).
 7. Evaluates Criteria A through J.
 8. Emits results.json, validation.json, summary.md, and design.md.
 """
@@ -32,6 +32,26 @@ ARTIFACTS_DIR = V3_DIR / "artifacts"
 RAW_RESULTS_FILE = V3_DIR / "raw_results.json"
 CANONICAL_DIR = BASE_DIR / "results" / "phase3" / "fixed_binary_artifacts" / "canonical"
 
+ACCUM_REGEX = re.compile(r"^\s*(?:@%p\d+\s+)?add(?:\.[A-Za-z0-9_]+)*\.f32\b")
+
+
+def normalize_reduction_instruction(inst: str) -> str:
+    """Normalize a reduction instruction: strip registers, keep opcode, qualifiers, vector width, immediates."""
+    s = re.sub(r"^@%p\d+\s+", "", inst.strip())
+    parts = s.split(None, 1)
+    if not parts:
+        return ""
+    opcode = parts[0].rstrip(";")
+    args = parts[1] if len(parts) > 1 else ""
+    if "shfl" in opcode:
+        imms = re.findall(r"(-?\d+)", args)
+        return f"{opcode} " + " ".join(imms)
+    elif "bar.sync" in opcode:
+        imms = re.findall(r"(\d+)", args)
+        return f"{opcode} " + " ".join(imms)
+    else:
+        return opcode
+
 
 def decompose_ptx_loop_body(ptx_text: str) -> Dict[str, Any]:
     """
@@ -39,7 +59,7 @@ def decompose_ptx_loop_body(ptx_text: str) -> Dict[str, Any]:
     1. sunk_localload_region: ld.shared and its address calculations inside loop
     2. opaque_identity_region: inline asm mov.b32 barriers
     3. canonical_reduction_region: cvt, shfl, max, and smem cross-warp exchanges
-    4. accumulator_region: add.f32 operations adding reduction result to acc
+    4. accumulator_region: add.*.f32 operations adding reduction result to acc
     5. loop_control_region: induction variable increment, comparison, and branch
     """
     raw_lines = ptx_text.splitlines()
@@ -104,7 +124,6 @@ def decompose_ptx_loop_body(ptx_text: str) -> Dict[str, Any]:
     # Find sunk load vs opaque vs reduction vs accum
     first_opaque_idx = -1
     for idx, inst in enumerate(body_insts):
-        # Opaque barrier is simple register move mov.b32 %rA, %rB without curly braces or cvt
         if re.search(r"mov\.b32\s+%r\d+,\s*%r\d+;", inst):
             first_opaque_idx = idx
             break
@@ -118,7 +137,7 @@ def decompose_ptx_loop_body(ptx_text: str) -> Dict[str, Any]:
     for inst in remaining:
         if re.search(r"mov\.b32\s+%r\d+,\s*%r\d+;", inst):
             opaque_insts.append(inst)
-        elif inst.startswith("add.f32") or ("add.f32" in inst and not "cvt" in inst):
+        elif ACCUM_REGEX.search(inst):
             accum_insts.append(inst)
         else:
             reduction_insts.append(inst)
@@ -138,6 +157,7 @@ def decompose_ptx_loop_body(ptx_text: str) -> Dict[str, Any]:
         "canonical_reduction_region": {
             "count": len(reduction_insts),
             "instructions": reduction_insts,
+            "normalized_fingerprint": [normalize_reduction_instruction(x) for x in reduction_insts if any(k in x for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "bar.sync"])],
         },
         "accumulator_region": {
             "count": len(accum_insts),
@@ -150,7 +170,7 @@ def decompose_ptx_loop_body(ptx_text: str) -> Dict[str, Any]:
     }
 
 
-def compare_with_step_a(canonical_ptx_path: Path, v3_reduction_insts: List[str]) -> Dict[str, Any]:
+def compare_with_step_a(canonical_ptx_path: Path, v3_decomp: Dict[str, Any]) -> Dict[str, Any]:
     """
     Compare v3 canonical reduction subregion with Step A canonical reduction instruction sequence.
     """
@@ -164,20 +184,21 @@ def compare_with_step_a(canonical_ptx_path: Path, v3_reduction_insts: List[str])
     lines = [l.strip() for l in canonical_text.splitlines() if l.strip() and not l.strip().startswith("//") and not l.strip().startswith(".")]
     
     # Filter canonical reduction ops
-    canon_red = [l.split()[0].rstrip(";") if not l.startswith("@") else l.split()[1].rstrip(";") 
-                 for l in lines if any(k in l for k in ["shfl", "max.f32", "cvt.f32", "st.shared", "bar.sync", "max.bf16"])]
+    canon_red_insts = [l for l in lines if any(k in l for k in ["shfl", "max.f32", "cvt.f32", "st.shared", "bar.sync", "max.bf16", "ld.shared"])]
+    canon_fingerprint = [normalize_reduction_instruction(l) for l in canon_red_insts]
     
-    v3_red = [l.split()[0].rstrip(";") if not l.startswith("@") else l.split()[1].rstrip(";") 
-              for l in v3_reduction_insts if any(k in l for k in ["shfl", "max.f32", "cvt.f32", "st.shared", "bar.sync", "max.bf16"])]
+    v3_fingerprint = v3_decomp.get("canonical_reduction_region", {}).get("normalized_fingerprint", [])
     
-    match = (canon_red == v3_red)
-    diff_count = abs(len(canon_red) - len(v3_red))
+    match = (canon_fingerprint == v3_fingerprint)
+    diff_count = abs(len(canon_fingerprint) - len(v3_fingerprint))
     
     return {
         "equivalent": match,
-        "v3_reduction_op_count": len(v3_red),
-        "canonical_reduction_op_count": len(canon_red),
+        "v3_reduction_op_count": len(v3_fingerprint),
+        "canonical_reduction_op_count": len(canon_fingerprint),
         "diff_count": diff_count,
+        "canonical_fingerprint_sample": canon_fingerprint[:10],
+        "v3_fingerprint_sample": v3_fingerprint[:10],
         "note": "Canonical has 1 extra post-reduction CTA barrier before global store" if diff_count == 1 else "Opcodes differ",
     }
 
@@ -205,8 +226,6 @@ def audit_v3() -> Tuple[Dict[str, Any], Dict[str, Any], bool]:
         "confounds_identified": [],
         "overall_status": "PENDING",
     }
-    
-    all_passed = True
     
     crit_a_tma = True
     crit_b_localload = True
@@ -286,17 +305,71 @@ def audit_v3() -> Tuple[Dict[str, Any], Dict[str, Any], bool]:
                 crit_j_correctness = False
             cand_val["correctness_all_passed"] = is_correct
             
-            # 5. Runtime loop
-            loop_data = data.get("runtime_loop", {})
-            has_loop = loop_data.get("runtime_loop_detected", False)
-            if not has_loop:
-                crit_h_runtime_loop = False
-            cand_val["runtime_loop_detected"] = has_loop
+            # 5. TTGIR Mechanical Invariants (Criterion A, D, and scf.for count)
+            ttgir_path = REPO_ROOT / art_paths.get("ttgir", "")
+            tma_copy_count = 0
+            tma_inside_runtime_loop = False
+            scf_for_count = 0
+            v3_layout = ""
+            canonical_layout = ""
+            layout_equal = False
             
+            if ttgir_path.exists():
+                ttgir_text = ttgir_path.read_text(encoding="utf-8")
+                lines = ttgir_text.splitlines()
+                scf_for_count = len(re.findall(r"\bscf\.for\b", ttgir_text))
+                
+                # Check scf.for boundaries
+                for_start = -1
+                for_end = -1
+                brace_depth = 0
+                for i, l in enumerate(lines):
+                    if "scf.for" in l:
+                        for_start = i
+                        brace_depth = l.count("{") - l.count("}")
+                    elif for_start != -1:
+                        brace_depth += l.count("{") - l.count("}")
+                        if brace_depth == 0:
+                            for_end = i
+                            break
+                            
+                tma_lines = [i for i, l in enumerate(lines) if "async_tma_copy_global_to_local" in l]
+                tma_copy_count = len(tma_lines)
+                tma_inside_runtime_loop = any(for_start <= i <= for_end for i in tma_lines) if for_start != -1 else False
+                
+                # Layout
+                canon_ttgir_path = CANONICAL_DIR / cfg_name / f"{cand}.ttgir"
+                if canon_ttgir_path.exists():
+                    m_v3 = re.search(r"#blocked\s*=\s*(#ttg\.blocked<\{[^>]+\}>)", ttgir_text)
+                    v3_layout = m_v3.group(1) if m_v3 else ""
+                    m_c = re.search(r"#blocked\s*=\s*(#ttg\.blocked<\{[^>]+\}>)", canon_ttgir_path.read_text(encoding="utf-8"))
+                    canonical_layout = m_c.group(1) if m_c else ""
+                    layout_equal = (v3_layout == canonical_layout and bool(v3_layout))
+
+            cand_val["tma_copy_count"] = tma_copy_count
+            cand_val["tma_inside_runtime_loop"] = tma_inside_runtime_loop
+            if tma_copy_count != 1 or tma_inside_runtime_loop:
+                crit_a_tma = False
+                
+            cand_val["v3_layout"] = v3_layout
+            cand_val["canonical_layout"] = canonical_layout
+            cand_val["layout_equal"] = layout_equal
+            if not layout_equal:
+                crit_d_layout = False
+                
             # 6. PTX Decomposition & Step A Equivalence
             ptx_path = REPO_ROOT / art_paths.get("ptx", "")
+            backward_branch_count = 0
             if ptx_path.exists():
                 ptx_text = ptx_path.read_text(encoding="utf-8")
+                raw_ptx = ptx_text.splitlines()
+                for i, l in enumerate(raw_ptx):
+                    m = re.search(r"(@%p\d+)?\s*bra(?:\.uni)?\s+(\$L__BB\d+_\d+);", l)
+                    if m:
+                        lbl = m.group(2)
+                        if any(raw_ptx[j].strip().startswith(f"{lbl}:") for j in range(i)):
+                            backward_branch_count += 1
+
                 decomp = decompose_ptx_loop_body(ptx_text)
                 cand_val["loop_decomposition"] = decomp
                 
@@ -310,13 +383,23 @@ def audit_v3() -> Tuple[Dict[str, Any], Dict[str, Any], bool]:
                         validation["confounds_identified"].append(msg)
                 
                 canon_ptx = CANONICAL_DIR / cfg_name / f"{cand}.ptx"
-                equiv_info = compare_with_step_a(canon_ptx, decomp.get("canonical_reduction_region", {}).get("instructions", []))
+                equiv_info = compare_with_step_a(canon_ptx, decomp)
                 cand_val["step_a_template_equivalence"] = equiv_info
+                if not equiv_info.get("equivalent", False):
+                    crit_c_template = False
             else:
                 crit_c_template = False
                 cand_val["loop_decomposition"] = {"loop_found": False, "error": "PTX file missing"}
                 cand_val["step_a_template_equivalence"] = {"equivalent": False, "error": "PTX file missing"}
                 
+            has_loop = (scf_for_count == 1 and backward_branch_count == 1 and data.get("runtime_loop", {}).get("sass_has_bra", False))
+            if not has_loop:
+                crit_h_runtime_loop = False
+            cand_val["runtime_loop_detected"] = has_loop
+            cand_val["scf_for_count"] = scf_for_count
+            cand_val["backward_branch_count"] = backward_branch_count
+            cand_val["loop_body_copy_count"] = scf_for_count
+
             validation["per_config_candidate"][cfg_name][cand] = cand_val
             results_summary["configs"][cfg_name][cand] = {
                 "cubin_sha256": data.get("cubin_sha256"),
@@ -341,14 +424,15 @@ def audit_v3() -> Tuple[Dict[str, Any], Dict[str, Any], bool]:
         
         validation["candidate_symmetry"][cfg_name]["opaque_region_symmetric"] = (def_opaque == c4_opaque and def_opaque > 0)
         validation["candidate_symmetry"][cfg_name]["opaque_count"] = def_opaque
-        validation["candidate_symmetry"][cfg_name]["accumulator_region_symmetric"] = (def_acc == c4_acc and def_acc > 0)
-        validation["candidate_symmetry"][cfg_name]["accumulator_count"] = def_acc
+        validation["candidate_symmetry"][cfg_name]["accumulator_region_layout_consistent"] = (def_acc > 0 and c4_acc > 0)
+        validation["candidate_symmetry"][cfg_name]["default_accumulator_count"] = def_acc
+        validation["candidate_symmetry"][cfg_name]["cand4_accumulator_count"] = c4_acc
 
     validation["criteria"] = {
-        "Criterion A (TMA Descriptor Load Invariant)": "PASS" if crit_a_tma else "FAIL",
+        "Criterion A (TMA Descriptor Load Invariant)": "PASS" if crit_a_tma else "FAIL_TMA_INVARIANT_VIOLATED",
         "Criterion B (Initial LocalLoad Invariant)": "FAIL_LOCAL_LOAD_SUNK_INTO_LOOP" if not crit_b_localload else "PASS",
-        "Criterion C (Reduction Body Template Invariant)": "FAIL_TEMPLATE_CONFOUNDED_BY_LOCAL_LOAD" if not crit_c_template else "PASS",
-        "Criterion D (Distributed Layout Invariant)": "PASS" if crit_d_layout else "FAIL",
+        "Criterion C (Reduction Body Template Invariant)": "FAIL_REDUCTION_TEMPLATE_MISMATCH" if not crit_c_template else "PASS",
+        "Criterion D (Distributed Layout Invariant)": "PASS" if crit_d_layout else "FAIL_LAYOUT_MISMATCH",
         "Criterion E (Self-Contained Committed Artifacts)": "PASS" if crit_e_self_contained else "FAIL",
         "Criterion F (Residency & Occupancy Matched)": "FAIL_RESIDENCY_DISPARITY" if not crit_f_residency else "PASS",
         "Criterion G (Spill Local/Stack == 0)": "PASS" if crit_g_no_spill else "FAIL",
@@ -424,7 +508,7 @@ Inside the PTX loop body, instructions are strictly partitioned into 5 functiona
 1. `sunk_localload_region`: Shared memory load (`ld.shared`) placed inside loop by compiler lowering.
 2. `opaque_identity_region`: Opaque elementwise register barriers (`mov.b32`).
 3. `canonical_reduction_region`: BF16->FP32 conversion, warp-level shuffles (`shfl.sync.bfly.b32`), comparisons (`max.f32`), and CTA shared memory barriers for `default`.
-4. `accumulator_region`: Floating-point accumulation (`add.f32`) into `acc`.
+4. `accumulator_region`: Floating-point accumulation (`add.rn.f32`) into `acc`.
 5. `loop_control_region`: Counter increment (`add.s32`), comparison (`setp`), and loop branch (`bra`).
 
 ## 4. Criteria Verification Matrix
@@ -463,7 +547,7 @@ The isolation is accepted if and only if all Criteria A through J pass.
 - **Positive Case (`M32_N64_w8`)**:
   - `default`: **39 registers**, {pos_def.get("dynamic_smem_bytes", 5120)}B dynamic smem. Active Blocks/SM: **{pos_def.get("max_active_blocks_per_sm", 6)}**, Active Warps/SM: **{pos_def.get("active_warps_per_sm", 48)}** (75% occupancy).
   - `cand4`: **29 registers**, {pos_c4.get("dynamic_smem_bytes", 6144)}B dynamic smem. Active Blocks/SM: **{pos_c4.get("max_active_blocks_per_sm", 8)}**, Active Warps/SM: **{pos_c4.get("active_warps_per_sm", 64)}** (100% occupancy).
-  - **Occupancy Disparity**: **25% reduction in active warps** for `default` vs `cand4` due to 39 vs 29 register allocation on SM90.
+  - **Occupancy Disparity**: The exact v3 functions yield 6 vs 8 active blocks/SM under the CUDA occupancy API. This disparity coincides with 39 vs 29 registers/thread and different dynamic shared-memory requirements. Limiter attribution is analyzed separately using zero-dynamic-smem occupancy checks.
 - **Control Case (`M32_N128_w4`)**:
   - `default`: **32 registers**, Active Blocks/SM: **{neg_def.get("max_active_blocks_per_sm", 16)}**, Active Warps/SM: **{neg_def.get("active_warps_per_sm", 64)}** (100% occupancy).
   - `cand4`: **32 registers**, Active Blocks/SM: **{neg_c4.get("max_active_blocks_per_sm", 16)}**, Active Warps/SM: **{neg_c4.get("active_warps_per_sm", 64)}** (100% occupancy).
@@ -475,7 +559,7 @@ The isolation is accepted if and only if all Criteria A through J pass.
 - The inner loop scales **both LocalLoad memory bandwidth and reduction computation**, violating pure reduction isolation.
 
 ## 4. Hardware Verification & Implementation Milestones
-- **Runtime Loop Emission**: Verified in all 4 conditions (`scf.for` in TTGIR, backward `bra` in PTX, `BRA` in SASS, `loop_body_copy_count = 1`).
+- **Runtime Loop Emission**: Verified mechanically in all 4 conditions (`scf.for` in TTGIR, backward `bra` in PTX, `BRA` in SASS, `loop_body_copy_count = 1`).
 - **Single CUBIN Binary Reuse**: Verified via JIT device caches; cache length remained 1 across all $K \\in \\{{1, 2, 4, 8\\}}$, confirming zero recompilation.
 - **Zero Spill**: 0 local bytes, 0 stack bytes in all conditions.
 - **Numerical Correctness**: 100% bitwise/tolerance match across all $K$ against $K \\times \\text{{max}}(x, \\text{{dim}}=1)$.

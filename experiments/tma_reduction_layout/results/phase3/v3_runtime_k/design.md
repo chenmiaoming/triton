@@ -48,7 +48,7 @@ Inside the PTX loop body, instructions are strictly partitioned into 5 functiona
 1. `sunk_localload_region`: Shared memory load (`ld.shared`) placed inside loop by compiler lowering.
 2. `opaque_identity_region`: Opaque elementwise register barriers (`mov.b32`).
 3. `canonical_reduction_region`: BF16->FP32 conversion, warp-level shuffles (`shfl.sync.bfly.b32`), comparisons (`max.f32`), and CTA shared memory barriers for `default`.
-4. `accumulator_region`: Floating-point accumulation (`add.f32`) into `acc`.
+4. `accumulator_region`: Floating-point accumulation (`add.rn.f32`) into `acc`.
 5. `loop_control_region`: Counter increment (`add.s32`), comparison (`setp`), and loop branch (`bra`).
 
 ## 4. Criteria Verification Matrix

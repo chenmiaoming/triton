@@ -8,7 +8,7 @@
 | :--- | :--- |
 | Criterion A (TMA Descriptor Load Invariant) | **PASS** |
 | Criterion B (Initial LocalLoad Invariant) | **FAIL_LOCAL_LOAD_SUNK_INTO_LOOP** |
-| Criterion C (Reduction Body Template Invariant) | **FAIL_TEMPLATE_CONFOUNDED_BY_LOCAL_LOAD** |
+| Criterion C (Reduction Body Template Invariant) | **FAIL_REDUCTION_TEMPLATE_MISMATCH** |
 | Criterion D (Distributed Layout Invariant) | **PASS** |
 | Criterion E (Self-Contained Committed Artifacts) | **PASS** |
 | Criterion F (Residency & Occupancy Matched) | **FAIL_RESIDENCY_DISPARITY** |
@@ -28,7 +28,7 @@
 - **Positive Case (`M32_N64_w8`)**:
   - `default`: **39 registers**, 5120B dynamic smem. Active Blocks/SM: **6**, Active Warps/SM: **48** (75% occupancy).
   - `cand4`: **29 registers**, 6144B dynamic smem. Active Blocks/SM: **8**, Active Warps/SM: **64** (100% occupancy).
-  - **Occupancy Disparity**: **25% reduction in active warps** for `default` vs `cand4` due to 39 vs 29 register allocation on SM90.
+  - **Occupancy Disparity**: The exact v3 functions yield 6 vs 8 active blocks/SM under the CUDA occupancy API. This disparity coincides with 39 vs 29 registers/thread and different dynamic shared-memory requirements. Limiter attribution is analyzed separately using zero-dynamic-smem occupancy checks.
 - **Control Case (`M32_N128_w4`)**:
   - `default`: **32 registers**, Active Blocks/SM: **16**, Active Warps/SM: **64** (100% occupancy).
   - `cand4`: **32 registers**, Active Blocks/SM: **16**, Active Warps/SM: **64** (100% occupancy).
@@ -40,7 +40,7 @@
 - The inner loop scales **both LocalLoad memory bandwidth and reduction computation**, violating pure reduction isolation.
 
 ## 4. Hardware Verification & Implementation Milestones
-- **Runtime Loop Emission**: Verified in all 4 conditions (`scf.for` in TTGIR, backward `bra` in PTX, `BRA` in SASS, `loop_body_copy_count = 1`).
+- **Runtime Loop Emission**: Verified mechanically in all 4 conditions (`scf.for` in TTGIR, backward `bra` in PTX, `BRA` in SASS, `loop_body_copy_count = 1`).
 - **Single CUBIN Binary Reuse**: Verified via JIT device caches; cache length remained 1 across all $K \in \{1, 2, 4, 8\}$, confirming zero recompilation.
 - **Zero Spill**: 0 local bytes, 0 stack bytes in all conditions.
 - **Numerical Correctness**: 100% bitwise/tolerance match across all $K$ against $K \times \text{max}(x, \text{dim}=1)$.
