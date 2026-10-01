@@ -1,6 +1,6 @@
 # Phase 3 Step B v4: Preloaded-Register Runtime-K Isolation Feasibility Report
 
-**Overall Feasibility Status**: `LOCALLOAD_ISOLATED_BUT_RESIDENCY_CONFOUNDED`
+**Overall Feasibility Status**: `LOCALLOAD_ISOLATED_BUT_RESIDENCY_AND_ACCUMULATOR_CONFOUNDED`
 
 ## 1. Executive Summary
 
@@ -55,7 +55,7 @@ is inserted both before the loop (to force shared-to-register load materializati
 | :--- | :--- | :--- |
 | `Criterion A (TMA Descriptor Load Invariant)` | Structural requirement | **`PASS`** |
 | `Criterion B (Initial LocalLoad Invariant - Inside Loop == 0)` | Structural requirement | **`PASS`** |
-| `Criterion C (Canonical Reduction Body Template Equivalence)` | Structural requirement | **`PASS`** |
+| `Criterion C (Canonical Reduction Body Template Equivalence)` | Structural requirement | **`FAIL`** |
 | `Criterion D (Distributed Layout Invariance)` | Structural requirement | **`PASS`** |
 | `Criterion E (Self-Contained Complete Executable Artifacts)` | Structural requirement | **`PASS`** |
 | `Criterion F (Residency & Occupancy Matched)` | Structural requirement | **`FAIL_RESIDENCY_DISPARITY`** |
@@ -64,7 +64,7 @@ is inserted both before the loop (to force shared-to-register load materializati
 | `Criterion I (Numerical Correctness Across K)` | Structural requirement | **`PASS`** |
 | `Criterion J (Sunk LocalLoad Count Inside Loop == 0)` | Structural requirement | **`PASS`** |
 | `Criterion K (Anti-CSE Barrier Symmetry)` | Structural requirement | **`PASS`** |
-| `Criterion L (Accumulator Structural Consistency)` | Structural requirement | **`PASS`** |
+| `Criterion L (Accumulator Structural Consistency)` | Structural requirement | **`FAIL_CANDIDATE_DEPENDENT_ACCUMULATOR`** |
 | `Criterion M (Zero Local Memory & Stack Spills)` | Structural requirement | **`PASS`** |
 | `Criterion N (Dynamic Smem Limiter Disambiguation)` | Structural requirement | **`PASS`** |
 

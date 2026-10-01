@@ -1170,7 +1170,7 @@ def validate():
         print("  Verified Phase 3 Step B v3 single-binary runtime-K feasibility (mechanical loop checks, single CUBIN, residency disparity & LocalLoad confounds recorded).")
 
     # Check 17: Phase 3 Step B v4 Preloaded-Register Runtime-K Feasibility & Occupancy Baseline
-    print("[17/17] Validating Phase 3 Step B v4 preloaded-register runtime-K feasibility...")
+    print("[17/18] Validating Phase 3 Step B v4 preloaded-register runtime-K feasibility...")
     canon_occ_path = phase3_dir / "canonical_occupancy" / "canonical_occupancy.json"
     v4_dir = phase3_dir / "v4_preloaded_k"
     v4_design_path = v4_dir / "design.md"
@@ -1292,23 +1292,31 @@ def validate():
                 if bw_count != 1:
                     errors.append(f"Expected exactly 1 backward branch in v4 PTX for {cfg} {cand}, got {bw_count}")
 
-        # 17.8 Residency comparison
+        # 17.8 Residency comparison & mechanical Criterion N check
         w8_def_occ = v4_val_data["v4_evaluations"]["M32_N64_w8"]["default"]["occupancy"]
         w8_c4_occ = v4_val_data["v4_evaluations"]["M32_N64_w8"]["4"]["occupancy"]
         if w8_def_occ["blocks_per_sm_actual_smem"] != 6 or w8_c4_occ["blocks_per_sm_actual_smem"] != 8:
             errors.append(f"Unexpected occupancy values for M32_N64_w8: default={w8_def_occ['blocks_per_sm_actual_smem']}, cand4={w8_c4_occ['blocks_per_sm_actual_smem']}")
 
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                occ = v4_val_data["v4_evaluations"][cfg][cand]["occupancy"]
+                b_act = occ.get("blocks_per_sm_actual_smem")
+                b_zero = occ.get("blocks_per_sm_zero_dynamic_smem")
+                if b_act is None or b_zero is None or b_act != b_zero:
+                    errors.append(f"Mechanical Criterion N failure in v4 for {cfg} {cand}: actual={b_act}, zero_smem={b_zero}")
+
         # 17.9 Confound classification & criteria verification
-        if v4_val_data.get("overall_status") != "LOCALLOAD_ISOLATED_BUT_RESIDENCY_CONFOUNDED":
-            errors.append(f"Expected overall_status == 'LOCALLOAD_ISOLATED_BUT_RESIDENCY_CONFOUNDED', got {v4_val_data.get('overall_status')}")
+        if v4_val_data.get("overall_status") != "LOCALLOAD_ISOLATED_BUT_RESIDENCY_AND_ACCUMULATOR_CONFOUNDED":
+            errors.append(f"Expected overall_status == 'LOCALLOAD_ISOLATED_BUT_RESIDENCY_AND_ACCUMULATOR_CONFOUNDED', got {v4_val_data.get('overall_status')}")
 
         v4_crit = v4_val_data.get("criteria", {})
         if v4_crit.get("Criterion A (TMA Descriptor Load Invariant)") != "PASS":
             errors.append("v4 Criterion A was not PASS")
         if v4_crit.get("Criterion B (Initial LocalLoad Invariant - Inside Loop == 0)") != "PASS":
             errors.append("v4 Criterion B was not PASS")
-        if v4_crit.get("Criterion C (Canonical Reduction Body Template Equivalence)") != "PASS":
-            errors.append("v4 Criterion C was not PASS")
+        if v4_crit.get("Criterion C (Canonical Reduction Body Template Equivalence)") != "FAIL":
+            errors.append("v4 Criterion C was not FAIL")
         if v4_crit.get("Criterion D (Distributed Layout Invariance)") != "PASS":
             errors.append("v4 Criterion D was not PASS")
         if v4_crit.get("Criterion E (Self-Contained Complete Executable Artifacts)") != "PASS":
@@ -1317,8 +1325,175 @@ def validate():
             errors.append("v4 Criterion F was not FAIL_RESIDENCY_DISPARITY")
         if v4_crit.get("Criterion J (Sunk LocalLoad Count Inside Loop == 0)") != "PASS":
             errors.append("v4 Criterion J was not PASS")
+        if v4_crit.get("Criterion L (Accumulator Structural Consistency)") != "FAIL_CANDIDATE_DEPENDENT_ACCUMULATOR":
+            errors.append("v4 Criterion L was not FAIL_CANDIDATE_DEPENDENT_ACCUMULATOR")
+        if v4_crit.get("Criterion N (Dynamic Smem Limiter Disambiguation)") != "PASS":
+            errors.append("v4 Criterion N was not PASS")
 
-        print("  Verified Phase 3 Step B v4 preloaded runtime-loop isolation (0 tile loads inside loop, canonical template matched, residency disparity recorded).")
+        print("  Verified Phase 3 Step B v4 preloaded runtime-loop isolation (0 tile loads inside loop, residency & accumulator confounds recorded).")
+
+    # Check 18: Phase 3 Step B v5 Preloaded-Register Last-Result Carry Feasibility
+    print("[18/18] Validating Phase 3 Step B v5 last-result runtime-K feasibility...")
+    v5_dir = phase3_dir / "v5_preloaded_k"
+    v5_design_path = v5_dir / "design.md"
+    v5_val_path = v5_dir / "validation.json"
+    v5_res_path = v5_dir / "results.json"
+    v5_sum_path = v5_dir / "summary.md"
+    v5_arts_dir = v5_dir / "artifacts"
+    v5_raw_path = v5_dir / "raw_results.json"
+
+    if not v5_design_path.exists():
+        errors.append(f"Missing {v5_design_path}")
+    if not v5_val_path.exists():
+        errors.append(f"Missing {v5_val_path}")
+    if not v5_res_path.exists():
+        errors.append(f"Missing {v5_res_path}")
+    if not v5_sum_path.exists():
+        errors.append(f"Missing {v5_sum_path}")
+    if not v5_arts_dir.exists():
+        errors.append(f"Missing {v5_arts_dir}")
+    if not v5_raw_path.exists():
+        errors.append(f"Missing {v5_raw_path}")
+
+    if v5_val_path.exists() and v5_res_path.exists() and v5_raw_path.exists() and v5_arts_dir.exists():
+        v5_val_data = json.loads(v5_val_path.read_text(encoding="utf-8"))
+        v5_res_data = json.loads(v5_res_path.read_text(encoding="utf-8"))
+        v5_raw_data = json.loads(v5_raw_path.read_text(encoding="utf-8"))
+
+        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
+        expected_candidates = ["default", "4"]
+
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                art_prefix = v5_arts_dir / cfg / cand
+                for ext in [".ptx", ".ttgir", ".sass", ".resource.txt", ".cubin.sha256"]:
+                    f_path = art_prefix.with_suffix(ext) if ext != ".cubin.sha256" else v5_arts_dir / cfg / f"{cand}.cubin.sha256"
+                    if not f_path.exists() or f_path.stat().st_size == 0:
+                        errors.append(f"Missing or empty v5 artifact: {f_path}")
+
+                cand_data = v5_raw_data.get(cfg, {}).get(cand, {})
+                c_sha = cand_data.get("cubin_sha256")
+                sha_file_path = v5_arts_dir / cfg / f"{cand}.cubin.sha256"
+                if sha_file_path.exists():
+                    f_sha = sha_file_path.read_text(encoding="utf-8").strip()
+                    if f_sha != c_sha:
+                        errors.append(f"CUBIN sha mismatch for v5 {cfg} {cand}: file={f_sha} vs raw={c_sha}")
+
+                # 18.1 Single CUBIN reuse across K
+                if cand_data.get("specialization_check", {}).get("runtime_k_specialized") is not False:
+                    errors.append(f"Expected runtime_k_specialized == False in v5 for {cfg} {cand}")
+
+                # 18.2 Numerical correctness
+                corr = cand_data.get("correctness", {})
+                if not corr.get("all_passed", False):
+                    errors.append(f"Numerical correctness failed in v5 for {cfg} {cand}")
+
+                # 18.3 Zero spills
+                res = cand_data.get("resources", {})
+                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
+                    errors.append(f"Non-zero spill in v5 {cfg} {cand}: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
+
+                # 18.4 Mechanical TTGIR validation
+                ttgir_text = (v5_arts_dir / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                scf_split = ttgir_text.split("scf.for", 1)
+                tma_inside = len(re.findall(r"ttng\.async_tma_copy_global_to_local", scf_split[1])) if len(scf_split) > 1 else 0
+                tma_outside = len(re.findall(r"ttng\.async_tma_copy_global_to_local", scf_split[0]))
+                if tma_inside != 0 or tma_outside != 1:
+                    errors.append(f"Mechanical Criterion A failure in v5 for {cfg} {cand}: outside={tma_outside}, inside={tma_inside}")
+
+                ll_inside = len(re.findall(r"\bttg\.local_load\b", scf_split[1])) if len(scf_split) > 1 else 0
+                ll_outside = len(re.findall(r"\bttg\.local_load\b", scf_split[0]))
+                if ll_inside != 0:
+                    errors.append(f"Mechanical Criterion C failure: ttg.local_load found inside scf.for in v5 for {cfg} {cand} (count={ll_inside})")
+                if ll_outside != 1:
+                    errors.append(f"Mechanical Criterion B failure: expected 1 pre-loop ttg.local_load in v5 for {cfg} {cand} (count={ll_outside})")
+
+                red_inside = len(re.findall(r"\btt\.reduce\b", scf_split[1])) if len(scf_split) > 1 else 0
+                red_outside = len(re.findall(r"\btt\.reduce\b", scf_split[0]))
+                if red_inside == 0 or red_outside != 0:
+                    errors.append(f"Mechanical Criterion H failure: tt.reduce not inside scf.for in v5 for {cfg} {cand}: inside={red_inside}, outside={red_outside}")
+
+                # 18.5 Layout match with canonical
+                canon_ttgir_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                cb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", canon_ttgir_text)
+                vb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", ttgir_text)
+                cb = re.sub(r"#blocked\d*", "#blocked", cb_m.group(1)) if cb_m else None
+                vb = re.sub(r"#blocked\d*", "#blocked", vb_m.group(1)) if vb_m else None
+                if cb != vb:
+                    errors.append(f"Criterion F failure: layout mismatch for v5 {cfg} {cand}: {vb} vs {cb}")
+
+                # 18.6 Mechanical PTX loop branch validation
+                ptx_text = (v5_arts_dir / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
+                labels_seen = set()
+                bw_count = 0
+                for l in ptx_text.splitlines():
+                    lbl_m = re.match(r"^\s*(\$L__BB\d+_\d+):", l)
+                    if lbl_m:
+                        labels_seen.add(lbl_m.group(1))
+                    bra_m = re.search(r"(@%p\d+)?\s*bra(?:\.uni)?\s+(\$L__BB\d+_\d+);", l)
+                    if bra_m:
+                        target = bra_m.group(2)
+                        if target in labels_seen:
+                            bw_count += 1
+                if bw_count != 1:
+                    errors.append(f"Expected exactly 1 backward branch in v5 PTX for {cfg} {cand}, got {bw_count}")
+
+                # 18.7 Decomposition validations: zero accumulator, zero global store inside loop
+                eval_entry = v5_val_data.get("v5_evaluations", {}).get(cfg, {}).get(cand, {})
+                decomp_info = eval_entry.get("loop_decomposition", {})
+                if decomp_info.get("accumulator_count") != 0:
+                    errors.append(f"Expected accumulator_count == 0 in v5 {cfg} {cand}, got {decomp_info.get('accumulator_count')}")
+                if decomp_info.get("global_store_inside_loop_count") != 0:
+                    errors.append(f"Expected global_store_inside_loop_count == 0 in v5 {cfg} {cand}, got {decomp_info.get('global_store_inside_loop_count')}")
+
+        # 18.8 Residency comparison: default vs cand4 matched
+        w8_def_occ = v5_val_data["v5_evaluations"]["M32_N64_w8"]["default"]["occupancy"]
+        w8_c4_occ = v5_val_data["v5_evaluations"]["M32_N64_w8"]["4"]["occupancy"]
+        if w8_def_occ["blocks_per_sm_actual_smem"] != 8 or w8_c4_occ["blocks_per_sm_actual_smem"] != 8:
+            errors.append(f"Expected 8 blocks/SM for M32_N64_w8 default and cand4, got {w8_def_occ['blocks_per_sm_actual_smem']} and {w8_c4_occ['blocks_per_sm_actual_smem']}")
+
+        w4_def_occ = v5_val_data["v5_evaluations"]["M32_N128_w4"]["default"]["occupancy"]
+        w4_c4_occ = v5_val_data["v5_evaluations"]["M32_N128_w4"]["4"]["occupancy"]
+        if w4_def_occ["blocks_per_sm_actual_smem"] != 16 or w4_c4_occ["blocks_per_sm_actual_smem"] != 16:
+            errors.append(f"Expected 16 blocks/SM for M32_N128_w4 default and cand4, got {w4_def_occ['blocks_per_sm_actual_smem']} and {w4_c4_occ['blocks_per_sm_actual_smem']}")
+
+        # 18.9 Mechanical Criterion O check: actual == zero_dynamic_smem
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                occ = v5_val_data["v5_evaluations"][cfg][cand]["occupancy"]
+                b_act = occ.get("blocks_per_sm_actual_smem")
+                b_zero = occ.get("blocks_per_sm_zero_dynamic_smem")
+                if b_act is None or b_zero is None or b_act != b_zero:
+                    errors.append(f"Mechanical Criterion O failure in v5 for {cfg} {cand}: actual={b_act}, zero_smem={b_zero}")
+
+        # 18.10 Confound classification & criteria verification
+        if v5_val_data.get("overall_status") != "REDUCTION_ISOLATED_BUT_TEMPLATE_CONFOUNDED":
+            errors.append(f"Expected overall_status == 'REDUCTION_ISOLATED_BUT_TEMPLATE_CONFOUNDED', got {v5_val_data.get('overall_status')}")
+
+        v5_crit = v5_val_data.get("criteria", {})
+        for crit_name in [
+            "Criterion A (TMA Issue Once Outside Loop)",
+            "Criterion B (Initial LocalLoad Once Outside Loop)",
+            "Criterion C (Zero Initial LocalLoad Inside Loop)",
+            "Criterion D (One Runtime Loop / One CUBIN)",
+            "Criterion E (Runtime K Unspecialized)",
+            "Criterion F (Distributed Layout Invariance)",
+            "Criterion H (Reduction Remains Inside Runtime Loop)",
+            "Criterion I (Zero Accumulator Adds Inside Loop)",
+            "Criterion J (Zero Global Store Inside Loop)",
+            "Criterion K (In-Loop Anti-CSE Region Candidate Symmetry)",
+            "Criterion L (Zero Local Memory & Stack Spills)",
+            "Criterion M (Numerical Correctness across K)",
+            "Criterion N (Residency & Occupancy Matched)",
+            "Criterion O (Dynamic Smem Limiter Disambiguation)",
+        ]:
+            if v5_crit.get(crit_name) != "PASS":
+                errors.append(f"v5 {crit_name} was not PASS (got {v5_crit.get(crit_name)})")
+
+        if v5_crit.get("Criterion G (Canonical Reduction Core Fingerprint Equivalence)") != "FAIL":
+            errors.append("v5 Criterion G was not FAIL")
+
+        print("  Verified Phase 3 Step B v5 last-result runtime-loop isolation (0 accumulator adds, residency matched, template confound recorded).")
 
     print("--------------------------------------------------")
     if errors:
@@ -1327,7 +1502,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 17 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 18 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 
