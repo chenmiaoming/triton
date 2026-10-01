@@ -69,6 +69,7 @@ by carrying only the last reduction result across the runtime `k_iters` loop.
 ## 7. Conclusions & Findings
 
 - **Overall Status**: `REDUCTION_ISOLATED_BUT_TEMPLATE_CONFOUNDED`.
+- **Scope of Conclusion**: The tested Triton source-level constructions v1-v5 did not simultaneously satisfy all pre-registered isolation invariants. This does not establish impossibility for all Triton source programs.
 - **Accumulator Elimination**: Criterion I is `PASS`. All per-iteration FP32 accumulator adds were eliminated.
 - **Reduction Placement**: Criterion H is `PASS`.
 - **Residency & Occupancy Status**: Criterion N is `PASS`. 

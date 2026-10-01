@@ -1333,7 +1333,7 @@ def validate():
         print("  Verified Phase 3 Step B v4 preloaded runtime-loop isolation (0 tile loads inside loop, residency & accumulator confounds recorded).")
 
     # Check 18: Phase 3 Step B v5 Preloaded-Register Last-Result Carry Feasibility
-    print("[18/18] Validating Phase 3 Step B v5 last-result runtime-K feasibility...")
+    print("[18/19] Validating Phase 3 Step B v5 last-result runtime-K feasibility...")
     v5_dir = phase3_dir / "v5_preloaded_k"
     v5_design_path = v5_dir / "design.md"
     v5_val_path = v5_dir / "validation.json"
@@ -1495,6 +1495,118 @@ def validate():
 
         print("  Verified Phase 3 Step B v5 last-result runtime-loop isolation (0 accumulator adds, residency matched, template confound recorded).")
 
+    # Check 19: Phase 3 Step C Gluon Canonical Structural Reproduction
+    print("[19/19] Validating Phase 3 Step C Gluon canonical structural reproduction...")
+    gluon_dir = phase3_dir / "gluon_reproduction"
+    gluon_design_path = gluon_dir / "design.md"
+    gluon_val_path = gluon_dir / "validation.json"
+    gluon_res_path = gluon_dir / "results.json"
+    gluon_sum_path = gluon_dir / "summary.md"
+    gluon_arts_dir = gluon_dir / "artifacts"
+    gluon_raw_path = gluon_dir / "raw_results.json"
+
+    if not gluon_design_path.exists():
+        errors.append(f"Missing {gluon_design_path}")
+    if not gluon_val_path.exists():
+        errors.append(f"Missing {gluon_val_path}")
+    if not gluon_res_path.exists():
+        errors.append(f"Missing {gluon_res_path}")
+    if not gluon_sum_path.exists():
+        errors.append(f"Missing {gluon_sum_path}")
+    if not gluon_arts_dir.exists():
+        errors.append(f"Missing {gluon_arts_dir}")
+    if not gluon_raw_path.exists():
+        errors.append(f"Missing {gluon_raw_path}")
+
+    if gluon_val_path.exists() and gluon_res_path.exists() and gluon_raw_path.exists() and gluon_arts_dir.exists():
+        gluon_val_data = json.loads(gluon_val_path.read_text(encoding="utf-8"))
+        gluon_res_data = json.loads(gluon_res_path.read_text(encoding="utf-8"))
+        gluon_raw_data = json.loads(gluon_raw_path.read_text(encoding="utf-8"))
+
+        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
+        expected_candidates = ["default", "4"]
+
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                art_prefix = gluon_arts_dir / cfg / cand
+                for ext in [".ptx", ".ttgir", ".sass", ".resource.txt", ".cubin.sha256"]:
+                    f_path = art_prefix.with_suffix(ext) if ext != ".cubin.sha256" else gluon_arts_dir / cfg / f"{cand}.cubin.sha256"
+                    if not f_path.exists() or f_path.stat().st_size == 0:
+                        errors.append(f"Missing or empty Gluon artifact: {f_path}")
+
+                cand_data = gluon_raw_data.get("configurations", {}).get(cfg, {}).get(cand, {})
+                c_sha = cand_data.get("cubin_sha256")
+                sha_file_path = gluon_arts_dir / cfg / f"{cand}.cubin.sha256"
+                if sha_file_path.exists():
+                    f_sha = sha_file_path.read_text(encoding="utf-8").strip()
+                    if f_sha != c_sha:
+                        errors.append(f"CUBIN sha mismatch for Gluon {cfg} {cand}: file={f_sha} vs raw={c_sha}")
+
+                # 19.1 Numerical correctness
+                corr = cand_data.get("correctness", {})
+                if not corr.get("passed", False):
+                    errors.append(f"Numerical correctness failed in Gluon for {cfg} {cand}")
+
+                # 19.2 Zero spills
+                res = cand_data.get("resources", {})
+                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
+                    errors.append(f"Non-zero spill in Gluon {cfg} {cand}: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
+
+                # 19.3 TTGIR layout matches canonical
+                ttgir_text = (gluon_arts_dir / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                canon_ttgir_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+
+                cb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", canon_ttgir_text)
+                vb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", ttgir_text)
+                cb = re.sub(r"#blocked\d*", "#blocked", cb_m.group(1)) if cb_m else None
+                vb = re.sub(r"#blocked\d*", "#blocked", vb_m.group(1)) if vb_m else None
+                if cb != vb:
+                    errors.append(f"Criterion A failure: layout mismatch for Gluon {cfg} {cand}: {vb} vs {cb}")
+
+                cs_m = re.search(r"(#shared\d*\s*=\s*#ttg\.nvmma_shared<[^>]+>)", canon_ttgir_text)
+                vs_m = re.search(r"(#shared\d*\s*=\s*#ttg\.nvmma_shared<[^>]+>)", ttgir_text)
+                cs = re.sub(r"#shared\d*", "#shared", cs_m.group(1)) if cs_m else None
+                vs = re.sub(r"#shared\d*", "#shared", vs_m.group(1)) if vs_m else None
+                if cs != vs:
+                    errors.append(f"Criterion B failure: shared layout mismatch for Gluon {cfg} {cand}: {vs} vs {cs}")
+
+                # 19.4 TMA count == 1
+                tma_count = len(re.findall(r"ttng\.async_tma_copy_global_to_local", ttgir_text))
+                if tma_count != 1:
+                    errors.append(f"Criterion C failure: TMA count != 1 for Gluon {cfg} {cand} (got {tma_count})")
+
+                # 19.5 LocalLoad check
+                eval_info = gluon_val_data.get("evaluations", {}).get(cfg, {}).get(cand, {})
+                ll_info = eval_info.get("localload", {})
+                if not ll_info.get("matched", False):
+                    errors.append(f"Criterion D failure: LocalLoad mismatch in Gluon {cfg} {cand}: {ll_info.get('actual')} vs {ll_info.get('expected')}")
+
+                # 19.6 Reduction equivalence check
+                red_info = eval_info.get("reduction_equivalence", {})
+                if not red_info.get("matched", False):
+                    errors.append(f"Criterion E failure: reduction fingerprint mismatch in Gluon {cfg} {cand}")
+
+        # 19.7 Same-config residency match
+        w8_def_occ = gluon_val_data["evaluations"]["M32_N64_w8"]["default"]["occupancy"]
+        w8_c4_occ = gluon_val_data["evaluations"]["M32_N64_w8"]["4"]["occupancy"]
+        if w8_def_occ["blocks_per_sm_actual_smem"] != 8 or w8_c4_occ["blocks_per_sm_actual_smem"] != 8:
+            errors.append(f"Expected 8 blocks/SM for Gluon M32_N64_w8 default and cand4, got {w8_def_occ['blocks_per_sm_actual_smem']} and {w8_c4_occ['blocks_per_sm_actual_smem']}")
+
+        w4_def_occ = gluon_val_data["evaluations"]["M32_N128_w4"]["default"]["occupancy"]
+        w4_c4_occ = gluon_val_data["evaluations"]["M32_N128_w4"]["4"]["occupancy"]
+        if w4_def_occ["blocks_per_sm_actual_smem"] != 16 or w4_c4_occ["blocks_per_sm_actual_smem"] != 16:
+            errors.append(f"Expected 16 blocks/SM for Gluon M32_N128_w4 default and cand4, got {w4_def_occ['blocks_per_sm_actual_smem']} and {w4_c4_occ['blocks_per_sm_actual_smem']}")
+
+        # 19.8 Overall status & criteria
+        if gluon_val_data.get("overall_status") != "GLUON_CANONICAL_REPRODUCTION_SUCCESS":
+            errors.append(f"Expected overall_status == 'GLUON_CANONICAL_REPRODUCTION_SUCCESS', got {gluon_val_data.get('overall_status')}")
+
+        for crit_name, status in gluon_val_data.get("criteria", {}).items():
+            if status != "PASS":
+                errors.append(f"Gluon {crit_name} was not PASS (got {status})")
+
+        print("  Verified Phase 3 Step C Gluon canonical structural reproduction (100% layout, LocalLoad, reduction topology, and occupancy equivalence).")
+
     print("--------------------------------------------------")
     if errors:
         print(f"FAILED with {len(errors)} consistency error(s):")
@@ -1502,7 +1614,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 18 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 19 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 
