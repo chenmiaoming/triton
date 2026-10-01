@@ -59,7 +59,7 @@ base_cuda_image = (
         "PATH": "/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin",
         "TRITON_BUILD_WITH_CLANG_LLD": "true",
         "TRITON_BUILD_WITH_CCACHE": "true",
-        "MAX_JOBS": "8",
+        "MAX_JOBS": "4",
     })
 )
 

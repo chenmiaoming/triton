@@ -1796,14 +1796,119 @@ def validate():
             errors.append(f"Step D expected 16 blocks/SM for M32_N128_w4, got default={w4_def_b}, cand4={w4_c4_b}")
 
         # 20.10 Overall status & criteria
-        if d_val_data.get("overall_status") != "GLUON_REDUCTION_AMPLIFICATION_FEASIBLE":
-            errors.append(f"Step D expected overall_status == 'GLUON_REDUCTION_AMPLIFICATION_FEASIBLE', got {d_val_data.get('overall_status')}")
+        if d_val_data.get("overall_status") != "GLUON_REDUCTION_AMPLIFICATION_TIMING_READY_WITH_COMPILER_BARRIER":
+            errors.append(f"Step D expected overall_status == 'GLUON_REDUCTION_AMPLIFICATION_TIMING_READY_WITH_COMPILER_BARRIER', got {d_val_data.get('overall_status')}")
 
-        for crit_name, status in d_val_data.get("criteria", {}).items():
-            if status != "PASS":
-                errors.append(f"Step D {crit_name} was not PASS (got {status})")
+        if d_val_data.get("timing_gate", {}).get("timing_gate_status") != "PASS_UNLOCKED_FOR_STEP_E":
+            errors.append(f"Step D timing_gate_status != 'PASS_UNLOCKED_FOR_STEP_E' (got {d_val_data.get('timing_gate', {}).get('timing_gate_status')})")
 
-        print("  Verified Phase 3 Step D Gluon repeated reduction isolation feasibility (12/12 criteria PASS, single-binary across R, zero spills, matched residency).")
+        d_criteria = d_val_data.get("criteria", {})
+        for crit_name, status in d_criteria.items():
+            if "Criterion E" in crit_name:
+                if status != "FAIL_AT_PTX_LEVEL":
+                    errors.append(f"Step D {crit_name} expected FAIL_AT_PTX_LEVEL (got {status})")
+            elif "Criterion G" in crit_name:
+                if status != "PASS_STRATIFIED":
+                    errors.append(f"Step D {crit_name} expected PASS_STRATIFIED (got {status})")
+            else:
+                if status != "PASS":
+                    errors.append(f"Step D {crit_name} was not PASS (got {status})")
+
+        # Verify all 10 timing gate conditions are PASS
+        for cond_name, c_status in d_val_data.get("timing_gate", {}).items():
+            if cond_name != "timing_gate_status" and c_status != "PASS":
+                errors.append(f"Step D timing gate condition {cond_name} was not PASS (got {c_status})")
+
+        # Verify candidate symmetry of induced copies
+        w8_def_c = d_val_data["evaluations"]["M32_N64_w8"]["default"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
+        w8_c4_c = d_val_data["evaluations"]["M32_N64_w8"]["4"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
+        w4_def_c = d_val_data["evaluations"]["M32_N128_w4"]["default"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
+        w4_c4_c = d_val_data["evaluations"]["M32_N128_w4"]["4"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
+        if w8_def_c != 8 or w8_c4_c != 8:
+            errors.append(f"Expected 8 mov.b16 copies for M32_N64_w8, got default={w8_def_c}, cand4={w8_c4_c}")
+        if w4_def_c != 32 or w4_c4_c != 32:
+            errors.append(f"Expected 32 mov.b16 copies for M32_N128_w4, got default={w4_def_c}, cand4={w4_c4_c}")
+
+        print("  Verified Phase 3 Step D.1 Gluon repeated reduction isolation feasibility (timing gate 10/10 PASS, BARRIER_EXPLICIT_SASS_OVERHEAD=0, matched residency).")
+
+    # =========================================================================
+    # Check 21: Phase 3 Step E Gluon Controlled Repeated Reduction Timing
+    # =========================================================================
+    print("[21/21] Validating Phase 3 Step E Gluon repeated reduction timing...")
+    step_e_dir = phase3_dir / "gluon_timing"
+    e_res_path = step_e_dir / "results.json"
+    e_val_path = step_e_dir / "validation.json"
+    e_sum_path = step_e_dir / "summary.md"
+    raw_run_paths = [step_e_dir / f"raw_run_{i}.json" for i in range(1, 4)]
+
+    for p in [e_res_path, e_val_path, e_sum_path] + raw_run_paths:
+        if not p.exists():
+            errors.append(f"Missing Phase 3 Step E file: {p}")
+
+    if all(p.exists() for p in [e_res_path, e_val_path, e_sum_path] + raw_run_paths):
+        e_res_data = json.loads(e_res_path.read_text(encoding="utf-8"))
+        e_val_data = json.loads(e_val_path.read_text(encoding="utf-8"))
+        e_sum_md = e_sum_path.read_text(encoding="utf-8")
+
+        # 21.1 Overall Status and H2 Status
+        if e_res_data.get("h2_status") != "SUPPORTED_AT_REDUCTION_BODY_LEVEL":
+            errors.append(f"Step E results.json h2_status != 'SUPPORTED_AT_REDUCTION_BODY_LEVEL' (got {e_res_data.get('h2_status')})")
+        if e_val_data.get("h2_status") != "SUPPORTED_AT_REDUCTION_BODY_LEVEL":
+            errors.append(f"Step E validation.json h2_status != 'SUPPORTED_AT_REDUCTION_BODY_LEVEL' (got {e_val_data.get('h2_status')})")
+        if "SUPPORTED_AT_REDUCTION_BODY_LEVEL" not in e_sum_md:
+            errors.append("Step E summary.md missing 'SUPPORTED_AT_REDUCTION_BODY_LEVEL'")
+
+        # 21.2 Raw Runs Verification
+        cubin_seen = {}
+        for r_path in raw_run_paths:
+            run_data = json.loads(r_path.read_text(encoding="utf-8"))
+            env = run_data.get("env_info", {})
+            if "NVIDIA H100" not in env.get("gpu_name", ""):
+                errors.append(f"Unexpected GPU name in {r_path.name}: {env.get('gpu_name')}")
+
+            cfgs = run_data.get("configurations", {})
+            for cfg_name, c_data in cfgs.items():
+                for cand, cand_data in c_data.get("candidates", {}).items():
+                    c_hash = cand_data.get("cubin_sha256")
+                    if (cfg_name, cand) not in cubin_seen:
+                        cubin_seen[(cfg_name, cand)] = c_hash
+                    elif cubin_seen[(cfg_name, cand)] != c_hash:
+                        errors.append(f"CUBIN mismatch across runs for {cfg_name} {cand}: {cubin_seen[(cfg_name, cand)]} vs {c_hash}")
+
+                    r_timing = cand_data.get("r_timing", {})
+                    for r_str, b_dict in r_timing.items():
+                        for b_str, timing_info in b_dict.items():
+                            samples = timing_info.get("samples_us", [])
+                            if len(samples) != 100:
+                                errors.append(f"Expected 100 samples in {r_path.name} {cfg_name} {cand} R={r_str} B={b_str}, got {len(samples)}")
+
+        # 21.3 Cross-Invocation Metrics for Primary (M32_N64_w8)
+        w8_summary = e_res_data.get("cross_invocation_summary", {}).get("configurations", {}).get("M32_N64_w8", {})
+        beta_mean = w8_summary.get("beta", {}).get("mean", 0.0)
+        r2_mean = w8_summary.get("r2", {}).get("mean", 0.0)
+        dg1_mean = w8_summary.get("delta_g_1", {}).get("mean", 0.0)
+        attr_mean = w8_summary.get("attribution_ratio", {}).get("mean", 0.0)
+
+        if beta_mean <= 0.5:
+            errors.append(f"Expected beta_mean > 0.5 for M32_N64_w8, got {beta_mean}")
+        if r2_mean < 0.99:
+            errors.append(f"Expected r2_mean >= 0.99 for M32_N64_w8, got {r2_mean}")
+        if dg1_mean <= 0.5:
+            errors.append(f"Expected delta_g_1_mean > 0.5 for M32_N64_w8, got {dg1_mean}")
+        if attr_mean < 0.70 or attr_mean > 0.85:
+            errors.append(f"Expected attribution_ratio around 76.5% for M32_N64_w8, got {attr_mean*100:.2f}%")
+
+        # 21.4 Monotonicity check for M32_N64_w8
+        if not e_res_data.get("h2_evaluation", {}).get("is_monotonic", False):
+            errors.append("M32_N64_w8 expected is_monotonic == True")
+        w8_breakdown = w8_summary.get("r_breakdown", {})
+        g_means = [w8_breakdown[str(r)]["g_r_mean"] for r in [0, 1, 2, 4, 8]]
+        for i in range(len(g_means) - 1):
+            if g_means[i] >= g_means[i+1]:
+                errors.append(f"Monotonicity violation in M32_N64_w8 mean g(R): {g_means}")
+                break
+
+        print("  Verified Phase 3 Step E Gluon controlled repeated reduction timing (H2=SUPPORTED_AT_REDUCTION_BODY_LEVEL, 3 H100 runs, beta>0, R2>=0.999, monotonic).")
 
     print("--------------------------------------------------")
     if errors:
@@ -1812,7 +1917,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 20 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 21 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 

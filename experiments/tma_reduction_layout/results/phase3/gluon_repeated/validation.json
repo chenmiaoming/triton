@@ -1,5 +1,5 @@
 {
-  "title": "Phase 3 Step D: Gluon Repeated-Reduction Isolation Audit",
+  "title": "Phase 3 Step D.1: Gluon Repeated-Reduction Isolation Audit",
   "device_limits": {
     "max_threads_per_sm": 2048,
     "max_threads_per_block": 1024,
@@ -12,6 +12,7 @@
   "evaluations": {
     "M32_N64_w8": {
       "default": {
+        "experiment_role": "PRIMARY",
         "cubin_sha256": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b",
         "cubin_invariant_across_r": true,
         "r_cubin_hashes": {
@@ -21,9 +22,18 @@
           "8": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b"
         },
         "structural_decomp": {
+          "experiment_role": "PRIMARY",
           "tma_count": 1,
           "loop_start": 125,
           "loop_end": 364,
+          "backward_branch_count": 1,
+          "backward_branches": [
+            [
+              364,
+              "$L__BB0_2",
+              "@%p11 bra \t$L__BB0_2;"
+            ]
+          ],
           "pre_loop_ll_count": 1,
           "in_loop_ll_count": 0,
           "in_tile_ll_count": 0,
@@ -32,10 +42,48 @@
           "red_inside_loop": true,
           "red_start": 138,
           "red_end": 356,
-          "reduction_match_type": "EXACT_CONTIGUOUS_SUBSEQUENCE",
+          "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
           "terminal_ld_inside": true,
-          "barrier_inst_count": 0,
-          "barrier_instructions": [],
+          "barrier_audit": {
+            "inline_asm_block_count": 2,
+            "input_barrier": {
+              "start_line": 135,
+              "end_line": 136,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 8,
+              "induced_copies": [
+                "mov.b16 \t%rs5, %rs13;",
+                "mov.b16 \t%rs7, %rs15;",
+                "mov.b16 \t%rs2, %rs10;",
+                "mov.b16 \t%rs4, %rs12;",
+                "mov.b16 \t%rs6, %rs14;",
+                "mov.b16 \t%rs1, %rs9;",
+                "mov.b16 \t%rs8, %rs16;",
+                "mov.b16 \t%rs3, %rs11;"
+              ]
+            },
+            "result_sink": {
+              "start_line": 359,
+              "end_line": 360,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 0,
+              "induced_copies": []
+            }
+          },
+          "sass_audit": {
+            "step_c_sass_instruction_count": 192,
+            "step_d_sass_instruction_count": 192,
+            "diff_instruction_count": 0,
+            "loop_start_addr": "0x4a0",
+            "loop_end_addr": "0xaa0",
+            "loop_sass_instruction_count": 97,
+            "loop_body_mov_instructions": [],
+            "attributable_sass_barrier_overhead": 0,
+            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
+            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+          },
           "extra_in_loop_ops": 0
         },
         "resources": {
@@ -57,6 +105,7 @@
         }
       },
       "4": {
+        "experiment_role": "PRIMARY",
         "cubin_sha256": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375",
         "cubin_invariant_across_r": true,
         "r_cubin_hashes": {
@@ -66,9 +115,18 @@
           "8": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375"
         },
         "structural_decomp": {
+          "experiment_role": "PRIMARY",
           "tma_count": 1,
           "loop_start": 124,
           "loop_end": 242,
+          "backward_branch_count": 1,
+          "backward_branches": [
+            [
+              242,
+              "$L__BB0_2",
+              "@%p11 bra \t$L__BB0_2;"
+            ]
+          ],
           "pre_loop_ll_count": 2,
           "in_loop_ll_count": 0,
           "in_tile_ll_count": 0,
@@ -77,10 +135,48 @@
           "red_inside_loop": true,
           "red_start": 139,
           "red_end": 234,
-          "reduction_match_type": "EXACT_CONTIGUOUS_SUBSEQUENCE",
+          "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
           "terminal_ld_inside": true,
-          "barrier_inst_count": 0,
-          "barrier_instructions": [],
+          "barrier_audit": {
+            "inline_asm_block_count": 2,
+            "input_barrier": {
+              "start_line": 134,
+              "end_line": 135,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 8,
+              "induced_copies": [
+                "mov.b16 \t%rs7, %rs15;",
+                "mov.b16 \t%rs2, %rs10;",
+                "mov.b16 \t%rs4, %rs12;",
+                "mov.b16 \t%rs6, %rs14;",
+                "mov.b16 \t%rs1, %rs9;",
+                "mov.b16 \t%rs8, %rs16;",
+                "mov.b16 \t%rs3, %rs11;",
+                "mov.b16 \t%rs5, %rs13;"
+              ]
+            },
+            "result_sink": {
+              "start_line": 237,
+              "end_line": 238,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 0,
+              "induced_copies": []
+            }
+          },
+          "sass_audit": {
+            "step_c_sass_instruction_count": 136,
+            "step_d_sass_instruction_count": 136,
+            "diff_instruction_count": 0,
+            "loop_start_addr": "0x490",
+            "loop_end_addr": "0x720",
+            "loop_sass_instruction_count": 42,
+            "loop_body_mov_instructions": [],
+            "attributable_sass_barrier_overhead": 0,
+            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
+            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+          },
           "extra_in_loop_ops": 0
         },
         "resources": {
@@ -104,6 +200,7 @@
     },
     "M32_N128_w4": {
       "default": {
+        "experiment_role": "SECONDARY_CONTROL",
         "cubin_sha256": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331",
         "cubin_invariant_across_r": true,
         "r_cubin_hashes": {
@@ -113,9 +210,18 @@
           "8": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331"
         },
         "structural_decomp": {
+          "experiment_role": "SECONDARY_CONTROL",
           "tma_count": 1,
           "loop_start": 152,
           "loop_end": 354,
+          "backward_branch_count": 1,
+          "backward_branches": [
+            [
+              354,
+              "$L__BB0_2",
+              "@%p11 bra \t$L__BB0_2;"
+            ]
+          ],
           "pre_loop_ll_count": 4,
           "in_loop_ll_count": 0,
           "in_tile_ll_count": 0,
@@ -124,10 +230,72 @@
           "red_inside_loop": true,
           "red_start": 191,
           "red_end": 346,
-          "reduction_match_type": "CONTIGUOUS_PIPELINED_EQUIVALENCE",
+          "reduction_match_type": "PIPELINED_OPCODE_EQUIVALENT",
           "terminal_ld_inside": true,
-          "barrier_inst_count": 0,
-          "barrier_instructions": [],
+          "barrier_audit": {
+            "inline_asm_block_count": 2,
+            "input_barrier": {
+              "start_line": 186,
+              "end_line": 187,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 32,
+              "induced_copies": [
+                "mov.b16 \t%rs29, %rs61;",
+                "mov.b16 \t%rs10, %rs42;",
+                "mov.b16 \t%rs17, %rs49;",
+                "mov.b16 \t%rs24, %rs56;",
+                "mov.b16 \t%rs5, %rs37;",
+                "mov.b16 \t%rs31, %rs63;",
+                "mov.b16 \t%rs12, %rs44;",
+                "mov.b16 \t%rs19, %rs51;",
+                "mov.b16 \t%rs26, %rs58;",
+                "mov.b16 \t%rs7, %rs39;",
+                "mov.b16 \t%rs14, %rs46;",
+                "mov.b16 \t%rs21, %rs53;",
+                "mov.b16 \t%rs2, %rs34;",
+                "mov.b16 \t%rs28, %rs60;",
+                "mov.b16 \t%rs9, %rs41;",
+                "mov.b16 \t%rs16, %rs48;",
+                "mov.b16 \t%rs23, %rs55;",
+                "mov.b16 \t%rs4, %rs36;",
+                "mov.b16 \t%rs30, %rs62;",
+                "mov.b16 \t%rs11, %rs43;",
+                "mov.b16 \t%rs18, %rs50;",
+                "mov.b16 \t%rs25, %rs57;",
+                "mov.b16 \t%rs6, %rs38;",
+                "mov.b16 \t%rs32, %rs64;",
+                "mov.b16 \t%rs13, %rs45;",
+                "mov.b16 \t%rs20, %rs52;",
+                "mov.b16 \t%rs1, %rs33;",
+                "mov.b16 \t%rs27, %rs59;",
+                "mov.b16 \t%rs8, %rs40;",
+                "mov.b16 \t%rs15, %rs47;",
+                "mov.b16 \t%rs22, %rs54;",
+                "mov.b16 \t%rs3, %rs35;"
+              ]
+            },
+            "result_sink": {
+              "start_line": 349,
+              "end_line": 350,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 0,
+              "induced_copies": []
+            }
+          },
+          "sass_audit": {
+            "step_c_sass_instruction_count": 184,
+            "step_d_sass_instruction_count": 192,
+            "diff_instruction_count": 8,
+            "loop_start_addr": "0x610",
+            "loop_end_addr": "0xa10",
+            "loop_sass_instruction_count": 65,
+            "loop_body_mov_instructions": [],
+            "attributable_sass_barrier_overhead": 0,
+            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
+            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+          },
           "extra_in_loop_ops": 0
         },
         "resources": {
@@ -149,6 +317,7 @@
         }
       },
       "4": {
+        "experiment_role": "SECONDARY_CONTROL",
         "cubin_sha256": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0",
         "cubin_invariant_across_r": true,
         "r_cubin_hashes": {
@@ -158,9 +327,18 @@
           "8": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0"
         },
         "structural_decomp": {
+          "experiment_role": "SECONDARY_CONTROL",
           "tma_count": 1,
           "loop_start": 142,
           "loop_end": 272,
+          "backward_branch_count": 1,
+          "backward_branches": [
+            [
+              272,
+              "$L__BB0_2",
+              "@%p11 bra \t$L__BB0_2;"
+            ]
+          ],
           "pre_loop_ll_count": 8,
           "in_loop_ll_count": 0,
           "in_tile_ll_count": 0,
@@ -169,10 +347,72 @@
           "red_inside_loop": true,
           "red_start": 181,
           "red_end": 264,
-          "reduction_match_type": "EXACT_CONTIGUOUS_SUBSEQUENCE",
+          "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
           "terminal_ld_inside": true,
-          "barrier_inst_count": 0,
-          "barrier_instructions": [],
+          "barrier_audit": {
+            "inline_asm_block_count": 2,
+            "input_barrier": {
+              "start_line": 176,
+              "end_line": 177,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 32,
+              "induced_copies": [
+                "mov.b16 \t%rs25, %rs57;",
+                "mov.b16 \t%rs6, %rs38;",
+                "mov.b16 \t%rs32, %rs64;",
+                "mov.b16 \t%rs13, %rs45;",
+                "mov.b16 \t%rs20, %rs52;",
+                "mov.b16 \t%rs1, %rs33;",
+                "mov.b16 \t%rs27, %rs59;",
+                "mov.b16 \t%rs8, %rs40;",
+                "mov.b16 \t%rs15, %rs47;",
+                "mov.b16 \t%rs22, %rs54;",
+                "mov.b16 \t%rs3, %rs35;",
+                "mov.b16 \t%rs29, %rs61;",
+                "mov.b16 \t%rs10, %rs42;",
+                "mov.b16 \t%rs17, %rs49;",
+                "mov.b16 \t%rs24, %rs56;",
+                "mov.b16 \t%rs5, %rs37;",
+                "mov.b16 \t%rs31, %rs63;",
+                "mov.b16 \t%rs12, %rs44;",
+                "mov.b16 \t%rs19, %rs51;",
+                "mov.b16 \t%rs26, %rs58;",
+                "mov.b16 \t%rs7, %rs39;",
+                "mov.b16 \t%rs14, %rs46;",
+                "mov.b16 \t%rs21, %rs53;",
+                "mov.b16 \t%rs2, %rs34;",
+                "mov.b16 \t%rs28, %rs60;",
+                "mov.b16 \t%rs9, %rs41;",
+                "mov.b16 \t%rs16, %rs48;",
+                "mov.b16 \t%rs23, %rs55;",
+                "mov.b16 \t%rs4, %rs36;",
+                "mov.b16 \t%rs30, %rs62;",
+                "mov.b16 \t%rs11, %rs43;",
+                "mov.b16 \t%rs18, %rs50;"
+              ]
+            },
+            "result_sink": {
+              "start_line": 267,
+              "end_line": 268,
+              "explicit_asm_ptx_count": 0,
+              "explicit_instructions": [],
+              "induced_ptx_copy_count": 0,
+              "induced_copies": []
+            }
+          },
+          "sass_audit": {
+            "step_c_sass_instruction_count": 144,
+            "step_d_sass_instruction_count": 144,
+            "diff_instruction_count": 0,
+            "loop_start_addr": "0x5d0",
+            "loop_end_addr": "0x760",
+            "loop_sass_instruction_count": 26,
+            "loop_body_mov_instructions": [],
+            "attributable_sass_barrier_overhead": 0,
+            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
+            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+          },
           "extra_in_loop_ops": 0
         },
         "resources": {
@@ -200,14 +440,27 @@
     "Criterion B (Initial LocalLoad Once Outside Loop, Zero Inside)": "PASS",
     "Criterion C (Runtime R Unspecialized, Single Binary)": "PASS",
     "Criterion D (One Runtime Loop, One Static Canonical Body)": "PASS",
-    "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "PASS",
+    "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "FAIL_AT_PTX_LEVEL",
     "Criterion F (Result Sink Emits Zero Instructions)": "PASS",
-    "Criterion G (Exact Canonical Reduction Fingerprint Inside Loop)": "PASS",
+    "Criterion G (Canonical Reduction Core Topology Equivalence)": "PASS_STRATIFIED",
     "Criterion H (Terminal Canonical ld.shared Remains Inside Loop)": "PASS",
     "Criterion I (Zero Accumulator / Global Store Inside Loop)": "PASS",
     "Criterion J (Same-Config Residency & Occupancy Matched)": "PASS",
     "Criterion K (Zero Local Memory & Stack Spills)": "PASS",
     "Criterion L (Identical CUBIN Across R in {1,2,4,8})": "PASS"
   },
-  "overall_status": "GLUON_REDUCTION_AMPLIFICATION_FEASIBLE"
+  "timing_gate": {
+    "1_m32_n64_w8_default_exact_sequence": "PASS",
+    "2_m32_n64_w8_cand4_exact_sequence": "PASS",
+    "3_input_barrier_ptx_copies_candidate_symmetric": "PASS",
+    "4_no_attributable_additional_sass_barrier_instructions": "PASS",
+    "5_result_sink_no_runtime_sass_overhead": "PASS",
+    "6_blocks_per_sm_matched": "PASS",
+    "7_active_warps_per_sm_matched": "PASS",
+    "8_zero_local_and_stack_spills": "PASS",
+    "9_one_cubin_per_candidate": "PASS",
+    "10_runtime_r_unspecialized": "PASS",
+    "timing_gate_status": "PASS_UNLOCKED_FOR_STEP_E"
+  },
+  "overall_status": "GLUON_REDUCTION_AMPLIFICATION_TIMING_READY_WITH_COMPILER_BARRIER"
 }
