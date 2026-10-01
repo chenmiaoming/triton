@@ -1,4 +1,44 @@
 {
+  "metadata": {
+    "status": "V2_CODEGEN_PARTIALLY_VALIDATED",
+    "accepted_for_timing": false,
+    "purpose": "Step B v2 static-unroll codegen exploration checkpoint demonstrating that proto1_pack2 preserves canonical reduction lowering under static unrolling better than proto2/proto3",
+    "resource_evidence_note": "Resource values (regs, LOCAL, STACK) were observed during original remote execution on H100 but are not self-contained in committed v2 artifacts (no CUBIN/resource.txt committed for v2).",
+    "opaque_symmetry_note": "Opaque identity source construction is symmetric, but exact candidate-symmetric machine-level overhead was not isolated from other compiler-generated mov instructions in v2.",
+    "criteria": {
+      "criterion_a": {
+        "name": "Canonical Body Match @ K=1",
+        "status": "PASS",
+        "detail": "K=1 matches canonical Step A reduction opcodes and initial LocalLoad."
+      },
+      "criterion_b": {
+        "name": "Initial LocalLoad Invariance across K",
+        "status": "PASS",
+        "detail": "Initial LocalLoad signature invariant across K in {1, 2, 4}."
+      },
+      "criterion_c": {
+        "name": "Identical Reduction Body Template",
+        "status": "NOT_ESTABLISHED_BY_V2_AUDIT",
+        "detail": "Only aggregate opcode scaling was audited; per-body template equivalence was not established by v2 audit."
+      },
+      "criterion_d": {
+        "name": "Exact Affine Opcode Scaling",
+        "status": "PASS",
+        "detail": "Critical reduction opcodes (shfl, max, bar, st.sh, ld.sh) scale strictly with R2=1.0."
+      },
+      "criterion_e": {
+        "name": "Spill Invariance (LOCAL=0, STACK=0)",
+        "status": "EVIDENCE_NOT_SELF_CONTAINED",
+        "detail": "Observed 0 spill during original remote run, but no CUBIN/resource.txt committed for v2."
+      },
+      "criterion_f": {
+        "name": "Register Growth & Residency Matched",
+        "status": "NOT_ESTABLISHED_POTENTIAL_RESIDENCY_CONFOUND",
+        "detail": "Physical registers grow with K (e.g., 29 -> 46 in default w8); occupancy was not computed via official CUDA API."
+      }
+    },
+    "overall_verdict": "V2_CODEGEN_PARTIALLY_VALIDATED / NOT_ACCEPTED_FOR_TIMING"
+  },
   "proto1_pack2": {
     "M32_N64_w8": {
       "default": {

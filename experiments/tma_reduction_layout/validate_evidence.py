@@ -847,8 +847,8 @@ def validate():
 
         print("  Verified Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.")
 
-    # Check 15: Phase 3 Step B: Reduction-Communication Amplification Microbenchmark
-    print("[15/15] Validating Phase 3 reduction amplification microbenchmark (H2 isolation)...")
+    # Check 15: Phase 3 Step B v1 confounded benchmark evidence
+    print("[15/16] Validating Phase 3 Step B v1 confounded benchmark evidence...")
     mb_dir = phase3_dir / "microbench_reduction"
     mb_design_path = mb_dir / "design.md"
     mb_val_path = mb_dir / "validation.json"
@@ -1049,7 +1049,101 @@ def validate():
         if "fitted K-axis intercept; no physical attribution" not in act_sum_md:
             errors.append("summary.md missing fitted K-axis intercept note")
 
-        print("  Verified Phase 3 reduction amplification microbenchmark (H2 isolation, codegen invariance, telemetry, slope recomputation, canonical MD).")
+        print("  Verified Phase 3 Step B v1 confounded benchmark evidence (confound classification, LocalLoad divergence, telemetry, canonical MD).")
+
+    # Check 16: Phase 3 Step B v3 Single-Binary Runtime-K Feasibility
+    print("[16/16] Validating Phase 3 Step B v3 single-binary runtime-K feasibility...")
+    v3_dir = phase3_dir / "v3_runtime_k"
+    v3_design_path = v3_dir / "design.md"
+    v3_val_path = v3_dir / "validation.json"
+    v3_res_path = v3_dir / "results.json"
+    v3_sum_path = v3_dir / "summary.md"
+    v3_arts_dir = v3_dir / "artifacts"
+    v3_raw_path = v3_dir / "raw_results.json"
+
+    if not v3_design_path.exists():
+        errors.append(f"Missing {v3_design_path}")
+    if not v3_val_path.exists():
+        errors.append(f"Missing {v3_val_path}")
+    if not v3_res_path.exists():
+        errors.append(f"Missing {v3_res_path}")
+    if not v3_sum_path.exists():
+        errors.append(f"Missing {v3_sum_path}")
+    if not v3_arts_dir.exists():
+        errors.append(f"Missing {v3_arts_dir}")
+    if not v3_raw_path.exists():
+        errors.append(f"Missing {v3_raw_path}")
+
+    if v3_val_path.exists() and v3_res_path.exists() and v3_raw_path.exists() and v3_arts_dir.exists():
+        v3_val_data = json.loads(v3_val_path.read_text(encoding="utf-8"))
+        v3_res_data = json.loads(v3_res_path.read_text(encoding="utf-8"))
+        v3_raw_data = json.loads(v3_raw_path.read_text(encoding="utf-8"))
+
+        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
+        expected_candidates = ["default", "4"]
+
+        # 16.1 Artifact completeness & non-empty content validation
+        for cfg in expected_configs:
+            for cand in expected_candidates:
+                cand_data = v3_raw_data.get(cfg, {}).get(cand, {})
+                cubin_sha = cand_data.get("cubin_sha256", "")
+                if not cubin_sha or len(cubin_sha) != 64:
+                    errors.append(f"Invalid cubin_sha256 for {cfg} {cand}: {cubin_sha}")
+
+                for ext in ["ptx", "ttgir", "sass", "resource.txt", "cubin.sha256"]:
+                    art_file = v3_arts_dir / cfg / f"{cand}.{ext}"
+                    if not art_file.exists():
+                        errors.append(f"Missing v3 artifact: {art_file}")
+                    else:
+                        content = art_file.read_text(encoding="utf-8").strip()
+                        if not content:
+                            errors.append(f"Empty v3 artifact: {art_file}")
+                        if ext == "cubin.sha256" and content != cubin_sha:
+                            errors.append(f"cubin.sha256 mismatch for {cfg} {cand}: {content} vs {cubin_sha}")
+
+                # 16.2 Single-binary reuse & no runtime K specialization
+                spec_check = cand_data.get("specialization_check", {})
+                if spec_check.get("runtime_k_specialized") is not False:
+                    errors.append(f"Expected runtime_k_specialized == False for {cfg} {cand}")
+                if spec_check.get("initial_cache_len") != 1 or spec_check.get("final_cache_len") != 1:
+                    errors.append(f"Cache len changed across K in {cfg} {cand}: initial={spec_check.get('initial_cache_len')}, final={spec_check.get('final_cache_len')}")
+
+                # 16.3 Runtime loop verification
+                loop_check = cand_data.get("runtime_loop", {})
+                if not loop_check.get("ttgir_has_scf_for"):
+                    errors.append(f"Missing scf.for in TTGIR for {cfg} {cand}")
+                if not loop_check.get("ptx_has_loop_branch"):
+                    errors.append(f"Missing loop branch in PTX for {cfg} {cand}")
+                if not loop_check.get("sass_has_bra"):
+                    errors.append(f"Missing BRA in SASS for {cfg} {cand}")
+                if not loop_check.get("runtime_loop_detected"):
+                    errors.append(f"runtime_loop_detected == False for {cfg} {cand}")
+
+                # 16.4 Numerical correctness
+                corr_check = cand_data.get("correctness", {})
+                if not corr_check.get("all_passed"):
+                    errors.append(f"Correctness failed for {cfg} {cand}")
+
+                # 16.5 Spill checks
+                res = cand_data.get("resources", {})
+                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
+                    errors.append(f"Non-zero spill in {cfg} {cand}: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
+
+        # 16.6 Confound classification & criteria verification
+        if v3_val_data.get("overall_status") != "V3_CODEGEN_CONFOUNDED_NOT_ACCEPTED_FOR_TIMING":
+            errors.append(f"Expected overall_status == 'V3_CODEGEN_CONFOUNDED_NOT_ACCEPTED_FOR_TIMING', got {v3_val_data.get('overall_status')}")
+
+        crit = v3_val_data.get("criteria", {})
+        if crit.get("Criterion A (TMA Descriptor Load Invariant)") != "PASS":
+            errors.append("Criterion A was not PASS")
+        if crit.get("Criterion B (Initial LocalLoad Invariant)") != "FAIL_LOCAL_LOAD_SUNK_INTO_LOOP":
+            errors.append("Criterion B was not FAIL_LOCAL_LOAD_SUNK_INTO_LOOP")
+        if crit.get("Criterion C (Reduction Body Template Invariant)") != "FAIL_TEMPLATE_CONFOUNDED_BY_LOCAL_LOAD":
+            errors.append("Criterion C was not FAIL_TEMPLATE_CONFOUNDED_BY_LOCAL_LOAD")
+        if crit.get("Criterion F (Residency & Occupancy Matched)") != "FAIL_RESIDENCY_DISPARITY":
+            errors.append("Criterion F was not FAIL_RESIDENCY_DISPARITY")
+
+        print("  Verified Phase 3 Step B v3 single-binary runtime-K feasibility (loop presence, single CUBIN, residency disparity & LocalLoad confounds recorded).")
 
     print("--------------------------------------------------")
     if errors:
@@ -1058,7 +1152,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 15 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 16 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 
