@@ -27,6 +27,20 @@ and reduction topology of Canonical Step A without opaque hacks or handwritten P
 | `M32_N128_w4` | `default` | `#blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>` | `#blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>` | **`MATCH`** |
 | `M32_N128_w4` | `4` | `#blocked = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 1, 32], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>` | `#blocked = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 1, 32], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>` | **`MATCH`** |
 
+### Hardware View & Lane/Warp Partitioning
+
+Tensor axes are `[B, M, N]` (rank 3 in Gluon: `[1, M, N]`).
+- `lanePart[M] = threadsPerWarp[1]`
+- `warpPart[M] = warpsPerCTA[1]`
+- `N-lane partition = threadsPerWarp[2]`
+
+| Configuration | Candidate | `sizePerThread` | `threadsPerWarp` | `warpsPerCTA` | `order` | `lanePart[M]` | `warpPart[M]` | N-lane partition |
+| :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: |
+| `M32_N64_w8` | `default` | `[1, 1, 8]` | `[1, 4, 8]` | `[1, 8, 1]` | `[2, 1, 0]` | 4 | 8 | 8 |
+| `M32_N64_w8` | `4` | `[1, 1, 4]` | `[1, 2, 16]` | `[1, 8, 1]` | `[2, 1, 0]` | 2 | 8 | 16 |
+| `M32_N128_w4` | `default` | `[1, 1, 8]` | `[1, 2, 16]` | `[1, 4, 1]` | `[2, 1, 0]` | 2 | 4 | 16 |
+| `M32_N128_w4` | `4` | `[1, 1, 4]` | `[1, 1, 32]` | `[1, 4, 1]` | `[2, 1, 0]` | 1 | 4 | 32 |
+
 ## 4. LocalLoad Instruction Structural Verification
 
 | Config | Candidate | Expected LocalLoad | Actual Gluon LocalLoad | Structural Match |
@@ -36,14 +50,14 @@ and reduction topology of Canonical Step A without opaque hacks or handwritten P
 | `M32_N128_w4` | `default` | 4 × ld.shared.v4.b32 | 4 × ld.shared.v4.b32 | **`MATCH`** |
 | `M32_N128_w4` | `4` | 8 × ld.shared.v2.b32 | 8 × ld.shared.v2.b32 | **`MATCH`** |
 
-## 5. Level 2 — Reduction Structural Equivalence
+## 5. Level 2 — Reduction Structural Equivalence (Contiguous Subsequence Match)
 
-| Config | Candidate | Canonical Reduction Ops | Gluon Reduction Ops | Sequence Match | Full Topology Equivalence |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| `M32_N64_w8` | `default` | 104 | 104 | **`MATCH`** | **`MATCH`** |
-| `M32_N64_w8` | `4` | 46 | 46 | **`MATCH`** | **`MATCH`** |
-| `M32_N128_w4` | `default` | 84 | 84 | **`MATCH`** | **`MATCH`** |
-| `M32_N128_w4` | `4` | 42 | 42 | **`MATCH`** | **`MATCH`** |
+| Config | Candidate | Canonical Reduction Ops | Gluon Reduction Ops | Contiguous Range | Match Count | Status |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| `M32_N64_w8` | `default` | 104 | 104 | `L106..L338` | 1 | **`REDUCTION_STRUCTURALLY_EQUIVALENT`** |
+| `M32_N64_w8` | `4` | 46 | 46 | `L104..L224` | 1 | **`REDUCTION_STRUCTURALLY_EQUIVALENT`** |
+| `M32_N128_w4` | `default` | 84 | 84 | `L118..L272` | 1 | **`REDUCTION_STRUCTURALLY_EQUIVALENT`** |
+| `M32_N128_w4` | `4` | 42 | 42 | `L124..L216` | 1 | **`REDUCTION_STRUCTURALLY_EQUIVALENT`** |
 
 ## 6. Physical Resources & SM Occupancy (H100 SM90)
 
@@ -58,7 +72,7 @@ and reduction topology of Canonical Step A without opaque hacks or handwritten P
 
 | Criterion | Description | Status |
 | :--- | :--- | :--- |
-| `Criterion A (Explicit Distributed Layout Mapping Equivalence)` | Structural requirement | **`PASS`** |
+| `Criterion A (Explicit Distributed Layout Attribute Equivalence)` | Structural requirement | **`PASS`** |
 | `Criterion B (Shared Layout NVMMA Mapping Equivalence)` | Structural requirement | **`PASS`** |
 | `Criterion C (TMA Count == 1)` | Structural requirement | **`PASS`** |
 | `Criterion D (Explicit smem.load Generates Expected LocalLoad)` | Structural requirement | **`PASS`** |

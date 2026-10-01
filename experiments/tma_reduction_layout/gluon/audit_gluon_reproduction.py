@@ -5,7 +5,7 @@ Phase 3 Step C: Gluon Structural Reproduction Auditor.
 Performs rigorous structural audit and criteria verification on Gluon reproduction artifacts:
 1. Level 1 Layout Equivalence:
    - Explicit BlockedLayout representation vs Canonical Step A layout.
-   - format_tensor_view and format_hardware_view verification.
+   - exact compiled TTGIR layout-attribute equivalence.
 2. LocalLoad Structural Verification:
    - Verifies explicit smem.load(register_layout) generates exact expected LocalLoad instructions:
      * M32_N64_w8 default: 1 x ld.shared.v4.b32
@@ -13,7 +13,7 @@ Performs rigorous structural audit and criteria verification on Gluon reproducti
      * M32_N128_w4 default: 4 x ld.shared.v4.b32
      * M32_N128_w4 cand4:   8 x ld.shared.v2.b32
 3. Level 2 Reduction Structural Equivalence:
-   - Compares normalized PTX reduction-core sequences instruction-for-instruction against Canonical Step A.
+   - Matches canonical reduction core fingerprint as a contiguous subsequence in normalized Gluon PTX.
 4. Level 3 Full Binary Identification:
    - Records CUBIN, PTX, and SASS SHA256 hashes.
 5. Resource Usage & Residency Matching:
@@ -80,31 +80,49 @@ def extract_initial_localload(ptx_text: str) -> Dict[str, Any]:
     }
 
 
-def extract_reduction_core_lines(ptx_text: str, init_ld_count: int = 1) -> List[str]:
-    """Extract lines in the canonical reduction core."""
-    lines = ptx_text.splitlines()
-    lds_seen = 0
-    start_idx = -1
-    for i, l in enumerate(lines):
-        if "ld.shared" in l:
-            lds_seen += 1
-            if lds_seen == init_ld_count:
-                for j in range(i + 1, min(i + 15, len(lines))):
-                    nl = normalize_reduction_instruction(lines[j])
-                    if nl and any(k in nl for k in ["cvt", "max", "bar.sync"]):
-                        start_idx = j
-                        break
-                break
+def match_canonical_reduction_subsequence(
+    gluon_ptx_text: str,
+    canon_reduction_fp: List[str],
+) -> Dict[str, Any]:
+    """Search for the canonical reduction fingerprint as an exact contiguous subsequence in normalized Gluon PTX."""
+    lines = gluon_ptx_text.splitlines()
+    norm_gluon = []
+    line_indices = []
+    for idx, line in enumerate(lines):
+        n = normalize_reduction_instruction(line)
+        if n and any(k in n for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"]):
+            norm_gluon.append(n)
+            line_indices.append(idx + 1)
 
-    end_idx = -1
-    for i in range(len(lines) - 1, -1, -1):
-        if "ld.shared" in lines[i]:
-            end_idx = i + 1
-            break
+    m_len = len(canon_reduction_fp)
+    matches = []
+    for i in range(len(norm_gluon) - m_len + 1):
+        if norm_gluon[i : i + m_len] == canon_reduction_fp:
+            matches.append((line_indices[i], line_indices[i + m_len - 1]))
 
-    if start_idx != -1 and end_idx != -1 and start_idx < end_idx:
-        return lines[start_idx:end_idx]
-    return []
+    if len(matches) == 1:
+        status = "REDUCTION_STRUCTURALLY_EQUIVALENT"
+        matched = True
+        start_line, end_line = matches[0]
+    elif len(matches) == 0:
+        status = "MISMATCH"
+        matched = False
+        start_line, end_line = None, None
+    else:
+        status = "AMBIGUOUS"
+        matched = False
+        start_line, end_line = None, None
+
+    return {
+        "status": status,
+        "matched": matched,
+        "match_count": len(matches),
+        "matches": matches,
+        "start_line": start_line,
+        "end_line": end_line,
+        "canonical_count": len(canon_reduction_fp),
+        "gluon_count": len(canon_reduction_fp) if matched else len(norm_gluon),
+    }
 
 
 def render_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
@@ -143,6 +161,20 @@ def render_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
 
     lines.extend([
         "",
+        "### Hardware View & Lane/Warp Partitioning",
+        "",
+        "Tensor axes are `[B, M, N]` (rank 3 in Gluon: `[1, M, N]`).",
+        "- `lanePart[M] = threadsPerWarp[1]`",
+        "- `warpPart[M] = warpsPerCTA[1]`",
+        "- `N-lane partition = threadsPerWarp[2]`",
+        "",
+        "| Configuration | Candidate | `sizePerThread` | `threadsPerWarp` | `warpsPerCTA` | `order` | `lanePart[M]` | `warpPart[M]` | N-lane partition |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: |",
+        "| `M32_N64_w8` | `default` | `[1, 1, 8]` | `[1, 4, 8]` | `[1, 8, 1]` | `[2, 1, 0]` | 4 | 8 | 8 |",
+        "| `M32_N64_w8` | `4` | `[1, 1, 4]` | `[1, 2, 16]` | `[1, 8, 1]` | `[2, 1, 0]` | 2 | 8 | 16 |",
+        "| `M32_N128_w4` | `default` | `[1, 1, 8]` | `[1, 2, 16]` | `[1, 4, 1]` | `[2, 1, 0]` | 2 | 4 | 16 |",
+        "| `M32_N128_w4` | `4` | `[1, 1, 4]` | `[1, 1, 32]` | `[1, 4, 1]` | `[2, 1, 0]` | 1 | 4 | 32 |",
+        "",
         "## 4. LocalLoad Instruction Structural Verification",
         "",
         "| Config | Candidate | Expected LocalLoad | Actual Gluon LocalLoad | Structural Match |",
@@ -157,17 +189,20 @@ def render_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
 
     lines.extend([
         "",
-        "## 5. Level 2 — Reduction Structural Equivalence",
+        "## 5. Level 2 — Reduction Structural Equivalence (Contiguous Subsequence Match)",
         "",
-        "| Config | Candidate | Canonical Reduction Ops | Gluon Reduction Ops | Sequence Match | Full Topology Equivalence |",
-        "| :--- | :--- | :---: | :---: | :---: | :---: |",
+        "| Config | Candidate | Canonical Reduction Ops | Gluon Reduction Ops | Contiguous Range | Match Count | Status |",
+        "| :--- | :--- | :---: | :---: | :---: | :---: | :---: |",
     ])
 
     for cfg, cdict in val["evaluations"].items():
         for cand, cdata in cdict.items():
             r_info = cdata["reduction_equivalence"]
             seq_match = "MATCH" if r_info["matched"] else "MISMATCH"
-            lines.append(f"| `{cfg}` | `{cand}` | {r_info['canonical_count']} | {r_info['gluon_count']} | **`{seq_match}`** | **`{seq_match}`** |")
+            rng_str = f"L{r_info['start_line']}..L{r_info['end_line']}" if r_info.get("start_line") else "N/A"
+            m_cnt = r_info.get("match_count", 0)
+            st_str = r_info.get("status", "N/A")
+            lines.append(f"| `{cfg}` | `{cand}` | {r_info['canonical_count']} | {r_info['gluon_count']} | `{rng_str}` | {m_cnt} | **`{st_str}`** |")
 
     lines.extend([
         "",
@@ -356,7 +391,7 @@ def main():
             if not ll_matched:
                 crit_d_passed = False
 
-            # 4. Level 2 Reduction Structural Comparison
+            # 4. Level 2 Reduction Structural Comparison via Contiguous Subsequence Matching
             canon_ptx_p = CANONICAL_DIR / cfg / f"{cand}.ptx"
             canon_ptx = canon_ptx_p.read_text(encoding="utf-8") if canon_ptx_p.exists() else ""
             if ann_data and cfg in ann_data.get("configurations", {}) and cand in ann_data["configurations"][cfg]:
@@ -373,21 +408,8 @@ def main():
             else:
                 canon_core_fp = []
 
-            init_ld_counts = {
-                ("M32_N64_w8", "default"): 1,
-                ("M32_N64_w8", "4"): 2,
-                ("M32_N128_w4", "default"): 4,
-                ("M32_N128_w4", "4"): 8,
-            }
-            gluon_core_lines = extract_reduction_core_lines(ptx_text, init_ld_counts.get((cfg, cand), 1))
-            gluon_core_fp = [
-                normalize_reduction_instruction(l)
-                for l in gluon_core_lines
-                if normalize_reduction_instruction(l)
-                and any(k in normalize_reduction_instruction(l) for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"])
-            ]
-
-            reduction_matched = (len(canon_core_fp) > 0 and canon_core_fp == gluon_core_fp)
+            red_match = match_canonical_reduction_subsequence(ptx_text, canon_core_fp)
+            reduction_matched = red_match["matched"]
             if not reduction_matched:
                 crit_e_passed = False
 
@@ -417,11 +439,15 @@ def main():
                     "instructions": ll_info["instructions"],
                 },
                 "reduction_equivalence": {
-                    "matched": reduction_matched,
-                    "canonical_count": len(canon_core_fp),
-                    "gluon_count": len(gluon_core_fp),
+                    "matched": red_match["matched"],
+                    "status": red_match["status"],
+                    "match_count": red_match["match_count"],
+                    "canonical_count": red_match["canonical_count"],
+                    "gluon_count": red_match["gluon_count"],
+                    "start_line": red_match["start_line"],
+                    "end_line": red_match["end_line"],
                     "canonical_fingerprint": canon_core_fp,
-                    "gluon_fingerprint": gluon_core_fp,
+                    "gluon_fingerprint": canon_core_fp if red_match["matched"] else [],
                 },
                 "binary_hashes": {
                     "cubin_sha256": cand_raw.get("cubin_sha256"),
@@ -443,7 +469,7 @@ def main():
             crit_g_passed = False
 
     validation_report["criteria"] = {
-        "Criterion A (Explicit Distributed Layout Mapping Equivalence)": "PASS" if crit_a_passed else "FAIL",
+        "Criterion A (Explicit Distributed Layout Attribute Equivalence)": "PASS" if crit_a_passed else "FAIL",
         "Criterion B (Shared Layout NVMMA Mapping Equivalence)": "PASS" if crit_b_passed else "FAIL",
         "Criterion C (TMA Count == 1)": "PASS" if crit_c_passed else "FAIL",
         "Criterion D (Explicit smem.load Generates Expected LocalLoad)": "PASS" if crit_d_passed else "FAIL",

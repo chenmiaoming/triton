@@ -1,0 +1,213 @@
+{
+  "experiment": "Phase 3 Step D: Gluon Repeated-Reduction Isolation Feasibility",
+  "overall_status": "GLUON_REDUCTION_AMPLIFICATION_FEASIBLE",
+  "device_limits": {
+    "max_threads_per_sm": 2048,
+    "max_threads_per_block": 1024,
+    "max_registers_per_block": 65536,
+    "max_registers_per_sm": 65536,
+    "max_shared_memory_per_sm": 233472,
+    "warp_size": 32,
+    "max_warps_per_sm": 64
+  },
+  "criteria": {
+    "Criterion A (TMA Once Outside Loop)": "PASS",
+    "Criterion B (Initial LocalLoad Once Outside Loop, Zero Inside)": "PASS",
+    "Criterion C (Runtime R Unspecialized, Single Binary)": "PASS",
+    "Criterion D (One Runtime Loop, One Static Canonical Body)": "PASS",
+    "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "PASS",
+    "Criterion F (Result Sink Emits Zero Instructions)": "PASS",
+    "Criterion G (Exact Canonical Reduction Fingerprint Inside Loop)": "PASS",
+    "Criterion H (Terminal Canonical ld.shared Remains Inside Loop)": "PASS",
+    "Criterion I (Zero Accumulator / Global Store Inside Loop)": "PASS",
+    "Criterion J (Same-Config Residency & Occupancy Matched)": "PASS",
+    "Criterion K (Zero Local Memory & Stack Spills)": "PASS",
+    "Criterion L (Identical CUBIN Across R in {1,2,4,8})": "PASS"
+  },
+  "configurations": {
+    "M32_N64_w8": {
+      "default": {
+        "cubin_sha256": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b",
+        "cubin_invariant_across_r": true,
+        "r_cubin_hashes": {
+          "1": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b",
+          "2": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b",
+          "4": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b",
+          "8": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b"
+        },
+        "structural_decomp": {
+          "tma_count": 1,
+          "loop_start": 125,
+          "loop_end": 364,
+          "pre_loop_ll_count": 1,
+          "in_loop_ll_count": 0,
+          "in_tile_ll_count": 0,
+          "in_reduction_ll_count": 4,
+          "post_loop_ll_count": 0,
+          "red_inside_loop": true,
+          "red_start": 138,
+          "red_end": 356,
+          "reduction_match_type": "EXACT_CONTIGUOUS_SUBSEQUENCE",
+          "terminal_ld_inside": true,
+          "barrier_inst_count": 0,
+          "barrier_instructions": [],
+          "extra_in_loop_ops": 0
+        },
+        "resources": {
+          "num_regs": 32,
+          "static_smem_bytes": 1024,
+          "dynamic_smem_bytes": 4104,
+          "local_bytes": 0,
+          "stack_bytes": 0
+        },
+        "occupancy": {
+          "threads_per_block": 256,
+          "warps_per_block": 8,
+          "blocks_per_sm_actual_smem": 8,
+          "blocks_per_sm_zero_dynamic_smem": 8,
+          "active_warps_per_sm": 64
+        },
+        "correctness": {
+          "passed": true
+        }
+      },
+      "4": {
+        "cubin_sha256": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375",
+        "cubin_invariant_across_r": true,
+        "r_cubin_hashes": {
+          "1": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375",
+          "2": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375",
+          "4": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375",
+          "8": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375"
+        },
+        "structural_decomp": {
+          "tma_count": 1,
+          "loop_start": 124,
+          "loop_end": 242,
+          "pre_loop_ll_count": 2,
+          "in_loop_ll_count": 0,
+          "in_tile_ll_count": 0,
+          "in_reduction_ll_count": 2,
+          "post_loop_ll_count": 0,
+          "red_inside_loop": true,
+          "red_start": 139,
+          "red_end": 234,
+          "reduction_match_type": "EXACT_CONTIGUOUS_SUBSEQUENCE",
+          "terminal_ld_inside": true,
+          "barrier_inst_count": 0,
+          "barrier_instructions": [],
+          "extra_in_loop_ops": 0
+        },
+        "resources": {
+          "num_regs": 23,
+          "static_smem_bytes": 1024,
+          "dynamic_smem_bytes": 4104,
+          "local_bytes": 0,
+          "stack_bytes": 0
+        },
+        "occupancy": {
+          "threads_per_block": 256,
+          "warps_per_block": 8,
+          "blocks_per_sm_actual_smem": 8,
+          "blocks_per_sm_zero_dynamic_smem": 8,
+          "active_warps_per_sm": 64
+        },
+        "correctness": {
+          "passed": true
+        }
+      }
+    },
+    "M32_N128_w4": {
+      "default": {
+        "cubin_sha256": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331",
+        "cubin_invariant_across_r": true,
+        "r_cubin_hashes": {
+          "1": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331",
+          "2": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331",
+          "4": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331",
+          "8": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331"
+        },
+        "structural_decomp": {
+          "tma_count": 1,
+          "loop_start": 152,
+          "loop_end": 354,
+          "pre_loop_ll_count": 4,
+          "in_loop_ll_count": 0,
+          "in_tile_ll_count": 0,
+          "in_reduction_ll_count": 4,
+          "post_loop_ll_count": 0,
+          "red_inside_loop": true,
+          "red_start": 191,
+          "red_end": 346,
+          "reduction_match_type": "CONTIGUOUS_PIPELINED_EQUIVALENCE",
+          "terminal_ld_inside": true,
+          "barrier_inst_count": 0,
+          "barrier_instructions": [],
+          "extra_in_loop_ops": 0
+        },
+        "resources": {
+          "num_regs": 32,
+          "static_smem_bytes": 1024,
+          "dynamic_smem_bytes": 8200,
+          "local_bytes": 0,
+          "stack_bytes": 0
+        },
+        "occupancy": {
+          "threads_per_block": 128,
+          "warps_per_block": 4,
+          "blocks_per_sm_actual_smem": 16,
+          "blocks_per_sm_zero_dynamic_smem": 16,
+          "active_warps_per_sm": 64
+        },
+        "correctness": {
+          "passed": true
+        }
+      },
+      "4": {
+        "cubin_sha256": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0",
+        "cubin_invariant_across_r": true,
+        "r_cubin_hashes": {
+          "1": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0",
+          "2": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0",
+          "4": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0",
+          "8": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0"
+        },
+        "structural_decomp": {
+          "tma_count": 1,
+          "loop_start": 142,
+          "loop_end": 272,
+          "pre_loop_ll_count": 8,
+          "in_loop_ll_count": 0,
+          "in_tile_ll_count": 0,
+          "in_reduction_ll_count": 2,
+          "post_loop_ll_count": 0,
+          "red_inside_loop": true,
+          "red_start": 181,
+          "red_end": 264,
+          "reduction_match_type": "EXACT_CONTIGUOUS_SUBSEQUENCE",
+          "terminal_ld_inside": true,
+          "barrier_inst_count": 0,
+          "barrier_instructions": [],
+          "extra_in_loop_ops": 0
+        },
+        "resources": {
+          "num_regs": 24,
+          "static_smem_bytes": 1024,
+          "dynamic_smem_bytes": 8200,
+          "local_bytes": 0,
+          "stack_bytes": 0
+        },
+        "occupancy": {
+          "threads_per_block": 128,
+          "warps_per_block": 4,
+          "blocks_per_sm_actual_smem": 16,
+          "blocks_per_sm_zero_dynamic_smem": 16,
+          "active_warps_per_sm": 64
+        },
+        "correctness": {
+          "passed": true
+        }
+      }
+    }
+  }
+}

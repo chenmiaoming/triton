@@ -1496,7 +1496,7 @@ def validate():
         print("  Verified Phase 3 Step B v5 last-result runtime-loop isolation (0 accumulator adds, residency matched, template confound recorded).")
 
     # Check 19: Phase 3 Step C Gluon Canonical Structural Reproduction
-    print("[19/19] Validating Phase 3 Step C Gluon canonical structural reproduction...")
+    print("[19/20] Validating Phase 3 Step C Gluon canonical structural reproduction...")
     gluon_dir = phase3_dir / "gluon_reproduction"
     gluon_design_path = gluon_dir / "design.md"
     gluon_val_path = gluon_dir / "validation.json"
@@ -1554,6 +1554,7 @@ def validate():
 
                 # 19.3 TTGIR layout matches canonical
                 ttgir_text = (gluon_arts_dir / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
+                ptx_text = (gluon_arts_dir / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
                 canon_ttgir_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
 
                 cb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", canon_ttgir_text)
@@ -1575,16 +1576,85 @@ def validate():
                 if tma_count != 1:
                     errors.append(f"Criterion C failure: TMA count != 1 for Gluon {cfg} {cand} (got {tma_count})")
 
-                # 19.5 LocalLoad check
-                eval_info = gluon_val_data.get("evaluations", {}).get(cfg, {}).get(cand, {})
-                ll_info = eval_info.get("localload", {})
-                if not ll_info.get("matched", False):
-                    errors.append(f"Criterion D failure: LocalLoad mismatch in Gluon {cfg} {cand}: {ll_info.get('actual')} vs {ll_info.get('expected')}")
+                # 19.5 Direct recomputation of LocalLoad from PTX
+                ptx_lines = ptx_text.splitlines()
+                in_ll = False
+                ll_loads = []
+                for l in ptx_lines:
+                    s = l.strip()
+                    if "mbarrier.inval" in s:
+                        in_ll = True
+                        continue
+                    if in_ll:
+                        if "ld.shared" in s:
+                            ll_loads.append(s)
+                        elif "cvt.f32.bf16" in s or "max.bf16" in s or ("bar.sync" in s and ll_loads):
+                            break
 
-                # 19.6 Reduction equivalence check
-                red_info = eval_info.get("reduction_equivalence", {})
-                if not red_info.get("matched", False):
-                    errors.append(f"Criterion E failure: reduction fingerprint mismatch in Gluon {cfg} {cand}")
+                def _norm_inst(inst_str: str) -> str:
+                    s_clean = re.sub(r"^@%p\d+\s+", "", inst_str.strip()).rstrip(";")
+                    parts = s_clean.split(None, 1)
+                    if not parts:
+                        return ""
+                    op = parts[0]
+                    ar = parts[1] if len(parts) > 1 else ""
+                    if "shfl" in op or "bar.sync" in op:
+                        c_ar = re.sub(r"%[a-zA-Z0-9_]+", "", ar)
+                        imms = re.findall(r"(-?\d+|0x[0-9a-fA-F]+)", c_ar)
+                        return f"{op} " + " ".join(imms)
+                    elif any(k in op for k in ["max", "cvt", "st.shared", "ld.shared", "ldmatrix", "selp"]):
+                        return op
+                    else:
+                        return op
+
+                act_ll_str = f"{len(ll_loads)} × {_norm_inst(ll_loads[0])}" if ll_loads else "0"
+                expected_ll_map = {
+                    ("M32_N64_w8", "default"): "1 × ld.shared.v4.b32",
+                    ("M32_N64_w8", "4"): "2 × ld.shared.v2.b32",
+                    ("M32_N128_w4", "default"): "4 × ld.shared.v4.b32",
+                    ("M32_N128_w4", "4"): "8 × ld.shared.v2.b32",
+                }
+                exp_ll_str = expected_ll_map.get((cfg, cand))
+                if act_ll_str != exp_ll_str:
+                    errors.append(f"Criterion D failure: recomputed LocalLoad mismatch for Gluon {cfg} {cand}: act='{act_ll_str}' vs exp='{exp_ll_str}'")
+
+                # 19.6 Direct recomputation of Reduction fingerprint subsequence match
+                ann_path = phase3_dir / "phase3_audited_annotations.json"
+                if ann_path.exists():
+                    ann_data = json.loads(ann_path.read_text(encoding="utf-8"))
+                    phases = ann_data["configurations"][cfg][cand]["phases"]
+                    c_start = phases["thread_local_reduction_arithmetic"]["lines"][0]
+                    c_end = phases["cross_warp_reduction_communication"]["lines"][1]
+                    canon_ptx_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
+                    canon_lines = canon_ptx_text.splitlines()[c_start - 1 : c_end]
+                    canon_fp = [
+                        _norm_inst(l)
+                        for l in canon_lines
+                        if _norm_inst(l)
+                        and any(k in _norm_inst(l) for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"])
+                    ]
+
+                    norm_gluon = []
+                    line_indices = []
+                    for idx, line in enumerate(ptx_lines):
+                        n = _norm_inst(line)
+                        if n and any(k in n for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"]):
+                            norm_gluon.append(n)
+                            line_indices.append(idx + 1)
+
+                    m_len = len(canon_fp)
+                    matches = []
+                    for i in range(len(norm_gluon) - m_len + 1):
+                        if norm_gluon[i : i + m_len] == canon_fp:
+                            matches.append((line_indices[i], line_indices[i + m_len - 1]))
+
+                    if len(matches) != 1:
+                        errors.append(f"Criterion E failure: reduction subsequence match count != 1 for Gluon {cfg} {cand} (got {len(matches)})")
+                    else:
+                        eval_info = gluon_val_data.get("evaluations", {}).get(cfg, {}).get(cand, {})
+                        red_eval = eval_info.get("reduction_equivalence", {})
+                        if red_eval.get("start_line") != matches[0][0] or red_eval.get("end_line") != matches[0][1]:
+                            errors.append(f"Criterion E failure: line range mismatch for Gluon {cfg} {cand}: recomputed {matches[0]} vs val {red_eval.get('start_line')}, {red_eval.get('end_line')}")
 
         # 19.7 Same-config residency match
         w8_def_occ = gluon_val_data["evaluations"]["M32_N64_w8"]["default"]["occupancy"]
@@ -1607,6 +1677,134 @@ def validate():
 
         print("  Verified Phase 3 Step C Gluon canonical structural reproduction (100% layout, LocalLoad, reduction topology, and occupancy equivalence).")
 
+    # Check 20: Phase 3 Step D Gluon Repeated Reduction Isolation Feasibility
+    print("[20/20] Validating Phase 3 Step D Gluon repeated reduction isolation feasibility...")
+    step_d_dir = phase3_dir / "gluon_repeated"
+    d_arts_dir = step_d_dir / "artifacts"
+    d_raw_path = step_d_dir / "raw_results.json"
+    d_val_path = step_d_dir / "validation.json"
+    d_sum_path = step_d_dir / "summary.md"
+
+    if not step_d_dir.exists():
+        errors.append(f"Missing Step D directory: {step_d_dir}")
+    elif not d_raw_path.exists() or not d_val_path.exists() or not d_sum_path.exists():
+        errors.append("Step D missing raw_results.json, validation.json, or summary.md")
+    else:
+        d_raw_data = json.loads(d_raw_path.read_text(encoding="utf-8"))
+        d_val_data = json.loads(d_val_path.read_text(encoding="utf-8"))
+        d_sum_text = d_sum_path.read_text(encoding="utf-8")
+
+        for cfg in ["M32_N64_w8", "M32_N128_w4"]:
+            for cand in ["default", "4"]:
+                art_dir = d_arts_dir / cfg
+                ptx_p = art_dir / f"{cand}.ptx"
+                ttgir_p = art_dir / f"{cand}.ttgir"
+                sass_p = art_dir / f"{cand}.sass"
+                res_p = art_dir / f"{cand}.resource.txt"
+                sha_p = art_dir / f"{cand}.cubin.sha256"
+
+                for p, name in [(ptx_p, "ptx"), (ttgir_p, "ttgir"), (sass_p, "sass"), (res_p, "resource"), (sha_p, "cubin.sha256")]:
+                    if not p.exists() or not p.read_text(encoding="utf-8").strip():
+                        errors.append(f"Step D artifact missing or empty: {p}")
+
+                ptx_lines = ptx_p.read_text(encoding="utf-8").splitlines() if ptx_p.exists() else []
+                ttgir_text = ttgir_p.read_text(encoding="utf-8") if ttgir_p.exists() else ""
+                sass_lines = sass_p.read_text(encoding="utf-8").splitlines() if sass_p.exists() else []
+
+                # 20.1 TTGIR: async_tma_copy_global_to_local == 1
+                tma_ops = re.findall(r"ttng\.async_tma_copy_global_to_local", ttgir_text)
+                if len(tma_ops) != 1:
+                    errors.append(f"Step D {cfg} {cand} TTGIR TMA count != 1 (got {len(tma_ops)})")
+
+                # 20.2 TTGIR: ttg.local_load count outside loop == 1, inside loop == 0
+                ttg_parts = ttgir_text.split("scf.for")
+                ttg_outside = len(re.findall(r"ttg\.local_load", ttg_parts[0])) if ttg_parts else 0
+                ttg_inside = len(re.findall(r"ttg\.local_load", ttg_parts[1])) if len(ttg_parts) > 1 else 0
+                if ttg_outside != 1 or ttg_inside != 0:
+                    errors.append(f"Step D {cfg} {cand} TTGIR local_load error: outside={ttg_outside} (expected 1), inside={ttg_inside} (expected 0)")
+
+                # 20.3 Loop boundaries in PTX
+                l_labels = {}
+                for i, l in enumerate(ptx_lines):
+                    m = re.match(r"^(\$L__BB\d+_\d+):", l.strip())
+                    if m: l_labels[m.group(1)] = i + 1
+                loop_start, loop_end = None, None
+                for i, l in enumerate(ptx_lines):
+                    m = re.search(r"bra(?:\.uni)?\s+(\$L__BB\d+_\d+)", l.strip())
+                    if m and m.group(1) in l_labels and l_labels[m.group(1)] < (i + 1):
+                        loop_start = l_labels[m.group(1)]
+                        loop_end = i + 1
+                        break
+                if not loop_start or not loop_end:
+                    errors.append(f"Step D {cfg} {cand} PTX missing runtime loop")
+
+                # 20.4 PTX: initial LocalLoad count before loop matches canonical
+                exp_pre_ll = {("M32_N64_w8", "default"): 1, ("M32_N64_w8", "4"): 2, ("M32_N128_w4", "default"): 4, ("M32_N128_w4", "4"): 8}[(cfg, cand)]
+                pre_loop_ptx = ptx_lines[:loop_start - 1] if loop_start else []
+                pre_ll_insts = [l for l in pre_loop_ptx if "ld.shared" in l]
+                if len(pre_ll_insts) != exp_pre_ll:
+                    errors.append(f"Step D {cfg} {cand} pre-loop LocalLoad count {len(pre_ll_insts)} != expected {exp_pre_ll}")
+
+                # 20.5 Zero machine instructions for barriers in PTX & SASS
+                loop_ptx = ptx_lines[loop_start - 1 : loop_end] if loop_start and loop_end else []
+                in_asm = False
+                asm_insts = []
+                for l in loop_ptx:
+                    s = l.strip()
+                    if "// begin inline asm" in s:
+                        in_asm = True
+                        continue
+                    if "// end inline asm" in s:
+                        in_asm = False
+                        continue
+                    if in_asm and s and not s.startswith("//") and not s.startswith("."):
+                        asm_insts.append(s)
+                if len(asm_insts) != 0:
+                    errors.append(f"Step D {cfg} {cand} emitted non-zero machine instructions in inline asm: {asm_insts}")
+
+                # 20.6 Canonical reduction inside loop and terminal ld.shared inside loop
+                eval_entry = d_val_data.get("evaluations", {}).get(cfg, {}).get(cand, {})
+                s_decomp = eval_entry.get("structural_decomp", {})
+                if not s_decomp.get("red_inside_loop", False):
+                    errors.append(f"Step D {cfg} {cand} canonical reduction not verified inside loop")
+                if not s_decomp.get("terminal_ld_inside", False):
+                    errors.append(f"Step D {cfg} {cand} terminal ld.shared not inside loop")
+                if s_decomp.get("extra_in_loop_ops", -1) != 0:
+                    errors.append(f"Step D {cfg} {cand} has extra in-loop operations: {s_decomp.get('extra_in_loop_ops')}")
+
+                # 20.7 Single binary across R in {1, 2, 4, 8}
+                if not eval_entry.get("cubin_invariant_across_r", False):
+                    errors.append(f"Step D {cfg} {cand} CUBIN not invariant across R in {1, 2, 4, 8}")
+                r_hashes = eval_entry.get("r_cubin_hashes", {})
+                if len(set(r_hashes.values())) != 1 or len(r_hashes) != 4:
+                    errors.append(f"Step D {cfg} {cand} r_cubin_hashes mismatch: {r_hashes}")
+
+                # 20.8 Zero spills
+                res = eval_entry.get("resources", {})
+                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
+                    errors.append(f"Step D {cfg} {cand} has spills: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
+
+        # 20.9 Same-config residency match
+        w8_def_b = d_val_data["evaluations"]["M32_N64_w8"]["default"]["occupancy"]["blocks_per_sm_actual_smem"]
+        w8_c4_b = d_val_data["evaluations"]["M32_N64_w8"]["4"]["occupancy"]["blocks_per_sm_actual_smem"]
+        if w8_def_b != 8 or w8_c4_b != 8:
+            errors.append(f"Step D expected 8 blocks/SM for M32_N64_w8, got default={w8_def_b}, cand4={w8_c4_b}")
+
+        w4_def_b = d_val_data["evaluations"]["M32_N128_w4"]["default"]["occupancy"]["blocks_per_sm_actual_smem"]
+        w4_c4_b = d_val_data["evaluations"]["M32_N128_w4"]["4"]["occupancy"]["blocks_per_sm_actual_smem"]
+        if w4_def_b != 16 or w4_c4_b != 16:
+            errors.append(f"Step D expected 16 blocks/SM for M32_N128_w4, got default={w4_def_b}, cand4={w4_c4_b}")
+
+        # 20.10 Overall status & criteria
+        if d_val_data.get("overall_status") != "GLUON_REDUCTION_AMPLIFICATION_FEASIBLE":
+            errors.append(f"Step D expected overall_status == 'GLUON_REDUCTION_AMPLIFICATION_FEASIBLE', got {d_val_data.get('overall_status')}")
+
+        for crit_name, status in d_val_data.get("criteria", {}).items():
+            if status != "PASS":
+                errors.append(f"Step D {crit_name} was not PASS (got {status})")
+
+        print("  Verified Phase 3 Step D Gluon repeated reduction isolation feasibility (12/12 criteria PASS, single-binary across R, zero spills, matched residency).")
+
     print("--------------------------------------------------")
     if errors:
         print(f"FAILED with {len(errors)} consistency error(s):")
@@ -1614,7 +1812,7 @@ def validate():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("ALL 19 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
+        print("ALL 20 CONSISTENCY CHECKS PASSED SUCCESSFULLY.")
         print("==================================================")
         sys.exit(0)
 
