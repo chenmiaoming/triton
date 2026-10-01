@@ -33,6 +33,11 @@ APP_NAME = "triton-tma-reduction-layout"
 
 app = modal.App(APP_NAME)
 
+# Persistent Modal Volume for caching Triton build artifacts across image rebuilds.
+# Note on Volume concurrency: persistent build cache volume assumes serialized image builds;
+# concurrent image builds must not write to the same volume concurrently.
+build_cache_volume = modal.Volume.from_name("triton-build-cache", create_if_missing=True)
+
 # ---------------------------------------------------------------------------
 # Layered Modal Image definition
 # ---------------------------------------------------------------------------
@@ -59,6 +64,10 @@ base_cuda_image = (
         "PATH": "/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin",
         "TRITON_BUILD_WITH_CLANG_LLD": "true",
         "TRITON_BUILD_WITH_CCACHE": "true",
+        "CCACHE_DIR": "/cache/ccache",
+        "CCACHE_COMPILERCHECK": "content",
+        "CCACHE_MAXSIZE": "20G",
+        "TRITON_HOME": "/cache/triton-home",
         "MAX_JOBS": "4",
     })
 )
@@ -96,10 +105,13 @@ triton_image = (
         ignore=MODAL_SOURCE_IGNORE_PATTERNS,
     )
     .run_commands(
+        "mkdir -p /cache/ccache /cache/triton-home && ccache --version && ccache -s",
         "python3 -m pip uninstall -y triton pytorch-triton || true",
         "cd /opt/triton-src && python3 -m pip install -r python/requirements.txt",
         "cd /opt/triton-src && TRITON_BUILD_WITH_CLANG_LLD=true TRITON_BUILD_WITH_CCACHE=true python3 -m pip install -e . --no-build-isolation -v",
+        "ccache -s",
         "python3 -c 'import triton; print(\"Built Triton verification:\", triton.__version__, triton.__file__)'",
+        volumes={"/cache": build_cache_volume},
     )
 )
 
@@ -107,6 +119,74 @@ triton_image = (
 # ---------------------------------------------------------------------------
 # Verification Helpers (Run inside container)
 # ---------------------------------------------------------------------------
+def collect_ccache_stats(ccache_dir: str = "/cache/ccache") -> Dict[str, Any]:
+    """Collects machine-readable ccache statistics from the persistent build cache directory."""
+    import os
+    import subprocess
+
+    env = dict(os.environ, CCACHE_DIR=ccache_dir)
+    stats: Dict[str, Any] = {
+        "cache_dir": ccache_dir,
+        "cache_size": 0,
+        "cacheable_calls": 0,
+        "hits": 0,
+        "direct_hits": 0,
+        "preprocessed_hits": 0,
+        "misses": 0,
+        "uncacheable_calls": 0,
+    }
+    # 1. Attempt machine-readable --print-stats
+    try:
+        raw = subprocess.check_output(["ccache", "--print-stats"], env=env, text=True)
+        raw_dict = {}
+        for line in raw.strip().splitlines():
+            parts = line.split()
+            if len(parts) >= 2:
+                raw_dict[parts[0]] = parts[1]
+
+        direct = int(raw_dict.get("direct_cache_hit", 0))
+        preprocessed = int(raw_dict.get("preprocessed_cache_hit", 0))
+        hits = direct + preprocessed
+        misses = int(raw_dict.get("cache_miss", 0))
+        stats["cache_size"] = int(raw_dict.get("cache_size_kibibyte", 0)) * 1024
+        stats["direct_hits"] = direct
+        stats["preprocessed_hits"] = preprocessed
+        stats["hits"] = hits
+        stats["misses"] = misses
+        stats["cacheable_calls"] = hits + misses
+        stats["uncacheable_calls"] = (
+            int(raw_dict.get("bad_compiler_arguments", 0))
+            + int(raw_dict.get("unsupported_compiler_option", 0))
+            + int(raw_dict.get("unsupported_source_language", 0))
+        )
+        return stats
+    except Exception:
+        pass
+
+    # 2. Fallback to parsing ccache -s
+    try:
+        raw_s = subprocess.check_output(["ccache", "-s"], env=env, text=True)
+        for line in raw_s.splitlines():
+            line = line.strip()
+            if "Hits:" in line and "/" in line:
+                parts = line.split("Hits:")[1].split("/")[0].strip()
+                stats["hits"] = int(parts)
+            elif "Misses:" in line and "/" in line:
+                parts = line.split("Misses:")[1].split("/")[0].strip()
+                stats["misses"] = int(parts)
+            elif "Direct:" in line:
+                parts = line.split("Direct:")[1].strip()
+                stats["direct_hits"] = int(parts)
+            elif "Preprocessed:" in line:
+                parts = line.split("Preprocessed:")[1].strip()
+                stats["preprocessed_hits"] = int(parts)
+        stats["cacheable_calls"] = stats["hits"] + stats["misses"]
+    except Exception:
+        pass
+
+    return stats
+
+
 def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     import subprocess
     import torch
@@ -222,6 +302,7 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
         "l2_cache_bytes": l2_cache_bytes if l2_cache_bytes is not None else "UNKNOWN",
         "pre_run_gpu_telemetry": telemetry,
         "manifest_verification": manifest_ver,
+        "build_cache": collect_ccache_stats(),
     }
 
 
@@ -232,6 +313,7 @@ def remote_verify_environment(local_provenance: Optional[Dict[str, Any]] = None)
     image=triton_image,
     gpu="H100!:1",
     timeout=600,
+    volumes={"/cache": build_cache_volume},
 )
 def run_smoke_test_remote(local_provenance: Dict[str, Any]) -> Dict[str, Any]:
     import torch
@@ -329,6 +411,9 @@ def execute_smoke_test() -> Dict[str, Any]:
     print(f"  Triton Version: {result['environment']['triton_version']}")
     print(f"  Triton Path: {result['environment']['triton_file']}")
     print(f"  PTXAS Version: {result['environment']['ptxas_version'].splitlines()[0] if result['environment']['ptxas_version'] else 'N/A'}")
+    if "build_cache" in result.get("environment", {}):
+        bc = result["environment"]["build_cache"]
+        print(f"  Build Cache: {bc.get('hits', 0)} hits, {bc.get('misses', 0)} misses, {bc.get('cacheable_calls', 0)} calls (dir: {bc.get('cache_dir')})")
     print("==================================================")
     return result
 
