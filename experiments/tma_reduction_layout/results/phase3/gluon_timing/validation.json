@@ -4,9 +4,1516 @@
   "cubin_invariance_passed": true,
   "replication_mode": "same-device temporal replication",
   "evaluations": {
+    "canonical_baseline": {
+      "raw_path": "experiments/tma_reduction_layout/results/phase2/saturation/corrected_pilot_runs.json",
+      "raw_sha256": "75087a0ea79d359e4b1820be729295db3f0d7cf392cdfde2a888b63dbb453e9b",
+      "raw_last_change_commit": "a57bff355124dd3d80e6ff4116e4796d1eeb48de",
+      "config": "M32_N64_w8",
+      "candidates": [
+        "default",
+        "4"
+      ],
+      "B": [
+        16384,
+        32768,
+        65536
+      ],
+      "estimator": "per-condition sample median -> OLS T(B) on B -> arithmetic mean of three run slopes; ns/additional CTA",
+      "per_run_slopes": {
+        "run_1": {
+          "default": 3.985281767069994,
+          "4": 2.4997208518990583
+        },
+        "run_2": {
+          "default": 3.9401506585688497,
+          "4": 2.4873745425273746
+        },
+        "run_3": {
+          "default": 3.9093891765722733,
+          "4": 2.468959288697598
+        }
+      },
+      "mean_slopes": {
+        "default": 3.9449405340703723,
+        "4": 2.4853515610413437
+      },
+      "gap_ns_per_cta": 1.4595889730290286
+    },
+    "evidence_bindings": {
+      "raw_hashes": {
+        "raw_run_1.json": "85c2ffa342987ec6e91a263f9d5cbecd148b47162db0a130ba964470e44890d3",
+        "raw_run_2.json": "eb9cbfbfe067fceb1faa09774672d8917c9b3f5e9e96c00810dfbbda6ee8e196",
+        "raw_run_3.json": "8500d0e1dcca2966bb3c49de7d22b7e0db76299755dbad67a0ce91f0ebc4308c"
+      },
+      "configurations": {
+        "M32_N64_w8": {
+          "default": {
+            "artifact_audit": {
+              "checks": {
+                "tma_once_before_loop": true,
+                "local_load_once_before_loop": true,
+                "runtime_r": true,
+                "one_runtime_loop": true,
+                "layouts": true,
+                "initial_load_signature": true,
+                "complete_reduction_fingerprint": true,
+                "complete_memory_signature": true,
+                "no_extra_float_add_or_global_effect": true,
+                "barriers": true,
+                "no_explicit_sass_mov": true,
+                "resources": true,
+                "recorded_candidate_binary_binding": true
+              },
+              "all_checks_passed": true,
+              "all_ptx_backedges": [
+                {
+                  "start": 79,
+                  "end": 82,
+                  "target": "waitLoop",
+                  "predicate": "!complete",
+                  "kind": "inline_loop"
+                },
+                {
+                  "start": 125,
+                  "end": 364,
+                  "target": "$L__BB0_2",
+                  "predicate": "%p11",
+                  "kind": "compiler_loop"
+                }
+              ],
+              "loop_start": 125,
+              "loop_end": 364,
+              "fingerprint": [
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "bar.sync 0",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "canonical_fingerprint": [
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "bar.sync 0",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 8 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
+              "red_start": 138,
+              "red_end": 356,
+              "initial_load_signature": [
+                "ld.shared.v4.b32"
+              ],
+              "loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "expected_loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "post_loop_shared_loads": [],
+              "copy_signature": [
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16"
+              ],
+              "copy_operands": [
+                [
+                  "%rs5",
+                  "%rs13"
+                ],
+                [
+                  "%rs7",
+                  "%rs15"
+                ],
+                [
+                  "%rs2",
+                  "%rs10"
+                ],
+                [
+                  "%rs4",
+                  "%rs12"
+                ],
+                [
+                  "%rs6",
+                  "%rs14"
+                ],
+                [
+                  "%rs1",
+                  "%rs9"
+                ],
+                [
+                  "%rs8",
+                  "%rs16"
+                ],
+                [
+                  "%rs3",
+                  "%rs11"
+                ]
+              ],
+              "copy_operands_one_to_one": true,
+              "resources_from_artifact": {
+                "num_regs": 32,
+                "local_bytes": 0,
+                "stack_bytes": 0,
+                "static_smem_bytes": 1024
+              },
+              "sass_audit": {
+                "all_backward_edges": [
+                  {
+                    "start_addr": 1184,
+                    "end_addr": 2720,
+                    "kind": "reduction",
+                    "instruction": "@P0 BRA 0x4a0"
+                  },
+                  {
+                    "start_addr": 2880,
+                    "end_addr": 2896,
+                    "kind": "barrier_poll",
+                    "instruction": "@!P0 BRA 0xb40"
+                  },
+                  {
+                    "start_addr": 656,
+                    "end_addr": 2912,
+                    "kind": "return_edge",
+                    "instruction": "BRA 0x290"
+                  },
+                  {
+                    "start_addr": 2928,
+                    "end_addr": 2928,
+                    "kind": "terminal_self_loop",
+                    "instruction": "BRA 0xb70"
+                  }
+                ],
+                "loop_start_addr": "0x4a0",
+                "loop_end_addr": "0xaa0",
+                "loop_sass_instruction_count": 97,
+                "loop_body_mov_instructions": [],
+                "explicit_loop_mov_count": 0,
+                "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+                "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+                "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+              },
+              "artifact_hashes": {
+                "ptx": "1164710c90e1407462f5430e0ad7b7f714f59ab4eec1f4e98601a606775e7cbb",
+                "ttgir": "54110a9c8ec4082d34d16ea4a896844835271033c2a0bded22c26bc81706d07e",
+                "sass": "a479c139a2f02bbebdd8aeebbc84742f5600726efa0a1b29a71c497a896a81e4",
+                "resource.txt": "105d74e94d9d7229011e9d4efaff0e30cfb6d6d282fcb5d044bf63364bff75d9",
+                "cubin.sha256": "94a1b0ae8796a0d69e5ca0e9c3d5534908001fcc929302f04846d85daa8c1fb6"
+              }
+            },
+            "cubin_sha256": "b62640bbbe640897df41fc1c2ba3afff6f4ec00de3f31afa3359792d233e2b35",
+            "d_e_text_resource_equivalent": true,
+            "binary_archive_limit": "SHA record only; no archived CUBIN or R-by-R E hash map"
+          },
+          "4": {
+            "artifact_audit": {
+              "checks": {
+                "tma_once_before_loop": true,
+                "local_load_once_before_loop": true,
+                "runtime_r": true,
+                "one_runtime_loop": true,
+                "layouts": true,
+                "initial_load_signature": true,
+                "complete_reduction_fingerprint": true,
+                "complete_memory_signature": true,
+                "no_extra_float_add_or_global_effect": true,
+                "barriers": true,
+                "no_explicit_sass_mov": true,
+                "resources": true,
+                "recorded_candidate_binary_binding": true
+              },
+              "all_checks_passed": true,
+              "all_ptx_backedges": [
+                {
+                  "start": 79,
+                  "end": 82,
+                  "target": "waitLoop",
+                  "predicate": "!complete",
+                  "kind": "inline_loop"
+                },
+                {
+                  "start": 124,
+                  "end": 242,
+                  "target": "$L__BB0_2",
+                  "predicate": "%p11",
+                  "kind": "compiler_loop"
+                }
+              ],
+              "loop_start": 124,
+              "loop_end": 242,
+              "fingerprint": [
+                "bar.sync 0",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "canonical_fingerprint": [
+                "bar.sync 0",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 4 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
+              "red_start": 139,
+              "red_end": 234,
+              "initial_load_signature": [
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16"
+              ],
+              "loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "expected_loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "post_loop_shared_loads": [],
+              "copy_signature": [
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16"
+              ],
+              "copy_operands": [
+                [
+                  "%rs7",
+                  "%rs15"
+                ],
+                [
+                  "%rs2",
+                  "%rs10"
+                ],
+                [
+                  "%rs4",
+                  "%rs12"
+                ],
+                [
+                  "%rs6",
+                  "%rs14"
+                ],
+                [
+                  "%rs1",
+                  "%rs9"
+                ],
+                [
+                  "%rs8",
+                  "%rs16"
+                ],
+                [
+                  "%rs3",
+                  "%rs11"
+                ],
+                [
+                  "%rs5",
+                  "%rs13"
+                ]
+              ],
+              "copy_operands_one_to_one": true,
+              "resources_from_artifact": {
+                "num_regs": 23,
+                "local_bytes": 0,
+                "stack_bytes": 0,
+                "static_smem_bytes": 1024
+              },
+              "sass_audit": {
+                "all_backward_edges": [
+                  {
+                    "start_addr": 1168,
+                    "end_addr": 1824,
+                    "kind": "reduction",
+                    "instruction": "@P0 BRA 0x490"
+                  },
+                  {
+                    "start_addr": 1984,
+                    "end_addr": 2000,
+                    "kind": "barrier_poll",
+                    "instruction": "@!P0 BRA 0x7c0"
+                  },
+                  {
+                    "start_addr": 656,
+                    "end_addr": 2016,
+                    "kind": "return_edge",
+                    "instruction": "BRA 0x290"
+                  },
+                  {
+                    "start_addr": 2032,
+                    "end_addr": 2032,
+                    "kind": "terminal_self_loop",
+                    "instruction": "BRA 0x7f0"
+                  }
+                ],
+                "loop_start_addr": "0x490",
+                "loop_end_addr": "0x720",
+                "loop_sass_instruction_count": 42,
+                "loop_body_mov_instructions": [],
+                "explicit_loop_mov_count": 0,
+                "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+                "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+                "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+              },
+              "artifact_hashes": {
+                "ptx": "81e9fcec949c2f6bf7aa76ebb55449453ba02a74f1dc7c203bc474764718b1ed",
+                "ttgir": "5c1000b57adfc8bafba486822652d008b2c9afda9a2f2478e0d335bc45be6761",
+                "sass": "5531196ba495a40879ee01eeb850c7fb634914b73f47c23c2ddc39efaa4516b7",
+                "resource.txt": "0955d8d2047de72f877d837256089da9ecf75f486ffb76942702dda9c6398a77",
+                "cubin.sha256": "7943bde0751bc7590c2960fb4ee68e2a3d367d0b0c0f7b765345bbf3f7c5c5a2"
+              }
+            },
+            "cubin_sha256": "fff71ce0d9daa0e8a3ea5292c03722a736eb54bff5c620f8e14c79b0ab757241",
+            "d_e_text_resource_equivalent": true,
+            "binary_archive_limit": "SHA record only; no archived CUBIN or R-by-R E hash map"
+          }
+        },
+        "M32_N128_w4": {
+          "default": {
+            "artifact_audit": {
+              "checks": {
+                "tma_once_before_loop": true,
+                "local_load_once_before_loop": true,
+                "runtime_r": true,
+                "one_runtime_loop": true,
+                "layouts": true,
+                "initial_load_signature": true,
+                "complete_reduction_fingerprint": true,
+                "complete_memory_signature": true,
+                "no_extra_float_add_or_global_effect": true,
+                "barriers": true,
+                "no_explicit_sass_mov": true,
+                "resources": true,
+                "recorded_candidate_binary_binding": true
+              },
+              "all_checks_passed": true,
+              "all_ptx_backedges": [
+                {
+                  "start": 85,
+                  "end": 88,
+                  "target": "waitLoop",
+                  "predicate": "!complete",
+                  "kind": "inline_loop"
+                },
+                {
+                  "start": 152,
+                  "end": 354,
+                  "target": "$L__BB0_2",
+                  "predicate": "%p11",
+                  "kind": "compiler_loop"
+                }
+              ],
+              "loop_start": 152,
+              "loop_end": 354,
+              "fingerprint": [
+                "bar.sync 0",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "canonical_fingerprint": [
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "bar.sync 0",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "shfl.sync.bfly.b32 16 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "reduction_match_type": "PIPELINED_OPCODE_EQUIVALENT",
+              "red_start": 191,
+              "red_end": 346,
+              "initial_load_signature": [
+                "ld.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "expected_loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "post_loop_shared_loads": [],
+              "copy_signature": [
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16"
+              ],
+              "copy_operands": [
+                [
+                  "%rs29",
+                  "%rs61"
+                ],
+                [
+                  "%rs10",
+                  "%rs42"
+                ],
+                [
+                  "%rs17",
+                  "%rs49"
+                ],
+                [
+                  "%rs24",
+                  "%rs56"
+                ],
+                [
+                  "%rs5",
+                  "%rs37"
+                ],
+                [
+                  "%rs31",
+                  "%rs63"
+                ],
+                [
+                  "%rs12",
+                  "%rs44"
+                ],
+                [
+                  "%rs19",
+                  "%rs51"
+                ],
+                [
+                  "%rs26",
+                  "%rs58"
+                ],
+                [
+                  "%rs7",
+                  "%rs39"
+                ],
+                [
+                  "%rs14",
+                  "%rs46"
+                ],
+                [
+                  "%rs21",
+                  "%rs53"
+                ],
+                [
+                  "%rs2",
+                  "%rs34"
+                ],
+                [
+                  "%rs28",
+                  "%rs60"
+                ],
+                [
+                  "%rs9",
+                  "%rs41"
+                ],
+                [
+                  "%rs16",
+                  "%rs48"
+                ],
+                [
+                  "%rs23",
+                  "%rs55"
+                ],
+                [
+                  "%rs4",
+                  "%rs36"
+                ],
+                [
+                  "%rs30",
+                  "%rs62"
+                ],
+                [
+                  "%rs11",
+                  "%rs43"
+                ],
+                [
+                  "%rs18",
+                  "%rs50"
+                ],
+                [
+                  "%rs25",
+                  "%rs57"
+                ],
+                [
+                  "%rs6",
+                  "%rs38"
+                ],
+                [
+                  "%rs32",
+                  "%rs64"
+                ],
+                [
+                  "%rs13",
+                  "%rs45"
+                ],
+                [
+                  "%rs20",
+                  "%rs52"
+                ],
+                [
+                  "%rs1",
+                  "%rs33"
+                ],
+                [
+                  "%rs27",
+                  "%rs59"
+                ],
+                [
+                  "%rs8",
+                  "%rs40"
+                ],
+                [
+                  "%rs15",
+                  "%rs47"
+                ],
+                [
+                  "%rs22",
+                  "%rs54"
+                ],
+                [
+                  "%rs3",
+                  "%rs35"
+                ]
+              ],
+              "copy_operands_one_to_one": true,
+              "resources_from_artifact": {
+                "num_regs": 32,
+                "local_bytes": 0,
+                "stack_bytes": 0,
+                "static_smem_bytes": 1024
+              },
+              "sass_audit": {
+                "all_backward_edges": [
+                  {
+                    "start_addr": 1552,
+                    "end_addr": 2576,
+                    "kind": "reduction",
+                    "instruction": "@P0 BRA 0x610"
+                  },
+                  {
+                    "start_addr": 2768,
+                    "end_addr": 2784,
+                    "kind": "barrier_poll",
+                    "instruction": "@!P0 BRA 0xad0"
+                  },
+                  {
+                    "start_addr": 720,
+                    "end_addr": 2800,
+                    "kind": "return_edge",
+                    "instruction": "BRA 0x2d0"
+                  },
+                  {
+                    "start_addr": 2816,
+                    "end_addr": 2816,
+                    "kind": "terminal_self_loop",
+                    "instruction": "BRA 0xb00"
+                  }
+                ],
+                "loop_start_addr": "0x610",
+                "loop_end_addr": "0xa10",
+                "loop_sass_instruction_count": 65,
+                "loop_body_mov_instructions": [],
+                "explicit_loop_mov_count": 0,
+                "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+                "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+                "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+              },
+              "artifact_hashes": {
+                "ptx": "3c28156124b13df5ac6048a2bf6551e4d08b13874b8a9d2f5a699b15d138ef65",
+                "ttgir": "c18dcdc3ea0d3cf02be97ff2194d9b402e20b5564ed59ea6885866039dd0e79f",
+                "sass": "fce18033055ad7258802698510b34613f74f2e4f4f1126ee059301b9505e4b0d",
+                "resource.txt": "105d74e94d9d7229011e9d4efaff0e30cfb6d6d282fcb5d044bf63364bff75d9",
+                "cubin.sha256": "08736844065a8bbacbd8f0f6f8f81ee24d9a4a29d6d2e52d89b210fbd075ddd5"
+              }
+            },
+            "cubin_sha256": "7df7ecd6396164ec5f2ce70f23b55bfdcd8317486f7b4b3d86b25953efc6f767",
+            "d_e_text_resource_equivalent": true,
+            "binary_archive_limit": "SHA record only; no archived CUBIN or R-by-R E hash map"
+          },
+          "4": {
+            "artifact_audit": {
+              "checks": {
+                "tma_once_before_loop": true,
+                "local_load_once_before_loop": true,
+                "runtime_r": true,
+                "one_runtime_loop": true,
+                "layouts": true,
+                "initial_load_signature": true,
+                "complete_reduction_fingerprint": true,
+                "complete_memory_signature": true,
+                "no_extra_float_add_or_global_effect": true,
+                "barriers": true,
+                "no_explicit_sass_mov": true,
+                "resources": true,
+                "recorded_candidate_binary_binding": true
+              },
+              "all_checks_passed": true,
+              "all_ptx_backedges": [
+                {
+                  "start": 85,
+                  "end": 88,
+                  "target": "waitLoop",
+                  "predicate": "!complete",
+                  "kind": "inline_loop"
+                },
+                {
+                  "start": 142,
+                  "end": 272,
+                  "target": "$L__BB0_2",
+                  "predicate": "%p11",
+                  "kind": "compiler_loop"
+                }
+              ],
+              "loop_start": 142,
+              "loop_end": 272,
+              "fingerprint": [
+                "bar.sync 0",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "canonical_fingerprint": [
+                "bar.sync 0",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "max.bf16x2",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "cvt.f32.bf16",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "shfl.sync.bfly.b32 2 31 -1",
+                "max.f32",
+                "shfl.sync.bfly.b32 1 31 -1",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "max.f32",
+                "bar.sync 0",
+                "st.shared.v4.b32",
+                "bar.sync 0",
+                "ld.shared.v4.b32"
+              ],
+              "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
+              "red_start": 181,
+              "red_end": 264,
+              "initial_load_signature": [
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16",
+                "ld.shared.v4.b16"
+              ],
+              "loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "expected_loop_memory_signature": [
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32",
+                "st.shared.v4.b32",
+                "ld.shared.v4.b32"
+              ],
+              "post_loop_shared_loads": [],
+              "copy_signature": [
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16",
+                "mov.b16"
+              ],
+              "copy_operands": [
+                [
+                  "%rs25",
+                  "%rs57"
+                ],
+                [
+                  "%rs6",
+                  "%rs38"
+                ],
+                [
+                  "%rs32",
+                  "%rs64"
+                ],
+                [
+                  "%rs13",
+                  "%rs45"
+                ],
+                [
+                  "%rs20",
+                  "%rs52"
+                ],
+                [
+                  "%rs1",
+                  "%rs33"
+                ],
+                [
+                  "%rs27",
+                  "%rs59"
+                ],
+                [
+                  "%rs8",
+                  "%rs40"
+                ],
+                [
+                  "%rs15",
+                  "%rs47"
+                ],
+                [
+                  "%rs22",
+                  "%rs54"
+                ],
+                [
+                  "%rs3",
+                  "%rs35"
+                ],
+                [
+                  "%rs29",
+                  "%rs61"
+                ],
+                [
+                  "%rs10",
+                  "%rs42"
+                ],
+                [
+                  "%rs17",
+                  "%rs49"
+                ],
+                [
+                  "%rs24",
+                  "%rs56"
+                ],
+                [
+                  "%rs5",
+                  "%rs37"
+                ],
+                [
+                  "%rs31",
+                  "%rs63"
+                ],
+                [
+                  "%rs12",
+                  "%rs44"
+                ],
+                [
+                  "%rs19",
+                  "%rs51"
+                ],
+                [
+                  "%rs26",
+                  "%rs58"
+                ],
+                [
+                  "%rs7",
+                  "%rs39"
+                ],
+                [
+                  "%rs14",
+                  "%rs46"
+                ],
+                [
+                  "%rs21",
+                  "%rs53"
+                ],
+                [
+                  "%rs2",
+                  "%rs34"
+                ],
+                [
+                  "%rs28",
+                  "%rs60"
+                ],
+                [
+                  "%rs9",
+                  "%rs41"
+                ],
+                [
+                  "%rs16",
+                  "%rs48"
+                ],
+                [
+                  "%rs23",
+                  "%rs55"
+                ],
+                [
+                  "%rs4",
+                  "%rs36"
+                ],
+                [
+                  "%rs30",
+                  "%rs62"
+                ],
+                [
+                  "%rs11",
+                  "%rs43"
+                ],
+                [
+                  "%rs18",
+                  "%rs50"
+                ]
+              ],
+              "copy_operands_one_to_one": true,
+              "resources_from_artifact": {
+                "num_regs": 24,
+                "local_bytes": 0,
+                "stack_bytes": 0,
+                "static_smem_bytes": 1024
+              },
+              "sass_audit": {
+                "all_backward_edges": [
+                  {
+                    "start_addr": 1488,
+                    "end_addr": 1888,
+                    "kind": "reduction",
+                    "instruction": "@P0 BRA 0x5d0"
+                  },
+                  {
+                    "start_addr": 2080,
+                    "end_addr": 2096,
+                    "kind": "barrier_poll",
+                    "instruction": "@!P0 BRA 0x820"
+                  },
+                  {
+                    "start_addr": 720,
+                    "end_addr": 2112,
+                    "kind": "return_edge",
+                    "instruction": "BRA 0x2d0"
+                  },
+                  {
+                    "start_addr": 2128,
+                    "end_addr": 2128,
+                    "kind": "terminal_self_loop",
+                    "instruction": "BRA 0x850"
+                  }
+                ],
+                "loop_start_addr": "0x5d0",
+                "loop_end_addr": "0x760",
+                "loop_sass_instruction_count": 26,
+                "loop_body_mov_instructions": [],
+                "explicit_loop_mov_count": 0,
+                "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+                "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+                "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+              },
+              "artifact_hashes": {
+                "ptx": "984a754ef1317de26fb77432ae6f9232135fe49af3bb6a115b025c46a2413ca8",
+                "ttgir": "72be0bc06c94c2efa7eb9a12cdc29c87390c5ebbf76b80fefa08258727baa0b1",
+                "sass": "d76de6dfdc85f71e8bcd13483391917883f9fcabbf4ef2f3594be128676020c6",
+                "resource.txt": "1ebf9811e2b23fa2cb7c854faa4d6963f832a8ee545bd9c55b6fefeb8cd49483",
+                "cubin.sha256": "73cf634e4066e7743940008f86b17c4627a611c581ab44458852f8c0d8a5f9ad"
+              }
+            },
+            "cubin_sha256": "f03c0e4becaa7a8764d47dd20c7e0c6835f3c5e641c30023aa2c79d8a274fce4",
+            "d_e_text_resource_equivalent": true,
+            "binary_archive_limit": "SHA record only; no archived CUBIN or R-by-R E hash map"
+          }
+        }
+      }
+    },
     "experiment": "Phase 3 Step E: Controlled Gluon Repeated-Reduction Timing",
     "h2_status": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
     "h2_evaluation": {
+      "decision_rule": {
+        "kind": "retrospective_descriptive_rule_not_integrity_invariant",
+        "all_run_beta_strictly_positive": true,
+        "delta_g_1_mean_threshold_ns_per_cta": 0.1,
+        "mean_run_fit_r2_minimum": 0.9,
+        "mean_and_each_run_g_nondecreasing": true,
+        "scope": "primary matched-residency composite-body harness; no component dominance claim"
+      },
       "status": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
       "sub_hypotheses": {
         "H2a": {
@@ -14,9 +1521,10 @@
           "status": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
           "attribution_scope": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
           "isolated_delta_g_1_ns": 1.0928896851207048,
-          "canonical_attribution_ratio": 0.7653825093638945,
+          "isolated_delta_g_1_std_ns": 0.011770658120654217,
+          "canonical_attribution_ratio": 0.7487653752636082,
           "description": "Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.",
-          "attribution_note": "The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition)."
+          "attribution_note": "The isolated one-reduction differential has a magnitude equal to 74.88% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition)."
         },
         "H2b": {
           "title": "Lane-partition dominance over warp-partition",
@@ -36,13 +1544,25 @@
       "good_linear_fit": true,
       "is_monotonic": true,
       "per_run_monotonic": true,
-      "verdict_statement": "Hypothesis H2 is decomposed into sub-hypotheses: H2a is SUPPORTED AT REDUCTION BODY LEVEL. The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition). The primary mechanism metric is \u0394g(1) = 1.0929 \u00b1 0.0118 ns/additional CTA. Linear slope beta = 1.2040 \u00b1 0.0022 ns/(CTA\u00b7rep) serves strictly as an amplification-trend summary. Incremental repetition deltas exhibit strong approximately linear amplification over R=0..8. Sub-hypotheses H2b (lane-partition dominance) and H2c (intra-warp communication dominance) remain UNVERIFIED."
+      "verdict_statement": "Hypothesis H2 is decomposed into sub-hypotheses: H2a is SUPPORTED AT REDUCTION BODY LEVEL. The isolated one-reduction differential has a magnitude equal to 74.9% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition). The primary mechanism metric is \u0394g(1) = 1.0929 \u00b1 0.0118 ns/additional CTA. Linear slope beta = 1.2040 \u00b1 0.0022 ns/(CTA\u00b7rep) serves strictly as an amplification-trend summary. Incremental repetition deltas exhibit strong approximately linear amplification over R=0..8. Sub-hypotheses H2b (lane-partition dominance) and H2c (intra-warp communication dominance) remain UNVERIFIED."
     },
     "cross_invocation_summary": {
       "replication_mode": "same-device temporal replication",
       "cubin_invariance_passed": true,
       "configurations": {
         "M32_N64_w8": {
+          "cross_mean_fit": {
+            "alpha": -0.015012921310352478,
+            "beta": 1.2039905278643777,
+            "r2": 0.9996471407591544,
+            "residuals": [
+              0.011106641566237824,
+              -0.09999420117743485,
+              0.10080021541268369,
+              0.001576245809008725,
+              -0.013488901610495319
+            ]
+          },
           "beta": {
             "mean": 1.2039905278643777,
             "std": 0.002212747040746953,
@@ -65,7 +1585,7 @@
               -0.007652075087856591
             ]
           },
-          "r2": {
+          "mean_run_fit_r2": {
             "mean": 0.999642049199822,
             "std": 1.5680310294531052e-05,
             "cv": 0.001568592508396639,
@@ -99,14 +1619,14 @@
             ]
           },
           "attribution_ratio": {
-            "mean": 0.7653825093638945,
-            "std": 0.00824333505193236,
-            "cv": 1.0770216135175803,
+            "mean": 0.7487653752636082,
+            "std": 0.008064364926125054,
+            "cv": 1.077021613517577,
             "stability_class": "stable",
             "values": [
-              0.7638355693073903,
-              0.7580222345520006,
-              0.7742897242322928
+              0.7472520206497415,
+              0.7415648985553654,
+              0.7574792065857175
             ]
           },
           "incremental_deltas": {
@@ -159,20 +1679,20 @@
             {
               "R": 0,
               "observed": -0.003906279744114653,
-              "fitted": -0.015012921310352775,
-              "residual": 0.011106641566238123
+              "fitted": -0.015012921310352478,
+              "residual": 0.011106641566237824
             },
             {
               "R": 1,
               "observed": 1.0889834053765903,
-              "fitted": 1.188977606554025,
-              "residual": -0.09999420117743463
+              "fitted": 1.1889776065540252,
+              "residual": -0.09999420117743485
             },
             {
               "R": 2,
               "observed": 2.4937683498310865,
-              "fitted": 2.3929681344184024,
-              "residual": 0.10080021541268414
+              "fitted": 2.392968134418403,
+              "residual": 0.10080021541268369
             },
             {
               "R": 4,
@@ -281,6 +1801,18 @@
           }
         },
         "M32_N128_w4": {
+          "cross_mean_fit": {
+            "alpha": -0.5214738818960456,
+            "beta": 0.5381149827869758,
+            "r2": 0.9442335331872953,
+            "residuals": [
+              0.5328903628629809,
+              -0.03373098273922996,
+              -0.5731480046376548,
+              -0.14702949897582585,
+              0.22101812348973038
+            ]
+          },
           "beta": {
             "mean": 0.5381149827869758,
             "std": 0.0016018785439493814,
@@ -303,7 +1835,7 @@
               -0.522452280295381
             ]
           },
-          "r2": {
+          "mean_run_fit_r2": {
             "mean": 0.9441899619820265,
             "std": 0.002498181869664219,
             "cv": 0.26458466730784563,
@@ -393,26 +1925,26 @@
             {
               "R": 0,
               "observed": 0.01141648096693526,
-              "fitted": -0.5214738818960455,
-              "residual": 0.5328903628629807
+              "fitted": -0.5214738818960456,
+              "residual": 0.5328903628629809
             },
             {
               "R": 1,
               "observed": -0.017089881848299775,
-              "fitted": 0.016641100890930294,
-              "residual": -0.03373098273923007
+              "fitted": 0.016641100890930183,
+              "residual": -0.03373098273922996
             },
             {
               "R": 2,
               "observed": -0.01839192095974888,
-              "fitted": 0.5547560836779061,
-              "residual": -0.5731480046376549
+              "fitted": 0.554756083677906,
+              "residual": -0.5731480046376548
             },
             {
               "R": 4,
               "observed": 1.4839565502760317,
-              "fitted": 1.6309860492518578,
-              "residual": -0.14702949897582607
+              "fitted": 1.6309860492518575,
+              "residual": -0.14702949897582585
             },
             {
               "R": 8,
@@ -520,6 +2052,18 @@
       "config": "M32_N64_w8",
       "role": "PRIMARY (EXACT_SEQUENCE_EQUIVALENT)",
       "cross_run": {
+        "cross_mean_fit": {
+          "alpha": -0.015012921310352478,
+          "beta": 1.2039905278643777,
+          "r2": 0.9996471407591544,
+          "residuals": [
+            0.011106641566237824,
+            -0.09999420117743485,
+            0.10080021541268369,
+            0.001576245809008725,
+            -0.013488901610495319
+          ]
+        },
         "beta": {
           "mean": 1.2039905278643777,
           "std": 0.002212747040746953,
@@ -542,7 +2086,7 @@
             -0.007652075087856591
           ]
         },
-        "r2": {
+        "mean_run_fit_r2": {
           "mean": 0.999642049199822,
           "std": 1.5680310294531052e-05,
           "cv": 0.001568592508396639,
@@ -576,14 +2120,14 @@
           ]
         },
         "attribution_ratio": {
-          "mean": 0.7653825093638945,
-          "std": 0.00824333505193236,
-          "cv": 1.0770216135175803,
+          "mean": 0.7487653752636082,
+          "std": 0.008064364926125054,
+          "cv": 1.077021613517577,
           "stability_class": "stable",
           "values": [
-            0.7638355693073903,
-            0.7580222345520006,
-            0.7742897242322928
+            0.7472520206497415,
+            0.7415648985553654,
+            0.7574792065857175
           ]
         },
         "incremental_deltas": {
@@ -636,20 +2180,20 @@
           {
             "R": 0,
             "observed": -0.003906279744114653,
-            "fitted": -0.015012921310352775,
-            "residual": 0.011106641566238123
+            "fitted": -0.015012921310352478,
+            "residual": 0.011106641566237824
           },
           {
             "R": 1,
             "observed": 1.0889834053765903,
-            "fitted": 1.188977606554025,
-            "residual": -0.09999420117743463
+            "fitted": 1.1889776065540252,
+            "residual": -0.09999420117743485
           },
           {
             "R": 2,
             "observed": 2.4937683498310865,
-            "fitted": 2.3929681344184024,
-            "residual": 0.10080021541268414
+            "fitted": 2.392968134418403,
+            "residual": 0.10080021541268369
           },
           {
             "R": 4,
@@ -762,6 +2306,18 @@
       "config": "M32_N128_w4",
       "role": "SECONDARY_CONTROL (PIPELINED_OPCODE_EQUIVALENT)",
       "cross_run": {
+        "cross_mean_fit": {
+          "alpha": -0.5214738818960456,
+          "beta": 0.5381149827869758,
+          "r2": 0.9442335331872953,
+          "residuals": [
+            0.5328903628629809,
+            -0.03373098273922996,
+            -0.5731480046376548,
+            -0.14702949897582585,
+            0.22101812348973038
+          ]
+        },
         "beta": {
           "mean": 0.5381149827869758,
           "std": 0.0016018785439493814,
@@ -784,7 +2340,7 @@
             -0.522452280295381
           ]
         },
-        "r2": {
+        "mean_run_fit_r2": {
           "mean": 0.9441899619820265,
           "std": 0.002498181869664219,
           "cv": 0.26458466730784563,
@@ -874,26 +2430,26 @@
           {
             "R": 0,
             "observed": 0.01141648096693526,
-            "fitted": -0.5214738818960455,
-            "residual": 0.5328903628629807
+            "fitted": -0.5214738818960456,
+            "residual": 0.5328903628629809
           },
           {
             "R": 1,
             "observed": -0.017089881848299775,
-            "fitted": 0.016641100890930294,
-            "residual": -0.03373098273923007
+            "fitted": 0.016641100890930183,
+            "residual": -0.03373098273922996
           },
           {
             "R": 2,
             "observed": -0.01839192095974888,
-            "fitted": 0.5547560836779061,
-            "residual": -0.5731480046376549
+            "fitted": 0.554756083677906,
+            "residual": -0.5731480046376548
           },
           {
             "R": 4,
             "observed": 1.4839565502760317,
-            "fitted": 1.6309860492518578,
-            "residual": -0.14702949897582607
+            "fitted": 1.6309860492518575,
+            "residual": -0.14702949897582585
           },
           {
             "R": 8,
@@ -1314,7 +2870,7 @@
                 "beta": 0.8787004694405759,
                 "r2": 0.9853092856008039
               },
-              "canonical_attribution_ratio": 0.7638355693073903
+              "canonical_attribution_ratio": 0.7472520206497415
             },
             "intercepts": {
               "default": {
@@ -1346,6 +2902,62 @@
                 "2": 0.9999999267178292,
                 "4": 0.9999342266825665,
                 "8": 0.9999217935317811
+              }
+            },
+            "grid_fit_residuals_us": {
+              "default": {
+                "0": [
+                  0.027427715914591033,
+                  -0.041141573871883,
+                  0.01371385795729907
+                ],
+                "1": [
+                  0.21485718233245166,
+                  -0.3222857734986633,
+                  0.10742859116624004
+                ],
+                "2": [
+                  0.4914275237492234,
+                  -0.7371412856238067,
+                  0.2457137618746401
+                ],
+                "4": [
+                  -1.2434273958205893,
+                  1.8651410937309834,
+                  -0.6217136979101952
+                ],
+                "8": [
+                  -0.12115495545521071,
+                  0.18173243318290133,
+                  -0.06057747772752009
+                ]
+              },
+              "4": {
+                "0": [
+                  -0.006857727255145107,
+                  0.010286590882714108,
+                  -0.0034288636275618956
+                ],
+                "1": [
+                  0.09828539831298144,
+                  -0.14742809746945795,
+                  0.04914269915649072
+                ],
+                "2": [
+                  -0.011429190635674047,
+                  0.01714378595353594,
+                  -0.0057145953178121545
+                ],
+                "4": [
+                  0.6445699504443638,
+                  -0.9668549256665244,
+                  0.32228497522220323
+                ],
+                "8": [
+                  -1.3394313199179066,
+                  2.0091469798769594,
+                  -0.6697156599589107
+                ]
               }
             },
             "per_b_stats": {
@@ -1864,6 +3476,62 @@
                 "2": 0.9999986602032511,
                 "4": 0.9999972109671563,
                 "8": 0.9999755040020536
+              }
+            },
+            "grid_fit_residuals_us": {
+              "default": {
+                "0": [
+                  -0.26514221514975134,
+                  0.3977133227246128,
+                  -0.13257110757487567
+                ],
+                "1": [
+                  -0.09371287056377753,
+                  0.1405693058456734,
+                  -0.04685643528188166
+                ],
+                "2": [
+                  0.10742779288973736,
+                  -0.16114168933458473,
+                  0.05371389644489
+                ],
+                "4": [
+                  0.5485724125589684,
+                  -0.8228586188384384,
+                  0.2742862062794984
+                ],
+                "8": [
+                  -1.2685720409665748,
+                  1.9028580614498765,
+                  -0.6342860204832732
+                ]
+              },
+              "4": {
+                "0": [
+                  -0.02742878028324469,
+                  0.04114317042487414,
+                  -0.01371439014161524
+                ],
+                "1": [
+                  0.12343164001191553,
+                  -0.1851474600178875,
+                  0.06171582000595777
+                ],
+                "2": [
+                  -0.0571422278881073,
+                  0.08571334183216095,
+                  -0.02857111394405365
+                ],
+                "4": [
+                  0.08228421211242676,
+                  -0.12342631816862593,
+                  0.0411421060562418
+                ],
+                "8": [
+                  0.3360009619167954,
+                  -0.5040014428751647,
+                  0.16800048095842612
+                ]
               }
             },
             "per_b_stats": {
@@ -2578,7 +4246,7 @@
                 "beta": 0.8768310708871597,
                 "r2": 0.9853914471956825
               },
-              "canonical_attribution_ratio": 0.7580222345520006
+              "canonical_attribution_ratio": 0.7415648985553654
             },
             "intercepts": {
               "default": {
@@ -2610,6 +4278,62 @@
                 "2": 0.9999864411492095,
                 "4": 0.9999364263309054,
                 "8": 0.9999532746969778
+              }
+            },
+            "grid_fit_residuals_us": {
+              "default": {
+                "0": [
+                  -0.20799945507731366,
+                  0.31199918261594917,
+                  -0.10399972753864972
+                ],
+                "1": [
+                  0.1302877707140908,
+                  -0.1954316560711078,
+                  0.06514388535705962
+                ],
+                "2": [
+                  0.6514287420681626,
+                  -0.9771431131022155,
+                  0.3257143710341097
+                ],
+                "4": [
+                  -0.8297136851719245,
+                  1.2445705277579577,
+                  -0.4148568425858912
+                ],
+                "8": [
+                  -0.027422394071322742,
+                  0.04113359110692727,
+                  -0.013711197035718214
+                ]
+              },
+              "4": {
+                "0": [
+                  -0.07542701704160493,
+                  0.1131405255624287,
+                  -0.03771350852079536
+                ],
+                "1": [
+                  0.1645716173308216,
+                  -0.2468574259962395,
+                  0.08228580866540369
+                ],
+                "2": [
+                  -0.15543028712272644,
+                  0.23314543068408966,
+                  -0.07771514356136322
+                ],
+                "4": [
+                  0.6331418241773434,
+                  -0.9497127362659796,
+                  0.31657091208870725
+                ],
+                "8": [
+                  -1.033140080315718,
+                  1.5497101204736055,
+                  -0.5165700401578306
+                ]
               }
             },
             "per_b_stats": {
@@ -3128,6 +4852,62 @@
                 "2": 0.9999998960037854,
                 "4": 0.9999565550566369,
                 "8": 0.9999402831770585
+              }
+            },
+            "grid_fit_residuals_us": {
+              "default": {
+                "0": [
+                  0.17600027578217237,
+                  -0.26400041367325855,
+                  0.0880001378911004
+                ],
+                "1": [
+                  0.19428559712001459,
+                  -0.2914283956800148,
+                  0.0971427985600144
+                ],
+                "2": [
+                  0.10514312556813366,
+                  -0.15771468835215785,
+                  0.05257156278406683
+                ],
+                "4": [
+                  0.2011433243751526,
+                  -0.3017149865627289,
+                  0.1005716621875763
+                ],
+                "8": [
+                  -1.0857177632195487,
+                  1.6285766448293657,
+                  -0.5428588816097317
+                ]
+              },
+              "4": {
+                "0": [
+                  -0.1691446772643559,
+                  0.25371701589652673,
+                  -0.08457233863214242
+                ],
+                "1": [
+                  0.21714504276003765,
+                  -0.32571756414003517,
+                  0.10857252138004014
+                ],
+                "2": [
+                  0.01600012183189392,
+                  -0.02400018274784088,
+                  0.00800006091594696
+                ],
+                "4": [
+                  -0.324572835649775,
+                  0.4868592534746341,
+                  -0.1622864178248733
+                ],
+                "8": [
+                  0.5257161600249276,
+                  -0.7885742400373488,
+                  0.26285808001250643
+                ]
               }
             },
             "per_b_stats": {
@@ -3842,7 +5622,7 @@
                 "beta": 0.8800274814900279,
                 "r2": 0.985228934903276
               },
-              "canonical_attribution_ratio": 0.7742897242322928
+              "canonical_attribution_ratio": 0.7574792065857175
             },
             "intercepts": {
               "default": {
@@ -3874,6 +5654,62 @@
                 "2": 0.9999752563451744,
                 "4": 0.9999631011352078,
                 "8": 0.9999458288777747
+              }
+            },
+            "grid_fit_residuals_us": {
+              "default": {
+                "0": [
+                  0.18057173916272973,
+                  -0.27085760874406617,
+                  0.09028586958137907
+                ],
+                "1": [
+                  0.045715165989747675,
+                  -0.0685727489846073,
+                  0.022857582994873837
+                ],
+                "2": [
+                  0.19428559712001459,
+                  -0.2914283956800148,
+                  0.0971427985600144
+                ],
+                "4": [
+                  -0.7085693734032645,
+                  1.0628540601049394,
+                  -0.35428468670158964
+                ],
+                "8": [
+                  -0.006858791623756133,
+                  0.010288187435776308,
+                  -0.003429395811735958
+                ]
+              },
+              "4": {
+                "0": [
+                  -0.1417132360594593,
+                  0.21256985408919604,
+                  -0.07085661802972254
+                ],
+                "1": [
+                  -0.13028617416108546,
+                  0.1954292612416566,
+                  -0.06514308708054273
+                ],
+                "2": [
+                  -0.2102857189519085,
+                  0.31542857842785565,
+                  -0.10514285947596136
+                ],
+                "4": [
+                  0.4822867257254444,
+                  -0.7234300885881737,
+                  0.2411433628627151
+                ],
+                "8": [
+                  -1.115430678640081,
+                  1.673146017960164,
+                  -0.5577153393199978
+                ]
               }
             },
             "per_b_stats": {
@@ -4392,6 +6228,62 @@
                 "2": 0.9999183636859948,
                 "4": 0.9999787009887149,
                 "8": 0.999940315346705
+              }
+            },
+            "grid_fit_residuals_us": {
+              "default": {
+                "0": [
+                  -0.03657011049133985,
+                  0.05485516573702398,
+                  -0.018285055245655712
+                ],
+                "1": [
+                  0.10514312556811944,
+                  -0.15771468835217206,
+                  0.05257156278406683
+                ],
+                "2": [
+                  0.315427247967051,
+                  -0.4731408719505481,
+                  0.15771362398353972
+                ],
+                "4": [
+                  0.4571399518421799,
+                  -0.6857099277632415,
+                  0.22856997592111838
+                ],
+                "8": [
+                  -1.2777213539395973,
+                  1.9165820309094102,
+                  -0.6388606769697844
+                ]
+              },
+              "4": {
+                "0": [
+                  -0.03200077584810401,
+                  0.04800116377218444,
+                  -0.016000387924066217
+                ],
+                "1": [
+                  0.1691441450800255,
+                  -0.25371621762002405,
+                  0.08457207254002697
+                ],
+                "2": [
+                  0.45714101621081227,
+                  -0.6857115243162468,
+                  0.22857050810540613
+                ],
+                "4": [
+                  0.22857263684274187,
+                  -0.3428589552640773,
+                  0.11428631842136383
+                ],
+                "8": [
+                  0.52571722439356,
+                  -0.7885758365903826,
+                  0.2628586121967942
+                ]
               }
             },
             "per_b_stats": {

@@ -10,10 +10,86 @@
     ],
     "throughput_metrics_note": "These are logical-byte throughput metrics (logical bytes / fitted marginal grid time). They are NOT measured DRAM/HBM traffic or hardware bandwidth.",
     "configurations": {
-      "M32_N64_w8": "Strong-positive case (large layout sensitivity ~37%-43%)",
+      "M32_N64_w8": "Strong-positive case (large layout sensitivity)",
       "M32_N128_w4": "Negative/control case (near-zero layout sensitivity ~0.1%)",
       "M32_N16_w8": "Weak-effect control case (degenerate vector width / legality)"
     }
+  },
+  "canonical_baseline": {
+    "raw_path": "experiments/tma_reduction_layout/results/phase2/saturation/corrected_pilot_runs.json",
+    "raw_sha256": "75087a0ea79d359e4b1820be729295db3f0d7cf392cdfde2a888b63dbb453e9b",
+    "raw_last_change_commit": "a57bff355124dd3d80e6ff4116e4796d1eeb48de",
+    "config": "M32_N64_w8",
+    "candidates": [
+      "default",
+      "4"
+    ],
+    "B": [
+      16384,
+      32768,
+      65536
+    ],
+    "estimator": "per-condition sample median -> OLS T(B) on B -> arithmetic mean of three run slopes; ns/additional CTA",
+    "per_run_slopes": {
+      "run_1": {
+        "default": 3.985281767069994,
+        "4": 2.4997208518990583
+      },
+      "run_2": {
+        "default": 3.9401506585688497,
+        "4": 2.4873745425273746
+      },
+      "run_3": {
+        "default": 3.9093891765722733,
+        "4": 2.468959288697598
+      }
+    },
+    "mean_slopes": {
+      "default": 3.9449405340703723,
+      "4": 2.4853515610413437
+    },
+    "gap_ns_per_cta": 1.4595889730290286
+  },
+  "step_e_evidence": {
+    "decision_rule": {
+      "kind": "retrospective_descriptive_rule_not_integrity_invariant",
+      "all_run_beta_strictly_positive": true,
+      "delta_g_1_mean_threshold_ns_per_cta": 0.1,
+      "mean_run_fit_r2_minimum": 0.9,
+      "mean_and_each_run_g_nondecreasing": true,
+      "scope": "primary matched-residency composite-body harness; no component dominance claim"
+    },
+    "status": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
+    "sub_hypotheses": {
+      "H2a": {
+        "title": "Composite reduction-body contribution",
+        "status": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
+        "attribution_scope": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
+        "isolated_delta_g_1_ns": 1.0928896851207048,
+        "isolated_delta_g_1_std_ns": 0.011770658120654217,
+        "canonical_attribution_ratio": 0.7487653752636082,
+        "description": "Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.",
+        "attribution_note": "The isolated one-reduction differential has a magnitude equal to 74.88% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition)."
+      },
+      "H2b": {
+        "title": "Lane-partition dominance over warp-partition",
+        "status": "UNVERIFIED",
+        "description": "Lane-partition pruning dominates warp-partition pruning.",
+        "rationale": "No matched orthogonal lane-only vs warp-only intervention has been isolated without confounding."
+      },
+      "H2c": {
+        "title": "Intra-warp communication dominance",
+        "status": "UNVERIFIED",
+        "description": "Intra-warp communication dominates cross-warp communication.",
+        "rationale": "Step E isolates the composite reduction body, but does not isolate thread-local vs shuffle vs smem vs barrier components separately."
+      }
+    },
+    "all_betas_positive": true,
+    "delta_g_1_materially_positive": true,
+    "good_linear_fit": true,
+    "is_monotonic": true,
+    "per_run_monotonic": true,
+    "verdict_statement": "Hypothesis H2 is decomposed into sub-hypotheses: H2a is SUPPORTED AT REDUCTION BODY LEVEL. The isolated one-reduction differential has a magnitude equal to 74.9% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition). The primary mechanism metric is \u0394g(1) = 1.0929 \u00b1 0.0118 ns/additional CTA. Linear slope beta = 1.2040 \u00b1 0.0022 ns/(CTA\u00b7rep) serves strictly as an amplification-trend summary. Incremental repetition deltas exhibit strong approximately linear amplification over R=0..8. Sub-hypotheses H2b (lane-partition dominance) and H2c (intra-warp communication dominance) remain UNVERIFIED."
   },
   "configurations": {
     "M32_N64_w8": {
@@ -59,8 +135,8 @@
             "lanePart_M": 4,
             "warpPart_M": 8,
             "derived_M_elems_per_thread": 1,
-            "derived_N_elems_per_thread": 64,
-            "derived_total_elems_per_thread": 64
+            "derived_N_elems_per_thread": 8,
+            "derived_total_elems_per_thread": 8
           },
           "localload": {
             "family": "ld.shared.v4.b32",
@@ -116,7 +192,7 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 3.9449,
+            "marginal_slope_ns_per_cta": 3.9449405340703723,
             "temporal_replication_cv_pct": 0.79,
             "vs_default_slope_pct": 0.0,
             "logical_input_throughput_gbps": 1038.29,
@@ -159,8 +235,8 @@
             "lanePart_M": 4,
             "warpPart_M": 8,
             "derived_M_elems_per_thread": 1,
-            "derived_N_elems_per_thread": 64,
-            "derived_total_elems_per_thread": 64
+            "derived_N_elems_per_thread": 8,
+            "derived_total_elems_per_thread": 8
           },
           "localload": {
             "family": "ld.shared.v4.b32",
@@ -216,7 +292,7 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 3.9438,
+            "marginal_slope_ns_per_cta": 3.943847754531556,
             "temporal_replication_cv_pct": 0.7,
             "vs_default_slope_pct": -0.03,
             "logical_input_throughput_gbps": 1038.58,
@@ -259,8 +335,8 @@
             "lanePart_M": 2,
             "warpPart_M": 8,
             "derived_M_elems_per_thread": 2,
-            "derived_N_elems_per_thread": 16,
-            "derived_total_elems_per_thread": 32
+            "derived_N_elems_per_thread": 4,
+            "derived_total_elems_per_thread": 8
           },
           "localload": {
             "family": "ld.shared.v2.b32",
@@ -315,7 +391,7 @@
             "HMNMX2": 2
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.4854,
+            "marginal_slope_ns_per_cta": 2.4853515610413437,
             "temporal_replication_cv_pct": 0.51,
             "vs_default_slope_pct": -37.0,
             "logical_input_throughput_gbps": 1648.06,
@@ -358,8 +434,8 @@
             "lanePart_M": 1,
             "warpPart_M": 8,
             "derived_M_elems_per_thread": 4,
-            "derived_N_elems_per_thread": 4,
-            "derived_total_elems_per_thread": 16
+            "derived_N_elems_per_thread": 2,
+            "derived_total_elems_per_thread": 8
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
@@ -416,7 +492,7 @@
             "HMNMX2": 1
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.2766,
+            "marginal_slope_ns_per_cta": 2.2765763971966364,
             "temporal_replication_cv_pct": 0.62,
             "vs_default_slope_pct": -42.29,
             "logical_input_throughput_gbps": 1799.19,
@@ -515,7 +591,7 @@
             "HMNMX2": 2
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.2548,
+            "marginal_slope_ns_per_cta": 2.2547665897339657,
             "temporal_replication_cv_pct": 0.34,
             "vs_default_slope_pct": -42.84,
             "logical_input_throughput_gbps": 1816.6,
@@ -567,8 +643,8 @@
             "lanePart_M": 2,
             "warpPart_M": 4,
             "derived_M_elems_per_thread": 4,
-            "derived_N_elems_per_thread": 64,
-            "derived_total_elems_per_thread": 256
+            "derived_N_elems_per_thread": 8,
+            "derived_total_elems_per_thread": 32
           },
           "localload": {
             "family": "ld.shared.v4.b32",
@@ -623,7 +699,7 @@
             "HMNMX2": 4
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9771,
+            "marginal_slope_ns_per_cta": 2.9770508317163884,
             "temporal_replication_cv_pct": 0.71,
             "vs_default_slope_pct": 0.0,
             "logical_input_throughput_gbps": 2751.72,
@@ -666,8 +742,8 @@
             "lanePart_M": 2,
             "warpPart_M": 4,
             "derived_M_elems_per_thread": 4,
-            "derived_N_elems_per_thread": 64,
-            "derived_total_elems_per_thread": 256
+            "derived_N_elems_per_thread": 8,
+            "derived_total_elems_per_thread": 32
           },
           "localload": {
             "family": "ld.shared.v4.b32",
@@ -722,7 +798,7 @@
             "HMNMX2": 4
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9809,
+            "marginal_slope_ns_per_cta": 2.9808872644328708,
             "temporal_replication_cv_pct": 0.47,
             "vs_default_slope_pct": 0.13,
             "logical_input_throughput_gbps": 2748.18,
@@ -765,8 +841,8 @@
             "lanePart_M": 1,
             "warpPart_M": 4,
             "derived_M_elems_per_thread": 8,
-            "derived_N_elems_per_thread": 16,
-            "derived_total_elems_per_thread": 128
+            "derived_N_elems_per_thread": 4,
+            "derived_total_elems_per_thread": 32
           },
           "localload": {
             "family": "ld.shared.v2.b32",
@@ -821,7 +897,7 @@
             "HMNMX2": 6
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9804,
+            "marginal_slope_ns_per_cta": 2.9803757277997125,
             "temporal_replication_cv_pct": 0.58,
             "vs_default_slope_pct": 0.11,
             "logical_input_throughput_gbps": 2748.65,
@@ -864,8 +940,8 @@
             "lanePart_M": 1,
             "warpPart_M": 2,
             "derived_M_elems_per_thread": 16,
-            "derived_N_elems_per_thread": 4,
-            "derived_total_elems_per_thread": 64
+            "derived_N_elems_per_thread": 2,
+            "derived_total_elems_per_thread": 32
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x4.shared.b16",
@@ -920,7 +996,7 @@
             "HMNMX2": 5
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9681,
+            "marginal_slope_ns_per_cta": 2.968052448133156,
             "temporal_replication_cv_pct": 0.23,
             "vs_default_slope_pct": -0.3,
             "logical_input_throughput_gbps": 2760.06,
@@ -1018,7 +1094,7 @@
             "HMNMX2": 6
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.9698,
+            "marginal_slope_ns_per_cta": 2.969842880485798,
             "temporal_replication_cv_pct": 0.4,
             "vs_default_slope_pct": -0.24,
             "logical_input_throughput_gbps": 2758.4,
@@ -1070,8 +1146,8 @@
             "lanePart_M": 4,
             "warpPart_M": 8,
             "derived_M_elems_per_thread": 1,
-            "derived_N_elems_per_thread": 4,
-            "derived_total_elems_per_thread": 4
+            "derived_N_elems_per_thread": 2,
+            "derived_total_elems_per_thread": 2
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
@@ -1129,11 +1205,11 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.2044,
-            "temporal_replication_cv_pct": 0.5,
-            "vs_default_slope_pct": 0.0,
-            "logical_input_throughput_gbps": 464.52,
-            "logical_io_throughput_gbps": 493.55
+            "marginal_slope_ns_per_cta": 2.2785761107765468,
+            "temporal_replication_cv_pct": 0.48,
+            "vs_default_slope_pct": 3.36,
+            "logical_input_throughput_gbps": 449.4,
+            "logical_io_throughput_gbps": 477.49
           }
         },
         "2": {
@@ -1172,8 +1248,8 @@
             "lanePart_M": 4,
             "warpPart_M": 8,
             "derived_M_elems_per_thread": 1,
-            "derived_N_elems_per_thread": 4,
-            "derived_total_elems_per_thread": 4
+            "derived_N_elems_per_thread": 2,
+            "derived_total_elems_per_thread": 2
           },
           "localload": {
             "family": "ldmatrix.sync.aligned.m8n8.x1.shared.b16",
@@ -1231,11 +1307,11 @@
             "HMNMX2": 0
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.203,
-            "temporal_replication_cv_pct": 0.64,
-            "vs_default_slope_pct": -0.06,
-            "logical_input_throughput_gbps": 464.82,
-            "logical_io_throughput_gbps": 493.88
+            "marginal_slope_ns_per_cta": 2.277273990460214,
+            "temporal_replication_cv_pct": 0.43,
+            "vs_default_slope_pct": 3.31,
+            "logical_input_throughput_gbps": 449.66,
+            "logical_io_throughput_gbps": 477.76
           }
         },
         "1": {
@@ -1330,11 +1406,11 @@
             "HMNMX2": 1
           },
           "performance": {
-            "marginal_slope_ns_per_cta": 2.1435,
-            "temporal_replication_cv_pct": 0.68,
-            "vs_default_slope_pct": -2.76,
-            "logical_input_throughput_gbps": 477.71,
-            "logical_io_throughput_gbps": 507.57
+            "marginal_slope_ns_per_cta": 2.2147740071973416,
+            "temporal_replication_cv_pct": 0.22,
+            "vs_default_slope_pct": 0.47,
+            "logical_input_throughput_gbps": 462.35,
+            "logical_io_throughput_gbps": 491.25
           }
         }
       }

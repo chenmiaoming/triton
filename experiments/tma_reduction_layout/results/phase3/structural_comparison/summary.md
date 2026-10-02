@@ -1,8 +1,8 @@
 # Phase 3 Structural Decomposition & Mechanism Isolation Report
 
 > [!NOTE]
-> **Core Research Question**: Why does `M32_N64_w8` exhibit ~37%–43% marginal throughput separation across layout candidates (`3.88 -> 2.45 -> 2.25 ns/CTA`),
-> whereas `M32_N128_w4` exhibits near-zero layout sensitivity (`~2.92 ns/CTA` across all candidates)?
+> **Core Research Question**: Why does `M32_N64_w8` exhibit large marginal throughput separation across layout candidates (`3.94 -> 2.49 -> 2.28 ns/CTA`),
+> whereas `M32_N128_w4` exhibits near-zero layout sensitivity (the current raw-derived slopes listed in the performance table across candidates)?
 >
 > **Evidence Discipline**:
 > 1. All structural metrics and opcode counts below are extracted directly from the verified canonical fixed-binary artifacts (`results/phase3/fixed_binary_artifacts/canonical/`), proven identical across three sequential invocations on the same NVIDIA H100 GPU.
@@ -41,13 +41,13 @@
 
 | Candidate | LocalLoad | lanePart[M] | warpPart[M] | M Elems/Th | max.bf16x2 | cvt.f32 | shfl.sync (Whole) | max.f32 (Whole) | st.shared (Whole) | bar.sync (Whole) | Regs | Total SASS | Marginal Slope | vs Default | Logical Input GB/s | Logical I/O GB/s |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `default` | `1x ldmatrix.x1` | 4 | 8 | 1 | 0 | 2 | 12 | 10 | 3 | 8 | 22 | 232 | **2.2044 ns** | 0.00% (base) | 464.5 GB/s | 493.6 GB/s |
-| `2` | `1x ldmatrix.x1` | 4 | 8 | 1 | 0 | 2 | 12 | 10 | 3 | 8 | 22 | 232 | **2.2030 ns** | -0.06% | 464.8 GB/s | 493.9 GB/s |
-| `1` | `2x ld.shared.b16` | 2 | 8 | 2 | 0 | 1 | 4 | 4 | 3 | 8 | 21 | 208 | **2.1435 ns** | -2.76% | 477.7 GB/s | 507.6 GB/s |
+| `default` | `1x ldmatrix.x1` | 4 | 8 | 1 | 0 | 2 | 12 | 10 | 3 | 8 | 22 | 232 | **2.2786 ns** | 0.00% (base) | 449.4 GB/s | 477.5 GB/s |
+| `2` | `1x ldmatrix.x1` | 4 | 8 | 1 | 0 | 2 | 12 | 10 | 3 | 8 | 22 | 232 | **2.2773 ns** | +3.31% | 449.7 GB/s | 477.8 GB/s |
+| `1` | `2x ld.shared.b16` | 2 | 8 | 2 | 0 | 1 | 4 | 4 | 3 | 8 | 21 | 208 | **2.2148 ns** | +0.47% | 462.4 GB/s | 491.2 GB/s |
 
 ## 4. Itemized Delta Table: `default` -> `cand4` in `M32_N64_w8`
 
-Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 coincides with a reduction in the empirical marginal grid slope from **3.8822 ns** to **2.4543 ns** (-36.78%).
+Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 coincides with a reduction in the empirical marginal grid slope from **3.9449 ns** to **2.4854 ns** (-37.00%).
 
 | Structural Metric | default (lanePart[M]=4) | cand4 (lanePart[M]=2) | Absolute Delta | Relative Change |
 | :--- | :---: | :---: | :---: | :---: |
@@ -66,8 +66,8 @@ Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 c
 | **Post-reduction convert barriers** | 2 (`bar.sync 0`) | 2 (`bar.sync 0`) | 0 | Same |
 | **Physical registers / thread** | 29 | 22 | -7 registers | -24.1% |
 | **Total SASS instructions** | 296 | 232 | -64 instructions | -21.6% |
-| **Marginal grid slope per CTA** | **3.8822 ns** | **2.4543 ns** | **-1.4279 ns** | **-36.78%** |
-| **Logical input throughput** | 1055.1 GB/s | 1668.9 GB/s | +613.8 GB/s | +58.2% |
+| **Marginal grid slope per CTA** | **3.9449 ns** | **2.4854 ns** | **-1.4596 ns** | **-37.00%** |
+| **Logical input throughput** | 1038.3 GB/s | 1648.1 GB/s | +609.8 GB/s | +58.7% |
 
 ## 5. Itemized Delta Table: `cand4` -> `cand2` -> `cand1` in `M32_N64_w8`
 
@@ -87,8 +87,8 @@ Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 c
 | **Total barriers (`bar.sync`)** | 10 | 8 | -2 barriers | 8 | 0 |
 | **Total SASS instructions** | 232 | 208 | -24 insts (-10.3%) | 200 | -8 insts (-3.8%) |
 | **Physical registers / thread** | 22 | 21 | -1 register | 21 | 0 |
-| **Marginal slope (ns/CTA)** | **2.4543 ns** | **2.2537 ns** | **-0.2006 ns (-8.17%)** | **2.2249 ns** | **-0.0288 ns (-1.28%)** |
-| **Logical input throughput** | 1668.9 GB/s | 1817.5 GB/s | +148.6 GB/s | 1841.0 GB/s | +23.5 GB/s |
+| **Marginal slope (ns/CTA)** | **2.4854 ns** | **2.2766 ns** | **-0.2088 ns (-8.40%)** | **2.2548 ns** | **-0.0218 ns (-0.96%)** |
+| **Logical input throughput** | 1648.1 GB/s | 1799.2 GB/s | +151.1 GB/s | 1816.6 GB/s | +17.4 GB/s |
 
 ## 6. Answers to the 5 Research Questions
 
@@ -102,10 +102,10 @@ Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 c
 7. **In SASS**: Total instructions drop from 296 to 232 (-64 instructions), with SHFL dropping from 40 to 16 (-60%) and FMNMX dropping from 40 to 16 (-60%).
 
 ### Question 2: Do these changes also occur in `M32_N128_w4`? Why is there no performance difference?
-- **OBSERVED**: `M32_N128_w4` shows substantial reductions in shuffles, barriers, and instruction count across layouts (e.g. shuffles drop from 25 to 9, float maxes drop from 24 to 8, barriers drop from 14 to 10, total SASS drops from 280 to 232; in `cand1`, reduction communication is 100% eliminated), yet empirical marginal slopes remain near parity (`~2.92 ns/CTA` across all candidates, delta < 0.12%).
-- **UNKNOWN**: The current evidence does not identify why those structural reductions do not change throughput. Candidate explanations include a memory-system limitation (e.g. high logical traffic rate of ~2.8 TB/s operating near an empirical throughput ceiling), execution overlap hiding SM-side work, issue-resource behavior, or another bottleneck, but none is established without hardware-counter proof.
+- **OBSERVED**: `M32_N128_w4` shows substantial reductions in shuffles, barriers, and instruction count across layouts (e.g. shuffles drop from 25 to 9, float maxes drop from 24 to 8, barriers drop from 14 to 10, total SASS drops from 280 to 232; in `cand1`, reduction communication is 100% eliminated), yet empirical marginal slopes remain near parity (range 2.9681..2.9809 ns/CTA, span 0.431%).
+- **UNKNOWN**: The current evidence does not identify why those structural reductions do not change throughput. Candidate explanations include a memory-system limitation (e.g. high logical traffic rate (see current table) operating in an overlap regime), execution overlap hiding SM-side work, issue-resource behavior, or another bottleneck, but none is established without hardware-counter proof.
 
-### Question 3: Does the ~37% slope difference in `M32_N64_w8` correspond to an identifiable dependency-chain reduction?
+### Question 3: Does the 37.00% slope difference in `M32_N64_w8` correspond to an identifiable dependency-chain reduction?
 - **A strong structural correlation exists**: Transitioning `default -> cand4` coincides with:
   - fewer PTX reduction shuffles (40 -> 16)
   - fewer max.f32 operations (40 -> 16)
@@ -113,23 +113,25 @@ Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 c
   - fewer CTA barriers (14 -> 10)
   - fewer physical registers (29 -> 22)
   - a shorter visible reduction-stage sequence (from 2 visible shuffle+max stages to 1 visible stage)
-  - and an empirical marginal slope that is ~37% lower (3.8822 -> 2.4543 ns/CTA).
+  - and an empirical marginal slope that is 37.00% lower (3.9449 -> 2.4854 ns/CTA).
 - **No individual mechanism is yet causally isolated**: Whether the runtime reduction is primarily driven by fewer barrier synchronizations, fewer shuffles, packed arithmetic folding, or lower register pressure cannot be determined from this single transition alone.
 
-### Question 4: Which structural changes coincide with the additional ~8% gain from `cand4` -> `cand2`?
+### Question 4: Which structural changes coincide with the additional 8.40% slope change from `cand4` -> `cand2`?
 - Coinciding structural changes include:
   1. `lanePart[M]` drops from 2 to 1: Intra-warp reduction shuffles along M completely disappear (4 -> 0). All intra-warp M reduction folds into registers via 3x packed `max.bf16x2`.
   2. **LocalLoad lowering switch**: Lowered to hardware `1x ldmatrix.x4` instead of `2x ld.shared.v2`.
   3. **Post-reduction conversion change**: Instead of storing to shared memory and re-loading with ldmatrix, `cand2` performs layout redistribution directly in registers via `2x shfl.sync.idx.b32` and `1x selp.b32`, eliminating 2 CTA barriers in the epilogue.
   4. **Barrier count**: Drops from 10 to 8.
   5. **Register count**: Drops from 22 to 21.
-- **Conclusion**: The current evidence cannot determine which of these structural changes accounts for the ~0.20 ns marginal-slope difference.
+- **Conclusion**: The current evidence cannot determine which of these structural changes accounts for the 0.2088 ns marginal-slope difference.
 
-### Question 5: Why does `cand2` -> `cand1` show near-zero additional gain (~1.3%)?
+### Question 5: Why does `cand2` -> `cand1` show a small additional slope change (0.96%)?
 - Transitioning `cand2 -> cand1` simultaneously:
   1. Replaces `1x ldmatrix.x4` with `8x ld.shared.b16` scalar shared loads.
   2. Replaces packed BF16 reduction (`max.bf16x2`) with scalar BF16 reduction (`7x max.bf16`).
   3. Reduces remaining cross-warp communication (4 fewer combine shuffles).
   4. Reintroduces post-convert shared-memory work (`1x st.shared.b32`, `1x bar.sync`, `1x ld.shared.b32`).
-- The net measured slope change is only -1.28% (2.2537 -> 2.2249 ns/CTA).
+- The net measured slope change is only -0.96% (2.2766 -> 2.2548 ns/CTA).
 - **Which positive and negative costs cancel is UNKNOWN**: We cannot determine whether scalar load overhead offsets communication savings without targeted differential microbenchmarks.
+
+Current canonical comparison is derived from sample medians and OLS on B={16384,32768,65536}, averaged across three runs. Raw SHA256: `75087a0ea79d359e4b1820be729295db3f0d7cf392cdfde2a888b63dbb453e9b`; last-change commit: `a57bff355124dd3d80e6ff4116e4796d1eeb48de`. H2a uses the declared retrospective Step E decision rule; integrity checks do not require support. See the Phase 3 freeze note for occupancy and archival limits.

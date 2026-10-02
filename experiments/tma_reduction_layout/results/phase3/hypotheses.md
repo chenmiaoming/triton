@@ -12,15 +12,15 @@
 ## Hypothesis 1: Bandwidth-Roof / Overlap Hypothesis
 
 - **OBSERVED**:
-  - In `M32_N128_w4` (8 KiB input tile), all layout candidates achieve empirical marginal slopes of `~2.92 ns/additional CTA` (within 0.12% variation across all candidates).
-  - At 2.92 ns/CTA, `M32_N128_w4` achieves a logical input throughput of **2801 GB/s** (and 2976 GB/s logical I/O throughput).
-  - In `M32_N64_w8` (4 KiB input tile), default achieves `3.88 ns/CTA` (**1055 GB/s** logical input throughput), while cand2 achieves `2.25 ns/CTA` (**1818 GB/s** logical input throughput).
-  - Pruning 24 shuffles and 10 barriers in `M32_N128_w4` produces zero runtime change, while pruning 24 shuffles and 4 barriers in `M32_N64_w8` coincides with a 36.8% runtime reduction.
+  - In `M32_N128_w4` (8 KiB input tile), current empirical marginal slopes range from `2.9681` to `2.9809` ns/additional CTA (0.431% span relative to default).
+  - At the current default slope of 2.9771 ns/CTA, `M32_N128_w4` has a logical input rate of **2751.7 GB/s** and logical I/O rate of 2923.7 GB/s.
+  - In `M32_N64_w8` (4 KiB input tile), default has marginal slope `3.9449 ns/CTA` (**1038.3 GB/s** logical input rate), while cand2 has `2.2766 ns/CTA` (**1799.2 GB/s** logical input rate).
+  - Pruning shuffles/barriers in `M32_N128_w4` coincides with near-parity grid slopes, while pruning 24 shuffles and 4 barriers in `M32_N64_w8` coincides with a 37.00% marginal-slope reduction.
   - Actual DRAM/HBM traffic, cache hit rates, and hardware memory utilization are **UNKNOWN** (not measured via hardware counters).
 
 - **DERIVED**:
-  - Minimum transfer time scaling for logical bytes: 8704 logical bytes / 2.92 ns = 2.98 TB/s logical rate. At this rate, the logical transfer floor for 4352 bytes is 1.46 ns.
-  - In `M32_N64_w8`, default CTA duration (3.88 ns) exceeds the logical transfer floor by 2.6x.
+  - Arithmetic logical-byte scaling: 8704 bytes / 2.9771 ns = 2.9237 TB/s logical rate. Half the logical bytes at this assumed rate gives 1.4885 ns; this is not a measured transfer floor.
+  - The primary default marginal grid slope (3.9449 ns/CTA) is 2.650 times that arithmetic half-byte scaling. Neither quantity is single-CTA latency or a measured hardware floor.
 
 - **HYPOTHESIS**:
   - The negative case (`M32_N128_w4`) may be limited by a memory-system throughput roof or pipeline overlap that hides reductions in SM-side communication cost.
@@ -37,8 +37,8 @@
 ## Hypothesis 2: Lane-Partitioning Pruning Dominates Over Warp-Partitioning in SM-Sensitive Regimes
 
 - **OBSERVED**:
-  - In the audited `M32_N64_w8` `default -> cand4` artifact, transitioning `lanePart[M]` from 4 to 2 (while holding `warpPart[M]=8` constant) coincides with whole-kernel shuffles dropping from 40 to 16 (-60%), barriers dropping from 14 to 10 (-28.6%), and marginal slope dropping from 3.8822 ns to 2.4543 ns (-36.78%).
-  - In contrast, transitioning `cand2 -> cand1` holds `lanePart[M]=1` constant while halving `warpPart[M]` from 8 to 4, coinciding with only a -1.28% slope change (2.2537 -> 2.2249 ns).
+  - In the audited `M32_N64_w8` `default -> cand4` artifact, transitioning `lanePart[M]` from 4 to 2 (while holding `warpPart[M]=8` constant) coincides with whole-kernel shuffles dropping from 40 to 16 (-60%), barriers dropping from 14 to 10 (-28.6%), and marginal slope dropping from 3.9449 ns to 2.4854 ns (-37.00%).
+  - In contrast, transitioning `cand2 -> cand1` holds `lanePart[M]=1` constant while halving `warpPart[M]` from 8 to 4, coinciding with only a -0.96% slope change (2.2766 -> 2.2548 ns).
   - In `default`, `lanePart[M]=4` forces `derived_M_elems_per_thread = 1`, which prevents thread-local reduction before communication.
   - In `cand4`, `lanePart[M]=2` provides 2 elements on M per thread, enabling **2x `max.bf16x2`** packed local reduction.
 
@@ -59,7 +59,7 @@
 - **Hypothesis 2a (H2a)**: Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.
   - **Lineage**: Refinement of H2 to composite reduction body level.
   - **Evidence**: Phase 3 Step E single-binary repeated reduction isolates $\Delta g(1) = 1.0929 \pm 0.0118$ ns/additional CTA on `M32_N64_w8`.
-  - **Magnitude Attribution**: The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).
+  - **Magnitude Attribution**: The isolated one-reduction differential has a magnitude equal to 74.88% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).
   - **Sub-Hypothesis Status**: `SUPPORTED_AT_REDUCTION_BODY_LEVEL`
 
 - **Hypothesis 2b (H2b)**: Lane-partition pruning dominates warp-partition pruning.
@@ -101,7 +101,7 @@
 - **OBSERVED**:
   - In `cand4`, post-reduction layout conversion uses shared memory: `1x st.shared.v4.b32`, `2x bar.sync 0`, and `1x ldmatrix.x1`, requiring 10 total barriers.
   - In `cand2`, post-reduction layout conversion is performed entirely in registers via `2x shfl.sync.idx.b32` and `1x selp.b32`, requiring only 8 total barriers.
-  - The marginal slope improves from `2.4543 ns` (cand4) to `2.2537 ns` (cand2) — an ~8.2% relative improvement.
+  - The marginal slope improves from `2.4854 ns` (cand4) to `2.2766 ns` (cand2) — a 8.40% relative slope change.
 
 - **DERIVED**:
   - `bar.sync 0` is a CTA-wide barrier synchronizing all 256 threads across 8 warps.
@@ -115,3 +115,5 @@
   - Reports the exact ratio of the isolated epilogue conversion delta relative to the original `cand4 -> cand2` delta.
 
 - **STATUS**: `UNVERIFIED / PENDING_DIFFERENTIAL_MICROBENCH`
+
+Current canonical comparison is derived from sample medians and OLS on B={16384,32768,65536}, averaged across three runs. Raw SHA256: `75087a0ea79d359e4b1820be729295db3f0d7cf392cdfde2a888b63dbb453e9b`; last-change commit: `a57bff355124dd3d80e6ff4116e4796d1eeb48de`. H2a uses the declared retrospective Step E decision rule; integrity checks do not require support. See the Phase 3 freeze note for occupancy and archival limits.

@@ -18,7 +18,7 @@
     "Criterion D (One Runtime Loop, One Static Canonical Body)": "PASS",
     "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "FAIL_AT_PTX_LEVEL",
     "Criterion F (Result Sink Emits Zero Instructions)": "PASS",
-    "Criterion G (Canonical Reduction Core Topology Equivalence)": "PASS_STRATIFIED",
+    "Criterion G (Complete Filtered Reduction Fingerprint Equivalence)": "PASS_STRATIFIED",
     "Criterion H (Terminal Canonical ld.shared Remains Inside Loop)": "PASS",
     "Criterion I (Zero Accumulator / Global Store Inside Loop)": "PASS",
     "Criterion J (Same-Config Residency & Occupancy Matched)": "PASS",
@@ -26,11 +26,12 @@
     "Criterion L (Identical CUBIN Across R in {1,2,4,8})": "PASS"
   },
   "timing_gate": {
+    "11_all_structural_conditions": "PASS",
     "1_m32_n64_w8_default_exact_sequence": "PASS",
     "2_m32_n64_w8_cand4_exact_sequence": "PASS",
     "3_input_barrier_ptx_copies_candidate_symmetric": "PASS",
-    "4_no_attributable_additional_sass_barrier_instructions": "PASS",
-    "5_result_sink_no_runtime_sass_overhead": "PASS",
+    "4_no_explicit_loop_sass_mov_observed": "PASS",
+    "5_result_sink_empty_ptx_and_no_copies": "PASS",
     "6_blocks_per_sm_matched": "PASS",
     "7_active_warps_per_sm_matched": "PASS",
     "8_zero_local_and_stack_spills": "PASS",
@@ -41,6 +42,375 @@
   "configurations": {
     "M32_N64_w8": {
       "default": {
+        "offline_artifact_audit": {
+          "checks": {
+            "tma_once_before_loop": true,
+            "local_load_once_before_loop": true,
+            "runtime_r": true,
+            "one_runtime_loop": true,
+            "layouts": true,
+            "initial_load_signature": true,
+            "complete_reduction_fingerprint": true,
+            "complete_memory_signature": true,
+            "no_extra_float_add_or_global_effect": true,
+            "barriers": true,
+            "no_explicit_sass_mov": true,
+            "resources": true,
+            "single_recorded_binary": true
+          },
+          "all_checks_passed": true,
+          "all_ptx_backedges": [
+            {
+              "start": 79,
+              "end": 82,
+              "target": "waitLoop",
+              "predicate": "!complete",
+              "kind": "inline_loop"
+            },
+            {
+              "start": 125,
+              "end": 364,
+              "target": "$L__BB0_2",
+              "predicate": "%p11",
+              "kind": "compiler_loop"
+            }
+          ],
+          "loop_start": 125,
+          "loop_end": 364,
+          "fingerprint": [
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "bar.sync 0",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "canonical_fingerprint": [
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "bar.sync 0",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 8 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
+          "red_start": 138,
+          "red_end": 356,
+          "initial_load_signature": [
+            "ld.shared.v4.b32"
+          ],
+          "loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "expected_loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "post_loop_shared_loads": [],
+          "copy_signature": [
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16"
+          ],
+          "copy_operands": [
+            [
+              "%rs5",
+              "%rs13"
+            ],
+            [
+              "%rs7",
+              "%rs15"
+            ],
+            [
+              "%rs2",
+              "%rs10"
+            ],
+            [
+              "%rs4",
+              "%rs12"
+            ],
+            [
+              "%rs6",
+              "%rs14"
+            ],
+            [
+              "%rs1",
+              "%rs9"
+            ],
+            [
+              "%rs8",
+              "%rs16"
+            ],
+            [
+              "%rs3",
+              "%rs11"
+            ]
+          ],
+          "copy_operands_one_to_one": true,
+          "resources_from_artifact": {
+            "num_regs": 32,
+            "local_bytes": 0,
+            "stack_bytes": 0,
+            "static_smem_bytes": 1024
+          },
+          "sass_audit": {
+            "all_backward_edges": [
+              {
+                "start_addr": 1184,
+                "end_addr": 2720,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x4a0"
+              },
+              {
+                "start_addr": 2880,
+                "end_addr": 2896,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0xb40"
+              },
+              {
+                "start_addr": 656,
+                "end_addr": 2912,
+                "kind": "return_edge",
+                "instruction": "BRA 0x290"
+              },
+              {
+                "start_addr": 2928,
+                "end_addr": 2928,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0xb70"
+              }
+            ],
+            "loop_start_addr": "0x4a0",
+            "loop_end_addr": "0xaa0",
+            "loop_sass_instruction_count": 97,
+            "loop_body_mov_instructions": [],
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+          },
+          "artifact_hashes": {
+            "ptx": "1164710c90e1407462f5430e0ad7b7f714f59ab4eec1f4e98601a606775e7cbb",
+            "ttgir": "54110a9c8ec4082d34d16ea4a896844835271033c2a0bded22c26bc81706d07e",
+            "sass": "a479c139a2f02bbebdd8aeebbc84742f5600726efa0a1b29a71c497a896a81e4",
+            "resource.txt": "105d74e94d9d7229011e9d4efaff0e30cfb6d6d282fcb5d044bf63364bff75d9",
+            "cubin.sha256": "d2443fb7b7e41c2af95d37c9f91ec94079a44cddc3b78a697ad52e15a7ac88c1"
+          }
+        },
         "experiment_role": "PRIMARY",
         "cubin_sha256": "8e295a5321813639a2e56b0237c4f2b0ddf5c2b57556221a361300905c251c1b",
         "cubin_invariant_across_r": true,
@@ -64,8 +434,7 @@
             ]
           ],
           "pre_loop_ll_count": 1,
-          "in_loop_ll_count": 0,
-          "in_tile_ll_count": 0,
+          "extra_in_loop_shared_load_count": 0,
           "in_reduction_ll_count": 4,
           "post_loop_ll_count": 0,
           "red_inside_loop": true,
@@ -102,16 +471,40 @@
             }
           },
           "sass_audit": {
-            "step_c_sass_instruction_count": 192,
-            "step_d_sass_instruction_count": 192,
-            "diff_instruction_count": 0,
+            "all_backward_edges": [
+              {
+                "start_addr": 1184,
+                "end_addr": 2720,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x4a0"
+              },
+              {
+                "start_addr": 2880,
+                "end_addr": 2896,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0xb40"
+              },
+              {
+                "start_addr": 656,
+                "end_addr": 2912,
+                "kind": "return_edge",
+                "instruction": "BRA 0x290"
+              },
+              {
+                "start_addr": 2928,
+                "end_addr": 2928,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0xb70"
+              }
+            ],
             "loop_start_addr": "0x4a0",
             "loop_end_addr": "0xaa0",
             "loop_sass_instruction_count": 97,
             "loop_body_mov_instructions": [],
-            "attributable_sass_barrier_overhead": 0,
-            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
-            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
           },
           "extra_in_loop_ops": 0
         },
@@ -134,6 +527,252 @@
         }
       },
       "4": {
+        "offline_artifact_audit": {
+          "checks": {
+            "tma_once_before_loop": true,
+            "local_load_once_before_loop": true,
+            "runtime_r": true,
+            "one_runtime_loop": true,
+            "layouts": true,
+            "initial_load_signature": true,
+            "complete_reduction_fingerprint": true,
+            "complete_memory_signature": true,
+            "no_extra_float_add_or_global_effect": true,
+            "barriers": true,
+            "no_explicit_sass_mov": true,
+            "resources": true,
+            "single_recorded_binary": true
+          },
+          "all_checks_passed": true,
+          "all_ptx_backedges": [
+            {
+              "start": 79,
+              "end": 82,
+              "target": "waitLoop",
+              "predicate": "!complete",
+              "kind": "inline_loop"
+            },
+            {
+              "start": 124,
+              "end": 242,
+              "target": "$L__BB0_2",
+              "predicate": "%p11",
+              "kind": "compiler_loop"
+            }
+          ],
+          "loop_start": 124,
+          "loop_end": 242,
+          "fingerprint": [
+            "bar.sync 0",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "canonical_fingerprint": [
+            "bar.sync 0",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 4 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
+          "red_start": 139,
+          "red_end": 234,
+          "initial_load_signature": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "expected_loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "post_loop_shared_loads": [],
+          "copy_signature": [
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16"
+          ],
+          "copy_operands": [
+            [
+              "%rs7",
+              "%rs15"
+            ],
+            [
+              "%rs2",
+              "%rs10"
+            ],
+            [
+              "%rs4",
+              "%rs12"
+            ],
+            [
+              "%rs6",
+              "%rs14"
+            ],
+            [
+              "%rs1",
+              "%rs9"
+            ],
+            [
+              "%rs8",
+              "%rs16"
+            ],
+            [
+              "%rs3",
+              "%rs11"
+            ],
+            [
+              "%rs5",
+              "%rs13"
+            ]
+          ],
+          "copy_operands_one_to_one": true,
+          "resources_from_artifact": {
+            "num_regs": 23,
+            "local_bytes": 0,
+            "stack_bytes": 0,
+            "static_smem_bytes": 1024
+          },
+          "sass_audit": {
+            "all_backward_edges": [
+              {
+                "start_addr": 1168,
+                "end_addr": 1824,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x490"
+              },
+              {
+                "start_addr": 1984,
+                "end_addr": 2000,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0x7c0"
+              },
+              {
+                "start_addr": 656,
+                "end_addr": 2016,
+                "kind": "return_edge",
+                "instruction": "BRA 0x290"
+              },
+              {
+                "start_addr": 2032,
+                "end_addr": 2032,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0x7f0"
+              }
+            ],
+            "loop_start_addr": "0x490",
+            "loop_end_addr": "0x720",
+            "loop_sass_instruction_count": 42,
+            "loop_body_mov_instructions": [],
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+          },
+          "artifact_hashes": {
+            "ptx": "81e9fcec949c2f6bf7aa76ebb55449453ba02a74f1dc7c203bc474764718b1ed",
+            "ttgir": "5c1000b57adfc8bafba486822652d008b2c9afda9a2f2478e0d335bc45be6761",
+            "sass": "5531196ba495a40879ee01eeb850c7fb634914b73f47c23c2ddc39efaa4516b7",
+            "resource.txt": "0955d8d2047de72f877d837256089da9ecf75f486ffb76942702dda9c6398a77",
+            "cubin.sha256": "eca8227475652e031545992b80b7687eb1fcc0e3ada6f44db661eab4a432ffd8"
+          }
+        },
         "experiment_role": "PRIMARY",
         "cubin_sha256": "2c938c8251ccdf3bbd85ad640996d27ea36fb4ce3642db93ca36c52e0975f375",
         "cubin_invariant_across_r": true,
@@ -157,8 +796,7 @@
             ]
           ],
           "pre_loop_ll_count": 2,
-          "in_loop_ll_count": 0,
-          "in_tile_ll_count": 0,
+          "extra_in_loop_shared_load_count": 0,
           "in_reduction_ll_count": 2,
           "post_loop_ll_count": 0,
           "red_inside_loop": true,
@@ -195,16 +833,40 @@
             }
           },
           "sass_audit": {
-            "step_c_sass_instruction_count": 136,
-            "step_d_sass_instruction_count": 136,
-            "diff_instruction_count": 0,
+            "all_backward_edges": [
+              {
+                "start_addr": 1168,
+                "end_addr": 1824,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x490"
+              },
+              {
+                "start_addr": 1984,
+                "end_addr": 2000,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0x7c0"
+              },
+              {
+                "start_addr": 656,
+                "end_addr": 2016,
+                "kind": "return_edge",
+                "instruction": "BRA 0x290"
+              },
+              {
+                "start_addr": 2032,
+                "end_addr": 2032,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0x7f0"
+              }
+            ],
             "loop_start_addr": "0x490",
             "loop_end_addr": "0x720",
             "loop_sass_instruction_count": 42,
             "loop_body_mov_instructions": [],
-            "attributable_sass_barrier_overhead": 0,
-            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
-            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
           },
           "extra_in_loop_ops": 0
         },
@@ -229,6 +891,458 @@
     },
     "M32_N128_w4": {
       "default": {
+        "offline_artifact_audit": {
+          "checks": {
+            "tma_once_before_loop": true,
+            "local_load_once_before_loop": true,
+            "runtime_r": true,
+            "one_runtime_loop": true,
+            "layouts": true,
+            "initial_load_signature": true,
+            "complete_reduction_fingerprint": true,
+            "complete_memory_signature": true,
+            "no_extra_float_add_or_global_effect": true,
+            "barriers": true,
+            "no_explicit_sass_mov": true,
+            "resources": true,
+            "single_recorded_binary": true
+          },
+          "all_checks_passed": true,
+          "all_ptx_backedges": [
+            {
+              "start": 85,
+              "end": 88,
+              "target": "waitLoop",
+              "predicate": "!complete",
+              "kind": "inline_loop"
+            },
+            {
+              "start": 152,
+              "end": 354,
+              "target": "$L__BB0_2",
+              "predicate": "%p11",
+              "kind": "compiler_loop"
+            }
+          ],
+          "loop_start": 152,
+          "loop_end": 354,
+          "fingerprint": [
+            "bar.sync 0",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "canonical_fingerprint": [
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "bar.sync 0",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "shfl.sync.bfly.b32 16 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "reduction_match_type": "PIPELINED_OPCODE_EQUIVALENT",
+          "red_start": 191,
+          "red_end": 346,
+          "initial_load_signature": [
+            "ld.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "expected_loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "post_loop_shared_loads": [],
+          "copy_signature": [
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16"
+          ],
+          "copy_operands": [
+            [
+              "%rs29",
+              "%rs61"
+            ],
+            [
+              "%rs10",
+              "%rs42"
+            ],
+            [
+              "%rs17",
+              "%rs49"
+            ],
+            [
+              "%rs24",
+              "%rs56"
+            ],
+            [
+              "%rs5",
+              "%rs37"
+            ],
+            [
+              "%rs31",
+              "%rs63"
+            ],
+            [
+              "%rs12",
+              "%rs44"
+            ],
+            [
+              "%rs19",
+              "%rs51"
+            ],
+            [
+              "%rs26",
+              "%rs58"
+            ],
+            [
+              "%rs7",
+              "%rs39"
+            ],
+            [
+              "%rs14",
+              "%rs46"
+            ],
+            [
+              "%rs21",
+              "%rs53"
+            ],
+            [
+              "%rs2",
+              "%rs34"
+            ],
+            [
+              "%rs28",
+              "%rs60"
+            ],
+            [
+              "%rs9",
+              "%rs41"
+            ],
+            [
+              "%rs16",
+              "%rs48"
+            ],
+            [
+              "%rs23",
+              "%rs55"
+            ],
+            [
+              "%rs4",
+              "%rs36"
+            ],
+            [
+              "%rs30",
+              "%rs62"
+            ],
+            [
+              "%rs11",
+              "%rs43"
+            ],
+            [
+              "%rs18",
+              "%rs50"
+            ],
+            [
+              "%rs25",
+              "%rs57"
+            ],
+            [
+              "%rs6",
+              "%rs38"
+            ],
+            [
+              "%rs32",
+              "%rs64"
+            ],
+            [
+              "%rs13",
+              "%rs45"
+            ],
+            [
+              "%rs20",
+              "%rs52"
+            ],
+            [
+              "%rs1",
+              "%rs33"
+            ],
+            [
+              "%rs27",
+              "%rs59"
+            ],
+            [
+              "%rs8",
+              "%rs40"
+            ],
+            [
+              "%rs15",
+              "%rs47"
+            ],
+            [
+              "%rs22",
+              "%rs54"
+            ],
+            [
+              "%rs3",
+              "%rs35"
+            ]
+          ],
+          "copy_operands_one_to_one": true,
+          "resources_from_artifact": {
+            "num_regs": 32,
+            "local_bytes": 0,
+            "stack_bytes": 0,
+            "static_smem_bytes": 1024
+          },
+          "sass_audit": {
+            "all_backward_edges": [
+              {
+                "start_addr": 1552,
+                "end_addr": 2576,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x610"
+              },
+              {
+                "start_addr": 2768,
+                "end_addr": 2784,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0xad0"
+              },
+              {
+                "start_addr": 720,
+                "end_addr": 2800,
+                "kind": "return_edge",
+                "instruction": "BRA 0x2d0"
+              },
+              {
+                "start_addr": 2816,
+                "end_addr": 2816,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0xb00"
+              }
+            ],
+            "loop_start_addr": "0x610",
+            "loop_end_addr": "0xa10",
+            "loop_sass_instruction_count": 65,
+            "loop_body_mov_instructions": [],
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+          },
+          "artifact_hashes": {
+            "ptx": "3c28156124b13df5ac6048a2bf6551e4d08b13874b8a9d2f5a699b15d138ef65",
+            "ttgir": "c18dcdc3ea0d3cf02be97ff2194d9b402e20b5564ed59ea6885866039dd0e79f",
+            "sass": "fce18033055ad7258802698510b34613f74f2e4f4f1126ee059301b9505e4b0d",
+            "resource.txt": "105d74e94d9d7229011e9d4efaff0e30cfb6d6d282fcb5d044bf63364bff75d9",
+            "cubin.sha256": "1b6d2489c9b5e0628e16b856fe4c4c58bc6c24c0d558af34f884f0e598ed2efe"
+          }
+        },
         "experiment_role": "SECONDARY_CONTROL",
         "cubin_sha256": "c3a82950d7040e8a6bda66883a8bd3d07d6205036a4c159c47df267d9d9d8331",
         "cubin_invariant_across_r": true,
@@ -252,8 +1366,7 @@
             ]
           ],
           "pre_loop_ll_count": 4,
-          "in_loop_ll_count": 0,
-          "in_tile_ll_count": 0,
+          "extra_in_loop_shared_load_count": 0,
           "in_reduction_ll_count": 4,
           "post_loop_ll_count": 0,
           "red_inside_loop": true,
@@ -314,16 +1427,40 @@
             }
           },
           "sass_audit": {
-            "step_c_sass_instruction_count": 184,
-            "step_d_sass_instruction_count": 192,
-            "diff_instruction_count": 8,
+            "all_backward_edges": [
+              {
+                "start_addr": 1552,
+                "end_addr": 2576,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x610"
+              },
+              {
+                "start_addr": 2768,
+                "end_addr": 2784,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0xad0"
+              },
+              {
+                "start_addr": 720,
+                "end_addr": 2800,
+                "kind": "return_edge",
+                "instruction": "BRA 0x2d0"
+              },
+              {
+                "start_addr": 2816,
+                "end_addr": 2816,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0xb00"
+              }
+            ],
             "loop_start_addr": "0x610",
             "loop_end_addr": "0xa10",
             "loop_sass_instruction_count": 65,
             "loop_body_mov_instructions": [],
-            "attributable_sass_barrier_overhead": 0,
-            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
-            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
           },
           "extra_in_loop_ops": 0
         },
@@ -346,6 +1483,370 @@
         }
       },
       "4": {
+        "offline_artifact_audit": {
+          "checks": {
+            "tma_once_before_loop": true,
+            "local_load_once_before_loop": true,
+            "runtime_r": true,
+            "one_runtime_loop": true,
+            "layouts": true,
+            "initial_load_signature": true,
+            "complete_reduction_fingerprint": true,
+            "complete_memory_signature": true,
+            "no_extra_float_add_or_global_effect": true,
+            "barriers": true,
+            "no_explicit_sass_mov": true,
+            "resources": true,
+            "single_recorded_binary": true
+          },
+          "all_checks_passed": true,
+          "all_ptx_backedges": [
+            {
+              "start": 85,
+              "end": 88,
+              "target": "waitLoop",
+              "predicate": "!complete",
+              "kind": "inline_loop"
+            },
+            {
+              "start": 142,
+              "end": 272,
+              "target": "$L__BB0_2",
+              "predicate": "%p11",
+              "kind": "compiler_loop"
+            }
+          ],
+          "loop_start": 142,
+          "loop_end": 272,
+          "fingerprint": [
+            "bar.sync 0",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "canonical_fingerprint": [
+            "bar.sync 0",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "max.bf16x2",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "cvt.f32.bf16",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "shfl.sync.bfly.b32 2 31 -1",
+            "max.f32",
+            "shfl.sync.bfly.b32 1 31 -1",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "max.f32",
+            "bar.sync 0",
+            "st.shared.v4.b32",
+            "bar.sync 0",
+            "ld.shared.v4.b32"
+          ],
+          "reduction_match_type": "EXACT_SEQUENCE_EQUIVALENT",
+          "red_start": 181,
+          "red_end": 264,
+          "initial_load_signature": [
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16",
+            "ld.shared.v4.b16"
+          ],
+          "loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "expected_loop_memory_signature": [
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32",
+            "st.shared.v4.b32",
+            "ld.shared.v4.b32"
+          ],
+          "post_loop_shared_loads": [],
+          "copy_signature": [
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16",
+            "mov.b16"
+          ],
+          "copy_operands": [
+            [
+              "%rs25",
+              "%rs57"
+            ],
+            [
+              "%rs6",
+              "%rs38"
+            ],
+            [
+              "%rs32",
+              "%rs64"
+            ],
+            [
+              "%rs13",
+              "%rs45"
+            ],
+            [
+              "%rs20",
+              "%rs52"
+            ],
+            [
+              "%rs1",
+              "%rs33"
+            ],
+            [
+              "%rs27",
+              "%rs59"
+            ],
+            [
+              "%rs8",
+              "%rs40"
+            ],
+            [
+              "%rs15",
+              "%rs47"
+            ],
+            [
+              "%rs22",
+              "%rs54"
+            ],
+            [
+              "%rs3",
+              "%rs35"
+            ],
+            [
+              "%rs29",
+              "%rs61"
+            ],
+            [
+              "%rs10",
+              "%rs42"
+            ],
+            [
+              "%rs17",
+              "%rs49"
+            ],
+            [
+              "%rs24",
+              "%rs56"
+            ],
+            [
+              "%rs5",
+              "%rs37"
+            ],
+            [
+              "%rs31",
+              "%rs63"
+            ],
+            [
+              "%rs12",
+              "%rs44"
+            ],
+            [
+              "%rs19",
+              "%rs51"
+            ],
+            [
+              "%rs26",
+              "%rs58"
+            ],
+            [
+              "%rs7",
+              "%rs39"
+            ],
+            [
+              "%rs14",
+              "%rs46"
+            ],
+            [
+              "%rs21",
+              "%rs53"
+            ],
+            [
+              "%rs2",
+              "%rs34"
+            ],
+            [
+              "%rs28",
+              "%rs60"
+            ],
+            [
+              "%rs9",
+              "%rs41"
+            ],
+            [
+              "%rs16",
+              "%rs48"
+            ],
+            [
+              "%rs23",
+              "%rs55"
+            ],
+            [
+              "%rs4",
+              "%rs36"
+            ],
+            [
+              "%rs30",
+              "%rs62"
+            ],
+            [
+              "%rs11",
+              "%rs43"
+            ],
+            [
+              "%rs18",
+              "%rs50"
+            ]
+          ],
+          "copy_operands_one_to_one": true,
+          "resources_from_artifact": {
+            "num_regs": 24,
+            "local_bytes": 0,
+            "stack_bytes": 0,
+            "static_smem_bytes": 1024
+          },
+          "sass_audit": {
+            "all_backward_edges": [
+              {
+                "start_addr": 1488,
+                "end_addr": 1888,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x5d0"
+              },
+              {
+                "start_addr": 2080,
+                "end_addr": 2096,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0x820"
+              },
+              {
+                "start_addr": 720,
+                "end_addr": 2112,
+                "kind": "return_edge",
+                "instruction": "BRA 0x2d0"
+              },
+              {
+                "start_addr": 2128,
+                "end_addr": 2128,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0x850"
+              }
+            ],
+            "loop_start_addr": "0x5d0",
+            "loop_end_addr": "0x760",
+            "loop_sass_instruction_count": 26,
+            "loop_body_mov_instructions": [],
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
+          },
+          "artifact_hashes": {
+            "ptx": "984a754ef1317de26fb77432ae6f9232135fe49af3bb6a115b025c46a2413ca8",
+            "ttgir": "72be0bc06c94c2efa7eb9a12cdc29c87390c5ebbf76b80fefa08258727baa0b1",
+            "sass": "d76de6dfdc85f71e8bcd13483391917883f9fcabbf4ef2f3594be128676020c6",
+            "resource.txt": "1ebf9811e2b23fa2cb7c854faa4d6963f832a8ee545bd9c55b6fefeb8cd49483",
+            "cubin.sha256": "46403edb574e7d525d29f92467967c1ee5b7b12308c52519a8060a72f5fa3699"
+          }
+        },
         "experiment_role": "SECONDARY_CONTROL",
         "cubin_sha256": "88c234adc884f7204090c89836942e207d1a367b7eb99e2d4e190c3c573595e0",
         "cubin_invariant_across_r": true,
@@ -369,8 +1870,7 @@
             ]
           ],
           "pre_loop_ll_count": 8,
-          "in_loop_ll_count": 0,
-          "in_tile_ll_count": 0,
+          "extra_in_loop_shared_load_count": 0,
           "in_reduction_ll_count": 2,
           "post_loop_ll_count": 0,
           "red_inside_loop": true,
@@ -431,16 +1931,40 @@
             }
           },
           "sass_audit": {
-            "step_c_sass_instruction_count": 144,
-            "step_d_sass_instruction_count": 144,
-            "diff_instruction_count": 0,
+            "all_backward_edges": [
+              {
+                "start_addr": 1488,
+                "end_addr": 1888,
+                "kind": "reduction",
+                "instruction": "@P0 BRA 0x5d0"
+              },
+              {
+                "start_addr": 2080,
+                "end_addr": 2096,
+                "kind": "barrier_poll",
+                "instruction": "@!P0 BRA 0x820"
+              },
+              {
+                "start_addr": 720,
+                "end_addr": 2112,
+                "kind": "return_edge",
+                "instruction": "BRA 0x2d0"
+              },
+              {
+                "start_addr": 2128,
+                "end_addr": 2128,
+                "kind": "terminal_self_loop",
+                "instruction": "BRA 0x850"
+              }
+            ],
             "loop_start_addr": "0x5d0",
             "loop_end_addr": "0x760",
             "loop_sass_instruction_count": 26,
             "loop_body_mov_instructions": [],
-            "attributable_sass_barrier_overhead": 0,
-            "sass_barrier_classification": "BARRIER_EXPLICIT_SASS_OVERHEAD = 0",
-            "sass_barrier_observation": "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
+            "explicit_loop_mov_count": 0,
+            "sass_barrier_classification": "NO_EXPLICIT_LOOP_MOV_OBSERVED",
+            "sass_barrier_observation": "PTX tied copies exist; no extra explicit SASS MOV was observed.",
+            "attribution_limit": "No proof of zero indirect live-range, register-assignment, or scheduling effects."
           },
           "extra_in_loop_ops": 0
         },

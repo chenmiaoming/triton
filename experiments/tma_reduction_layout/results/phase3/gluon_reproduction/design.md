@@ -36,3 +36,7 @@ def gluon_canonical_reduction_kernel(
 - `M32_N128_w4 default`: `gl.BlockedLayout([1, 1, 8], [1, 2, 16], [1, 4, 1], [2, 1, 0])`
 - `M32_N128_w4 cand4`: `gl.BlockedLayout([1, 1, 4], [1, 1, 32], [1, 4, 1], [2, 1, 0])`
 - `Shared Layout`: `gl.NVMMASharedLayout(swizzle_byte_width=128, element_bitwidth=16, rank=3, transposed=False)`
+
+
+Exact matches compare the complete filtered normalized fingerprint: selected opcode families and shuffle/barrier immediates. Most operands/predicates are ignored; matching does not establish dataflow or full PTX/SASS/CUBIN equality. Initial LocalLoad matching checks every opcode/width.
+Theoretical residency is not achieved occupancy. Canonical occupancy-query records use a resource-matched recompile, with a different recorded CUBIN SHA from the measured canonical binary. See ../freeze.md for archival limits.

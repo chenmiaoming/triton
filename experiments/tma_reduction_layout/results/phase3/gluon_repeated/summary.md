@@ -11,8 +11,8 @@ for Gluon repeated reduction isolation across `R in {1, 2, 4, 8}`.
 > [!NOTE] Compiler Barrier Classification
 > The input anti-LICM tied barrier is **not PTX-zero**: it induces candidate-symmetric `mov.b16` register copies
 > (8 copies for `M32_N64_w8`, 32 copies for `M32_N128_w4`).
-> However, **SASS verification proves that 100% of these copies are eliminated** by `ptxas` register coalescing.
-> Therefore, `BARRIER_EXPLICIT_SASS_OVERHEAD = 0` is physically established.
+> SASS inspection: **no explicit MOV or IMAD.MOV was observed** in the runtime reduction region.
+> Allocation, live-range, and scheduler effects remain unmeasured; zero total overhead is not established.
 
 ## 2. Hardware Limits & Target Device (H100 SM90)
 
@@ -26,12 +26,12 @@ for Gluon repeated reduction isolation across `R in {1, 2, 4, 8}`.
 
 ## 3. Barrier & Reduction Decomposition across Specializations
 
-| Config | Candidate | Role | Loop Range | Branches | Input Barrier PTX Copies | In-Asm PTX | SASS Loop MOVs | SASS Overhead | Reduction Stratification | Extra Ops |
+| Config | Candidate | Role | Loop Range | Branches | Input Barrier PTX Copies | In-Asm PTX | SASS Loop MOVs | SASS Observation | Reduction Stratification | Extra Ops |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- | :---: |
-| `M32_N64_w8` | `default` | `PRIMARY` | `L125..L364` | **1** | **8 × mov.b16** | **0** | **0** | **BARRIER_EXPLICIT_SASS_OVERHEAD = 0** | `EXACT_SEQUENCE_EQUIVALENT` | **0** |
-| `M32_N64_w8` | `4` | `PRIMARY` | `L124..L242` | **1** | **8 × mov.b16** | **0** | **0** | **BARRIER_EXPLICIT_SASS_OVERHEAD = 0** | `EXACT_SEQUENCE_EQUIVALENT` | **0** |
-| `M32_N128_w4` | `default` | `SECONDARY_CONTROL` | `L152..L354` | **1** | **32 × mov.b16** | **0** | **0** | **BARRIER_EXPLICIT_SASS_OVERHEAD = 0** | `PIPELINED_OPCODE_EQUIVALENT` | **0** |
-| `M32_N128_w4` | `4` | `SECONDARY_CONTROL` | `L142..L272` | **1** | **32 × mov.b16** | **0** | **0** | **BARRIER_EXPLICIT_SASS_OVERHEAD = 0** | `EXACT_SEQUENCE_EQUIVALENT` | **0** |
+| `M32_N64_w8` | `default` | `PRIMARY` | `L125..L364` | **1** | **8 × mov.b16** | **0** | **0** | **NO_EXPLICIT_LOOP_MOV_OBSERVED** | `EXACT_SEQUENCE_EQUIVALENT` | **0** |
+| `M32_N64_w8` | `4` | `PRIMARY` | `L124..L242` | **1** | **8 × mov.b16** | **0** | **0** | **NO_EXPLICIT_LOOP_MOV_OBSERVED** | `EXACT_SEQUENCE_EQUIVALENT` | **0** |
+| `M32_N128_w4` | `default` | `SECONDARY_CONTROL` | `L152..L354` | **1** | **32 × mov.b16** | **0** | **0** | **NO_EXPLICIT_LOOP_MOV_OBSERVED** | `PIPELINED_OPCODE_EQUIVALENT` | **0** |
+| `M32_N128_w4` | `4` | `SECONDARY_CONTROL` | `L142..L272` | **1** | **32 × mov.b16** | **0** | **0** | **NO_EXPLICIT_LOOP_MOV_OBSERVED** | `EXACT_SEQUENCE_EQUIVALENT` | **0** |
 
 ## 4. Physical Resources & SM Occupancy (H100 SM90)
 
@@ -49,37 +49,42 @@ for Gluon repeated reduction isolation across `R in {1, 2, 4, 8}`.
 | `Criterion A (TMA Once Outside Loop)` | Structural requirement | **`PASS`** | Exactly 1 ttng.async_tma_copy_global_to_local before scf.for |
 | `Criterion B (Initial LocalLoad Once Outside Loop, Zero Inside)` | Structural requirement | **`PASS`** | Primary TTGIR: 1 ttg.local_load outside scf.for, 0 inside |
 | `Criterion C (Runtime R Unspecialized, Single Binary)` | Structural requirement | **`PASS`** | Single unspecialized binary reused across all R in {1,2,4,8} |
-| `Criterion D (One Runtime Loop, One Static Canonical Body)` | Structural requirement | **`PASS`** | Exactly 1 backward branch (@%p bra) per kernel |
-| `Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)` | Structural requirement | **`FAIL_AT_PTX_LEVEL`** | FAIL_AT_PTX_LEVEL: 0 explicit asm, 8/32 induced mov.b16 copies (candidate-symmetric; SASS overhead = 0) |
-| `Criterion F (Result Sink Emits Zero Instructions)` | Structural requirement | **`PASS`** | 0 explicit asm, 0 induced copies, 0 SASS instructions |
-| `Criterion G (Canonical Reduction Core Topology Equivalence)` | Structural requirement | **`PASS_STRATIFIED`** | PASS_STRATIFIED: PRIMARY w8 is EXACT_SEQUENCE_EQUIVALENT; SECONDARY w4 def is PIPELINED_OPCODE_EQUIVALENT |
+| `Criterion D (One Runtime Loop, One Static Canonical Body)` | Structural requirement | **`PASS`** | One compiler runtime reduction backedge; separate TMA polling edge is also present |
+| `Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)` | Structural requirement | **`FAIL_AT_PTX_LEVEL`** | FAIL_AT_PTX_LEVEL: 0 explicit asm, 8/32 induced mov.b16 copies (candidate-symmetric; no explicit loop MOV observed) |
+| `Criterion F (Result Sink Emits Zero Instructions)` | Structural requirement | **`PASS`** | 0 explicit asm and 0 induced copies |
+| `Criterion G (Complete Filtered Reduction Fingerprint Equivalence)` | Structural requirement | **`PASS_STRATIFIED`** | PASS_STRATIFIED: PRIMARY w8 is EXACT_SEQUENCE_EQUIVALENT; SECONDARY w4 def is PIPELINED_OPCODE_EQUIVALENT (opcode multiset only) |
 | `Criterion H (Terminal Canonical ld.shared Remains Inside Loop)` | Structural requirement | **`PASS`** | Terminal shared exchange ld.shared verified inside runtime loop |
 | `Criterion I (Zero Accumulator / Global Store Inside Loop)` | Structural requirement | **`PASS`** | Zero accumulator adds and zero global stores inside loop |
 | `Criterion J (Same-Config Residency & Occupancy Matched)` | Structural requirement | **`PASS`** | Blocks/SM and active warps/SM identical between default and cand4 |
 | `Criterion K (Zero Local Memory & Stack Spills)` | Structural requirement | **`PASS`** | 0 local memory bytes, 0 stack bytes |
 | `Criterion L (Identical CUBIN Across R in {1,2,4,8})` | Structural requirement | **`PASS`** | Identical CUBIN SHA256 across all R values |
 
-## 6. Timing Gate Verification (10 Conditions)
+## 6. Archived Timing Gate Verification (11 Conditions)
 
 | # | Condition | Result | Notes |
 | :-: | :--- | :---: | :--- |
-| 1 | M32_N64_w8 default exact canonical reduction sequence | **`PASS`** | Contiguous subsequence match verified |
-| 2 | M32_N64_w8 cand4 exact canonical reduction sequence | **`PASS`** | Contiguous subsequence match verified |
+| 1 | M32_N64_w8 default exact canonical reduction sequence | **`PASS`** | Complete filtered sequence match verified |
+| 2 | M32_N64_w8 cand4 exact canonical reduction sequence | **`PASS`** | Complete filtered sequence match verified |
 | 3 | Input barrier PTX copies candidate-symmetric | **`PASS`** | w8: 8 == 8; w4: 32 == 32 |
-| 4 | No attributable additional SASS barrier instructions | **`PASS`** | BARRIER_EXPLICIT_SASS_OVERHEAD = 0 |
-| 5 | Result sink no runtime SASS overhead | **`PASS`** | 0 copies / 0 SASS insts |
+| 4 | No explicit MOV/IMAD.MOV in runtime region | **`PASS`** | NO_EXPLICIT_LOOP_MOV_OBSERVED |
+| 5 | Result sink empty PTX and no copies | **`PASS`** | 0 explicit PTX / 0 copies |
 | 6 | Default / cand4 blocks/SM matched | **`PASS`** | w8: 8 blk/SM, w4: 16 blk/SM |
 | 7 | Active warps/SM matched | **`PASS`** | 64 warps/SM across all candidates |
 | 8 | Zero local memory and stack spills | **`PASS`** | LOCAL=0, STACK=0 |
 | 9 | One CUBIN per candidate | **`PASS`** | Single binary across all conditions |
 | 10 | Runtime R unspecialized | **`PASS`** | do_not_specialize=['num_reductions'] |
+| 11 | All structural conditions | **`PASS`** | Complete artifact audit required |
 
-**Gate Verdict**: **`PASS_UNLOCKED_FOR_STEP_E`** -> Phase 3 Step E timing is unlocked.
+**Gate Verdict**: **`PASS_UNLOCKED_FOR_STEP_E`** -> archived Step E structural protocol passes; no new timing is authorized.
 
 ## 7. Conclusions & Findings
 
 - **Overall Feasibility Status**: `GLUON_REDUCTION_AMPLIFICATION_TIMING_READY_WITH_COMPILER_BARRIER`.
-- **Compiler Barrier Overhead**: Prototype X induces candidate-symmetric `mov.b16` register copies at PTX level (Criterion E = `FAIL_AT_PTX_LEVEL`), but in SASS all copies are completely eliminated by ptxas register coalescing (`BARRIER_EXPLICIT_SASS_OVERHEAD = 0`).
-- **Reduction Fingerprint Stratification**: PRIMARY configuration (`M32_N64_w8`) exhibits exact canonical reduction sequence match in both default and cand4. SECONDARY configuration (`M32_N128_w4`) exhibits pipelined opcode equivalence for default due to LLVM independent column slice scheduling.
-- **Timing Gate Cleared**: All 10 pre-conditions passed, officially unlocking Phase 3 Step E controlled repeated-reduction timing.
-- **Hypothesis H2 Status**: Strictly remains **`UNVERIFIED`** pending Step E timing measurements.
+- **Compiler Barrier Overhead**: Prototype X induces candidate-symmetric `mov.b16` register copies at PTX level (Criterion E = `FAIL_AT_PTX_LEVEL`), no explicit loop MOV/IMAD.MOV is observed; indirect compiler effects remain possible.
+- **Reduction Fingerprint Stratification**: PRIMARY configuration (`M32_N64_w8`) exhibits exact canonical reduction sequence match in both default and cand4. SECONDARY configuration (`M32_N128_w4`) exhibits pipelined opcode equivalence for default with an opcode multiset match; register-dependency topology is not established.
+- **Timing Gate Cleared**: All structural and observational checks pass for the archived Step E protocol.
+- **Hypothesis H2 Status**: This stage supplies structural evidence; the current scientific decision is reported in Step E.
+
+
+Exact sequence compares the complete filtered normalized reduction fingerprint, including selected opcodes and shuffle/barrier immediates. Most operands and predicates are ignored; this is not dataflow/full PTX/SASS/CUBIN equality. Secondary opcode multiset equality does not prove topology.
+All structural conditions, complete loop memory signature, resources, and recorded binary bindings are required. The archived gate authorizes no new timing. Indirect live-range, allocation, and scheduler effects remain possible.

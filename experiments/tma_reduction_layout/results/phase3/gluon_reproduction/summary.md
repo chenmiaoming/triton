@@ -6,7 +6,7 @@
 
 Phase 3 Step C determines whether the built-in Gluon language can explicitly reproduce the
 TMA load, shared memory layout, shared-to-register load lowering, distributed register layout,
-and reduction topology of Canonical Step A without opaque hacks or handwritten PTX.
+and filtered reduction fingerprint of Canonical Step A without opaque hacks or handwritten PTX.
 
 ## 2. Hardware Limits & Target GPU
 
@@ -86,6 +86,10 @@ Tensor axes are `[B, M, N]` (rank 3 in Gluon: `[1, M, N]`).
 - **Overall Status**: `GLUON_CANONICAL_REPRODUCTION_SUCCESS`.
 - **Explicit Layout Representation**: Gluon's `gl.BlockedLayout` directly expresses the canonical distributed layouts without compiler inference.
 - **Shared-Memory LocalLoad Lowering**: `smem.load(register_layout)` generates the exact target LocalLoad instruction families (vector widths and counts) instruction-for-instruction.
-- **Reduction Topology Equivalence**: Gluon's native `gl.max` along axis 1 compiles to the exact canonical reduction sequence across all specializations.
-- **Residency & Occupancy**: Full 100% theoretical occupancy (64 warps/SM) is achieved across all 4 specializations with 0 local memory or stack spills.
-- **Hypothesis H2 Status**: Strictly remains **`UNVERIFIED`** (no runtime-K amplification or timing was performed).
+- **Filtered Reduction Fingerprint Equivalence**: Gluon's native `gl.max` along axis 1 compiles to the complete filtered normalized canonical reduction fingerprint sequence across all specializations.
+- **Residency & Occupancy**: Recorded theoretical residency corresponds to 64 warps/SM across all 4 specializations with 0 local memory or stack spills.
+- **Hypothesis H2 Status**: This stage provides structural evidence; current hypothesis decisions are reported in Step E.
+
+
+Exact matches compare the complete filtered normalized fingerprint: selected opcode families and shuffle/barrier immediates. Most operands/predicates are ignored; matching does not establish dataflow or full PTX/SASS/CUBIN equality. Initial LocalLoad matching checks every opcode/width.
+Theoretical residency is not achieved occupancy. Canonical occupancy-query records use a resource-matched recompile, with a different recorded CUBIN SHA from the measured canonical binary. See ../freeze.md for archival limits.

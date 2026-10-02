@@ -11,7 +11,7 @@ Initial TMA loading and shared-to-register LocalLoads are paid exactly once befo
 Residency is matched (8 blocks/SM for w8, 16 blocks/SM for w4) with 0 spills across all conditions.
 
 - **Primary Mechanism Metric**: Isolated one-reduction differential $\Delta g(1) = g(1) - g(0)$ is **`1.0929 ± 0.0118` ns/additional CTA**.
-- **Descriptive Attribution Ratio**: The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap. (Canonical gap = 1.4279 ns/additional CTA; isolated delta = 1.0929 ns/additional CTA).
+- **Descriptive Attribution Ratio**: The isolated one-reduction differential has a magnitude equal to 74.88% of the canonical default-vs-cand4 marginal-slope gap. (Canonical gap = 1.459589 ns/additional CTA; isolated delta = 1.0929 ns/additional CTA).
   - *Attribution Note*: This is a **cross-harness descriptive magnitude comparison, not an additive causal decomposition**.
 - **Amplification Trend Summary**: Fitted linear slope $\beta = `1.2040 ± 0.0022` ns/(CTA · rep)** serves strictly as an **amplification-trend summary** across $R \in \{0, 1, 2, 4, 8\}$ ($R^2 = 0.9996).
 - **Linearity Quality**: Incremental repetition deltas demonstrate **strong approximately linear amplification over R=0..8** without constant per-repetition cost assumptions.
@@ -31,7 +31,7 @@ Residency is matched (8 blocks/SM for w8, 16 blocks/SM for w4) with 0 spills acr
 ## 3. PRIMARY Specialization: `M32_N64_w8` (Exact Canonical Subsequence Equivalent)
 
 > [!NOTE] Primary Experiment
-> Both default (vec=8) and cand4 (vec=4) exhibit 100% exact contiguous subsequence equivalence
+> Both candidates match the complete filtered normalized reduction fingerprint sequence
 > with the canonical reduction fingerprint inside the runtime loop.
 
 ### Repetition Sweep Breakdown ($R \in \{0, 1, 2, 4, 8\}$)
@@ -53,7 +53,7 @@ Residency is matched (8 blocks/SM for w8, 16 blocks/SM for w4) with 0 spills acr
 | **R: 2 -> 4** | `d_24 = (g(4) - g(2)) / 2` | **1.1544 ± 0.0069** | 0.60% | Two-repetition average step |
 | **R: 4 -> 8** | `d_48 = (g(8) - g(4)) / 4` | **1.2002 ± 0.0070** | 0.58% | Four-repetition average step |
 
-Incremental deltas cluster tightly around ~1.15 - 1.40 ns/(CTA·rep), demonstrating **strong approximately linear amplification over R=0..8**.
+The observed increments vary; the fitted trend is approximately linear over R=0..8, not an exact constant cost per repetition.
 
 ### Primary Amplification Model Fits ($g(R) = \alpha + \beta \cdot R$)
 
@@ -61,9 +61,9 @@ Incremental deltas cluster tightly around ~1.15 - 1.40 ns/(CTA·rep), demonstrat
 - **Primary Metric $\Delta g(1)$**: `1.0929 ± 0.0118` ns/CTA
 - **Amplification Slope $\beta$**: `1.2040 ± 0.0022` ns/(CTA · rep) (amplification-trend summary)
 - **Fit Intercept $\alpha$**: `-0.0150 ± 0.0064` ns/CTA (CV: `N/A`, stability: `near_zero_or_sign_unstable`)
-- **Model Fit $R^2$**: `0.9996`
-- **Canonical Positive Gap**: `1.4279` ns/additional CTA
-- **Descriptive Attribution Ratio**: **`76.5%`** (`1.0929 / 1.4279`)
+- **Mean per-run fit $R^2$**: `0.9996`
+- **Canonical Positive Gap**: `1.459589` ns/additional CTA
+- **Descriptive Attribution Ratio**: **`74.9%`** (`1.0929 / 1.459589`)
 
 ### Linear Model Fit Residuals
 
@@ -95,24 +95,24 @@ Incremental deltas cluster tightly around ~1.15 - 1.40 ns/(CTA·rep), demonstrat
 - **Measured Baseline $g(0)$**: `0.0114 ± 0.0030` ns/CTA
 - **Isolated $\Delta g(1)$**: `-0.0285 ± 0.0168` ns/CTA
 - **Linear Slope $\beta$**: `0.5381 ± 0.0016` ns/(CTA · rep)
-- **Model Fit $R^2$**: `0.9442`
+- **Mean per-run fit $R^2$**: `0.9442`
 
 ## 5. Compiler Barrier Attribution & SASS Verification
 
-- The input compiler barrier induces candidate-symmetric PTX tied-copy instructions. No additional explicit SASS MOV attributable to those copies was observed after ptxas register coalescing.
-- Barrier overhead is candidate-symmetric and does not contribute to default-vs-cand4 differentials.
+- The input compiler barrier induces equal PTX copy counts within each shape. No explicit MOV or IMAD.MOV was observed in the runtime SASS reduction region.
+- Indirect allocation, live-range, and scheduler effects remain possible; equal copy counts do not establish zero differential.
 
 ## 6. Hypothesis H2 Evaluation & Lineage Decomposition
 
 - **Overall H2 Status**: **`SUPPORTED_AT_REDUCTION_BODY_LEVEL`**
-- **Evaluation Verdict**: Hypothesis H2 is decomposed into sub-hypotheses: H2a is SUPPORTED AT REDUCTION BODY LEVEL. The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition). The primary mechanism metric is Δg(1) = 1.0929 ± 0.0118 ns/additional CTA. Linear slope beta = 1.2040 ± 0.0022 ns/(CTA·rep) serves strictly as an amplification-trend summary. Incremental repetition deltas exhibit strong approximately linear amplification over R=0..8. Sub-hypotheses H2b (lane-partition dominance) and H2c (intra-warp communication dominance) remain UNVERIFIED.
+- **Evaluation Verdict**: Hypothesis H2 is decomposed into sub-hypotheses: H2a is SUPPORTED AT REDUCTION BODY LEVEL. The isolated one-reduction differential has a magnitude equal to 74.9% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition). The primary mechanism metric is Δg(1) = 1.0929 ± 0.0118 ns/additional CTA. Linear slope beta = 1.2040 ± 0.0022 ns/(CTA·rep) serves strictly as an amplification-trend summary. Incremental repetition deltas exhibit strong approximately linear amplification over R=0..8. Sub-hypotheses H2b (lane-partition dominance) and H2c (intra-warp communication dominance) remain UNVERIFIED.
 
 ### Formal Sub-Hypothesis Lineage
 
 1. **Hypothesis 2a (H2a)**: Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.
    - **Status**: **`SUPPORTED_AT_REDUCTION_BODY_LEVEL`**
    - **Evidence**: Isolated one-reduction differential $\Delta g(1) = 1.0929 ± 0.0118$ ns/additional CTA.
-   - **Attribution Scope**: The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).
+   - **Attribution Scope**: The isolated one-reduction differential has a magnitude equal to 74.88% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).
 
 2. **Hypothesis 2b (H2b)**: Lane-partition pruning dominates warp-partition pruning.
    - **Status**: **`UNVERIFIED`**
@@ -121,3 +121,10 @@ Incremental deltas cluster tightly around ~1.15 - 1.40 ns/(CTA·rep), demonstrat
 3. **Hypothesis 2c (H2c)**: Intra-warp communication dominates cross-warp communication.
    - **Status**: **`UNVERIFIED`**
    - **Rationale**: Step E isolates the composite reduction body, but does not isolate thread-local vs shuffle vs smem vs barrier components separately.
+
+
+The decision rule is retrospective: all primary run betas > 0, mean Δg(1) > 0.1 ns/CTA, mean per-run R² >= 0.90, and mean/each-run g(R) nondecreasing. It is not an integrity PASS condition.
+± denotes sample SD of three same-device temporal invocations, not a confidence interval.
+R² of cross-run mean points: 0.999647141; mean of per-run R²: 0.999642049.
+Canonical raw binding: `experiments/tma_reduction_layout/results/phase2/saturation/corrected_pilot_runs.json`, SHA256 `75087a0ea79d359e4b1820be729295db3f0d7cf392cdfde2a888b63dbb453e9b`, last-change commit `a57bff355124dd3d80e6ff4116e4796d1eeb48de`.
+Fingerprint equality ignores most operands and predicates; it does not prove dataflow, full PTX, SASS, or CUBIN identity. See ../freeze.md for archival limits.
