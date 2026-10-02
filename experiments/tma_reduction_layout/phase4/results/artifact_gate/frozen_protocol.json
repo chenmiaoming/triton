@@ -1,0 +1,178 @@
+{
+  "R0_limitation": "R=0 subtraction removes fixed one-time harness differentials, but does not prove absence of interaction through register allocation, live ranges, or scheduling",
+  "association": {
+    "anchors": "included in primary if gates pass, labeled separately; no automatic anchor deletion",
+    "inference": "structured factorial design, not an IID random population sample; descriptive association only, no correlation p-values as population-level random-sample inference or additive causal evidence",
+    "leave_one_out": "PRIMARY only: report every case_i/rho_minus_i using the same continuous ranks; report min/max/median of defined values, defined/undefined counts; no deletion or refitting of the full-cohort analysis",
+    "minimum": "fewer than 3 pairs or constant variable => UNDEFINED, no threshold/cohort changes",
+    "minimum_interpretability": "PRIMARY n<5: report per-case results and association metrics but do not claim cross-shape generalization established; n>=5 remains descriptive evidence over this defined cohort, not population inference; no required rho threshold",
+    "primary": "Spearman = Pearson of one-based average ranks of continuous unrounded mean delta_g1 and mean G_canonical among all future PRIMARY cases; exact ties receive average ranks; no sign-category discretization or numerical zeroing before ranking",
+    "secondary": "Pearson of the same unrounded means; separate SECONDARY cohort results; PRIMARY newly-generalized-only sensitivity",
+    "sign_agreement": "three-category exact agreement / all eligible pairs; additionally report resolved-sign-only rate with numerator, denominator and unresolved coverage",
+    "sign_unresolved_and_negative": "retain unrounded numeric values in correlations and all cases in taxonomy; never replace near-zero values with zero"
+  },
+  "canonical_single_gate": "CANONICAL_SINGLE_REPRODUCTION_GATE: exact blocked/NVMMA shared layouts and entire initial LocalLoad opcode sequence; complete reduction fingerprint exact or classified secondary; zero spill and resource provenance",
+  "cohort_rule": "legal, distinct supported layouts; same M reduction axis and warps; warpPart_M unchanged; lanePart_M strictly reduced",
+  "counterexample_axis_order": "delta_g1 category / G_canonical category; interpretations are candidates, not causal diagnoses",
+  "counterexamples": {
+    "NEGATIVE/NEGATIVE": "MECHANISM_ALIGNED_NEGATIVE",
+    "NEGATIVE/POSITIVE": "OPPOSED_CANONICAL_POSITIVE",
+    "NEGATIVE/SIGN_UNRESOLVED": "MASKED_LOCAL_DISADVANTAGE_CANDIDATE",
+    "POSITIVE/NEGATIVE": "D_OPPOSED_CANONICAL_OUTCOME",
+    "POSITIVE/POSITIVE": "A_MECHANISM_ALIGNED_POSITIVE",
+    "POSITIVE/SIGN_UNRESOLVED": "C_MASKED_LOCAL_ADVANTAGE_CANDIDATE",
+    "SIGN_UNRESOLVED/NEGATIVE": "CANONICAL_NEGATIVE_WITH_UNRESOLVED_BODY",
+    "SIGN_UNRESOLVED/POSITIVE": "E_OTHER_MECHANISM_CANDIDATE",
+    "SIGN_UNRESOLVED/SIGN_UNRESOLVED": "B_MECHANISM_NEUTRAL_UNRESOLVED"
+  },
+  "exclude_classification": [
+    "REDUCTION_FINGERPRINT_MISMATCH",
+    "CANONICAL_SINGLE_LOCALLOAD_SIGNATURE_MISMATCH",
+    "REPEATED_LOCALLOAD_SEMANTIC_MISMATCH",
+    "RUNTIME_BINARY_OR_LOCALLOAD_CHANGED",
+    "MISSING_R0",
+    "LAYOUT_MISMATCH",
+    "SPILLS",
+    "RESIDENCY_MISMATCH"
+  ],
+  "fingerprint_families": [
+    "max.*",
+    "cvt.*",
+    "shfl.*",
+    "st.shared*",
+    "ld.shared*",
+    "ldmatrix*",
+    "bar.sync",
+    "selp.*"
+  ],
+  "fingerprint_normalization": "retain shuffle/barrier immediates; remove registers, other addresses and predicates; complete filtered sequence only, no dataflow/full-PTX/SASS/CUBIN equality",
+  "fingerprint_stage": "canonical convert/max source stage including terminal exchange, excluding store-layout conversion; Gluon minimal-output complete region from after tile load to global store; repeated complete runtime loop. Future canonical source-stage lines must be SHA-bound and AST-verified. Missing/ambiguous stage => pending, never choose a subsequence by desired match",
+  "future_sampling": {
+    "B_DESC": 65536,
+    "B_RUN": [
+      16384,
+      32768,
+      65536
+    ],
+    "R": [
+      0,
+      1
+    ],
+    "binary_scope": "one exact compiled binary per case/candidate/harness across R and B_RUN; canonical and Gluon are separate binaries",
+    "invocations": 3,
+    "replication_label": "same UUID => same-device temporal replication; different UUIDs must be reported explicitly",
+    "rounds": 10,
+    "samples_per_condition": 100,
+    "samples_per_round": 10
+  },
+  "harness_description": "canonical reduction-body-equivalent controlled harness",
+  "metric_definitions": {
+    "G_canonical": "OLS_B(sample_median_canonical_default)*1000 - OLS_B(sample_median_canonical_cand4)*1000",
+    "aggregation": "paired differential per invocation, then arithmetic mean; sample SD across three invocations",
+    "delta_g1": "[b_default(1)-b_cand4(1)]-[b_default(0)-b_cand4(0)]",
+    "units": "ns/additional CTA (marginal grid-time slope, not single-CTA latency)"
+  },
+  "outliers": {
+    "handling": "no removal, refitting after deletion, or post-result definition change",
+    "report": "rank every case; discuss top min(5,n), descending score with config_id ascending for ties; label anchors",
+    "score": "abs(average_rank(delta_g1)-average_rank(G_canonical))/(n-1)"
+  },
+  "pending_policy": "Missing evidence is PENDING, not an experimental counterexample or structural-pool removal; retain all failures and reasons",
+  "primary_classification": "CANONICAL_SINGLE_EXACT_LAYOUT_AND_LOCALLOAD; BOTH_CANDIDATES_SINGLE_AND_RUNTIME_LOOP_EXACT_SEQUENCE_EQUIVALENT; ALL_ISOLATION_RESOURCE_RUNTIME_GATES_PASS; REPEATED_PRELOOP_ENCODING_NEED_NOT_EQUAL_CANONICAL",
+  "repeated_gate": "REPEATED_HARNESS_ISOLATION_GATE: one TMA/LocalLoad before one unspecialized R loop; no tile reload, extra memory/global effect or accumulator inside; complete reduction fingerprint preserved, zero spill, matched residency, R=0 present and one binary/PTX/LocalLoad sequence across runtime R/B",
+  "repeated_local_load": "record EXACT/DIFFERENT_ENCODING/MISMATCH; DIFFERENT_ENCODING is not automatic exclusion when TTGIR semantics and full byte payload agree, load remains one-time/outside loop, R=0 and fixed binary exist and all isolation/resource gates pass",
+  "schedule_cardinality": {
+    "by_harness": {
+      "canonical": {
+        "B_RUN_values": [
+          16384,
+          32768,
+          65536
+        ],
+        "R_values": [
+          null
+        ],
+        "candidate_level_invocation_conditions": 360,
+        "candidates": 2,
+        "cases": 20,
+        "measurement_conditions_per_invocation": 120,
+        "planned_scalar_timing_samples": 36000,
+        "round_order_visits": 3600
+      },
+      "repeated": {
+        "B_RUN_values": [
+          16384,
+          32768,
+          65536
+        ],
+        "R_values": [
+          0,
+          1
+        ],
+        "candidate_level_invocation_conditions": 720,
+        "candidates": 2,
+        "cases": 20,
+        "measurement_conditions_per_invocation": 240,
+        "planned_scalar_timing_samples": 72000,
+        "round_order_visits": 7200
+      }
+    },
+    "execution": "FUTURE_PLAN_COUNTS_ONLY_NO_MEASUREMENTS",
+    "invocations": 3,
+    "master_case_count": 20,
+    "master_source_domain": "structurally included transitions before artifact/resource filtering; all source transitions retained in structural accounting",
+    "rounds_per_invocation": [
+      10,
+      10,
+      10
+    ],
+    "samples_per_visit": [
+      10
+    ],
+    "stored_candidate_paired_scheduling_units": 0,
+    "total_candidate_level_invocation_conditions": 1080,
+    "total_measurement_conditions_per_invocation": 360,
+    "total_planned_scalar_timing_samples": 108000,
+    "total_round_order_visits": 10800
+  },
+  "schedule_semantics": {
+    "candidate_paired_condition": "not stored as a scheduling unit; default/cand4 are separate measurement conditions",
+    "eligible_n_formulas": {
+      "canonical_conditions_per_invocation": "n*2*1*3 = 6n (R=null)",
+      "canonical_invocation_conditions": "6n*3 = 18n",
+      "canonical_scalar_samples": "18n*10*10 = 1800n",
+      "combined_conditions_per_invocation": "18n",
+      "combined_invocation_conditions": "54n",
+      "combined_scalar_samples": "5400n",
+      "repeated_conditions_per_invocation": "n*2*2*3 = 12n",
+      "repeated_invocation_conditions": "12n*3 = 36n",
+      "repeated_scalar_samples": "36n*10*10 = 3600n"
+    },
+    "filter": "only artifact/resource eligibility filtering of the original 20-case master order; preserve relative order, never regenerate after Stage B gates",
+    "invocation": "one temporal benchmark run containing ten round orders; same condition repeated across rounds",
+    "measurement_condition": "(case,harness,candidate,R,B_RUN); canonical R=null, repeated R in {0,1}; one candidate per entry",
+    "round_order": "ordered visit to every retained measurement condition once per round; each visit collects samples_per_round scalar timings",
+    "sample": "one scalar timing observation; 100 per measurement condition per invocation, not 100 across all invocations"
+  },
+  "scope": "lane-partition-reduction class with unchanged warpPart_M; does not generalize to all partial-reduction layouts or verify H2b/H2c",
+  "secondary_classification": "NO_MISMATCH_AND_AT_LEAST_ONE_PIPELINED_OPCODE_EQUIVALENT_AND_ALL_PRE_GATES_PASS; opcode multiset is not topology proof",
+  "selection_blinding": "performance-field-independent programmatic cohort selection, frozen before any new Phase 4 mechanism measurements; historical canonical outcomes existed before this preregistration, so human-level complete outcome blinding cannot be claimed",
+  "sign_resolution": {
+    "absolute_alternative": "fixed ns/CTA floor has no prior calibration; an uncertainty-scaled absolute half-width avoids inventing one",
+    "band": "two-sided 95% Student-t sign-resolution band, df=2; sample SD uses ddof=1",
+    "display_alias": "NEAR_ZERO",
+    "interpretation": "SIGN_UNRESOLVED does not mean practical equivalence; sign is unresolved at chosen temporal-replication precision; descriptive t(df=2) interval assumptions and quantization limits must be reported",
+    "machine_label": "SIGN_UNRESOLVED",
+    "negative": "mean < -h",
+    "positive": "mean > h",
+    "precedent": "phase2_benchmark.py run_sweep_remote: abs(diff_pct)>3.0 triggers repeat, diff_pct=(candidate median-default median)/default median*100",
+    "recommended": "uncertainty-aware absolute signed-difference interval, separately for G_canonical and delta_g1",
+    "relative_alternative": "3% is an existing Phase 2 fixed-B median repeat-trigger, not established universal practical significance for slopes; do not use it as the primary category threshold",
+    "sign_unresolved": "-h <= mean <= h",
+    "threshold": "h = 4.302652729911275 * sample_SD(three paired invocation differentials) / sqrt(3)"
+  },
+  "stage": "A_ONLY_NO_EXECUTION",
+  "stop": "Stage A review only; no Modal, H100 compile, performance collection or push",
+  "unsupported_topology_class": "TOPOLOGY_EQUIVALENT_NONEXACT is not assigned by automatic multiset comparison; remains pending/excluded absent separately preregistered dependency/address proof",
+  "version": 2
+}

@@ -1,0 +1,178 @@
+{
+  "R0_limitation": "R=0 subtraction controls fixed one-time harness differential. It does not prove absence of interactions via register allocation, live ranges, instruction scheduling, or compiler decisions.",
+  "Stage_C_contract": "For canonical and repeated, runtime CUBIN SHA must equal archived timing-eligible SHA; mismatch ABORT BEFORE TIMING. Stage C not started.",
+  "attempts": 120,
+  "barrier_contract": "Empty input/sink asm; observed tied copies and SASS MOV/IMAD.MOV; frozen no-explicit-loop-MOV gate retained; indirect effects UNISOLATED_NOT_ASSUMED_ZERO",
+  "candidate_variants": 40,
+  "counts": {
+    "EXCLUDE_FROM_TIMING": 2,
+    "PENDING": 0,
+    "PRIMARY": 3,
+    "SECONDARY": 15
+  },
+  "eligible_coverage": {
+    "PRIMARY": {
+      "M": {
+        "128": 1,
+        "32": 1,
+        "64": 1
+      },
+      "N": {
+        "64": 3
+      },
+      "lanePart_transition": {
+        "4->2": 3
+      },
+      "num_warps": {
+        "8": 3
+      }
+    },
+    "SECONDARY": {
+      "M": {
+        "128": 6,
+        "32": 4,
+        "64": 5
+      },
+      "N": {
+        "128": 5,
+        "16": 3,
+        "32": 5,
+        "64": 2
+      },
+      "lanePart_transition": {
+        "16->8": 3,
+        "2->1": 5,
+        "4->2": 2,
+        "8->4": 5
+      },
+      "num_warps": {
+        "4": 9,
+        "8": 6
+      }
+    }
+  },
+  "exported_bundles": {
+    "canonical": 40,
+    "repeated": 40,
+    "single": 40
+  },
+  "fingerprint_contract": "Frozen family/immediate sequence or full multiset; operands/dataflow/topology not proven by a matching projection",
+  "generated_binaries": {
+    "canonical": 40,
+    "repeated": 40,
+    "single": 40
+  },
+  "master_schedule_sha256": "3ef7d10b23b4861bc428560c1b2058c6901eaf98080866a0b99f0b4dc23f3913",
+  "no_performance_observation": true,
+  "reason_semantics": {
+    "BARRIER_CONTRACT_FAILURE": "Empty asm, tied-copy dataflow, symmetry or explicit loop MOV gate fails",
+    "BINARY_NOT_INVARIANT": "R0/R1 loaded/archived CUBIN bindings differ",
+    "CANONICAL_LAYOUT_DRIFT": "Observed canonical layout differs from frozen expectation",
+    "COMPILER_EXPORT_FAILURE": "Compiler/export failure; evidence incomplete (PENDING)",
+    "CORRECTNESS_FAILURE": "Non-timed reduction correctness or launch smoke failed",
+    "EXACT_BINARY_OCCUPANCY_UNAVAILABLE": "Missing/unbound occupancy evidence (PENDING)",
+    "PROVENANCE_INCOMPLETE": "Missing/mismatched source or binary evidence (PENDING)",
+    "REDUCTION_TEMPLATE_MISMATCH": "Canonical terminal exchange missing from runtime loop",
+    "REPEATED_ACCUMULATOR_CONFOUND": "FP32 accumulator, global/atomic or other forbidden loop effect",
+    "REPEATED_EXTRA_MEMORY_EFFECT": "Complete runtime loop memory multiset differs from canonical reduction",
+    "REPEATED_REDUCTION_MISMATCH": "Repeated complete loop fingerprint multiset differs",
+    "REPEATED_TILE_RELOAD": "TMA or initial tile LocalLoad not isolated before runtime loop",
+    "RESIDENCY_MISMATCH": "Candidate blocks/SM or active warps/SM differ for any frozen harness",
+    "R_SPECIALIZED": "Runtime R unspecialized source/IR contract fails",
+    "SINGLE_LAYOUT_MISMATCH": "Single logical/layout/execution contract differs",
+    "SINGLE_LOCALLOAD_MISMATCH": "Complete ordered single LocalLoad sequence differs",
+    "SINGLE_REDUCTION_MISMATCH": "Frozen complete filtered fingerprint multiset differs",
+    "SPILL": "Nonzero LOCAL or STACK",
+    "STRUCTURAL_CONTRACT_FAILURE": "Actual IR/PTX/SASS fails a frozen structural contract"
+  },
+  "residency_contract": "Matched candidate blocks/SM and active warps/SM for canonical, single, repeated; register counts may differ",
+  "resource_field_contract": "Root case resources.static_smem_bytes is the driver attribute; cuobjdump_reported_shared_bytes retains raw SHARED. Raw metadata and frozen body-helper resources retain legacy parser names. Here driver static=0 and cuobjdump SHARED=1024; both are archived separately without assuming equality or using a proxy occupancy calculation.",
+  "stage": "PHASE_4_STAGE_B",
+  "structural_observations": {
+    "canonical_layout_drift": [],
+    "repeated_pipelined": [
+      "M128_N128_w4:default",
+      "M128_N128_w8:default",
+      "M128_N16_w4:default",
+      "M128_N16_w4:4",
+      "M128_N16_w8:default",
+      "M128_N16_w8:4",
+      "M128_N32_w4:default",
+      "M128_N32_w4:4",
+      "M128_N32_w8:default",
+      "M128_N64_w4:default",
+      "M32_N128_w4:default",
+      "M32_N128_w8:default",
+      "M32_N32_w4:default",
+      "M32_N32_w4:4",
+      "M32_N64_w4:default",
+      "M64_N128_w4:default",
+      "M64_N128_w8:default",
+      "M64_N16_w4:default",
+      "M64_N16_w4:4",
+      "M64_N32_w4:default",
+      "M64_N32_w4:4",
+      "M64_N32_w8:default",
+      "M64_N64_w4:default"
+    ],
+    "residency_mismatches": {
+      "M128_N64_w4": {
+        "canonical": {
+          "4": [
+            12,
+            48
+          ],
+          "default": [
+            13,
+            52
+          ],
+          "matched": false
+        },
+        "repeated": {
+          "4": [
+            13,
+            52
+          ],
+          "default": [
+            12,
+            48
+          ],
+          "matched": false
+        }
+      },
+      "M64_N128_w4": {
+        "canonical": {
+          "4": [
+            13,
+            52
+          ],
+          "default": [
+            12,
+            48
+          ],
+          "matched": false
+        }
+      }
+    },
+    "single_localload_failures": [],
+    "single_pipelined": [
+      "M128_N16_w4:default",
+      "M128_N16_w4:4",
+      "M128_N16_w8:default",
+      "M128_N16_w8:4",
+      "M128_N32_w4:default",
+      "M128_N32_w4:4",
+      "M128_N32_w8:default",
+      "M128_N64_w4:default",
+      "M32_N32_w4:default",
+      "M32_N32_w4:4",
+      "M32_N64_w4:default",
+      "M64_N16_w4:default",
+      "M64_N16_w4:4",
+      "M64_N32_w4:default",
+      "M64_N32_w4:4",
+      "M64_N32_w8:default",
+      "M64_N64_w4:default"
+    ]
+  }
+}

@@ -1,0 +1,2596 @@
+{
+  "coverage": {
+    "M": {
+      "128": 8,
+      "32": 5,
+      "64": 7
+    },
+    "N": {
+      "128": 6,
+      "16": 3,
+      "32": 5,
+      "64": 6
+    },
+    "N256_audit": [
+      {
+        "config_id": "M128_N256_w4",
+        "reason_codes": [
+          "WARP_PART_CHANGED",
+          "LANE_PART_NOT_REDUCED"
+        ]
+      },
+      {
+        "config_id": "M128_N256_w8",
+        "reason_codes": [
+          "WARP_PART_CHANGED",
+          "LANE_PART_NOT_REDUCED"
+        ]
+      },
+      {
+        "config_id": "M32_N256_w4",
+        "reason_codes": [
+          "WARP_PART_CHANGED",
+          "LANE_PART_NOT_REDUCED"
+        ]
+      },
+      {
+        "config_id": "M32_N256_w8",
+        "reason_codes": [
+          "WARP_PART_CHANGED",
+          "LANE_PART_NOT_REDUCED"
+        ]
+      },
+      {
+        "config_id": "M64_N256_w4",
+        "reason_codes": [
+          "WARP_PART_CHANGED",
+          "LANE_PART_NOT_REDUCED"
+        ]
+      },
+      {
+        "config_id": "M64_N256_w8",
+        "reason_codes": [
+          "WARP_PART_CHANGED",
+          "LANE_PART_NOT_REDUCED"
+        ]
+      }
+    ],
+    "lanePart_M_transitions": {
+      "16->8": 3,
+      "2->1": 6,
+      "4->2": 6,
+      "8->4": 5
+    },
+    "num_warps": {
+      "4": 11,
+      "8": 9
+    },
+    "origin": {
+      "ANCHOR_EXISTING": 2,
+      "NEW_GENERALIZATION": 18
+    },
+    "sizePerThread_transitions": {
+      "[1, 1, 8]->[1, 1, 4]": 20
+    },
+    "warpPart_M_values": {
+      "4": 11,
+      "8": 9
+    }
+  },
+  "excluded_structural_pool": 10,
+  "included_structural_pool": 20,
+  "logical_contract": {
+    "domains": {
+      "M_LIST": [
+        32,
+        64,
+        128
+      ],
+      "N_LIST": [
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "WARPS_LIST": [
+        4,
+        8
+      ]
+    },
+    "logical_shape": [
+      1,
+      "M",
+      "N"
+    ],
+    "reduction_axis": 1,
+    "reduction_axis_evidence": "source AST; historical parsed reduce_ops are empty; actual TTGIR required by Stage B",
+    "source_function": "run_sweep_remote.get_kernel.kernel"
+  },
+  "reason_counts_nonexclusive": {
+    "CAND4_ILLEGAL": 1,
+    "DEFAULT_ILLEGAL": 0,
+    "IDENTICAL_LAYOUT": 3,
+    "LANE_PART_NOT_REDUCED": 9,
+    "REDUCTION_AXIS_MISMATCH": 0,
+    "UNSUPPORTED_LAYOUT": 0,
+    "WARP_COUNT_MISMATCH": 0,
+    "WARP_PART_CHANGED": 6
+  },
+  "source_combinations": 150,
+  "source_git_head": "ce04afd7d9095349d54a007e61ec2b5d4fd557b6",
+  "source_path": "experiments/tma_reduction_layout/results/phase2/sweep/results.json",
+  "stage": "PHASE_4_STAGE_A_STRUCTURAL_POOL_FROZEN",
+  "total_source_transitions": 30,
+  "transitions": [
+    {
+      "M": 128,
+      "N": 128,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M128_N128_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        128
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 128,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M128_N128_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        128
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 16,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M128_N16_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 16,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            16,
+            2
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        16
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 16,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M128_N16_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 16,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            16,
+            2
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        16
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 256,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            2,
+            2
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 2
+      },
+      "config_id": "M128_N256_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        128,
+        256
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "WARP_PART_CHANGED",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 256,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            2
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M128_N256_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        128,
+        256
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "WARP_PART_CHANGED",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 32,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M128_N32_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        32
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 32,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M128_N32_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        32
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 64,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M128_N64_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        64
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 128,
+      "N": 64,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M128_N64_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        128,
+        64
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M32_N128_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        32,
+        128
+      ],
+      "num_warps": 4,
+      "origin": "ANCHOR_EXISTING",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M32_N128_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        32,
+        128
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 16,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M32_N16_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        32,
+        16
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "IDENTICAL_LAYOUT",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 16,
+      "cand4": {
+        "compiled_num_warps": null,
+        "hardware_warp_size": null,
+        "lanePart_M": null,
+        "layout": null,
+        "legal": false,
+        "num_ctas": null,
+        "shared_family": null,
+        "shared_rank": null,
+        "vec": null,
+        "warpPart_M": null
+      },
+      "config_id": "M32_N16_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            2
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 2,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        32,
+        16
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "CAND4_ILLEGAL"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 256,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            2,
+            2
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 2
+      },
+      "config_id": "M32_N256_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        32,
+        256
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "WARP_PART_CHANGED",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 256,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            2
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M32_N256_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        32,
+        256
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "WARP_PART_CHANGED",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 32,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M32_N32_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        32,
+        32
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 32,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M32_N32_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        32,
+        32
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "IDENTICAL_LAYOUT",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M32_N64_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        32,
+        64
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M32_N64_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        32,
+        64
+      ],
+      "num_warps": 8,
+      "origin": "ANCHOR_EXISTING",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 128,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M64_N128_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        128
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 128,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M64_N128_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        128
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 16,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M64_N16_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 16,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            16,
+            2
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        16
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 16,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M64_N16_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        64,
+        16
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "IDENTICAL_LAYOUT",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 256,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            2,
+            2
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 2
+      },
+      "config_id": "M64_N256_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        64,
+        256
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "WARP_PART_CHANGED",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 256,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            2
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M64_N256_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 1,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            1,
+            32
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": false,
+      "logical_shape": [
+        1,
+        64,
+        256
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [
+        "WARP_PART_CHANGED",
+        "LANE_PART_NOT_REDUCED"
+      ],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 32,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M64_N32_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        32
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 32,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M64_N32_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 8,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            8,
+            4
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        32
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 64,
+      "cand4": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 4
+      },
+      "config_id": "M64_N64_w4",
+      "default": {
+        "compiled_num_warps": 4,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 4
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        64
+      ],
+      "num_warps": 4,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    },
+    {
+      "M": 64,
+      "N": 64,
+      "cand4": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 2,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            4
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 4,
+        "warpPart_M": 8
+      },
+      "config_id": "M64_N64_w8",
+      "default": {
+        "compiled_num_warps": 8,
+        "hardware_warp_size": 32,
+        "lanePart_M": 4,
+        "layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ]
+        },
+        "legal": true,
+        "num_ctas": 1,
+        "shared_family": "nvmma_shared",
+        "shared_rank": 3,
+        "vec": 8,
+        "warpPart_M": 8
+      },
+      "included_in_structural_pool": true,
+      "logical_shape": [
+        1,
+        64,
+        64
+      ],
+      "num_warps": 8,
+      "origin": "NEW_GENERALIZATION",
+      "reason_codes": [],
+      "reduction_axis": 1,
+      "transition": "default -> cand4"
+    }
+  ],
+  "unit": "(M,N,num_warps,default->cand4)"
+}
