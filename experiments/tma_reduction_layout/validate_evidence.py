@@ -117,7 +117,7 @@ def validate():
     annotations = ann_raw.get("annotations", {})
 
     # Check 1: Branch and Run Metadata Sanity
-    print("[1/15] Validating branch & run metadata sanity...")
+    print("[1/21] Validating branch & run metadata sanity...")
     prov = data.get("local_provenance", {})
     is_dirty = prov.get("is_dirty")
     if is_dirty is not False:
@@ -133,10 +133,12 @@ def validate():
 
     print(f"  experiment source HEAD: {exp_head}")
     print(f"  current repository HEAD: {curr_head}")
-    print(f"  working tree is_dirty: {is_dirty}")
+    print(f"  recorded experiment working tree is_dirty: {is_dirty}")
+    current_dirty = bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO_ROOT, text=True).strip())
+    print(f"  current repository working tree is_dirty: {current_dirty}")
 
     # Check 2: Artifact hashes vs baseline_results.json
-    print("[2/15] Validating artifact hashes against baseline_results.json...")
+    print("[2/21] Validating artifact hashes against baseline_results.json...")
     for cand in candidates:
         if cand not in audited:
             errors.append(f"Candidate '{cand}' missing in baseline_results.json audited_results.")
@@ -159,7 +161,7 @@ def validate():
                 errors.append(f"SHA mismatch for {cand}.{ext}: disk={actual_sha} vs json={expected_sha}")
 
     # Check 3: Audited Phase Annotations & Mechanical Instruction Verification
-    print("[3/15] Validating audited phase annotations and mechanical instruction counts...")
+    print("[3/21] Validating audited phase annotations and mechanical instruction counts...")
     standard_phase_order = [
         "tma_setup_and_descriptor",
         "initial_local_load",
@@ -254,7 +256,7 @@ def validate():
                         )
 
     # Check 4: default vs forced-8 bit-for-bit equivalence
-    print("[4/15] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
+    print("[4/21] Validating default vs forced-8 PTX & TTGIR bit-for-bit equivalence...")
     default_ptx_sha = compute_sha256((ARTIFACTS_DIR / "default.ptx").read_text(encoding="utf-8"))
     c8_ptx_sha = compute_sha256((ARTIFACTS_DIR / "8.ptx").read_text(encoding="utf-8"))
     if default_ptx_sha != c8_ptx_sha:
@@ -266,7 +268,7 @@ def validate():
         errors.append(f"default.ttgir ({default_ttgir_sha}) != 8.ttgir ({c8_ttgir_sha})")
 
     # Check 5: Re-parse resource.txt files
-    print("[5/15] Validating resource.txt parsing consistency...")
+    print("[5/21] Validating resource.txt parsing consistency...")
     for cand in candidates:
         res_file = ARTIFACTS_DIR / f"{cand}.resource.txt"
         res_text = res_file.read_text(encoding="utf-8")
@@ -285,7 +287,7 @@ def validate():
             errors.append(f"cuobjdump SHARED mismatch for '{cand}': parsed={actual_smem} vs json={expected_smem}")
 
     # Check 6: Canonical Markdown Verification
-    print("[6/15] Validating canonical Markdown generation against committed docs...")
+    print("[6/21] Validating canonical Markdown generation against committed docs...")
     rendered_summary = render_summary(data)
     committed_summary = (RESULTS_DIR / "baseline_summary_table.md").read_text(encoding="utf-8")
     if rendered_summary != committed_summary:
@@ -301,7 +303,7 @@ def validate():
         )
 
     # Check 7: Modal & Source Manifest Ignore Policy Consistency
-    print("[7/15] Validating unified Modal & manifest ignore policy on synthetic paths...")
+    print("[7/21] Validating unified Modal & manifest ignore policy on synthetic paths...")
     synthetic_cases: List[Tuple[str, bool]] = [
         ("foo.so", True),
         ("foo.o", True),
@@ -336,7 +338,7 @@ def validate():
         pass
 
     # Check 8: Source subset manifest digest matches local source manifest
-    print("[8/15] Validating uploaded source-manifest subset digest fidelity...")
+    print("[8/21] Validating uploaded source-manifest subset digest fidelity...")
     env_ver = data.get("environment", {}).get("manifest_verification", {})
     if env_ver:
         local_sha = env_ver.get("local_manifest_sha256")
@@ -349,7 +351,7 @@ def validate():
         print(f"  Remote post-build extra files count: {env_ver.get('remote_extra_file_count')}")
 
     # Check 9: Phase 2 B-Saturation Pilot Consistency
-    print("[9/15] Validating Phase 2 B-Saturation pilot results...")
+    print("[9/21] Validating Phase 2 B-Saturation pilot results...")
     sat_json_path = SATURATION_DIR / "results.json"
     sat_md_path = SATURATION_DIR / "summary.md"
     if not sat_json_path.exists():
@@ -407,7 +409,7 @@ def validate():
             print("  Verified Phase 2 extended saturation pilot data and canonical markdown.")
 
     # Check 10: Phase 2 30-Config Sweep Consistency
-    print("[10/15] Validating Phase 2 30-Config Steady-State sweep results...")
+    print("[10/21] Validating Phase 2 30-Config Steady-State sweep results...")
     # 10.1 Synthetic unit test of transition classification
     try:
         assert test_classify_structural_transitions() is True
@@ -519,7 +521,7 @@ def validate():
         print("  Verified Phase 2 sweep (150 combinations, candidate legality, re-derived transitions, canonical CSV & MD).")
 
     # Check 11: Phase 2 Representative Artifact Fidelity & Hash-Binding
-    print("[11/15] Validating Phase 2 representative artifacts fidelity and hash binding...")
+    print("[11/21] Validating Phase 2 representative artifacts fidelity and hash binding...")
     if not REPRESENTATIVES_DIR.exists():
         errors.append(f"Representative cases directory missing: {REPRESENTATIVES_DIR}")
     else:
@@ -549,7 +551,7 @@ def validate():
         print(f"  Verified {len(case_dirs)} representative cases with exact byte-for-byte SHA256 bindings.")
 
     # Check 12: Offline Marginal Analysis Consistency
-    print("[12/15] Validating offline marginal analysis consistency and canonical markdown...")
+    print("[12/21] Validating offline marginal analysis consistency and canonical markdown...")
     mar_json_path = SATURATION_DIR / "marginal_analysis.json"
     mar_md_path = SATURATION_DIR / "marginal_analysis.md"
     if not mar_json_path.exists():
@@ -598,7 +600,7 @@ def validate():
             print("  Verified offline marginal analysis calculations and byte-for-byte markdown.")
 
     # Check 13: Corrected Fixed-Binary Saturation Pilot Runs & Multi-Invocation Verification
-    print("[13/15] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
+    print("[13/21] Validating corrected fixed-binary saturation pilot runs (3 benchmark invocations) and summary markdown...")
     cp_json_path = SATURATION_DIR / "corrected_pilot_runs.json"
     cp_md_path = SATURATION_DIR / "corrected_pilot_summary.md"
     EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -687,7 +689,7 @@ def validate():
             print("  Verified corrected fixed-binary pilot runs (3 benchmark invocations, fixed-binary invariance, telemetry, canonical MD).")
 
     # Check 14: Phase 3 Structural Evidence, Canonical Artifact Bindings, Equivalence, and Hypotheses
-    print("[14/15] Validating Phase 3 structural evidence, canonical artifact bindings, equivalence, and hypotheses...")
+    print("[14/21] Validating Phase 3 structural evidence, canonical artifact bindings, equivalence, and hypotheses...")
     phase3_dir = RESULTS_DIR / "phase3"
     canonical_dir = phase3_dir / "fixed_binary_artifacts" / "canonical"
     p3_ann_path = EXP_DIR / "phase3_audited_annotations.json"
@@ -849,14 +851,14 @@ def validate():
         sub_status_matches = re.findall(r"\*\*Sub-Hypothesis Status\*\*:\s*`([^`]+)`", hypotheses_text)
         if len(sub_status_matches) != 3:
             errors.append(f"Expected 3 Sub-Hypothesis Status tags in hypotheses.md, found {len(sub_status_matches)}")
-        expected_sub_statuses = ["SUPPORTED_AT_REDUCTION_BODY_LEVEL", "UNVERIFIED", "UNVERIFIED"]
+        expected_sub_statuses = [curr_ds["step_e_evidence"]["status"], "UNVERIFIED", "UNVERIFIED"]
         if sub_status_matches != expected_sub_statuses:
             errors.append(f"Sub-hypothesis status mismatch in hypotheses.md: got {sub_status_matches}, expected {expected_sub_statuses}")
 
         print("  Verified Phase 3 structural evidence, canonical artifact bindings, equivalence report, and hypotheses.")
 
     # Check 15: Phase 3 Step B v1 confounded benchmark evidence
-    print("[15/16] Validating Phase 3 Step B v1 confounded benchmark evidence...")
+    print("[15/21] Validating Phase 3 Step B v1 confounded benchmark evidence...")
     mb_dir = phase3_dir / "microbench_reduction"
     mb_design_path = mb_dir / "design.md"
     mb_val_path = mb_dir / "validation.json"
@@ -1060,7 +1062,7 @@ def validate():
         print("  Verified Phase 3 Step B v1 confounded benchmark evidence (confound classification, LocalLoad divergence, telemetry, canonical MD).")
 
     # Check 16: Phase 3 Step B v3 Single-Binary Runtime-K Feasibility
-    print("[16/17] Validating Phase 3 Step B v3 single-binary runtime-K feasibility...")
+    print("[16/21] Validating Phase 3 Step B v3 single-binary runtime-K feasibility...")
     v3_dir = phase3_dir / "v3_runtime_k"
     v3_design_path = v3_dir / "design.md"
     v3_val_path = v3_dir / "validation.json"
@@ -1178,7 +1180,7 @@ def validate():
         print("  Verified Phase 3 Step B v3 single-binary runtime-K feasibility (mechanical loop checks, single CUBIN, residency disparity & LocalLoad confounds recorded).")
 
     # Check 17: Phase 3 Step B v4 Preloaded-Register Runtime-K Feasibility & Occupancy Baseline
-    print("[17/18] Validating Phase 3 Step B v4 preloaded-register runtime-K feasibility...")
+    print("[17/21] Validating Phase 3 Step B v4 preloaded-register runtime-K feasibility...")
     canon_occ_path = phase3_dir / "canonical_occupancy" / "canonical_occupancy.json"
     v4_dir = phase3_dir / "v4_preloaded_k"
     v4_design_path = v4_dir / "design.md"
@@ -1341,7 +1343,7 @@ def validate():
         print("  Verified Phase 3 Step B v4 preloaded runtime-loop isolation (0 tile loads inside loop, residency & accumulator confounds recorded).")
 
     # Check 18: Phase 3 Step B v5 Preloaded-Register Last-Result Carry Feasibility
-    print("[18/19] Validating Phase 3 Step B v5 last-result runtime-K feasibility...")
+    print("[18/21] Validating Phase 3 Step B v5 last-result runtime-K feasibility...")
     v5_dir = phase3_dir / "v5_preloaded_k"
     v5_design_path = v5_dir / "design.md"
     v5_val_path = v5_dir / "validation.json"
@@ -1503,691 +1505,23 @@ def validate():
 
         print("  Verified Phase 3 Step B v5 last-result runtime-loop isolation (0 accumulator adds, residency matched, template confound recorded).")
 
-    # Check 19: Phase 3 Step C Gluon Canonical Structural Reproduction
-    print("[19/20] Validating Phase 3 Step C Gluon canonical structural reproduction...")
-    gluon_dir = phase3_dir / "gluon_reproduction"
-    gluon_design_path = gluon_dir / "design.md"
-    gluon_val_path = gluon_dir / "validation.json"
-    gluon_res_path = gluon_dir / "results.json"
-    gluon_sum_path = gluon_dir / "summary.md"
-    gluon_arts_dir = gluon_dir / "artifacts"
-    gluon_raw_path = gluon_dir / "raw_results.json"
-
-    if not gluon_design_path.exists():
-        errors.append(f"Missing {gluon_design_path}")
-    if not gluon_val_path.exists():
-        errors.append(f"Missing {gluon_val_path}")
-    if not gluon_res_path.exists():
-        errors.append(f"Missing {gluon_res_path}")
-    if not gluon_sum_path.exists():
-        errors.append(f"Missing {gluon_sum_path}")
-    if not gluon_arts_dir.exists():
-        errors.append(f"Missing {gluon_arts_dir}")
-    if not gluon_raw_path.exists():
-        errors.append(f"Missing {gluon_raw_path}")
-
-    if gluon_val_path.exists() and gluon_res_path.exists() and gluon_raw_path.exists() and gluon_arts_dir.exists():
-        gluon_val_data = json.loads(gluon_val_path.read_text(encoding="utf-8"))
-        gluon_res_data = json.loads(gluon_res_path.read_text(encoding="utf-8"))
-        gluon_raw_data = json.loads(gluon_raw_path.read_text(encoding="utf-8"))
-
-        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
-        expected_candidates = ["default", "4"]
-
-        for cfg in expected_configs:
-            for cand in expected_candidates:
-                art_prefix = gluon_arts_dir / cfg / cand
-                for ext in [".ptx", ".ttgir", ".sass", ".resource.txt", ".cubin.sha256"]:
-                    f_path = art_prefix.with_suffix(ext) if ext != ".cubin.sha256" else gluon_arts_dir / cfg / f"{cand}.cubin.sha256"
-                    if not f_path.exists() or f_path.stat().st_size == 0:
-                        errors.append(f"Missing or empty Gluon artifact: {f_path}")
-
-                cand_data = gluon_raw_data.get("configurations", {}).get(cfg, {}).get(cand, {})
-                c_sha = cand_data.get("cubin_sha256")
-                sha_file_path = gluon_arts_dir / cfg / f"{cand}.cubin.sha256"
-                if sha_file_path.exists():
-                    f_sha = sha_file_path.read_text(encoding="utf-8").strip()
-                    if f_sha != c_sha:
-                        errors.append(f"CUBIN sha mismatch for Gluon {cfg} {cand}: file={f_sha} vs raw={c_sha}")
-
-                # 19.1 Numerical correctness
-                corr = cand_data.get("correctness", {})
-                if not corr.get("passed", False):
-                    errors.append(f"Numerical correctness failed in Gluon for {cfg} {cand}")
-
-                # 19.2 Zero spills
-                res = cand_data.get("resources", {})
-                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
-                    errors.append(f"Non-zero spill in Gluon {cfg} {cand}: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
-
-                # 19.3 TTGIR layout matches canonical
-                ttgir_text = (gluon_arts_dir / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
-                ptx_text = (gluon_arts_dir / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
-                canon_ttgir_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ttgir").read_text(encoding="utf-8")
-
-                cb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", canon_ttgir_text)
-                vb_m = re.search(r"(#blocked\d*\s*=\s*#ttg\.blocked<[^>]+>)", ttgir_text)
-                cb = re.sub(r"#blocked\d*", "#blocked", cb_m.group(1)) if cb_m else None
-                vb = re.sub(r"#blocked\d*", "#blocked", vb_m.group(1)) if vb_m else None
-                if cb != vb:
-                    errors.append(f"Criterion A failure: layout mismatch for Gluon {cfg} {cand}: {vb} vs {cb}")
-
-                cs_m = re.search(r"(#shared\d*\s*=\s*#ttg\.nvmma_shared<[^>]+>)", canon_ttgir_text)
-                vs_m = re.search(r"(#shared\d*\s*=\s*#ttg\.nvmma_shared<[^>]+>)", ttgir_text)
-                cs = re.sub(r"#shared\d*", "#shared", cs_m.group(1)) if cs_m else None
-                vs = re.sub(r"#shared\d*", "#shared", vs_m.group(1)) if vs_m else None
-                if cs != vs:
-                    errors.append(f"Criterion B failure: shared layout mismatch for Gluon {cfg} {cand}: {vs} vs {cs}")
-
-                # 19.4 TMA count == 1
-                tma_count = len(re.findall(r"ttng\.async_tma_copy_global_to_local", ttgir_text))
-                if tma_count != 1:
-                    errors.append(f"Criterion C failure: TMA count != 1 for Gluon {cfg} {cand} (got {tma_count})")
-
-                # 19.5 Direct recomputation of LocalLoad from PTX
-                ptx_lines = ptx_text.splitlines()
-                in_ll = False
-                ll_loads = []
-                for l in ptx_lines:
-                    s = l.strip()
-                    if "mbarrier.inval" in s:
-                        in_ll = True
-                        continue
-                    if in_ll:
-                        if "ld.shared" in s:
-                            ll_loads.append(s)
-                        elif "cvt.f32.bf16" in s or "max.bf16" in s or ("bar.sync" in s and ll_loads):
-                            break
-
-                def _norm_inst(inst_str: str) -> str:
-                    s_clean = re.sub(r"^@%p\d+\s+", "", inst_str.strip()).rstrip(";")
-                    parts = s_clean.split(None, 1)
-                    if not parts:
-                        return ""
-                    op = parts[0]
-                    ar = parts[1] if len(parts) > 1 else ""
-                    if "shfl" in op or "bar.sync" in op:
-                        c_ar = re.sub(r"%[a-zA-Z0-9_]+", "", ar)
-                        imms = re.findall(r"(-?\d+|0x[0-9a-fA-F]+)", c_ar)
-                        return f"{op} " + " ".join(imms)
-                    elif any(k in op for k in ["max", "cvt", "st.shared", "ld.shared", "ldmatrix", "selp"]):
-                        return op
-                    else:
-                        return op
-
-                act_ll_str = f"{len(ll_loads)} × {_norm_inst(ll_loads[0])}" if ll_loads else "0"
-                expected_ll_map = {
-                    ("M32_N64_w8", "default"): "1 × ld.shared.v4.b32",
-                    ("M32_N64_w8", "4"): "2 × ld.shared.v2.b32",
-                    ("M32_N128_w4", "default"): "4 × ld.shared.v4.b32",
-                    ("M32_N128_w4", "4"): "8 × ld.shared.v2.b32",
-                }
-                exp_ll_str = expected_ll_map.get((cfg, cand))
-                if act_ll_str != exp_ll_str:
-                    errors.append(f"Criterion D failure: recomputed LocalLoad mismatch for Gluon {cfg} {cand}: act='{act_ll_str}' vs exp='{exp_ll_str}'")
-
-                # 19.6 Direct recomputation of Reduction fingerprint subsequence match
-                ann_path = phase3_dir / "phase3_audited_annotations.json"
-                if ann_path.exists():
-                    ann_data = json.loads(ann_path.read_text(encoding="utf-8"))
-                    phases = ann_data["configurations"][cfg][cand]["phases"]
-                    c_start = phases["thread_local_reduction_arithmetic"]["lines"][0]
-                    c_end = phases["cross_warp_reduction_communication"]["lines"][1]
-                    canon_ptx_text = (phase3_dir / "fixed_binary_artifacts" / "canonical" / cfg / f"{cand}.ptx").read_text(encoding="utf-8")
-                    canon_lines = canon_ptx_text.splitlines()[c_start - 1 : c_end]
-                    canon_fp = [
-                        _norm_inst(l)
-                        for l in canon_lines
-                        if _norm_inst(l)
-                        and any(k in _norm_inst(l) for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"])
-                    ]
-
-                    norm_gluon = []
-                    line_indices = []
-                    for idx, line in enumerate(ptx_lines):
-                        n = _norm_inst(line)
-                        if n and any(k in n for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"]):
-                            norm_gluon.append(n)
-                            line_indices.append(idx + 1)
-
-                    m_len = len(canon_fp)
-                    matches = []
-                    for i in range(len(norm_gluon) - m_len + 1):
-                        if norm_gluon[i : i + m_len] == canon_fp:
-                            matches.append((line_indices[i], line_indices[i + m_len - 1]))
-
-                    if len(matches) != 1:
-                        errors.append(f"Criterion E failure: reduction subsequence match count != 1 for Gluon {cfg} {cand} (got {len(matches)})")
-                    else:
-                        eval_info = gluon_val_data.get("evaluations", {}).get(cfg, {}).get(cand, {})
-                        red_eval = eval_info.get("reduction_equivalence", {})
-                        if red_eval.get("start_line") != matches[0][0] or red_eval.get("end_line") != matches[0][1]:
-                            errors.append(f"Criterion E failure: line range mismatch for Gluon {cfg} {cand}: recomputed {matches[0]} vs val {red_eval.get('start_line')}, {red_eval.get('end_line')}")
-
-        # 19.7 Same-config residency match
-        w8_def_occ = gluon_val_data["evaluations"]["M32_N64_w8"]["default"]["occupancy"]
-        w8_c4_occ = gluon_val_data["evaluations"]["M32_N64_w8"]["4"]["occupancy"]
-        if w8_def_occ["blocks_per_sm_actual_smem"] != 8 or w8_c4_occ["blocks_per_sm_actual_smem"] != 8:
-            errors.append(f"Expected 8 blocks/SM for Gluon M32_N64_w8 default and cand4, got {w8_def_occ['blocks_per_sm_actual_smem']} and {w8_c4_occ['blocks_per_sm_actual_smem']}")
-
-        w4_def_occ = gluon_val_data["evaluations"]["M32_N128_w4"]["default"]["occupancy"]
-        w4_c4_occ = gluon_val_data["evaluations"]["M32_N128_w4"]["4"]["occupancy"]
-        if w4_def_occ["blocks_per_sm_actual_smem"] != 16 or w4_c4_occ["blocks_per_sm_actual_smem"] != 16:
-            errors.append(f"Expected 16 blocks/SM for Gluon M32_N128_w4 default and cand4, got {w4_def_occ['blocks_per_sm_actual_smem']} and {w4_c4_occ['blocks_per_sm_actual_smem']}")
-
-        # 19.8 Overall status & criteria
-        if gluon_val_data.get("overall_status") != "GLUON_CANONICAL_REPRODUCTION_SUCCESS":
-            errors.append(f"Expected overall_status == 'GLUON_CANONICAL_REPRODUCTION_SUCCESS', got {gluon_val_data.get('overall_status')}")
-
-        for crit_name, status in gluon_val_data.get("criteria", {}).items():
-            if status != "PASS":
-                errors.append(f"Gluon {crit_name} was not PASS (got {status})")
-
-        print("  Verified Phase 3 Step C Gluon canonical structural reproduction (100% layout, LocalLoad, reduction topology, and occupancy equivalence).")
-
-    # Check 20: Phase 3 Step D Gluon Repeated Reduction Isolation Feasibility
-    print("[20/20] Validating Phase 3 Step D Gluon repeated reduction isolation feasibility...")
-    step_d_dir = phase3_dir / "gluon_repeated"
-    d_arts_dir = step_d_dir / "artifacts"
-    d_raw_path = step_d_dir / "raw_results.json"
-    d_val_path = step_d_dir / "validation.json"
-    d_sum_path = step_d_dir / "summary.md"
-
-    if not step_d_dir.exists():
-        errors.append(f"Missing Step D directory: {step_d_dir}")
-    elif not d_raw_path.exists() or not d_val_path.exists() or not d_sum_path.exists():
-        errors.append("Step D missing raw_results.json, validation.json, or summary.md")
-    else:
-        d_raw_data = json.loads(d_raw_path.read_text(encoding="utf-8"))
-        d_val_data = json.loads(d_val_path.read_text(encoding="utf-8"))
-        d_sum_text = d_sum_path.read_text(encoding="utf-8")
-
-        for cfg in ["M32_N64_w8", "M32_N128_w4"]:
-            for cand in ["default", "4"]:
-                art_dir = d_arts_dir / cfg
-                ptx_p = art_dir / f"{cand}.ptx"
-                ttgir_p = art_dir / f"{cand}.ttgir"
-                sass_p = art_dir / f"{cand}.sass"
-                res_p = art_dir / f"{cand}.resource.txt"
-                sha_p = art_dir / f"{cand}.cubin.sha256"
-
-                for p, name in [(ptx_p, "ptx"), (ttgir_p, "ttgir"), (sass_p, "sass"), (res_p, "resource"), (sha_p, "cubin.sha256")]:
-                    if not p.exists() or not p.read_text(encoding="utf-8").strip():
-                        errors.append(f"Step D artifact missing or empty: {p}")
-
-                ptx_lines = ptx_p.read_text(encoding="utf-8").splitlines() if ptx_p.exists() else []
-                ttgir_text = ttgir_p.read_text(encoding="utf-8") if ttgir_p.exists() else ""
-                sass_lines = sass_p.read_text(encoding="utf-8").splitlines() if sass_p.exists() else []
-
-                # 20.1 TTGIR: async_tma_copy_global_to_local == 1
-                tma_ops = re.findall(r"ttng\.async_tma_copy_global_to_local", ttgir_text)
-                if len(tma_ops) != 1:
-                    errors.append(f"Step D {cfg} {cand} TTGIR TMA count != 1 (got {len(tma_ops)})")
-
-                # 20.2 TTGIR: ttg.local_load count outside loop == 1, inside loop == 0
-                ttg_parts = ttgir_text.split("scf.for")
-                ttg_outside = len(re.findall(r"ttg\.local_load", ttg_parts[0])) if ttg_parts else 0
-                ttg_inside = len(re.findall(r"ttg\.local_load", ttg_parts[1])) if len(ttg_parts) > 1 else 0
-                if ttg_outside != 1 or ttg_inside != 0:
-                    errors.append(f"Step D {cfg} {cand} TTGIR local_load error: outside={ttg_outside} (expected 1), inside={ttg_inside} (expected 0)")
-
-                # 20.3 Loop boundaries in PTX
-                l_labels = {}
-                for i, l in enumerate(ptx_lines):
-                    m = re.match(r"^(\$L__BB\d+_\d+):", l.strip())
-                    if m: l_labels[m.group(1)] = i + 1
-                loop_start, loop_end = None, None
-                for i, l in enumerate(ptx_lines):
-                    m = re.search(r"bra(?:\.uni)?\s+(\$L__BB\d+_\d+)", l.strip())
-                    if m and m.group(1) in l_labels and l_labels[m.group(1)] < (i + 1):
-                        loop_start = l_labels[m.group(1)]
-                        loop_end = i + 1
-                        break
-                if not loop_start or not loop_end:
-                    errors.append(f"Step D {cfg} {cand} PTX missing runtime loop")
-
-                # 20.4 PTX: initial LocalLoad count before loop matches canonical
-                exp_pre_ll = {("M32_N64_w8", "default"): 1, ("M32_N64_w8", "4"): 2, ("M32_N128_w4", "default"): 4, ("M32_N128_w4", "4"): 8}[(cfg, cand)]
-                pre_loop_ptx = ptx_lines[:loop_start - 1] if loop_start else []
-                pre_ll_insts = [l for l in pre_loop_ptx if "ld.shared" in l]
-                if len(pre_ll_insts) != exp_pre_ll:
-                    errors.append(f"Step D {cfg} {cand} pre-loop LocalLoad count {len(pre_ll_insts)} != expected {exp_pre_ll}")
-
-                # 20.5 Zero machine instructions for barriers in PTX & SASS
-                loop_ptx = ptx_lines[loop_start - 1 : loop_end] if loop_start and loop_end else []
-                in_asm = False
-                asm_insts = []
-                for l in loop_ptx:
-                    s = l.strip()
-                    if "// begin inline asm" in s:
-                        in_asm = True
-                        continue
-                    if "// end inline asm" in s:
-                        in_asm = False
-                        continue
-                    if in_asm and s and not s.startswith("//") and not s.startswith("."):
-                        asm_insts.append(s)
-                if len(asm_insts) != 0:
-                    errors.append(f"Step D {cfg} {cand} emitted non-zero machine instructions in inline asm: {asm_insts}")
-
-                # 20.6 Canonical reduction inside loop and terminal ld.shared inside loop
-                eval_entry = d_val_data.get("evaluations", {}).get(cfg, {}).get(cand, {})
-                s_decomp = eval_entry.get("structural_decomp", {})
-                if not s_decomp.get("red_inside_loop", False):
-                    errors.append(f"Step D {cfg} {cand} canonical reduction not verified inside loop")
-                if not s_decomp.get("terminal_ld_inside", False):
-                    errors.append(f"Step D {cfg} {cand} terminal ld.shared not inside loop")
-                if s_decomp.get("extra_in_loop_ops", -1) != 0:
-                    errors.append(f"Step D {cfg} {cand} has extra in-loop operations: {s_decomp.get('extra_in_loop_ops')}")
-
-                # 20.7 Single binary across R in {1, 2, 4, 8}
-                if not eval_entry.get("cubin_invariant_across_r", False):
-                    errors.append(f"Step D {cfg} {cand} CUBIN not invariant across R in {1, 2, 4, 8}")
-                r_hashes = eval_entry.get("r_cubin_hashes", {})
-                if len(set(r_hashes.values())) != 1 or len(r_hashes) != 4:
-                    errors.append(f"Step D {cfg} {cand} r_cubin_hashes mismatch: {r_hashes}")
-
-                # 20.8 Zero spills
-                res = eval_entry.get("resources", {})
-                if res.get("local_bytes") != 0 or res.get("stack_bytes") != 0:
-                    errors.append(f"Step D {cfg} {cand} has spills: local={res.get('local_bytes')}, stack={res.get('stack_bytes')}")
-
-        # 20.9 Same-config residency match
-        w8_def_b = d_val_data["evaluations"]["M32_N64_w8"]["default"]["occupancy"]["blocks_per_sm_actual_smem"]
-        w8_c4_b = d_val_data["evaluations"]["M32_N64_w8"]["4"]["occupancy"]["blocks_per_sm_actual_smem"]
-        if w8_def_b != 8 or w8_c4_b != 8:
-            errors.append(f"Step D expected 8 blocks/SM for M32_N64_w8, got default={w8_def_b}, cand4={w8_c4_b}")
-
-        w4_def_b = d_val_data["evaluations"]["M32_N128_w4"]["default"]["occupancy"]["blocks_per_sm_actual_smem"]
-        w4_c4_b = d_val_data["evaluations"]["M32_N128_w4"]["4"]["occupancy"]["blocks_per_sm_actual_smem"]
-        if w4_def_b != 16 or w4_c4_b != 16:
-            errors.append(f"Step D expected 16 blocks/SM for M32_N128_w4, got default={w4_def_b}, cand4={w4_c4_b}")
-
-        # 20.10 Overall status & criteria
-        if d_val_data.get("overall_status") != "GLUON_REDUCTION_AMPLIFICATION_TIMING_READY_WITH_COMPILER_BARRIER":
-            errors.append(f"Step D expected overall_status == 'GLUON_REDUCTION_AMPLIFICATION_TIMING_READY_WITH_COMPILER_BARRIER', got {d_val_data.get('overall_status')}")
-
-        if d_val_data.get("timing_gate", {}).get("timing_gate_status") != "PASS_UNLOCKED_FOR_STEP_E":
-            errors.append(f"Step D timing_gate_status != 'PASS_UNLOCKED_FOR_STEP_E' (got {d_val_data.get('timing_gate', {}).get('timing_gate_status')})")
-
-        d_criteria = d_val_data.get("criteria", {})
-        for crit_name, status in d_criteria.items():
-            if "Criterion E" in crit_name:
-                if status != "FAIL_AT_PTX_LEVEL":
-                    errors.append(f"Step D {crit_name} expected FAIL_AT_PTX_LEVEL (got {status})")
-            elif "Criterion G" in crit_name:
-                if status != "PASS_STRATIFIED":
-                    errors.append(f"Step D {crit_name} expected PASS_STRATIFIED (got {status})")
-            else:
-                if status != "PASS":
-                    errors.append(f"Step D {crit_name} was not PASS (got {status})")
-
-        # Verify all 10 timing gate conditions are PASS
-        for cond_name, c_status in d_val_data.get("timing_gate", {}).items():
-            if cond_name != "timing_gate_status" and c_status != "PASS":
-                errors.append(f"Step D timing gate condition {cond_name} was not PASS (got {c_status})")
-
-        # Verify candidate symmetry of induced copies
-        w8_def_c = d_val_data["evaluations"]["M32_N64_w8"]["default"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
-        w8_c4_c = d_val_data["evaluations"]["M32_N64_w8"]["4"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
-        w4_def_c = d_val_data["evaluations"]["M32_N128_w4"]["default"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
-        w4_c4_c = d_val_data["evaluations"]["M32_N128_w4"]["4"]["structural_decomp"]["barrier_audit"]["input_barrier"]["induced_ptx_copy_count"]
-        if w8_def_c != 8 or w8_c4_c != 8:
-            errors.append(f"Expected 8 mov.b16 copies for M32_N64_w8, got default={w8_def_c}, cand4={w8_c4_c}")
-        if w4_def_c != 32 or w4_c4_c != 32:
-            errors.append(f"Expected 32 mov.b16 copies for M32_N128_w4, got default={w4_def_c}, cand4={w4_c4_c}")
-
-        print("  Verified Phase 3 Step D.1 Gluon repeated reduction isolation feasibility (timing gate 10/10 PASS, BARRIER_EXPLICIT_SASS_OVERHEAD=0, matched residency).")
-
-    # =========================================================================
-    # Check 21: Phase 3 Step E Gluon Controlled Repeated Reduction Timing
-    # =========================================================================
-    print("[21/21] Validating Phase 3 Step E Gluon repeated reduction timing...")
-    step_e_dir = phase3_dir / "gluon_timing"
-    e_res_path = step_e_dir / "results.json"
-    e_val_path = step_e_dir / "validation.json"
-    e_sum_path = step_e_dir / "summary.md"
-    raw_run_paths = [step_e_dir / f"raw_run_{i}.json" for i in range(1, 4)]
-
-    for p in [e_res_path, e_val_path, e_sum_path] + raw_run_paths:
-        if not p.exists():
-            errors.append(f"Missing Phase 3 Step E file: {p}")
-
-    if all(p.exists() for p in [e_res_path, e_val_path, e_sum_path] + raw_run_paths):
-        e_res_data = json.loads(e_res_path.read_text(encoding="utf-8"))
-        e_val_data = json.loads(e_val_path.read_text(encoding="utf-8"))
-        e_sum_md = e_sum_path.read_text(encoding="utf-8")
-
-        # 21.1 Overall Status and H2 Status
-        if e_res_data.get("h2_status") != "SUPPORTED_AT_REDUCTION_BODY_LEVEL":
-            errors.append(f"Step E results.json h2_status != 'SUPPORTED_AT_REDUCTION_BODY_LEVEL' (got {e_res_data.get('h2_status')})")
-        if e_val_data.get("h2_status") != "SUPPORTED_AT_REDUCTION_BODY_LEVEL":
-            errors.append(f"Step E validation.json h2_status != 'SUPPORTED_AT_REDUCTION_BODY_LEVEL' (got {e_val_data.get('h2_status')})")
-        if "SUPPORTED_AT_REDUCTION_BODY_LEVEL" not in e_sum_md:
-            errors.append("Step E summary.md missing 'SUPPORTED_AT_REDUCTION_BODY_LEVEL'")
-
-        # 21.2 Raw Runs Verification
-        cubin_seen = {}
-        for r_path in raw_run_paths:
-            run_data = json.loads(r_path.read_text(encoding="utf-8"))
-            env = run_data.get("env_info", {})
-            if "NVIDIA H100" not in env.get("gpu_name", ""):
-                errors.append(f"Unexpected GPU name in {r_path.name}: {env.get('gpu_name')}")
-
-            cfgs = run_data.get("configurations", {})
-            for cfg_name, c_data in cfgs.items():
-                for cand, cand_data in c_data.get("candidates", {}).items():
-                    c_hash = cand_data.get("cubin_sha256")
-                    if (cfg_name, cand) not in cubin_seen:
-                        cubin_seen[(cfg_name, cand)] = c_hash
-                    elif cubin_seen[(cfg_name, cand)] != c_hash:
-                        errors.append(f"CUBIN mismatch across runs for {cfg_name} {cand}: {cubin_seen[(cfg_name, cand)]} vs {c_hash}")
-
-                    r_timing = cand_data.get("r_timing", {})
-                    for r_str, b_dict in r_timing.items():
-                        for b_str, timing_info in b_dict.items():
-                            samples = timing_info.get("samples_us", [])
-                            if len(samples) != 100:
-                                errors.append(f"Expected 100 samples in {r_path.name} {cfg_name} {cand} R={r_str} B={b_str}, got {len(samples)}")
-
-        # 21.3 Independent Full Recomputation directly from Raw Data
-        def _get_med(samples: List[float]) -> float:
-            s = sorted(samples)
-            n = len(s)
-            return s[n // 2] if n % 2 == 1 else (s[n // 2 - 1] + s[n // 2]) / 2.0
-
-        def _recomp_mean_std(vals: List[float]) -> Tuple[float, float, Any, str]:
-            m = sum(vals) / len(vals)
-            s = math.sqrt(sum((x - m) ** 2 for x in vals) / (len(vals) - 1)) if len(vals) > 1 else 0.0
-            if abs(m) <= 3.0 * s:
-                cv = "N/A"
-                stab = "near_zero_or_sign_unstable"
-            else:
-                cv = (s / abs(m)) * 100.0
-                stab = "stable"
-            return m, s, cv, stab
-
-        b_vals = [16384.0, 32768.0, 65536.0]
-        r_vals = [0, 1, 2, 4, 8]
-        canonical_gap = 1.4279
-        expected_configs = ["M32_N64_w8", "M32_N128_w4"]
-
-        recomputed_runs = []
-        for run_idx, r_path in enumerate(raw_run_paths):
-            run_data = json.loads(r_path.read_text(encoding="utf-8"))
-            rep_run = e_res_data["runs"][run_idx]["configurations"]
-            c_eval = {}
-
-            for cfg in expected_configs:
-                w_cand = run_data["configurations"][cfg]["candidates"]
-                slopes = {"default": {}, "4": {}}
-                for cand in ["default", "4"]:
-                    for R in r_vals:
-                        meds = [_get_med(w_cand[cand]["r_timing"][str(R)][str(int(b))]["samples_us"]) for b in b_vals]
-                        slope, icept, r2, _ = linear_regression(b_vals, meds)
-                        marginal = slope * 1000.0  # ns/CTA
-                        slopes[cand][R] = marginal
-
-                        # Verify minimum grid-fit R^2 >= 0.99
-                        if r2 < 0.99:
-                            errors.append(f"Low grid fit R2 in {r_path.name} {cfg} {cand} R={R}: {r2}")
-
-                        # Compare against reported run slope
-                        rep_slope = rep_run[cfg]["slopes"][cand][str(R)]
-                        if abs(marginal - rep_slope) > 1e-4:
-                            errors.append(f"Marginal slope mismatch in {r_path.name} {cfg} {cand} R={R}: comp={marginal} vs rep={rep_slope}")
-
-                g_r = {R: slopes["default"][R] - slopes["4"][R] for R in r_vals}
-                g_0 = g_r[0]
-                dg_r = {R: g_r[R] - g_0 for R in r_vals}
-                dg_1 = dg_r[1]
-
-                # Per-run strict monotonicity check for Primary M32_N64_w8
-                if cfg == "M32_N64_w8":
-                    for i in range(len(r_vals) - 1):
-                        if g_r[r_vals[i]] >= g_r[r_vals[i + 1]]:
-                            errors.append(f"Strict monotonicity violation in {r_path.name} {cfg} g(R): {g_r}")
-
-                d_01 = g_r[1] - g_r[0]
-                d_12 = g_r[2] - g_r[1]
-                d_24 = (g_r[4] - g_r[2]) / 2.0
-                d_48 = (g_r[8] - g_r[4]) / 4.0
-
-                r_floats = [float(R) for R in r_vals]
-                g_floats = [g_r[R] for R in r_vals]
-                beta, alpha, r2_g, resids_g = linear_regression(r_floats, g_floats)
-                attr = (dg_1 / canonical_gap) if cfg == "M32_N64_w8" else None
-
-                # Check reported incremental deltas
-                rep_inc = rep_run[cfg].get("incremental_deltas", {})
-                for d_k, d_v in [("d_01", d_01), ("d_12", d_12), ("d_24", d_24), ("d_48", d_48)]:
-                    if abs(d_v - rep_inc.get(d_k, 0.0)) > 1e-4:
-                        errors.append(f"Incremental delta mismatch in {r_path.name} {cfg} {d_k}: comp={d_v} vs rep={rep_inc.get(d_k)}")
-
-                # Check reported linear fits
-                rep_fit = rep_run[cfg]["linear_fits"]["g_r_fit"]
-                if abs(beta - rep_fit["beta"]) > 1e-4:
-                    errors.append(f"Beta fit mismatch in {r_path.name} {cfg}: comp={beta} vs rep={rep_fit['beta']}")
-                if abs(alpha - rep_fit["alpha"]) > 1e-4:
-                    errors.append(f"Alpha fit mismatch in {r_path.name} {cfg}: comp={alpha} vs rep={rep_fit['alpha']}")
-                if abs(r2_g - rep_fit["r2"]) > 1e-4:
-                    errors.append(f"R2 fit mismatch in {r_path.name} {cfg}: comp={r2_g} vs rep={rep_fit['r2']}")
-
-                c_eval[cfg] = {
-                    "slopes": slopes,
-                    "g_r": g_r,
-                    "g_0": g_0,
-                    "dg_r": dg_r,
-                    "dg_1": dg_1,
-                    "incremental": {"d_01": d_01, "d_12": d_12, "d_24": d_24, "d_48": d_48},
-                    "beta": beta,
-                    "alpha": alpha,
-                    "r2": r2_g,
-                    "attr": attr,
-                }
-            recomputed_runs.append(c_eval)
-
-        # 21.4 Cross-Run Recomputation & Numerical Equality with Reported Summary
-        for cfg in expected_configs:
-            rep_cfg = e_res_data["cross_invocation_summary"]["configurations"][cfg]
-
-            betas = [r[cfg]["beta"] for r in recomputed_runs]
-            b_m, b_s, b_cv, b_stab = _recomp_mean_std(betas)
-            if abs(b_m - rep_cfg["beta"]["mean"]) > 1e-4 or abs(b_s - rep_cfg["beta"]["std"]) > 1e-4:
-                errors.append(f"Cross-run beta mismatch in {cfg}: comp={b_m}±{b_s} vs rep={rep_cfg['beta']['mean']}±{rep_cfg['beta']['std']}")
-
-            alphas = [r[cfg]["alpha"] for r in recomputed_runs]
-            a_m, a_s, a_cv, a_stab = _recomp_mean_std(alphas)
-            if abs(a_m - rep_cfg["alpha"]["mean"]) > 1e-4:
-                errors.append(f"Cross-run alpha mismatch in {cfg}: comp={a_m} vs rep={rep_cfg['alpha']['mean']}")
-
-            dg1s = [r[cfg]["dg_1"] for r in recomputed_runs]
-            dg1_m, dg1_s, dg1_cv, dg1_stab = _recomp_mean_std(dg1s)
-            if abs(dg1_m - rep_cfg["delta_g_1"]["mean"]) > 1e-4 or abs(dg1_s - rep_cfg["delta_g_1"]["std"]) > 1e-4:
-                errors.append(f"Cross-run delta_g_1 mismatch in {cfg}: comp={dg1_m}±{dg1_s} vs rep={rep_cfg['delta_g_1']['mean']}±{rep_cfg['delta_g_1']['std']}")
-
-            # Verify attribution ratio for primary
-            if cfg == "M32_N64_w8":
-                attrs = [r[cfg]["attr"] for r in recomputed_runs]
-                ar_m, ar_s, ar_cv, ar_stab = _recomp_mean_std(attrs)
-                if abs(ar_m - rep_cfg["attribution_ratio"]["mean"]) > 1e-4:
-                    errors.append(f"Cross-run attribution ratio mismatch in {cfg}: comp={ar_m} vs rep={rep_cfg['attribution_ratio']['mean']}")
-
-            # Verify incremental deltas
-            rep_inc_summary = rep_cfg.get("incremental_deltas", {})
-            for d_k in ["d_01", "d_12", "d_24", "d_48"]:
-                d_vals = [r[cfg]["incremental"][d_k] for r in recomputed_runs]
-                dm, ds, dcv, dstab = _recomp_mean_std(d_vals)
-                rep_dm = rep_inc_summary.get(d_k, {}).get("mean", 0.0)
-                if abs(dm - rep_dm) > 1e-4:
-                    errors.append(f"Cross-run {d_k} mean mismatch in {cfg}: comp={dm} vs rep={rep_dm}")
-
-            # 21.4.1 Direct Cross-Run OLS & Residual Table Verification
-            cross_g_r = {R: sum(r[cfg]["g_r"][R] for r in recomputed_runs) / float(len(recomputed_runs)) for R in r_vals}
-            r_floats = [float(R) for R in r_vals]
-            g_floats = [cross_g_r[R] for R in r_vals]
-            beta_direct, alpha_direct, r2_direct, resids_direct = linear_regression(r_floats, g_floats)
-            fitted_direct = {R: alpha_direct + beta_direct * float(R) for R in r_vals}
-            calc_resids = {R: cross_g_r[R] - fitted_direct[R] for R in r_vals}
-
-            # Verify fundamental OLS mathematical identities on directly fitted points
-            sum_res = sum(calc_resids.values())
-            sum_r_res = sum(float(R) * calc_resids[R] for R in r_vals)
-            if abs(sum_res) > 1e-4:
-                errors.append(f"Direct OLS identity violation in {cfg}: sum(residuals) = {sum_res} != 0")
-            if abs(sum_r_res) > 1e-4:
-                errors.append(f"Direct OLS orthogonality violation in {cfg}: sum(R*residuals) = {sum_r_res} != 0")
-
-            # Verify reported regression coefficients in results.json match direct OLS
-            if abs(alpha_direct - rep_cfg["alpha"]["mean"]) > 1e-4:
-                errors.append(f"results.json alpha mismatch in {cfg}: direct={alpha_direct} vs rep={rep_cfg['alpha']['mean']}")
-            if abs(beta_direct - rep_cfg["beta"]["mean"]) > 1e-4:
-                errors.append(f"results.json beta mismatch in {cfg}: direct={beta_direct} vs rep={rep_cfg['beta']['mean']}")
-            if abs(r2_direct - rep_cfg["r2"]["mean"]) > 1e-4:
-                errors.append(f"results.json r2 mismatch in {cfg}: direct={r2_direct} vs rep={rep_cfg['r2']['mean']}")
-
-            # Verify results.json residual table matches direct OLS row-by-row
-            rep_resids = rep_cfg.get("residual_table", [])
-            if len(rep_resids) != len(r_vals):
-                errors.append(f"results.json residual table row count mismatch in {cfg}: {len(rep_resids)} vs {len(r_vals)}")
-            for row in rep_resids:
-                R = row["R"]
-                if abs(row["observed"] - cross_g_r[R]) > 1e-4:
-                    errors.append(f"results.json observed mismatch in {cfg} R={R}: rep={row['observed']} vs direct={cross_g_r[R]}")
-                if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
-                    errors.append(f"results.json fitted mismatch in {cfg} R={R}: rep={row['fitted']} vs direct={fitted_direct[R]}")
-                if abs(row["residual"] - calc_resids[R]) > 1e-4:
-                    errors.append(f"results.json residual mismatch in {cfg} R={R}: rep={row['residual']} vs direct={calc_resids[R]}")
-                if abs(row["residual"] - (row["observed"] - row["fitted"])) > 1e-6:
-                    errors.append(f"results.json row identity mismatch in {cfg} R={R}")
-
-            # Verify primary_analysis residual table in results.json
-            if cfg == "M32_N64_w8":
-                prim_cr_resids = e_res_data.get("primary_analysis", {}).get("cross_run", {}).get("residual_table", [])
-                for row in prim_cr_resids:
-                    R = row["R"]
-                    if abs(row["observed"] - cross_g_r[R]) > 1e-4:
-                        errors.append(f"results.json primary_analysis observed mismatch R={R}")
-                    if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
-                        errors.append(f"results.json primary_analysis fitted mismatch R={R}")
-                    if abs(row["residual"] - calc_resids[R]) > 1e-4:
-                        errors.append(f"results.json primary_analysis residual mismatch R={R}")
-
-            # Verify validation.json cross-run summary matches direct OLS
-            val_cfg = e_val_data.get("evaluations", {}).get("cross_invocation_summary", {}).get("configurations", {}).get(cfg, {})
-            if abs(alpha_direct - val_cfg.get("alpha", {}).get("mean", 0.0)) > 1e-4:
-                errors.append(f"validation.json alpha mismatch in {cfg}: direct={alpha_direct} vs rep={val_cfg.get('alpha', {}).get('mean')}")
-            if abs(beta_direct - val_cfg.get("beta", {}).get("mean", 0.0)) > 1e-4:
-                errors.append(f"validation.json beta mismatch in {cfg}: direct={beta_direct} vs rep={val_cfg.get('beta', {}).get('mean')}")
-            for row in val_cfg.get("residual_table", []):
-                R = row["R"]
-                if abs(row["observed"] - cross_g_r[R]) > 1e-4:
-                    errors.append(f"validation.json observed mismatch in {cfg} R={R}")
-                if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
-                    errors.append(f"validation.json fitted mismatch in {cfg} R={R}")
-                if abs(row["residual"] - calc_resids[R]) > 1e-4:
-                    errors.append(f"validation.json residual mismatch in {cfg} R={R}")
-                if abs(row["residual"] - (row["observed"] - row["fitted"])) > 1e-6:
-                    errors.append(f"validation.json row identity mismatch in {cfg} R={R}")
-
-            # Verify primary_analysis residual table in validation.json
-            if cfg == "M32_N64_w8":
-                val_prim_resids = e_val_data.get("evaluations", {}).get("primary_analysis", {}).get("cross_run", {}).get("residual_table", [])
-                for row in val_prim_resids:
-                    R = row["R"]
-                    if abs(row["observed"] - cross_g_r[R]) > 1e-4:
-                        errors.append(f"validation.json primary_analysis observed mismatch R={R}")
-                    if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
-                        errors.append(f"validation.json primary_analysis fitted mismatch R={R}")
-                    if abs(row["residual"] - calc_resids[R]) > 1e-4:
-                        errors.append(f"validation.json primary_analysis residual mismatch R={R}")
-
-            # Verify summary.md table and reported model fit for primary configuration M32_N64_w8
-            if cfg == "M32_N64_w8":
-                m_table = re.search(r"### Linear Model Fit Residuals\s*\n\s*\|.*?\n\|.*?\n((?:\|.*?\n)+)", e_sum_md)
-                if not m_table:
-                    errors.append("summary.md missing Linear Model Fit Residuals table")
-                else:
-                    md_rows = []
-                    for line in m_table.group(1).strip().splitlines():
-                        parts = [p.strip().replace("*", "") for p in line.split("|")[1:-1]]
-                        if len(parts) >= 4:
-                            md_rows.append({
-                                "R": int(parts[0]),
-                                "obs": float(parts[1]),
-                                "fit": float(parts[2]),
-                                "res": float(parts[3]),
-                            })
-                    if len(md_rows) != len(r_vals):
-                        errors.append(f"summary.md residual table row count mismatch: {len(md_rows)} vs {len(r_vals)}")
-                    for row in md_rows:
-                        R = row["R"]
-                        if abs(row["obs"] - cross_g_r[R]) > 1e-3:
-                            errors.append(f"summary.md observed mismatch R={R}: {row['obs']} vs {cross_g_r[R]}")
-                        if abs(row["fit"] - fitted_direct[R]) > 1e-3:
-                            errors.append(f"summary.md fitted mismatch R={R}: {row['fit']} vs {fitted_direct[R]}")
-                        if abs(row["res"] - calc_resids[R]) > 1e-3:
-                            errors.append(f"summary.md residual mismatch R={R}: {row['res']} vs {calc_resids[R]}")
-                        if abs(row["res"] - (row["obs"] - row["fit"])) > 1e-4:
-                            errors.append(f"summary.md row identity mismatch R={R}")
-                    sum_md_res = sum(r["res"] for r in md_rows)
-                    sum_md_r_res = sum(r["R"] * r["res"] for r in md_rows)
-                    if abs(sum_md_res) > 1e-3:
-                        errors.append(f"summary.md residual table sum(residuals) = {sum_md_res} != 0")
-                    if abs(sum_md_r_res) > 1e-3:
-                        errors.append(f"summary.md residual table sum(R*residuals) = {sum_md_r_res} != 0")
-
-                # Verify reported slope and intercept in summary.md text
-                m_beta = re.search(r"Amplification Slope.*?`([0-9\.]+) ±", e_sum_md)
-                if not m_beta or abs(float(m_beta.group(1)) - beta_direct) > 1e-3:
-                    errors.append(f"summary.md reported beta mismatch: {m_beta.group(1) if m_beta else None} vs {beta_direct:.4f}")
-
-                m_alpha = re.search(r"Fit Intercept.*?`([+\-0-9\.]+) ±", e_sum_md)
-                if not m_alpha or abs(float(m_alpha.group(1)) - alpha_direct) > 1e-3:
-                    errors.append(f"summary.md reported alpha mismatch: {m_alpha.group(1) if m_alpha else None} vs {alpha_direct:.4f}")
-
-        # 21.5 Device Provenance & Replication Mode Verification
-        device_uuids = [json.loads(p.read_text(encoding="utf-8"))["env_info"].get("gpu_uuid") for p in raw_run_paths]
-        if len(set(device_uuids)) != 1:
-            errors.append(f"Expected identical GPU UUID across runs, got {set(device_uuids)}")
-        if e_res_data.get("cross_invocation_summary", {}).get("replication_mode") != "same-device temporal replication":
-            errors.append("Expected replication_mode == 'same-device temporal replication'")
-
-        # 21.6 Sub-Hypothesis Lineage Verification
-        sub_hyps = e_res_data.get("h2_evaluation", {}).get("sub_hypotheses", {})
-        if sub_hyps.get("H2a", {}).get("status") != "SUPPORTED_AT_REDUCTION_BODY_LEVEL":
-            errors.append(f"H2a status != 'SUPPORTED_AT_REDUCTION_BODY_LEVEL' (got {sub_hyps.get('H2a', {}).get('status')})")
-        if sub_hyps.get("H2b", {}).get("status") != "UNVERIFIED":
-            errors.append(f"H2b status != 'UNVERIFIED' (got {sub_hyps.get('H2b', {}).get('status')})")
-        if sub_hyps.get("H2c", {}).get("status") != "UNVERIFIED":
-            errors.append(f"H2c status != 'UNVERIFIED' (got {sub_hyps.get('H2c', {}).get('status')})")
-
-        # 21.7 Summary Markdown Hygiene & Terminology Invariant Check
-        required_phrases = [
-            "same-device temporal replication",
-            "The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap.",
-            "cross-harness descriptive magnitude comparison, not an additive causal decomposition",
-            "amplification-trend summary",
-            "strong approximately linear amplification over R=0..8",
-            "The input compiler barrier induces candidate-symmetric PTX tied-copy instructions. No additional explicit SASS MOV attributable to those copies was observed after ptxas register coalescing.",
-        ]
-        for req in required_phrases:
-            if req not in e_sum_md:
-                errors.append(f"summary.md missing required scientific wording: '{req}'")
-
-        banned_phrases = [
-            "zero-overhead compiler barrier",
-            "multi-device replication",
-            "independent hardware replication",
-            "constant cost per reduction",
-            "single reduction latency",
-            "exactly linear",
-        ]
-        for ban in banned_phrases:
-            if ban in e_sum_md.lower():
-                errors.append(f"summary.md contains forbidden phrase: '{ban}'")
-
-        print("  Verified Phase 3 Step E Gluon controlled repeated reduction timing (independent raw data recomputation, R2>=0.99, strict per-run monotonicity, near-zero CV discipline, exact wording invariants).")
+    from experiments.tma_reduction_layout.gluon import evidence_integrity as integrity
+    for number,stage in [(19,"gluon_reproduction"),(20,"gluon_repeated")]:
+        print(f"[{number}/21] Validating actual archived {stage} artifacts and complete derived reports...")
+        try:
+            integrity.validate_codegen(EXP_DIR,stage)
+            print("  Actual artifact contracts and derived report fidelity verified.")
+        except Exception as exc:
+            errors.append(f"{stage}: {type(exc).__name__}: {exc}")
+    print("[21/21] Independently validating raw statistics, finite schema, provenance and decision consistency...")
+    try:
+        count=integrity.protected_inputs(EXP_DIR)
+        integrity.validate_structure(EXP_DIR)
+        status=integrity.validate_timing(EXP_DIR)
+        print(f"  {count} protected original evidence hashes unchanged; complete statistical fidelity verified.")
+        print(f"  Retrospective scientific decision (separate from integrity): {status}")
+    except Exception as exc:
+        errors.append(f"Final evidence integrity: {type(exc).__name__}: {exc}")
 
     print("--------------------------------------------------")
     if errors:
@@ -2202,4 +1536,8 @@ def validate():
 
 
 if __name__ == "__main__":
-    validate()
+    if "--self-test" in sys.argv:
+        from experiments.tma_reduction_layout.gluon.evidence_integrity import self_test
+        self_test(EXP_DIR)
+    else:
+        validate()

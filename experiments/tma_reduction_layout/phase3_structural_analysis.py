@@ -9,21 +9,24 @@ Extracts, validates, and compares phase-specific structural decompositions acros
 All structural artifacts are bound to the true executed fixed-binary specializations
 in results/phase3/fixed_binary_artifacts/canonical/ (verified identical across run_1, run_2, run_3).
 
-Generates:
-1. phase3_audited_annotations.json
-2. artifact_equivalence_report.json
-3. results/phase3/structural_comparison/positive_vs_negative.json
-4. results/phase3/structural_comparison/summary.md
-5. results/phase3/hypotheses.md
+Default command regenerates derived reports only:
+1. results/phase3/structural_comparison/positive_vs_negative.json
+2. results/phase3/structural_comparison/summary.md
+3. results/phase3/hypotheses.md
+
+Original audited annotations and artifact-equivalence archives are read-only inputs.
 """
 
 import hashlib
 import json
 import pathlib
 import re
+import sys
 from typing import Any, Dict, List
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 EXP_DIR = REPO_ROOT / "experiments" / "tma_reduction_layout"
 OLD_REP_DIR = EXP_DIR / "results" / "phase2" / "representatives"
 FIXED_ARTS_DIR = EXP_DIR / "results" / "phase3" / "fixed_binary_artifacts"
@@ -754,6 +757,7 @@ def build_structural_decomposition_dataset(ann: Dict[str, Any]) -> Dict[str, Any
     """
     Builds the complete comparative structural dataset for Phase 3 bound to canonical fixed-binary artifacts.
     """
+    from experiments.tma_reduction_layout.gluon.audit_gluon_timing import derive_canonical_baseline, compute_sample_stats, linear_regression
     pilot_data = json.loads(PILOT_JSON.read_text(encoding="utf-8")) if PILOT_JSON.exists() else {}
     runs = ["run_1", "run_2", "run_3"]
 
@@ -765,11 +769,13 @@ def build_structural_decomposition_dataset(ann: Dict[str, Any]) -> Dict[str, Any
             "performance_source_runs": runs,
             "throughput_metrics_note": "These are logical-byte throughput metrics (logical bytes / fitted marginal grid time). They are NOT measured DRAM/HBM traffic or hardware bandwidth.",
             "configurations": {
-                "M32_N64_w8": "Strong-positive case (large layout sensitivity ~37%-43%)",
+                "M32_N64_w8": "Strong-positive case (large layout sensitivity)",
                 "M32_N128_w4": "Negative/control case (near-zero layout sensitivity ~0.1%)",
                 "M32_N16_w8": "Weak-effect control case (degenerate vector width / legality)",
             },
         },
+        "canonical_baseline": derive_canonical_baseline(),
+        "step_e_evidence": json.loads((PHASE3_DIR / "gluon_timing/results.json").read_text())["h2_evaluation"],
         "configurations": {},
     }
 
@@ -827,10 +833,13 @@ def build_structural_decomposition_dataset(ann: Dict[str, Any]) -> Dict[str, Any
             lane_m = tpw[1]
             warp_m = wpc[1]
             m_parts = lane_m * warp_m
-            m_elems_per_thread = m // m_parts
+            # Shape-aware ownership includes duplicated lanes for undersized axes.
+            axis_elems = [sp * ((dim + sp*tp*wp - 1)//(sp*tp*wp))
+                          for dim,sp,tp,wp in zip([1,m,n],spt,tpw,wpc)]
+            m_elems_per_thread = axis_elems[1]
             n_parts = tpw[2] * wpc[2]
-            n_elems_per_thread = (n // n_parts) * spt[2]
-            total_elems_per_thread = m_elems_per_thread * n_elems_per_thread
+            n_elems_per_thread = axis_elems[2]
+            total_elems_per_thread = axis_elems[0] * m_elems_per_thread * n_elems_per_thread
 
             # Performance slope extraction across the 3 sequential runs
             mean_slope = None
@@ -841,7 +850,10 @@ def build_structural_decomposition_dataset(ann: Dict[str, Any]) -> Dict[str, Any
                 for r in runs:
                     cman = pilot_data.get(r, {}).get("configs", {}).get(cfg_k, {}).get("marginal_analysis", {}).get(cand)
                     if cman:
-                        slopes.append(cman["affine_fit"]["marginal_ns_per_cta"])
+                        grid = pilot_data[r]["configs"][cfg_k]["grid_data"]
+                        bs = [16384,32768,65536]
+                        meds = [compute_sample_stats(grid[str(b)][cand]["raw_samples_us"])["median"] for b in bs]
+                        slopes.append(linear_regression(bs,meds)[0]*1000)
                 if slopes:
                     mean_slope = sum(slopes) / len(slopes)
                     if len(slopes) > 1 and mean_slope > 0:
@@ -942,7 +954,7 @@ def build_structural_decomposition_dataset(ann: Dict[str, Any]) -> Dict[str, Any
                     "HMNMX2": sass_counts.get("HMNMX2", 0),
                 },
                 "performance": {
-                    "marginal_slope_ns_per_cta": round(mean_slope, 4) if mean_slope else None,
+                    "marginal_slope_ns_per_cta": mean_slope,
                     "temporal_replication_cv_pct": cv_pct,
                     "vs_default_slope_pct": round(vs_default_pct, 2) if vs_default_pct is not None else None,
                     "logical_input_throughput_gbps": logical_input_throughput_gbps,
@@ -956,6 +968,27 @@ def build_structural_decomposition_dataset(ann: Dict[str, Any]) -> Dict[str, Any
     return dataset
 
 
+def performance_values(ds):
+    pos = ds["configurations"]["M32_N64_w8"]["candidates"]
+    d,c4,c2,c1 = [pos[c]["performance"]["marginal_slope_ns_per_cta"] for c in ["default","4","2","1"]]
+    neg = ds["configurations"]["M32_N128_w4"]["candidates"]
+    nd = neg["default"]["performance"]["marginal_slope_ns_per_cta"]
+    ns = [r["performance"]["marginal_slope_ns_per_cta"] for r in neg.values()]
+    h2a = ds["step_e_evidence"]["sub_hypotheses"]["H2a"]
+    return dict(d=d,c4=c4,c2=c2,c1=c1,gap=d-c4,p04=(d-c4)/d*100,g42=c4-c2,p42=(c4-c2)/c4*100,
+                g21=c2-c1,p21=(c2-c1)/c2*100,t0=4096/d,t4=4096/c4,t2=4096/c2,t1=4096/c1,
+                t04=4096/c4-4096/d,tp04=(d/c4-1)*100,t42=4096/c2-4096/c4,t21=4096/c1-4096/c2,
+                ratio=h2a["canonical_attribution_ratio"]*100,delta=h2a["isolated_delta_g_1_ns"],sd=h2a["isolated_delta_g_1_std_ns"],status=h2a["status"],
+                nd=nd,nlo=min(ns),nhi=max(ns),nspan=(max(ns)-min(ns))/nd*100,ni=8192/nd,nio=8704/nd,half=nd/2)
+
+
+def append_current_binding(ds, text):
+    baseline=ds["canonical_baseline"]
+    return text + ("\n\nCurrent canonical comparison is derived from sample medians and OLS on B={16384,32768,65536}, averaged across three runs. "
+                   f"Raw SHA256: `{baseline['raw_sha256']}`; last-change commit: `{baseline['raw_last_change_commit']}`. "
+                   "H2a uses the declared retrospective Step E decision rule; integrity checks do not require support. See the Phase 3 freeze note for occupancy and archival limits.")
+
+
 def render_summary_markdown(ds: Dict[str, Any]) -> str:
     """
     Renders Phase 3 comparative summary Markdown.
@@ -965,12 +998,13 @@ def render_summary_markdown(ds: Dict[str, Any]) -> str:
     neg = cfgs["M32_N128_w4"]["candidates"]
     ctrl_n16 = cfgs["M32_N16_w8"]["candidates"]
 
+    p = performance_values(ds)
     lines = [
         "# Phase 3 Structural Decomposition & Mechanism Isolation Report",
         "",
         "> [!NOTE]",
-        "> **Core Research Question**: Why does `M32_N64_w8` exhibit ~37%–43% marginal throughput separation across layout candidates (`3.88 -> 2.45 -> 2.25 ns/CTA`),",
-        "> whereas `M32_N128_w4` exhibits near-zero layout sensitivity (`~2.92 ns/CTA` across all candidates)?",
+        f"> **Core Research Question**: Why does `M32_N64_w8` exhibit large marginal throughput separation across layout candidates (`{p['d']:.2f} -> {p['c4']:.2f} -> {p['c2']:.2f} ns/CTA`),",
+        "> whereas `M32_N128_w4` exhibits near-zero layout sensitivity (the current raw-derived slopes listed in the performance table across candidates)?",
         ">",
         "> **Evidence Discipline**:",
         "> 1. All structural metrics and opcode counts below are extracted directly from the verified canonical fixed-binary artifacts (`results/phase3/fixed_binary_artifacts/canonical/`), proven identical across three sequential invocations on the same NVIDIA H100 GPU.",
@@ -1071,7 +1105,7 @@ def render_summary_markdown(ds: Dict[str, Any]) -> str:
         "",
         "## 4. Itemized Delta Table: `default` -> `cand4` in `M32_N64_w8`",
         "",
-        "Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 coincides with a reduction in the empirical marginal grid slope from **3.8822 ns** to **2.4543 ns** (-36.78%).",
+        f"Holding `warpPart[M]=8` constant while transitioning `lanePart[M]` from 4 to 2 coincides with a reduction in the empirical marginal grid slope from **{p['d']:.4f} ns** to **{p['c4']:.4f} ns** (-{p['p04']:.2f}%).",
         "",
         "| Structural Metric | default (lanePart[M]=4) | cand4 (lanePart[M]=2) | Absolute Delta | Relative Change |",
         "| :--- | :---: | :---: | :---: | :---: |",
@@ -1090,8 +1124,8 @@ def render_summary_markdown(ds: Dict[str, Any]) -> str:
         f"| **Post-reduction convert barriers** | 2 (`bar.sync 0`) | 2 (`bar.sync 0`) | 0 | Same |",
         f"| **Physical registers / thread** | 29 | 22 | -7 registers | -24.1% |",
         f"| **Total SASS instructions** | 296 | 232 | -64 instructions | -21.6% |",
-        f"| **Marginal grid slope per CTA** | **3.8822 ns** | **2.4543 ns** | **-1.4279 ns** | **-36.78%** |",
-        f"| **Logical input throughput** | 1055.1 GB/s | 1668.9 GB/s | +613.8 GB/s | +58.2% |",
+        f"| **Marginal grid slope per CTA** | **{p['d']:.4f} ns** | **{p['c4']:.4f} ns** | **-{p['gap']:.4f} ns** | **-{p['p04']:.2f}%** |",
+        f"| **Logical input throughput** | {p['t0']:.1f} GB/s | {p['t4']:.1f} GB/s | +{p['t04']:.1f} GB/s | +{p['tp04']:.1f}% |",
         "",
         "## 5. Itemized Delta Table: `cand4` -> `cand2` -> `cand1` in `M32_N64_w8`",
         "",
@@ -1111,8 +1145,8 @@ def render_summary_markdown(ds: Dict[str, Any]) -> str:
         f"| **Total barriers (`bar.sync`)** | 10 | 8 | -2 barriers | 8 | 0 |",
         f"| **Total SASS instructions** | 232 | 208 | -24 insts (-10.3%) | 200 | -8 insts (-3.8%) |",
         f"| **Physical registers / thread** | 22 | 21 | -1 register | 21 | 0 |",
-        f"| **Marginal slope (ns/CTA)** | **2.4543 ns** | **2.2537 ns** | **-0.2006 ns (-8.17%)** | **2.2249 ns** | **-0.0288 ns (-1.28%)** |",
-        f"| **Logical input throughput** | 1668.9 GB/s | 1817.5 GB/s | +148.6 GB/s | 1841.0 GB/s | +23.5 GB/s |",
+        f"| **Marginal slope (ns/CTA)** | **{p['c4']:.4f} ns** | **{p['c2']:.4f} ns** | **-{p['g42']:.4f} ns (-{p['p42']:.2f}%)** | **{p['c1']:.4f} ns** | **-{p['g21']:.4f} ns (-{p['p21']:.2f}%)** |",
+        f"| **Logical input throughput** | {p['t4']:.1f} GB/s | {p['t2']:.1f} GB/s | +{p['t42']:.1f} GB/s | {p['t1']:.1f} GB/s | +{p['t21']:.1f} GB/s |",
         "",
         "## 6. Answers to the 5 Research Questions",
         "",
@@ -1126,10 +1160,10 @@ def render_summary_markdown(ds: Dict[str, Any]) -> str:
         "7. **In SASS**: Total instructions drop from 296 to 232 (-64 instructions), with SHFL dropping from 40 to 16 (-60%) and FMNMX dropping from 40 to 16 (-60%).",
         "",
         "### Question 2: Do these changes also occur in `M32_N128_w4`? Why is there no performance difference?",
-        "- **OBSERVED**: `M32_N128_w4` shows substantial reductions in shuffles, barriers, and instruction count across layouts (e.g. shuffles drop from 25 to 9, float maxes drop from 24 to 8, barriers drop from 14 to 10, total SASS drops from 280 to 232; in `cand1`, reduction communication is 100% eliminated), yet empirical marginal slopes remain near parity (`~2.92 ns/CTA` across all candidates, delta < 0.12%).",
-        "- **UNKNOWN**: The current evidence does not identify why those structural reductions do not change throughput. Candidate explanations include a memory-system limitation (e.g. high logical traffic rate of ~2.8 TB/s operating near an empirical throughput ceiling), execution overlap hiding SM-side work, issue-resource behavior, or another bottleneck, but none is established without hardware-counter proof.",
+        f"- **OBSERVED**: `M32_N128_w4` shows substantial reductions in shuffles, barriers, and instruction count across layouts (e.g. shuffles drop from 25 to 9, float maxes drop from 24 to 8, barriers drop from 14 to 10, total SASS drops from 280 to 232; in `cand1`, reduction communication is 100% eliminated), yet empirical marginal slopes remain near parity (range {p['nlo']:.4f}..{p['nhi']:.4f} ns/CTA, span {p['nspan']:.3f}%).",
+        "- **UNKNOWN**: The current evidence does not identify why those structural reductions do not change throughput. Candidate explanations include a memory-system limitation (e.g. high logical traffic rate (see current table) operating in an overlap regime), execution overlap hiding SM-side work, issue-resource behavior, or another bottleneck, but none is established without hardware-counter proof.",
         "",
-        "### Question 3: Does the ~37% slope difference in `M32_N64_w8` correspond to an identifiable dependency-chain reduction?",
+        f"### Question 3: Does the {p['p04']:.2f}% slope difference in `M32_N64_w8` correspond to an identifiable dependency-chain reduction?",
         "- **A strong structural correlation exists**: Transitioning `default -> cand4` coincides with:",
         "  - fewer PTX reduction shuffles (40 -> 16)",
         "  - fewer max.f32 operations (40 -> 16)",
@@ -1137,29 +1171,29 @@ def render_summary_markdown(ds: Dict[str, Any]) -> str:
         "  - fewer CTA barriers (14 -> 10)",
         "  - fewer physical registers (29 -> 22)",
         "  - a shorter visible reduction-stage sequence (from 2 visible shuffle+max stages to 1 visible stage)",
-        "  - and an empirical marginal slope that is ~37% lower (3.8822 -> 2.4543 ns/CTA).",
+        f"  - and an empirical marginal slope that is {p['p04']:.2f}% lower ({p['d']:.4f} -> {p['c4']:.4f} ns/CTA).",
         "- **No individual mechanism is yet causally isolated**: Whether the runtime reduction is primarily driven by fewer barrier synchronizations, fewer shuffles, packed arithmetic folding, or lower register pressure cannot be determined from this single transition alone.",
         "",
-        "### Question 4: Which structural changes coincide with the additional ~8% gain from `cand4` -> `cand2`?",
+        f"### Question 4: Which structural changes coincide with the additional {p['p42']:.2f}% slope change from `cand4` -> `cand2`?",
         "- Coinciding structural changes include:",
         "  1. `lanePart[M]` drops from 2 to 1: Intra-warp reduction shuffles along M completely disappear (4 -> 0). All intra-warp M reduction folds into registers via 3x packed `max.bf16x2`.",
         "  2. **LocalLoad lowering switch**: Lowered to hardware `1x ldmatrix.x4` instead of `2x ld.shared.v2`.",
         "  3. **Post-reduction conversion change**: Instead of storing to shared memory and re-loading with ldmatrix, `cand2` performs layout redistribution directly in registers via `2x shfl.sync.idx.b32` and `1x selp.b32`, eliminating 2 CTA barriers in the epilogue.",
         "  4. **Barrier count**: Drops from 10 to 8.",
         "  5. **Register count**: Drops from 22 to 21.",
-        "- **Conclusion**: The current evidence cannot determine which of these structural changes accounts for the ~0.20 ns marginal-slope difference.",
+        f"- **Conclusion**: The current evidence cannot determine which of these structural changes accounts for the {p['g42']:.4f} ns marginal-slope difference.",
         "",
-        "### Question 5: Why does `cand2` -> `cand1` show near-zero additional gain (~1.3%)?",
+        f"### Question 5: Why does `cand2` -> `cand1` show a small additional slope change ({p['p21']:.2f}%)?",
         "- Transitioning `cand2 -> cand1` simultaneously:",
         "  1. Replaces `1x ldmatrix.x4` with `8x ld.shared.b16` scalar shared loads.",
         "  2. Replaces packed BF16 reduction (`max.bf16x2`) with scalar BF16 reduction (`7x max.bf16`).",
         "  3. Reduces remaining cross-warp communication (4 fewer combine shuffles).",
         "  4. Reintroduces post-convert shared-memory work (`1x st.shared.b32`, `1x bar.sync`, `1x ld.shared.b32`).",
-        "- The net measured slope change is only -1.28% (2.2537 -> 2.2249 ns/CTA).",
+        f"- The net measured slope change is only -{p['p21']:.2f}% ({p['c2']:.4f} -> {p['c1']:.4f} ns/CTA).",
         "- **Which positive and negative costs cancel is UNKNOWN**: We cannot determine whether scalar load overhead offsets communication savings without targeted differential microbenchmarks.",
     ])
 
-    return "\n".join(lines)
+    return append_current_binding(ds, "\n".join(lines))
 
 
 def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
@@ -1167,6 +1201,7 @@ def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
     Renders hypotheses Markdown adhering strictly to OBSERVED, DERIVED, HYPOTHESIS,
     FALSIFICATION TEST, and STATUS taxonomy.
     """
+    p = performance_values(ds)
     lines = [
         "# Phase 3 Mechanism Isolation: Formal Hypotheses",
         "",
@@ -1182,15 +1217,15 @@ def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
         "## Hypothesis 1: Bandwidth-Roof / Overlap Hypothesis",
         "",
         "- **OBSERVED**:",
-        "  - In `M32_N128_w4` (8 KiB input tile), all layout candidates achieve empirical marginal slopes of `~2.92 ns/additional CTA` (within 0.12% variation across all candidates).",
-        "  - At 2.92 ns/CTA, `M32_N128_w4` achieves a logical input throughput of **2801 GB/s** (and 2976 GB/s logical I/O throughput).",
-        "  - In `M32_N64_w8` (4 KiB input tile), default achieves `3.88 ns/CTA` (**1055 GB/s** logical input throughput), while cand2 achieves `2.25 ns/CTA` (**1818 GB/s** logical input throughput).",
-        "  - Pruning 24 shuffles and 10 barriers in `M32_N128_w4` produces zero runtime change, while pruning 24 shuffles and 4 barriers in `M32_N64_w8` coincides with a 36.8% runtime reduction.",
+        f"  - In `M32_N128_w4` (8 KiB input tile), current empirical marginal slopes range from `{p['nlo']:.4f}` to `{p['nhi']:.4f}` ns/additional CTA ({p['nspan']:.3f}% span relative to default).",
+        f"  - At the current default slope of {p['nd']:.4f} ns/CTA, `M32_N128_w4` has a logical input rate of **{p['ni']:.1f} GB/s** and logical I/O rate of {p['nio']:.1f} GB/s.",
+        f"  - In `M32_N64_w8` (4 KiB input tile), default has marginal slope `{p['d']:.4f} ns/CTA` (**{p['t0']:.1f} GB/s** logical input rate), while cand2 has `{p['c2']:.4f} ns/CTA` (**{p['t2']:.1f} GB/s** logical input rate).",
+        f"  - Pruning shuffles/barriers in `M32_N128_w4` coincides with near-parity grid slopes, while pruning 24 shuffles and 4 barriers in `M32_N64_w8` coincides with a {p['p04']:.2f}% marginal-slope reduction.",
         "  - Actual DRAM/HBM traffic, cache hit rates, and hardware memory utilization are **UNKNOWN** (not measured via hardware counters).",
         "",
         "- **DERIVED**:",
-        "  - Minimum transfer time scaling for logical bytes: 8704 logical bytes / 2.92 ns = 2.98 TB/s logical rate. At this rate, the logical transfer floor for 4352 bytes is 1.46 ns.",
-        "  - In `M32_N64_w8`, default CTA duration (3.88 ns) exceeds the logical transfer floor by 2.6x.",
+        f"  - Arithmetic logical-byte scaling: 8704 bytes / {p['nd']:.4f} ns = {p['nio']/1000:.4f} TB/s logical rate. Half the logical bytes at this assumed rate gives {p['half']:.4f} ns; this is not a measured transfer floor.",
+        f"  - The primary default marginal grid slope ({p['d']:.4f} ns/CTA) is {p['d']/p['half']:.3f} times that arithmetic half-byte scaling. Neither quantity is single-CTA latency or a measured hardware floor.",
         "",
         "- **HYPOTHESIS**:",
         "  - The negative case (`M32_N128_w4`) may be limited by a memory-system throughput roof or pipeline overlap that hides reductions in SM-side communication cost.",
@@ -1207,8 +1242,8 @@ def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
         "## Hypothesis 2: Lane-Partitioning Pruning Dominates Over Warp-Partitioning in SM-Sensitive Regimes",
         "",
         "- **OBSERVED**:",
-        "  - In the audited `M32_N64_w8` `default -> cand4` artifact, transitioning `lanePart[M]` from 4 to 2 (while holding `warpPart[M]=8` constant) coincides with whole-kernel shuffles dropping from 40 to 16 (-60%), barriers dropping from 14 to 10 (-28.6%), and marginal slope dropping from 3.8822 ns to 2.4543 ns (-36.78%).",
-        "  - In contrast, transitioning `cand2 -> cand1` holds `lanePart[M]=1` constant while halving `warpPart[M]` from 8 to 4, coinciding with only a -1.28% slope change (2.2537 -> 2.2249 ns).",
+        f"  - In the audited `M32_N64_w8` `default -> cand4` artifact, transitioning `lanePart[M]` from 4 to 2 (while holding `warpPart[M]=8` constant) coincides with whole-kernel shuffles dropping from 40 to 16 (-60%), barriers dropping from 14 to 10 (-28.6%), and marginal slope dropping from {p['d']:.4f} ns to {p['c4']:.4f} ns (-{p['p04']:.2f}%).",
+        f"  - In contrast, transitioning `cand2 -> cand1` holds `lanePart[M]=1` constant while halving `warpPart[M]` from 8 to 4, coinciding with only a -{p['p21']:.2f}% slope change ({p['c2']:.4f} -> {p['c1']:.4f} ns).",
         "  - In `default`, `lanePart[M]=4` forces `derived_M_elems_per_thread = 1`, which prevents thread-local reduction before communication.",
         "  - In `cand4`, `lanePart[M]=2` provides 2 elements on M per thread, enabling **2x `max.bf16x2`** packed local reduction.",
         "",
@@ -1228,9 +1263,9 @@ def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
         "",
         "- **Hypothesis 2a (H2a)**: Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.",
         "  - **Lineage**: Refinement of H2 to composite reduction body level.",
-        "  - **Evidence**: Phase 3 Step E single-binary repeated reduction isolates $\\Delta g(1) = 1.0929 \\pm 0.0118$ ns/additional CTA on `M32_N64_w8`.",
-        "  - **Magnitude Attribution**: The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).",
-        "  - **Sub-Hypothesis Status**: `SUPPORTED_AT_REDUCTION_BODY_LEVEL`",
+        f"  - **Evidence**: Phase 3 Step E single-binary repeated reduction isolates $\\Delta g(1) = {p['delta']:.4f} \\pm {p['sd']:.4f}$ ns/additional CTA on `M32_N64_w8`.",
+        f"  - **Magnitude Attribution**: The isolated one-reduction differential has a magnitude equal to {p['ratio']:.2f}% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).",
+        f"  - **Sub-Hypothesis Status**: `{p['status']}`",
         "",
         "- **Hypothesis 2b (H2b)**: Lane-partition pruning dominates warp-partition pruning.",
         "  - **Lineage**: Specific sub-claim of H2 attributing primary gain to lane partition rather than warp partition.",
@@ -1271,7 +1306,7 @@ def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
         "- **OBSERVED**:",
         "  - In `cand4`, post-reduction layout conversion uses shared memory: `1x st.shared.v4.b32`, `2x bar.sync 0`, and `1x ldmatrix.x1`, requiring 10 total barriers.",
         "  - In `cand2`, post-reduction layout conversion is performed entirely in registers via `2x shfl.sync.idx.b32` and `1x selp.b32`, requiring only 8 total barriers.",
-        "  - The marginal slope improves from `2.4543 ns` (cand4) to `2.2537 ns` (cand2) — an ~8.2% relative improvement.",
+        f"  - The marginal slope improves from `{p['c4']:.4f} ns` (cand4) to `{p['c2']:.4f} ns` (cand2) — a {p['p42']:.2f}% relative slope change.",
         "",
         "- **DERIVED**:",
         "  - `bar.sync 0` is a CTA-wide barrier synchronizing all 256 threads across 8 warps.",
@@ -1287,47 +1322,18 @@ def render_hypotheses_markdown(ds: Dict[str, Any]) -> str:
         "- **STATUS**: `UNVERIFIED / PENDING_DIFFERENTIAL_MICROBENCH`",
     ]
 
-    return "\n".join(lines)
+    return append_current_binding(ds, "\n".join(lines))
+
 
 
 def main():
-    print("Building Phase 3 structural decomposition and annotations from canonical fixed-binary artifacts...")
-    ann = build_phase3_annotations()
+    """Regenerate derived comparison files only; preserve original annotation archives."""
+    ann = json.loads((EXP_DIR / "phase3_audited_annotations.json").read_text())
     ds = build_structural_decomposition_dataset(ann)
-    equiv_report = generate_artifact_equivalence_report()
-    summary_md = render_summary_markdown(ds)
-    hypotheses_md = render_hypotheses_markdown(ds)
-
-    # Output paths
-    ann_path = EXP_DIR / "phase3_audited_annotations.json"
-    equiv_path = PHASE3_DIR / "artifact_equivalence_report.json"
-    pos_neg_json_path = STRUCT_DIR / "positive_vs_negative.json"
-    summary_md_path = STRUCT_DIR / "summary.md"
-    hypotheses_md_path = PHASE3_DIR / "hypotheses.md"
-
     STRUCT_DIR.mkdir(parents=True, exist_ok=True)
-    PHASE3_DIR.mkdir(parents=True, exist_ok=True)
-
-    ann_path.write_text(json.dumps(ann, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {ann_path}")
-
-    equiv_path.write_text(json.dumps(equiv_report, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {equiv_path}")
-
-    pos_neg_json_path.write_text(json.dumps(ds, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {pos_neg_json_path}")
-
-    summary_md_path.write_text(summary_md + "\n", encoding="utf-8")
-    print(f"Wrote {summary_md_path}")
-
-    hypotheses_md_path.write_text(hypotheses_md + "\n", encoding="utf-8")
-    print(f"Wrote {hypotheses_md_path}")
-
-    print("Annotations configurations:", list(ann["configurations"].keys()))
-    print("Dataset configurations:", list(ds["configurations"].keys()))
-    print("Equivalence configurations:", list(equiv_report["configurations"].keys()))
-    print("Summary Markdown length:", len(summary_md))
-    print("Hypotheses Markdown length:", len(hypotheses_md))
+    (STRUCT_DIR / "positive_vs_negative.json").write_text(json.dumps(ds, indent=2))
+    (STRUCT_DIR / "summary.md").write_text(render_summary_markdown(ds))
+    (PHASE3_DIR / "hypotheses.md").write_text(render_hypotheses_markdown(ds))
 
 
 if __name__ == "__main__":

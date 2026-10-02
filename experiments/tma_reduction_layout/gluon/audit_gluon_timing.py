@@ -7,7 +7,7 @@ Processes raw_run_1.json, raw_run_2.json, raw_run_3.json:
 2. Fits T(B) = a + b * B to extract marginal slopes b_c(R) in ns/additional CTA.
 3. Computes g(R) = b_default(R) - b_cand4(R), g(0), Δg(R) = g(R) - g(0), and Δg(1).
 4. Fits linear amplification model g(R) = alpha + beta * R.
-5. Computes descriptive attribution ratio against canonical gap (1.4279 ns/CTA).
+5. Computes descriptive attribution ratio against canonical gap derived from current raw samples.
 6. Computes cross-invocation statistics (mean, std, CV of beta and Δg(1)).
 7. Checks device UUID provenance (same-device temporal vs multi-device replication).
 8. Evaluates Hypothesis H2 status.
@@ -20,6 +20,12 @@ import math
 import os
 import re
 import sys
+import subprocess
+
+try:
+    from .evidence_integrity import DECISION_RULE, timing_bindings, finite_tree
+except ImportError:
+    from evidence_integrity import DECISION_RULE, timing_bindings, finite_tree
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -67,6 +73,8 @@ def calculate_percentile(sorted_data: List[float], percentile: float) -> float:
 
 
 def compute_sample_stats(samples: List[float]) -> Dict[str, float]:
+    if len(samples) != 100 or any(type(x) not in (int, float) or not math.isfinite(x) or x <= 0 for x in samples):
+        raise ValueError("Expected 100 positive finite samples")
     sorted_s = sorted(samples)
     n = len(samples)
     mean_val = sum(samples) / n
@@ -94,6 +102,31 @@ def compute_sample_stats(samples: List[float]) -> Dict[str, float]:
     }
 
 
+def derive_canonical_baseline():
+    """Bind the current canonical raw generation; auditor estimator is independent of validator."""
+    path = BASE_DIR / "results/phase2/saturation/corrected_pilot_runs.json"
+    raw = json.loads(path.read_text())
+    finite_tree(raw)
+    bs = [16384, 32768, 65536]
+    per_run = {}
+    for run in ["run_1", "run_2", "run_3"]:
+        grid = raw[run]["configs"]["M32_N64_w8"]["grid_data"]
+        per_run[run] = {}
+        for cand in ["default", "4"]:
+            medians = [compute_sample_stats(grid[str(b)][cand]["raw_samples_us"])["median"] for b in bs]
+            per_run[run][cand] = linear_regression(bs, medians)[0] * 1000.0
+    means = {c: sum(row[c] for row in per_run.values())/3 for c in ["default", "4"]}
+    rel = str(path.relative_to(REPO_ROOT))
+    commit = subprocess.check_output(["git", "log", "-1", "--format=%H", "--", rel], cwd=REPO_ROOT, text=True).strip()
+    gap = means["default"]-means["4"]
+    if gap == 0:
+        raise ValueError("Undefined canonical comparison: zero denominator")
+    return {"raw_path": rel, "raw_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "raw_last_change_commit": commit, "config": "M32_N64_w8", "candidates": ["default", "4"],
+            "B": bs, "estimator": "per-condition sample median -> OLS T(B) on B -> arithmetic mean of three run slopes; ns/additional CTA",
+            "per_run_slopes": per_run, "mean_slopes": means, "gap_ns_per_cta": gap}
+
+
 def format_cv(cv_val: Any) -> str:
     if cv_val == "N/A" or cv_val is None:
         return "N/A"
@@ -103,6 +136,7 @@ def format_cv(cv_val: Any) -> str:
 def render_timing_summary(res: Dict[str, Any], sum_path: Path):
     prim_cr = res["primary_analysis"]["cross_run"]
     sec_cr = res["secondary_analysis"]["cross_run"]
+    canonical_gap = res["canonical_baseline"]["gap_ns_per_cta"]
     ratio_pct = prim_cr["attribution_ratio"]["mean"] * 100.0
 
     lines = [
@@ -119,9 +153,9 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
         "Residency is matched (8 blocks/SM for w8, 16 blocks/SM for w4) with 0 spills across all conditions.",
         "",
         f"- **Primary Mechanism Metric**: Isolated one-reduction differential $\\Delta g(1) = g(1) - g(0)$ is **`{prim_cr['delta_g_1']['mean']:.4f} ± {prim_cr['delta_g_1']['std']:.4f}` ns/additional CTA**.",
-        f"- **Descriptive Attribution Ratio**: The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap. (Canonical gap = 1.4279 ns/additional CTA; isolated delta = {prim_cr['delta_g_1']['mean']:.4f} ns/additional CTA).",
+        f"- **Descriptive Attribution Ratio**: The isolated one-reduction differential has a magnitude equal to {ratio_pct:.2f}% of the canonical default-vs-cand4 marginal-slope gap. (Canonical gap = {canonical_gap:.6f} ns/additional CTA; isolated delta = {prim_cr['delta_g_1']['mean']:.4f} ns/additional CTA).",
         "  - *Attribution Note*: This is a **cross-harness descriptive magnitude comparison, not an additive causal decomposition**.",
-        f"- **Amplification Trend Summary**: Fitted linear slope $\\beta = `{prim_cr['beta']['mean']:.4f} ± {prim_cr['beta']['std']:.4f}` ns/(CTA · rep)** serves strictly as an **amplification-trend summary** across $R \\in \\{{0, 1, 2, 4, 8\\}}$ ($R^2 = {prim_cr['r2']['mean']:.4f}).",
+        f"- **Amplification Trend Summary**: Fitted linear slope $\\beta = `{prim_cr['beta']['mean']:.4f} ± {prim_cr['beta']['std']:.4f}` ns/(CTA · rep)** serves strictly as an **amplification-trend summary** across $R \\in \\{{0, 1, 2, 4, 8\\}}$ ($R^2 = {prim_cr['mean_run_fit_r2']['mean']:.4f}).",
         "- **Linearity Quality**: Incremental repetition deltas demonstrate **strong approximately linear amplification over R=0..8** without constant per-repetition cost assumptions.",
         "",
         "## 2. Hardware & Device Provenance",
@@ -149,7 +183,7 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
         "## 3. PRIMARY Specialization: `M32_N64_w8` (Exact Canonical Subsequence Equivalent)",
         "",
         "> [!NOTE] Primary Experiment",
-        "> Both default (vec=8) and cand4 (vec=4) exhibit 100% exact contiguous subsequence equivalence",
+        "> Both candidates match the complete filtered normalized reduction fingerprint sequence",
         "> with the canonical reduction fingerprint inside the runtime loop.",
         "",
         "### Repetition Sweep Breakdown ($R \\in \\{0, 1, 2, 4, 8\\}$)",
@@ -192,7 +226,7 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
 
     lines.extend([
         "",
-        "Incremental deltas cluster tightly around ~1.15 - 1.40 ns/(CTA·rep), demonstrating **strong approximately linear amplification over R=0..8**.",
+        "The observed increments vary; the fitted trend is approximately linear over R=0..8, not an exact constant cost per repetition.",
         "",
         "### Primary Amplification Model Fits ($g(R) = \\alpha + \\beta \\cdot R$)",
         "",
@@ -200,9 +234,9 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
         f"- **Primary Metric $\\Delta g(1)$**: `{prim_cr['delta_g_1']['mean']:.4f} ± {prim_cr['delta_g_1']['std']:.4f}` ns/CTA",
         f"- **Amplification Slope $\\beta$**: `{prim_cr['beta']['mean']:.4f} ± {prim_cr['beta']['std']:.4f}` ns/(CTA · rep) (amplification-trend summary)",
         f"- **Fit Intercept $\\alpha$**: `{prim_cr['alpha']['mean']:.4f} ± {prim_cr['alpha']['std']:.4f}` ns/CTA (CV: `{format_cv(prim_cr['alpha']['cv'])}`, stability: `{prim_cr['alpha']['stability_class']}`)",
-        f"- **Model Fit $R^2$**: `{prim_cr['r2']['mean']:.4f}`",
-        f"- **Canonical Positive Gap**: `1.4279` ns/additional CTA",
-        f"- **Descriptive Attribution Ratio**: **`{ratio_pct:.1f}%`** (`{prim_cr['delta_g_1']['mean']:.4f} / 1.4279`)",
+        f"- **Mean per-run fit $R^2$**: `{prim_cr['mean_run_fit_r2']['mean']:.4f}`",
+        f"- **Canonical Positive Gap**: `{canonical_gap:.6f}` ns/additional CTA",
+        f"- **Descriptive Attribution Ratio**: **`{ratio_pct:.1f}%`** (`{prim_cr['delta_g_1']['mean']:.4f} / {canonical_gap:.6f}`)",
         "",
         "### Linear Model Fit Residuals",
         "",
@@ -248,12 +282,12 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
         f"- **Measured Baseline $g(0)$**: `{sec_cr['g_0']['mean']:.4f} ± {sec_cr['g_0']['std']:.4f}` ns/CTA",
         f"- **Isolated $\\Delta g(1)$**: `{sec_cr['delta_g_1']['mean']:.4f} ± {sec_cr['delta_g_1']['std']:.4f}` ns/CTA",
         f"- **Linear Slope $\\beta$**: `{sec_cr['beta']['mean']:.4f} ± {sec_cr['beta']['std']:.4f}` ns/(CTA · rep)",
-        f"- **Model Fit $R^2$**: `{sec_cr['r2']['mean']:.4f}`",
+        f"- **Mean per-run fit $R^2$**: `{sec_cr['mean_run_fit_r2']['mean']:.4f}`",
         "",
         "## 5. Compiler Barrier Attribution & SASS Verification",
         "",
-        "- The input compiler barrier induces candidate-symmetric PTX tied-copy instructions. No additional explicit SASS MOV attributable to those copies was observed after ptxas register coalescing.",
-        "- Barrier overhead is candidate-symmetric and does not contribute to default-vs-cand4 differentials.",
+        "- The input compiler barrier induces equal PTX copy counts within each shape. No explicit MOV or IMAD.MOV was observed in the runtime SASS reduction region.",
+        "- Indirect allocation, live-range, and scheduler effects remain possible; equal copy counts do not establish zero differential.",
         "",
         "## 6. Hypothesis H2 Evaluation & Lineage Decomposition",
         "",
@@ -265,7 +299,7 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
         "1. **Hypothesis 2a (H2a)**: Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.",
         f"   - **Status**: **`{res['h2_evaluation']['sub_hypotheses']['H2a']['status']}`**",
         f"   - **Evidence**: Isolated one-reduction differential $\\Delta g(1) = {prim_cr['delta_g_1']['mean']:.4f} ± {prim_cr['delta_g_1']['std']:.4f}$ ns/additional CTA.",
-        f"   - **Attribution Scope**: The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).",
+        f"   - **Attribution Scope**: The isolated one-reduction differential has a magnitude equal to {ratio_pct:.2f}% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition).",
         "",
         "2. **Hypothesis 2b (H2b)**: Lane-partition pruning dominates warp-partition pruning.",
         f"   - **Status**: **`{res['h2_evaluation']['sub_hypotheses']['H2b']['status']}`**",
@@ -277,6 +311,7 @@ def render_timing_summary(res: Dict[str, Any], sum_path: Path):
         "",
     ])
 
+    lines.extend(["", "The decision rule is retrospective: all primary run betas > 0, mean Δg(1) > 0.1 ns/CTA, mean per-run R² >= 0.90, and mean/each-run g(R) nondecreasing. It is not an integrity PASS condition.", "± denotes sample SD of three same-device temporal invocations, not a confidence interval.", f"R² of cross-run mean points: {prim_cr['cross_mean_fit']['r2']:.9f}; mean of per-run R²: {prim_cr['mean_run_fit_r2']['mean']:.9f}.", f"Canonical raw binding: `{res['canonical_baseline']['raw_path']}`, SHA256 `{res['canonical_baseline']['raw_sha256']}`, last-change commit `{res['canonical_baseline']['raw_last_change_commit']}`.", "Fingerprint equality ignores most operands and predicates; it does not prove dataflow, full PTX, SASS, or CUBIN identity. See ../freeze.md for archival limits."])
     sum_path.write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -296,6 +331,8 @@ def main():
         with open(rf, "r", encoding="utf-8") as f:
             runs_data.append(json.load(f))
 
+    canonical_baseline = derive_canonical_baseline()
+    evidence_bindings = timing_bindings(BASE_DIR, runs_data)
     # 1. Device Provenance Check
     uuids = [r["env_info"].get("gpu_uuid") for r in runs_data]
     same_device = len(set(uuids)) == 1
@@ -350,6 +387,7 @@ def main():
             slopes_by_cand = {c: {} for c in candidates}
             intercepts_by_cand = {c: {} for c in candidates}
             r2_by_cand = {c: {} for c in candidates}
+            residuals_by_cand = {c: {} for c in candidates}
             per_b_stats = {c: {} for c in candidates}
 
             for cand in candidates:
@@ -372,10 +410,12 @@ def main():
                     slopes_by_cand[cand][r_str] = marginal_ns_per_cta
                     intercepts_by_cand[cand][r_str] = intercept
                     r2_by_cand[cand][r_str] = r2
+                    residuals_by_cand[cand][r_str] = resids
 
             run_eval["configurations"][cfg_name]["slopes"] = slopes_by_cand
             run_eval["configurations"][cfg_name]["intercepts"] = intercepts_by_cand
             run_eval["configurations"][cfg_name]["grid_fit_r2"] = r2_by_cand
+            run_eval["configurations"][cfg_name]["grid_fit_residuals_us"] = residuals_by_cand
             run_eval["configurations"][cfg_name]["per_b_stats"] = per_b_stats
 
             # Differentials: g(R), Δg(R), Δg(1)
@@ -439,7 +479,7 @@ def main():
             beta_c4, alpha_c4, r2_c4, _ = linear_regression(r_floats, b_c4_floats)
 
             # Attribution ratio for PRIMARY
-            canonical_gap = 1.4279
+            canonical_gap = canonical_baseline["gap_ns_per_cta"]
             attr_ratio = (delta_g_1 / canonical_gap) if cfg_name == "M32_N64_w8" else None
 
             run_eval["configurations"][cfg_name]["linear_fits"] = {
@@ -549,11 +589,12 @@ def main():
                 "delta_g_r_stability_class": dgr_stab,
             }
 
-        # Cross-run linear fit residual table
+        cross_beta, cross_alpha, cross_r2, cross_resids = linear_regression(r_values, [r_breakdown[str(r)]["g_r_mean"] for r in r_values])
+        # Cross-run mean-points fit residual table
         cross_residual_table = []
         for R in r_values:
             obs = r_breakdown[str(R)]["g_r_mean"]
-            fit = a_m + b_m * float(R)
+            fit = cross_alpha + cross_beta * float(R)
             cross_residual_table.append({
                 "R": R,
                 "observed": obs,
@@ -562,9 +603,10 @@ def main():
             })
 
         cross_run_summary["configurations"][cfg_name] = {
+            "cross_mean_fit": {"alpha": cross_alpha, "beta": cross_beta, "r2": cross_r2, "residuals": cross_resids},
             "beta": {"mean": b_m, "std": b_s, "cv": b_cv, "stability_class": b_stab, "values": betas},
             "alpha": {"mean": a_m, "std": a_s, "cv": a_cv, "stability_class": a_stab, "values": alphas},
-            "r2": {"mean": r2_m, "std": r2_s, "cv": r2_cv, "stability_class": r2_stab, "values": r2s},
+            "mean_run_fit_r2": {"mean": r2_m, "std": r2_s, "cv": r2_cv, "stability_class": r2_stab, "values": r2s},
             "delta_g_1": {"mean": dg1_m, "std": dg1_s, "cv": dg1_cv, "stability_class": dg1_stab, "values": delta_g_1s},
             "g_0": {"mean": g0_m, "std": g0_s, "cv": g0_cv, "stability_class": g0_stab, "values": g_0s},
             "attribution_ratio": {"mean": ar_m, "std": ar_s, "cv": ar_cv, "stability_class": ar_stab, "values": attr_ratios},
@@ -577,7 +619,7 @@ def main():
     prim_cfg = cross_run_summary["configurations"]["M32_N64_w8"]
     all_betas_positive = all(b > 0 for b in prim_cfg["beta"]["values"])
     delta_g_1_positive = prim_cfg["delta_g_1"]["mean"] > 0.1  # materially positive (>0.1 ns/CTA)
-    good_fit = prim_cfg["r2"]["mean"] >= 0.90
+    good_fit = prim_cfg["mean_run_fit_r2"]["mean"] >= 0.90
 
     # Monotonicity check across mean g(R)
     mean_g_rs = [prim_cfg["r_breakdown"][str(R)]["g_r_mean"] for R in r_values]
@@ -607,16 +649,18 @@ def main():
         h2_statement = "Hypothesis H2 was not supported by the repeated-reduction timing data."
 
     h2_evaluation = {
+        "decision_rule": DECISION_RULE,
         "status": h2_status,
         "sub_hypotheses": {
             "H2a": {
                 "title": "Composite reduction-body contribution",
-                "status": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
-                "attribution_scope": "SUPPORTED_AT_REDUCTION_BODY_LEVEL",
+                "status": h2_status,
+                "attribution_scope": h2_status,
                 "isolated_delta_g_1_ns": prim_cfg["delta_g_1"]["mean"],
+                "isolated_delta_g_1_std_ns": prim_cfg["delta_g_1"]["std"],
                 "canonical_attribution_ratio": prim_cfg["attribution_ratio"]["mean"],
                 "description": "Composite reduction-body structure materially contributes to positive default-vs-cand4 throughput separation.",
-                "attribution_note": "The isolated one-reduction differential has a magnitude equal to 76.5% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition)."
+                "attribution_note": f"The isolated one-reduction differential has a magnitude equal to {prim_cfg['attribution_ratio']['mean']*100:.2f}% of the canonical default-vs-cand4 marginal-slope gap (cross-harness descriptive magnitude comparison, not an additive causal decomposition)."
             },
             "H2b": {
                 "title": "Lane-partition dominance over warp-partition",
@@ -641,6 +685,8 @@ def main():
 
     # 6. Overall validation packaging
     final_results = {
+        "canonical_baseline": canonical_baseline,
+        "evidence_bindings": evidence_bindings,
         "experiment": "Phase 3 Step E: Controlled Gluon Repeated-Reduction Timing",
         "h2_status": h2_status,
         "h2_evaluation": h2_evaluation,

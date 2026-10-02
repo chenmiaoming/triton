@@ -8,15 +8,15 @@ Performs rigorous structural audit and criteria evaluation on Step D repeated re
 3. Criterion C: Runtime R unspecialized, single binary across R in {1, 2, 4, 8}.
 4. Criterion D: Exactly one runtime loop with backward branch count == 1.
 5. Criterion E: Input anti-LICM barrier: FAIL_AT_PTX_LEVEL (0 explicit asm, 8/32 induced mov.b16 copies, candidate-symmetric).
-6. Criterion F: Result sink emits 0 explicit asm, 0 induced copies, 0 SASS instructions (PASS).
+6. Criterion F: Result sink emits 0 explicit asm and 0 induced copies (PASS).
 7. Criterion G: Canonical reduction core stratification: EXACT_SEQUENCE_EQUIVALENT (Primary w8) vs PIPELINED_OPCODE_EQUIVALENT (Secondary w4 def).
 8. Criterion H: Terminal canonical ld.shared remains inside loop.
 9. Criterion I: Zero accumulator adds, global stores, or extra memory operations inside loop.
 10. Criterion J: default/cand4 residency matched within each config.
 11. Criterion K: LOCAL=0, STACK=0.
 12. Criterion L: Identical CUBIN SHA and resources across all R.
-13. SASS Verification: BARRIER_EXPLICIT_SASS_OVERHEAD = 0 (ptxas register coalescing eliminates all induced copies).
-14. Timing Gate: Evaluates 10 pre-conditions to unlock Phase 3 Step E timing.
+13. SASS Verification: NO_EXPLICIT_LOOP_MOV_OBSERVED; indirect compiler effects are not excluded.
+14. Timing Gate: Requires every structural condition and the observational barrier checks to unlock Phase 3 Step E timing.
 """
 
 import hashlib
@@ -24,6 +24,11 @@ import json
 import os
 import re
 import sys
+
+try:
+    from .artifact_checks import inspect_repeated, inspect_sass, normalize, ptx_backedges
+except ImportError:
+    from artifact_checks import inspect_repeated, inspect_sass, normalize, ptx_backedges
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -38,64 +43,30 @@ AUDITED_ANN_FILE = BASE_DIR / "phase3_audited_annotations.json"
 
 
 def normalize_reduction_instruction(inst: str) -> str:
-    s = re.sub(r"^@%p\d+\s+", "", inst.strip()).rstrip(";")
-    parts = s.split(None, 1)
-    if not parts:
-        return ""
-    opcode = parts[0]
-    args = parts[1] if len(parts) > 1 else ""
-    if "shfl" in opcode or "bar.sync" in opcode:
-        clean_args = re.sub(r"%[a-zA-Z0-9_]+", "", args)
-        imms = re.findall(r"(-?\d+|0x[0-9a-fA-F]+)", clean_args)
-        return f"{opcode} " + " ".join(imms)
-    elif any(k in opcode for k in ["max", "cvt", "st.shared", "ld.shared", "ldmatrix", "selp"]):
-        return opcode
-    else:
-        return opcode
+    """Selected opcode projection; shuffle/barrier immediates are retained."""
+    return normalize(inst)
 
 
 def find_loop_boundaries(ptx_lines: List[str]) -> Tuple[Optional[int], Optional[int]]:
-    """Identify the line boundaries of the runtime loop in PTX."""
-    labels = {}
-    for i, l in enumerate(ptx_lines):
-        m = re.match(r"^(\$L__BB\d+_\d+):", l.strip())
-        if m:
-            labels[m.group(1)] = i + 1
-
-    for i, l in enumerate(ptx_lines):
-        m = re.search(r"bra(?:\.uni)?\s+(\$L__BB\d+_\d+)", l.strip())
-        if m:
-            target = m.group(1)
-            if target in labels and labels[target] < (i + 1):
-                return labels[target], i + 1
-    return None, None
+    """Find the unique compiler runtime loop, excluding the inline TMA poll."""
+    edges = [e for e in ptx_backedges("\n".join(ptx_lines)) if e["kind"] == "compiler_loop"]
+    if len(edges) != 1:
+        return None, None
+    return edges[0]["start"], edges[0]["end"]
 
 
 def count_backward_branches(ptx_lines: List[str]) -> List[Tuple[int, str, str]]:
-    """Mechanically identify and count all backward branches in PTX."""
-    labels = {}
-    for i, l in enumerate(ptx_lines):
-        m = re.match(r"^(\$L__BB\d+_\d+):", l.strip())
-        if m:
-            labels[m.group(1)] = i + 1
-
-    backward_branches = []
-    for i, l in enumerate(ptx_lines):
-        m = re.search(r"bra(?:\.uni)?\s+(\$L__BB\d+_\d+)", l.strip())
-        if m:
-            target = m.group(1)
-            if target in labels and labels[target] < (i + 1):
-                backward_branches.append((i + 1, target, l.strip()))
-    return backward_branches
+    """Compiler runtime backedges; the complete enumeration is in artifact audit."""
+    return [(e["end"], e["target"], ptx_lines[e["end"]-1].strip())
+            for e in ptx_backedges("\n".join(ptx_lines)) if e["kind"] == "compiler_loop"]
 
 
 def extract_localloads_in_ptx(ptx_lines: List[str], loop_start: Optional[int], loop_end: Optional[int]):
     """
     Extract and partition LocalLoads into outside-loop (initial tile loads)
-    and inside-loop (distinguishing tile reloads from canonical reduction ld.shared).
+    and all inside-loop shared loads. Origin is not inferred from an opcode alone.
     """
     pre_loop_tile_loads = []
-    in_loop_tile_loads = []
     in_loop_reduction_loads = []
     post_loop_loads = []
 
@@ -115,7 +86,6 @@ def extract_localloads_in_ptx(ptx_lines: List[str], loop_start: Optional[int], l
 
     return {
         "pre_loop_loads": pre_loop_tile_loads,
-        "in_loop_tile_loads": in_loop_tile_loads,
         "in_loop_reduction_loads": in_loop_reduction_loads,
         "post_loop_loads": post_loop_loads,
     }
@@ -153,29 +123,17 @@ def find_canonical_reduction_region(
     Returns (matched, start_line, end_line, match_type).
     Categorizes into EXACT_SEQUENCE_EQUIVALENT or PIPELINED_OPCODE_EQUIVALENT.
     """
-    matches = match_canonical_subsequence(ptx_lines, canon_fp)
-    inside_matches = [m for m in matches if m[0] >= loop_start and m[1] <= loop_end]
-    if len(inside_matches) == 1:
-        return True, inside_matches[0][0], inside_matches[0][1], "EXACT_SEQUENCE_EQUIVALENT"
-
     from collections import Counter
-    canon_counts = Counter(canon_fp)
-    expected_total = len(canon_fp)
-
-    loop_slice = ptx_lines[loop_start - 1 : loop_end]
-    norm_loop = []
-    line_map = []
-    for idx, line in enumerate(loop_slice):
-        n = normalize_reduction_instruction(line)
-        if n and any(k in n for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"]):
-            norm_loop.append(n)
-            line_map.append(loop_start + idx)
-
-    for i in range(len(norm_loop) - expected_total + 1):
-        window = norm_loop[i : i + expected_total]
-        if Counter(window) == canon_counts:
-            return True, line_map[i], line_map[i + expected_total - 1], "PIPELINED_OPCODE_EQUIVALENT"
-
+    normalized, line_map = [], []
+    for idx, line in enumerate(ptx_lines[loop_start-1:loop_end], loop_start):
+        op = normalize_reduction_instruction(line)
+        if op and any(k in op for k in ["shfl", "max", "cvt", "st.shared", "ld.shared", "ldmatrix", "bar.sync", "selp"]):
+            normalized.append(op)
+            line_map.append(idx)
+    if normalized and normalized == canon_fp:
+        return True, line_map[0], line_map[-1], "EXACT_SEQUENCE_EQUIVALENT"
+    if normalized and Counter(normalized) == Counter(canon_fp):
+        return True, line_map[0], line_map[-1], "PIPELINED_OPCODE_EQUIVALENT"
     return False, None, None, "MISMATCH"
 
 
@@ -257,54 +215,8 @@ def audit_in_loop_asm_and_copies(ptx_lines: List[str], loop_start: int, loop_end
 
 
 def audit_sass_overhead(cfg: str, cand: str, step_c_sass: str, step_d_sass: str) -> Dict[str, Any]:
-    """
-    Verify whether PTX-level tied copies introduce any runtime SASS instructions.
-    Compares Step C (single reduction) vs Step D (repeated reduction) SASS.
-    """
-    def _extract_sass_insts(sass_text: str) -> List[Tuple[int, str]]:
-        insts = []
-        for l in sass_text.splitlines():
-            m = re.match(r"\s*/\*([0-9a-fA-F]+)\*/\s+(.*?);", l)
-            if m:
-                insts.append((int(m.group(1), 16), m.group(2).strip()))
-        return insts
-
-    c_insts = _extract_sass_insts(step_c_sass)
-    d_insts = _extract_sass_insts(step_d_sass)
-
-    # Find the runtime loop in SASS: the first backward branch
-    target, addr, branch_inst = None, None, None
-    for a, inst in d_insts:
-        m = re.search(r"BRA\s+(?:0x)?([0-9a-fA-F]+)", inst)
-        if m:
-            t = int(m.group(1), 16)
-            if t < a:
-                target, addr, branch_inst = t, a, inst
-                break
-
-    loop_insts = [(a, i) for a, i in d_insts if target is not None and a >= target and a <= addr]
-    loop_movs = [(f"0x{a:x}", i) for a, i in loop_insts if "MOV" in i and not "IMAD.MOV" in i]
-
-    attributable_overhead = len(loop_movs)
-    if attributable_overhead == 0:
-        observation = "PTX-level tied copies exist, but no additional executed SASS instruction is attributable to the barrier (ptxas coalesced 100% of mov.b16 copies)."
-        status = "BARRIER_EXPLICIT_SASS_OVERHEAD = 0"
-    else:
-        observation = f"Found {len(loop_movs)} SASS MOV instructions in loop body."
-        status = "BARRIER_HAS_RUNTIME_SASS_OVERHEAD"
-
-    return {
-        "step_c_sass_instruction_count": len(c_insts),
-        "step_d_sass_instruction_count": len(d_insts),
-        "diff_instruction_count": len(d_insts) - len(c_insts),
-        "loop_start_addr": f"0x{target:x}" if target is not None else None,
-        "loop_end_addr": f"0x{addr:x}" if addr is not None else None,
-        "loop_sass_instruction_count": len(loop_insts),
-        "loop_body_mov_instructions": loop_movs,
-        "attributable_sass_barrier_overhead": attributable_overhead,
-        "sass_barrier_classification": status,
-        "sass_barrier_observation": observation,
-    }
+    """Enumerate all edges and inspect the actual runtime reduction region."""
+    return inspect_sass(step_d_sass)
 
 
 def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
@@ -323,8 +235,8 @@ def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "> [!NOTE] Compiler Barrier Classification",
         "> The input anti-LICM tied barrier is **not PTX-zero**: it induces candidate-symmetric `mov.b16` register copies",
         "> (8 copies for `M32_N64_w8`, 32 copies for `M32_N128_w4`).",
-        "> However, **SASS verification proves that 100% of these copies are eliminated** by `ptxas` register coalescing.",
-        "> Therefore, `BARRIER_EXPLICIT_SASS_OVERHEAD = 0` is physically established.",
+        "> SASS inspection: **no explicit MOV or IMAD.MOV was observed** in the runtime reduction region.",
+        "> Allocation, live-range, and scheduler effects remain unmeasured; zero total overhead is not established.",
         "",
         "## 2. Hardware Limits & Target Device (H100 SM90)",
         "",
@@ -338,7 +250,7 @@ def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "",
         "## 3. Barrier & Reduction Decomposition across Specializations",
         "",
-        "| Config | Candidate | Role | Loop Range | Branches | Input Barrier PTX Copies | In-Asm PTX | SASS Loop MOVs | SASS Overhead | Reduction Stratification | Extra Ops |",
+        "| Config | Candidate | Role | Loop Range | Branches | Input Barrier PTX Copies | In-Asm PTX | SASS Loop MOVs | SASS Observation | Reduction Stratification | Extra Ops |",
         "| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- | :---: |",
     ]
 
@@ -387,10 +299,10 @@ def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "Criterion A (TMA Once Outside Loop)": "Exactly 1 ttng.async_tma_copy_global_to_local before scf.for",
         "Criterion B (Initial LocalLoad Once Outside Loop, Zero Inside)": "Primary TTGIR: 1 ttg.local_load outside scf.for, 0 inside",
         "Criterion C (Runtime R Unspecialized, Single Binary)": "Single unspecialized binary reused across all R in {1,2,4,8}",
-        "Criterion D (One Runtime Loop, One Static Canonical Body)": "Exactly 1 backward branch (@%p bra) per kernel",
-        "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "FAIL_AT_PTX_LEVEL: 0 explicit asm, 8/32 induced mov.b16 copies (candidate-symmetric; SASS overhead = 0)",
-        "Criterion F (Result Sink Emits Zero Instructions)": "0 explicit asm, 0 induced copies, 0 SASS instructions",
-        "Criterion G (Canonical Reduction Core Topology Equivalence)": "PASS_STRATIFIED: PRIMARY w8 is EXACT_SEQUENCE_EQUIVALENT; SECONDARY w4 def is PIPELINED_OPCODE_EQUIVALENT",
+        "Criterion D (One Runtime Loop, One Static Canonical Body)": "One compiler runtime reduction backedge; separate TMA polling edge is also present",
+        "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "FAIL_AT_PTX_LEVEL: 0 explicit asm, 8/32 induced mov.b16 copies (candidate-symmetric; no explicit loop MOV observed)",
+        "Criterion F (Result Sink Emits Zero Instructions)": "0 explicit asm and 0 induced copies",
+        "Criterion G (Complete Filtered Reduction Fingerprint Equivalence)": "PASS_STRATIFIED: PRIMARY w8 is EXACT_SEQUENCE_EQUIVALENT; SECONDARY w4 def is PIPELINED_OPCODE_EQUIVALENT (opcode multiset only)",
         "Criterion H (Terminal Canonical ld.shared Remains Inside Loop)": "Terminal shared exchange ld.shared verified inside runtime loop",
         "Criterion I (Zero Accumulator / Global Store Inside Loop)": "Zero accumulator adds and zero global stores inside loop",
         "Criterion J (Same-Config Residency & Occupancy Matched)": "Blocks/SM and active warps/SM identical between default and cand4",
@@ -404,33 +316,36 @@ def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
 
     lines.extend([
         "",
-        "## 6. Timing Gate Verification (10 Conditions)",
+        "## 6. Archived Timing Gate Verification (11 Conditions)",
         "",
         "| # | Condition | Result | Notes |",
         "| :-: | :--- | :---: | :--- |",
-        f"| 1 | M32_N64_w8 default exact canonical reduction sequence | **`{val['timing_gate']['1_m32_n64_w8_default_exact_sequence']}`** | Contiguous subsequence match verified |",
-        f"| 2 | M32_N64_w8 cand4 exact canonical reduction sequence | **`{val['timing_gate']['2_m32_n64_w8_cand4_exact_sequence']}`** | Contiguous subsequence match verified |",
+        f"| 1 | M32_N64_w8 default exact canonical reduction sequence | **`{val['timing_gate']['1_m32_n64_w8_default_exact_sequence']}`** | Complete filtered sequence match verified |",
+        f"| 2 | M32_N64_w8 cand4 exact canonical reduction sequence | **`{val['timing_gate']['2_m32_n64_w8_cand4_exact_sequence']}`** | Complete filtered sequence match verified |",
         f"| 3 | Input barrier PTX copies candidate-symmetric | **`{val['timing_gate']['3_input_barrier_ptx_copies_candidate_symmetric']}`** | w8: 8 == 8; w4: 32 == 32 |",
-        f"| 4 | No attributable additional SASS barrier instructions | **`{val['timing_gate']['4_no_attributable_additional_sass_barrier_instructions']}`** | BARRIER_EXPLICIT_SASS_OVERHEAD = 0 |",
-        f"| 5 | Result sink no runtime SASS overhead | **`{val['timing_gate']['5_result_sink_no_runtime_sass_overhead']}`** | 0 copies / 0 SASS insts |",
+        f"| 4 | No explicit MOV/IMAD.MOV in runtime region | **`{val['timing_gate']['4_no_explicit_loop_sass_mov_observed']}`** | NO_EXPLICIT_LOOP_MOV_OBSERVED |",
+        f"| 5 | Result sink empty PTX and no copies | **`{val['timing_gate']['5_result_sink_empty_ptx_and_no_copies']}`** | 0 explicit PTX / 0 copies |",
         f"| 6 | Default / cand4 blocks/SM matched | **`{val['timing_gate']['6_blocks_per_sm_matched']}`** | w8: 8 blk/SM, w4: 16 blk/SM |",
         f"| 7 | Active warps/SM matched | **`{val['timing_gate']['7_active_warps_per_sm_matched']}`** | 64 warps/SM across all candidates |",
         f"| 8 | Zero local memory and stack spills | **`{val['timing_gate']['8_zero_local_and_stack_spills']}`** | LOCAL=0, STACK=0 |",
         f"| 9 | One CUBIN per candidate | **`{val['timing_gate']['9_one_cubin_per_candidate']}`** | Single binary across all conditions |",
         f"| 10 | Runtime R unspecialized | **`{val['timing_gate']['10_runtime_r_unspecialized']}`** | do_not_specialize=['num_reductions'] |",
+        f"| 11 | All structural conditions | **`{val['timing_gate']['11_all_structural_conditions']}`** | Complete artifact audit required |",
         "",
-        f"**Gate Verdict**: **`{val['timing_gate']['timing_gate_status']}`** -> Phase 3 Step E timing is unlocked.",
+        f"**Gate Verdict**: **`{val['timing_gate']['timing_gate_status']}`** -> archived Step E structural protocol passes; no new timing is authorized.",
         "",
         "## 7. Conclusions & Findings",
         "",
         f"- **Overall Feasibility Status**: `{val['overall_status']}`.",
-        "- **Compiler Barrier Overhead**: Prototype X induces candidate-symmetric `mov.b16` register copies at PTX level (Criterion E = `FAIL_AT_PTX_LEVEL`), but in SASS all copies are completely eliminated by ptxas register coalescing (`BARRIER_EXPLICIT_SASS_OVERHEAD = 0`).",
-        "- **Reduction Fingerprint Stratification**: PRIMARY configuration (`M32_N64_w8`) exhibits exact canonical reduction sequence match in both default and cand4. SECONDARY configuration (`M32_N128_w4`) exhibits pipelined opcode equivalence for default due to LLVM independent column slice scheduling.",
-        "- **Timing Gate Cleared**: All 10 pre-conditions passed, officially unlocking Phase 3 Step E controlled repeated-reduction timing.",
-        "- **Hypothesis H2 Status**: Strictly remains **`UNVERIFIED`** pending Step E timing measurements.",
+        "- **Compiler Barrier Overhead**: Prototype X induces candidate-symmetric `mov.b16` register copies at PTX level (Criterion E = `FAIL_AT_PTX_LEVEL`), no explicit loop MOV/IMAD.MOV is observed; indirect compiler effects remain possible.",
+        "- **Reduction Fingerprint Stratification**: PRIMARY configuration (`M32_N64_w8`) exhibits exact canonical reduction sequence match in both default and cand4. SECONDARY configuration (`M32_N128_w4`) exhibits pipelined opcode equivalence for default with an opcode multiset match; register-dependency topology is not established.",
+        "- **Timing Gate Cleared**: All structural and observational checks pass for the archived Step E protocol.",
+        "- **Hypothesis H2 Status**: This stage supplies structural evidence; the current scientific decision is reported in Step E.",
         "",
     ])
 
+    contract = ["", "Exact sequence compares the complete filtered normalized reduction fingerprint, including selected opcodes and shuffle/barrier immediates. Most operands and predicates are ignored; this is not dataflow/full PTX/SASS/CUBIN equality. Secondary opcode multiset equality does not prove topology.", "All structural conditions, complete loop memory signature, resources, and recorded binary bindings are required. The archived gate authorizes no new timing. Indirect live-range, allocation, and scheduler effects remain possible."]
+    lines.extend(contract)
     sum_path.write_text("\n".join(lines), encoding="utf-8")
 
     des_lines = [
@@ -460,11 +375,11 @@ def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "    x = smem.load(register_layout)",
         "",
         "    for _ in range(0, num_reductions):",
-        "        # Prototype X: Input tied barrier (0 explicit PTX insts; tied-constraint mov.b16 copies coalesced in SASS)",
+        "        # Prototype X: Input tied barrier (0 explicit PTX insts; induced copies present; no explicit loop SASS MOV observed)",
         "        x_iter = gl.inline_asm(\"\", X_CONSTRAINTS, [x], x.type, is_pure=False)",
         "        # Canonical reduction core",
         "        r = gl.max(x_iter.to(gl.float32), axis=1)",
-        "        # Prototype Y: Result sink (0 explicit PTX insts, 0 SASS insts)",
+        "        # Prototype Y: Result sink (0 explicit PTX insts, 0 induced copies)",
         "        gl.inline_asm(\"\", R_CONSTRAINTS, [r], (), is_pure=False)",
         "",
         "    gl.store(out_ptr + pid, gl.to_tensor(0.0))",
@@ -476,9 +391,10 @@ def render_step_d_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "2. **Residency Match**: `blocks_per_sm = 8` for w8, `blocks_per_sm = 16` for w4 across default and cand4.",
         "3. **Zero Register Spills**: `LOCAL=0, STACK=0`.",
         "4. **Single-Binary**: Identical CUBIN SHA256 across all R.",
-        "5. **SASS Barrier Overhead**: Exactly 0 additional instructions attributable to the barrier.",
+        "5. **SASS Barrier Overhead**: No explicit MOV/IMAD.MOV observed in the runtime region; no total-cost attribution is made.",
         "",
     ]
+    des_lines.extend(contract)
     des_path.write_text("\n".join(des_lines), encoding="utf-8")
 
 
@@ -532,8 +448,8 @@ def main():
         "1_m32_n64_w8_default_exact_sequence": True,
         "2_m32_n64_w8_cand4_exact_sequence": True,
         "3_input_barrier_ptx_copies_candidate_symmetric": True,
-        "4_no_attributable_additional_sass_barrier_instructions": True,
-        "5_result_sink_no_runtime_sass_overhead": True,
+        "4_no_explicit_loop_sass_mov_observed": True,
+        "5_result_sink_empty_ptx_and_no_copies": True,
         "6_blocks_per_sm_matched": True,
         "7_active_warps_per_sm_matched": True,
         "8_zero_local_and_stack_spills": True,
@@ -541,11 +457,15 @@ def main():
         "10_runtime_r_unspecialized": True,
     }
 
+    source = (BASE_DIR / "gluon/kernel_repeated.py").read_text()
+    artifact_gate_passed = bool(re.search(r"do_not_specialize\s*=\s*\[([\"\'])num_reductions\1\]", source))
     for cfg in configs:
         validation_report["evaluations"][cfg] = {}
 
         for cand in candidates:
-            cand_raw = raw_configs.get(cfg, {}).get(cand, {})
+            cand_raw = raw_configs[cfg][cand]
+            actual_audit = inspect_repeated(BASE_DIR, ARTIFACTS_DIR / cfg, cfg, cand, cand_raw)
+            artifact_gate_passed = artifact_gate_passed and actual_audit["all_checks_passed"]
             art_dir = ARTIFACTS_DIR / cfg
             step_c_art_dir = STEP_C_DIR / "artifacts" / cfg
 
@@ -580,7 +500,10 @@ def main():
 
             ll_decomp = extract_localloads_in_ptx(ptx_lines, loop_start, loop_end)
             pre_ll_count = len(ll_decomp["pre_loop_loads"])
-            in_tile_ll_count = len(ll_decomp["in_loop_tile_loads"])
+            from collections import Counter
+            observed = Counter(actual_audit["loop_memory_signature"])
+            expected = Counter(actual_audit["expected_loop_memory_signature"])
+            in_tile_ll_count = sum(v for op,v in (observed-expected).items() if op.startswith(("ld.shared", "ldmatrix")))
             in_red_ll_count = len(ll_decomp["in_loop_reduction_loads"])
             post_ll_count = len(ll_decomp["post_loop_loads"])
 
@@ -637,12 +560,12 @@ def main():
             # Sink has 0 explicit insts and 0 induced copies
             if sink["explicit_asm_ptx_count"] != 0 or sink["induced_ptx_copy_count"] != 0:
                 crit_f_passed = False
-                tg_conds["5_result_sink_no_runtime_sass_overhead"] = False
+                tg_conds["5_result_sink_empty_ptx_and_no_copies"] = False
 
             # 6. SASS detailed inspection
             sass_audit = audit_sass_overhead(cfg, cand, step_c_sass_text, sass_text)
-            if sass_audit["attributable_sass_barrier_overhead"] != 0:
-                tg_conds["4_no_attributable_additional_sass_barrier_instructions"] = False
+            if sass_audit["explicit_loop_mov_count"] != 0:
+                tg_conds["4_no_explicit_loop_sass_mov_observed"] = False
 
             # 7. Extra in-loop ops (accumulators, stores, atomics)
             loop_slice = ptx_lines[loop_start - 1 : loop_end] if loop_start and loop_end else []
@@ -669,6 +592,7 @@ def main():
             exp_role = "PRIMARY" if cfg == "M32_N64_w8" else "SECONDARY_CONTROL"
 
             validation_report["evaluations"][cfg][cand] = {
+                "offline_artifact_audit": actual_audit,
                 "experiment_role": exp_role,
                 "cubin_sha256": cand_raw.get("cubin_sha256"),
                 "cubin_invariant_across_r": cubin_invariant,
@@ -681,8 +605,7 @@ def main():
                     "backward_branch_count": len(backward_branches),
                     "backward_branches": backward_branches,
                     "pre_loop_ll_count": pre_ll_count,
-                    "in_loop_ll_count": in_tile_ll_count,
-                    "in_tile_ll_count": in_tile_ll_count,
+                    "extra_in_loop_shared_load_count": in_tile_ll_count,
                     "in_reduction_ll_count": in_red_ll_count,
                     "post_loop_ll_count": post_ll_count,
                     "red_inside_loop": red_inside_loop,
@@ -722,7 +645,7 @@ def main():
         "Criterion D (One Runtime Loop, One Static Canonical Body)": "PASS" if crit_d_passed else "FAIL",
         "Criterion E (Input Anti-LICM Barrier Emits Zero Instructions)": "FAIL_AT_PTX_LEVEL",
         "Criterion F (Result Sink Emits Zero Instructions)": "PASS" if crit_f_passed else "FAIL",
-        "Criterion G (Canonical Reduction Core Topology Equivalence)": "PASS_STRATIFIED" if crit_g_stratified else "FAIL",
+        "Criterion G (Complete Filtered Reduction Fingerprint Equivalence)": "PASS_STRATIFIED" if crit_g_stratified else "FAIL",
         "Criterion H (Terminal Canonical ld.shared Remains Inside Loop)": "PASS" if crit_h_passed else "FAIL",
         "Criterion I (Zero Accumulator / Global Store Inside Loop)": "PASS" if crit_i_passed else "FAIL",
         "Criterion J (Same-Config Residency & Occupancy Matched)": "PASS" if crit_j_passed else "FAIL",
@@ -731,13 +654,15 @@ def main():
     }
 
     # Populate timing gate
-    timing_gate_all_passed = all(tg_conds.values())
+    structural_gate_passed = all([crit_a_passed, crit_b_passed, crit_c_passed, crit_d_passed, crit_f_passed, crit_g_stratified, crit_h_passed, crit_i_passed, crit_j_passed, crit_k_passed, crit_l_passed, artifact_gate_passed])
+    timing_gate_all_passed = all(tg_conds.values()) and structural_gate_passed
     validation_report["timing_gate"] = {
+        "11_all_structural_conditions": "PASS" if structural_gate_passed else "FAIL",
         "1_m32_n64_w8_default_exact_sequence": "PASS" if tg_conds["1_m32_n64_w8_default_exact_sequence"] else "FAIL",
         "2_m32_n64_w8_cand4_exact_sequence": "PASS" if tg_conds["2_m32_n64_w8_cand4_exact_sequence"] else "FAIL",
         "3_input_barrier_ptx_copies_candidate_symmetric": "PASS" if tg_conds["3_input_barrier_ptx_copies_candidate_symmetric"] else "FAIL",
-        "4_no_attributable_additional_sass_barrier_instructions": "PASS" if tg_conds["4_no_attributable_additional_sass_barrier_instructions"] else "FAIL",
-        "5_result_sink_no_runtime_sass_overhead": "PASS" if tg_conds["5_result_sink_no_runtime_sass_overhead"] else "FAIL",
+        "4_no_explicit_loop_sass_mov_observed": "PASS" if tg_conds["4_no_explicit_loop_sass_mov_observed"] else "FAIL",
+        "5_result_sink_empty_ptx_and_no_copies": "PASS" if tg_conds["5_result_sink_empty_ptx_and_no_copies"] else "FAIL",
         "6_blocks_per_sm_matched": "PASS" if tg_conds["6_blocks_per_sm_matched"] else "FAIL",
         "7_active_warps_per_sm_matched": "PASS" if tg_conds["7_active_warps_per_sm_matched"] else "FAIL",
         "8_zero_local_and_stack_spills": "PASS" if tg_conds["8_zero_local_and_stack_spills"] else "FAIL",

@@ -30,7 +30,7 @@ from experiments.tma_reduction_layout.gluon.kernel import (
 def get_barrier_constraints(cfg_name: str, cand: str) -> Tuple[str, Tuple[str, ...]]:
     """
     Return (input_tied_constraints, result_sink_constraints) for the specialization.
-    Uses explicitly numbered ties for input tensor x to guarantee zero machine instructions.
+    Uses explicitly numbered ties to preserve register dependencies. PTX copies may be induced; machine-code and scheduling effects require artifact inspection.
     """
     # Number of elements per thread for x (bfloat16) and r (float32)
     elem_counts = {
@@ -89,7 +89,7 @@ def gluon_repeated_reduction_kernel(
     # 4. Runtime R loop
     for _ in range(0, num_reductions):
         # Prototype X: Input opaque barrier (anti-LICM)
-        # Empty assembly with tied operands creates a new SSA value with side-effects but 0 machine instructions
+        # Empty assembly with tied operands creates a new SSA value with side-effects; induced copies and machine effects require inspection
         x_iter = gl.inline_asm("", X_CONSTRAINTS, [x], x.type, is_pure=False)
 
         # Canonical reduction: convert to float32, then max along axis 1 (M=32)
@@ -97,7 +97,7 @@ def gluon_repeated_reduction_kernel(
         r = gl.max(x_f32, axis=1)
 
         # Prototype Y: Result sink (anti-DCE & anti-sink)
-        # Consumes r with side-effects but emits 0 machine instructions
+        # Consumes r with side-effects and empty explicit asm; lowering is inspected separately
         gl.inline_asm("", R_CONSTRAINTS, [r], (), is_pure=False)
 
     # 5. Minimal observable scalar store outside the runtime loop (candidate-symmetric, R-independent)

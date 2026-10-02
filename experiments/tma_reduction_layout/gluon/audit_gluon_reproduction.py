@@ -27,6 +27,11 @@ import json
 import os
 import re
 import sys
+
+try:
+    from .artifact_checks import LOAD_SIGNATURES, initial_load_signature, artifact_hashes, parse_resource, normalize
+except ImportError:
+    from artifact_checks import LOAD_SIGNATURES, initial_load_signature, artifact_hashes, parse_resource, normalize
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -41,21 +46,8 @@ AUDITED_ANN_FILE = BASE_DIR / "phase3_audited_annotations.json"
 
 
 def normalize_reduction_instruction(inst: str) -> str:
-    """Normalize a reduction instruction: strip registers, keep opcode, qualifiers, vector width, immediates."""
-    s = re.sub(r"^@%p\d+\s+", "", inst.strip()).rstrip(";")
-    parts = s.split(None, 1)
-    if not parts:
-        return ""
-    opcode = parts[0]
-    args = parts[1] if len(parts) > 1 else ""
-    if "shfl" in opcode or "bar.sync" in opcode:
-        clean_args = re.sub(r"%[a-zA-Z0-9_]+", "", args)
-        imms = re.findall(r"(-?\d+|0x[0-9a-fA-F]+)", clean_args)
-        return f"{opcode} " + " ".join(imms)
-    elif any(k in opcode for k in ["max", "cvt", "st.shared", "ld.shared", "ldmatrix", "selp"]):
-        return opcode
-    else:
-        return opcode
+    """Selected opcode projection; immediates are retained for shuffles/barriers."""
+    return normalize(inst)
 
 
 def extract_initial_localload(ptx_text: str) -> Dict[str, Any]:
@@ -136,7 +128,7 @@ def render_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "",
         "Phase 3 Step C determines whether the built-in Gluon language can explicitly reproduce the",
         "TMA load, shared memory layout, shared-to-register load lowering, distributed register layout,",
-        "and reduction topology of Canonical Step A without opaque hacks or handwritten PTX.",
+        "and filtered reduction fingerprint of Canonical Step A without opaque hacks or handwritten PTX.",
         "",
         "## 2. Hardware Limits & Target GPU",
         "",
@@ -237,12 +229,14 @@ def render_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         f"- **Overall Status**: `{val['overall_status']}`.",
         "- **Explicit Layout Representation**: Gluon's `gl.BlockedLayout` directly expresses the canonical distributed layouts without compiler inference.",
         "- **Shared-Memory LocalLoad Lowering**: `smem.load(register_layout)` generates the exact target LocalLoad instruction families (vector widths and counts) instruction-for-instruction.",
-        "- **Reduction Topology Equivalence**: Gluon's native `gl.max` along axis 1 compiles to the exact canonical reduction sequence across all specializations.",
-        "- **Residency & Occupancy**: Full 100% theoretical occupancy (64 warps/SM) is achieved across all 4 specializations with 0 local memory or stack spills.",
-        "- **Hypothesis H2 Status**: Strictly remains **`UNVERIFIED`** (no runtime-K amplification or timing was performed).",
+        "- **Filtered Reduction Fingerprint Equivalence**: Gluon's native `gl.max` along axis 1 compiles to the complete filtered normalized canonical reduction fingerprint sequence across all specializations.",
+        "- **Residency & Occupancy**: Recorded theoretical residency corresponds to 64 warps/SM across all 4 specializations with 0 local memory or stack spills.",
+        "- **Hypothesis H2 Status**: This stage provides structural evidence; current hypothesis decisions are reported in Step E.",
         "",
     ])
 
+    contract = ["", "Exact matches compare the complete filtered normalized fingerprint: selected opcode families and shuffle/barrier immediates. Most operands/predicates are ignored; matching does not establish dataflow or full PTX/SASS/CUBIN equality. Initial LocalLoad matching checks every opcode/width.", "Theoretical residency is not achieved occupancy. Canonical occupancy-query records use a resource-matched recompile, with a different recorded CUBIN SHA from the measured canonical binary. See ../freeze.md for archival limits."]
+    lines.extend(contract)
     sum_path.write_text("\n".join(lines), encoding="utf-8")
 
     des_lines = [
@@ -286,6 +280,7 @@ def render_reports(val: Dict[str, Any], sum_path: Path, des_path: Path):
         "- `Shared Layout`: `gl.NVMMASharedLayout(swizzle_byte_width=128, element_bitwidth=16, rank=3, transposed=False)`",
         "",
     ]
+    des_lines.extend(contract)
     des_path.write_text("\n".join(des_lines), encoding="utf-8")
 
 
@@ -387,7 +382,8 @@ def main():
             ll_info = extract_initial_localload(ptx_text)
             exp_ll = expected_localloads[(cfg, cand)]
             act_ll = f"{ll_info['count']} × {ll_info['normalized'][0]}" if ll_info["count"] > 0 else "0"
-            ll_matched = (exp_ll == act_ll)
+            ll_signature = [i["opcode"] for i in initial_load_signature(ptx_text)]
+            ll_matched = ll_signature == LOAD_SIGNATURES[cfg, cand]
             if not ll_matched:
                 crit_d_passed = False
 
@@ -414,7 +410,10 @@ def main():
                 crit_e_passed = False
 
             # 5. Resources and zero spills
-            res = cand_raw.get("resources", {})
+            res = cand_raw["resources"]
+            parsed_res = parse_resource(res_p.read_text())
+            if any(parsed_res[k] != res["static_shared_bytes" if k == "static_smem_bytes" else k] for k in parsed_res) or sha_p.read_text().strip() != cand_raw["cubin_sha256"]:
+                crit_f_passed = False
             if res.get("local_bytes", -1) != 0 or res.get("stack_bytes", -1) != 0:
                 crit_f_passed = False
 
@@ -424,6 +423,7 @@ def main():
                 crit_h_passed = False
 
             validation_report["evaluations"][cfg][cand] = {
+                "artifact_hashes": artifact_hashes(art_dir, cand),
                 "layout_equivalence": {
                     "matched": layout_matched,
                     "gluon_layout_str": vb,
@@ -434,6 +434,7 @@ def main():
                 },
                 "localload": {
                     "matched": ll_matched,
+                    "signature": ll_signature,
                     "expected": exp_ll,
                     "actual": act_ll,
                     "instructions": ll_info["instructions"],
