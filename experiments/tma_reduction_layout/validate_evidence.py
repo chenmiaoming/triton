@@ -2022,15 +2022,129 @@ def validate():
                 if abs(dm - rep_dm) > 1e-4:
                     errors.append(f"Cross-run {d_k} mean mismatch in {cfg}: comp={dm} vs rep={rep_dm}")
 
-            # Verify residual table
+            # 21.4.1 Direct Cross-Run OLS & Residual Table Verification
+            cross_g_r = {R: sum(r[cfg]["g_r"][R] for r in recomputed_runs) / float(len(recomputed_runs)) for R in r_vals}
+            r_floats = [float(R) for R in r_vals]
+            g_floats = [cross_g_r[R] for R in r_vals]
+            beta_direct, alpha_direct, r2_direct, resids_direct = linear_regression(r_floats, g_floats)
+            fitted_direct = {R: alpha_direct + beta_direct * float(R) for R in r_vals}
+            calc_resids = {R: cross_g_r[R] - fitted_direct[R] for R in r_vals}
+
+            # Verify fundamental OLS mathematical identities on directly fitted points
+            sum_res = sum(calc_resids.values())
+            sum_r_res = sum(float(R) * calc_resids[R] for R in r_vals)
+            if abs(sum_res) > 1e-4:
+                errors.append(f"Direct OLS identity violation in {cfg}: sum(residuals) = {sum_res} != 0")
+            if abs(sum_r_res) > 1e-4:
+                errors.append(f"Direct OLS orthogonality violation in {cfg}: sum(R*residuals) = {sum_r_res} != 0")
+
+            # Verify reported regression coefficients in results.json match direct OLS
+            if abs(alpha_direct - rep_cfg["alpha"]["mean"]) > 1e-4:
+                errors.append(f"results.json alpha mismatch in {cfg}: direct={alpha_direct} vs rep={rep_cfg['alpha']['mean']}")
+            if abs(beta_direct - rep_cfg["beta"]["mean"]) > 1e-4:
+                errors.append(f"results.json beta mismatch in {cfg}: direct={beta_direct} vs rep={rep_cfg['beta']['mean']}")
+            if abs(r2_direct - rep_cfg["r2"]["mean"]) > 1e-4:
+                errors.append(f"results.json r2 mismatch in {cfg}: direct={r2_direct} vs rep={rep_cfg['r2']['mean']}")
+
+            # Verify results.json residual table matches direct OLS row-by-row
             rep_resids = rep_cfg.get("residual_table", [])
+            if len(rep_resids) != len(r_vals):
+                errors.append(f"results.json residual table row count mismatch in {cfg}: {len(rep_resids)} vs {len(r_vals)}")
             for row in rep_resids:
                 R = row["R"]
-                obs = rep_cfg["r_breakdown"][str(R)]["g_r_mean"]
-                fit = a_m + b_m * float(R)
-                resid = obs - fit
-                if abs(resid - row["residual"]) > 1e-4:
-                    errors.append(f"Residual mismatch in {cfg} R={R}: comp={resid} vs rep={row['residual']}")
+                if abs(row["observed"] - cross_g_r[R]) > 1e-4:
+                    errors.append(f"results.json observed mismatch in {cfg} R={R}: rep={row['observed']} vs direct={cross_g_r[R]}")
+                if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
+                    errors.append(f"results.json fitted mismatch in {cfg} R={R}: rep={row['fitted']} vs direct={fitted_direct[R]}")
+                if abs(row["residual"] - calc_resids[R]) > 1e-4:
+                    errors.append(f"results.json residual mismatch in {cfg} R={R}: rep={row['residual']} vs direct={calc_resids[R]}")
+                if abs(row["residual"] - (row["observed"] - row["fitted"])) > 1e-6:
+                    errors.append(f"results.json row identity mismatch in {cfg} R={R}")
+
+            # Verify primary_analysis residual table in results.json
+            if cfg == "M32_N64_w8":
+                prim_cr_resids = e_res_data.get("primary_analysis", {}).get("cross_run", {}).get("residual_table", [])
+                for row in prim_cr_resids:
+                    R = row["R"]
+                    if abs(row["observed"] - cross_g_r[R]) > 1e-4:
+                        errors.append(f"results.json primary_analysis observed mismatch R={R}")
+                    if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
+                        errors.append(f"results.json primary_analysis fitted mismatch R={R}")
+                    if abs(row["residual"] - calc_resids[R]) > 1e-4:
+                        errors.append(f"results.json primary_analysis residual mismatch R={R}")
+
+            # Verify validation.json cross-run summary matches direct OLS
+            val_cfg = e_val_data.get("evaluations", {}).get("cross_invocation_summary", {}).get("configurations", {}).get(cfg, {})
+            if abs(alpha_direct - val_cfg.get("alpha", {}).get("mean", 0.0)) > 1e-4:
+                errors.append(f"validation.json alpha mismatch in {cfg}: direct={alpha_direct} vs rep={val_cfg.get('alpha', {}).get('mean')}")
+            if abs(beta_direct - val_cfg.get("beta", {}).get("mean", 0.0)) > 1e-4:
+                errors.append(f"validation.json beta mismatch in {cfg}: direct={beta_direct} vs rep={val_cfg.get('beta', {}).get('mean')}")
+            for row in val_cfg.get("residual_table", []):
+                R = row["R"]
+                if abs(row["observed"] - cross_g_r[R]) > 1e-4:
+                    errors.append(f"validation.json observed mismatch in {cfg} R={R}")
+                if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
+                    errors.append(f"validation.json fitted mismatch in {cfg} R={R}")
+                if abs(row["residual"] - calc_resids[R]) > 1e-4:
+                    errors.append(f"validation.json residual mismatch in {cfg} R={R}")
+                if abs(row["residual"] - (row["observed"] - row["fitted"])) > 1e-6:
+                    errors.append(f"validation.json row identity mismatch in {cfg} R={R}")
+
+            # Verify primary_analysis residual table in validation.json
+            if cfg == "M32_N64_w8":
+                val_prim_resids = e_val_data.get("evaluations", {}).get("primary_analysis", {}).get("cross_run", {}).get("residual_table", [])
+                for row in val_prim_resids:
+                    R = row["R"]
+                    if abs(row["observed"] - cross_g_r[R]) > 1e-4:
+                        errors.append(f"validation.json primary_analysis observed mismatch R={R}")
+                    if abs(row["fitted"] - fitted_direct[R]) > 1e-4:
+                        errors.append(f"validation.json primary_analysis fitted mismatch R={R}")
+                    if abs(row["residual"] - calc_resids[R]) > 1e-4:
+                        errors.append(f"validation.json primary_analysis residual mismatch R={R}")
+
+            # Verify summary.md table and reported model fit for primary configuration M32_N64_w8
+            if cfg == "M32_N64_w8":
+                m_table = re.search(r"### Linear Model Fit Residuals\s*\n\s*\|.*?\n\|.*?\n((?:\|.*?\n)+)", e_sum_md)
+                if not m_table:
+                    errors.append("summary.md missing Linear Model Fit Residuals table")
+                else:
+                    md_rows = []
+                    for line in m_table.group(1).strip().splitlines():
+                        parts = [p.strip().replace("*", "") for p in line.split("|")[1:-1]]
+                        if len(parts) >= 4:
+                            md_rows.append({
+                                "R": int(parts[0]),
+                                "obs": float(parts[1]),
+                                "fit": float(parts[2]),
+                                "res": float(parts[3]),
+                            })
+                    if len(md_rows) != len(r_vals):
+                        errors.append(f"summary.md residual table row count mismatch: {len(md_rows)} vs {len(r_vals)}")
+                    for row in md_rows:
+                        R = row["R"]
+                        if abs(row["obs"] - cross_g_r[R]) > 1e-3:
+                            errors.append(f"summary.md observed mismatch R={R}: {row['obs']} vs {cross_g_r[R]}")
+                        if abs(row["fit"] - fitted_direct[R]) > 1e-3:
+                            errors.append(f"summary.md fitted mismatch R={R}: {row['fit']} vs {fitted_direct[R]}")
+                        if abs(row["res"] - calc_resids[R]) > 1e-3:
+                            errors.append(f"summary.md residual mismatch R={R}: {row['res']} vs {calc_resids[R]}")
+                        if abs(row["res"] - (row["obs"] - row["fit"])) > 1e-4:
+                            errors.append(f"summary.md row identity mismatch R={R}")
+                    sum_md_res = sum(r["res"] for r in md_rows)
+                    sum_md_r_res = sum(r["R"] * r["res"] for r in md_rows)
+                    if abs(sum_md_res) > 1e-3:
+                        errors.append(f"summary.md residual table sum(residuals) = {sum_md_res} != 0")
+                    if abs(sum_md_r_res) > 1e-3:
+                        errors.append(f"summary.md residual table sum(R*residuals) = {sum_md_r_res} != 0")
+
+                # Verify reported slope and intercept in summary.md text
+                m_beta = re.search(r"Amplification Slope.*?`([0-9\.]+) ±", e_sum_md)
+                if not m_beta or abs(float(m_beta.group(1)) - beta_direct) > 1e-3:
+                    errors.append(f"summary.md reported beta mismatch: {m_beta.group(1) if m_beta else None} vs {beta_direct:.4f}")
+
+                m_alpha = re.search(r"Fit Intercept.*?`([+\-0-9\.]+) ±", e_sum_md)
+                if not m_alpha or abs(float(m_alpha.group(1)) - alpha_direct) > 1e-3:
+                    errors.append(f"summary.md reported alpha mismatch: {m_alpha.group(1) if m_alpha else None} vs {alpha_direct:.4f}")
 
         # 21.5 Device Provenance & Replication Mode Verification
         device_uuids = [json.loads(p.read_text(encoding="utf-8"))["env_info"].get("gpu_uuid") for p in raw_run_paths]
