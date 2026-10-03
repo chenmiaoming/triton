@@ -1,0 +1,2244 @@
+✓ Initialized. View run at 
+https://modal.com/apps/miaomingc/main/ap-1FsPy6JLcYxf9vWUNjwba7
+Building image im-oyKMMgeIWq5XBiCEpyNf3F
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 1.51s
+
+Built image im-oyKMMgeIWq5XBiCEpyNf3F in 6.64s
+
+
+Building image im-oi5qYeFy0VXNYVe25j5PDb
+
+=> Step 0: FROM base
+
+=> Step 1: RUN mkdir -p /cache/ccache /cache/triton-home
+
+=> Step 2: RUN python3 -m pip uninstall -y triton pytorch-triton || true
+WARNING: Skipping triton as it is not installed.
+WARNING: Skipping pytorch-triton as it is not installed.
+
+=> Step 3: RUN cd /opt/triton-src && python3 -m pip install -r python/requirements.txt
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Requirement already satisfied: setuptools>=40.8.0 in /usr/local/lib/python3.12/site-packages (from -r python/requirements.txt (line 1)) (84.0.0)
+Requirement already satisfied: wheel in /usr/local/lib/python3.12/site-packages (from -r python/requirements.txt (line 2)) (0.48.0)
+Requirement already satisfied: cmake<4.0,>=3.20 in /usr/local/lib/python3.12/site-packages (from -r python/requirements.txt (line 3)) (3.31.10)
+Requirement already satisfied: ninja>=1.11.1 in /usr/local/lib/python3.12/site-packages (from -r python/requirements.txt (line 4)) (1.13.2)
+Requirement already satisfied: nanobind==2.10.2 in /usr/local/lib/python3.12/site-packages (from -r python/requirements.txt (line 5)) (2.10.2)
+Requirement already satisfied: lit in /usr/local/lib/python3.12/site-packages (from -r python/requirements.txt (line 6)) (23.1.2)
+Requirement already satisfied: packaging>=24.0 in /usr/local/lib/python3.12/site-packages (from wheel->-r python/requirements.txt (line 2)) (26.3)
+
+[notice] A new release of pip is available: 23.3.2 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+
+=> Step 4: RUN cd /opt/triton-src && TRITON_BUILD_WITH_CLANG_LLD=true TRITON_BUILD_WITH_CCACHE=true python3 -m pip install -e . --no-build-isolation -v
+Using pip 23.3.2 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Obtaining file:///opt/triton-src
+  Checking if build backend supports build_editable: started
+  Running command Checking if build backend supports build_editable
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Running command Preparing editable metadata (pyproject.toml)
+  running dist_info
+  creating /tmp/pip-modern-metadata-h4yfaphj/triton.egg-info
+  writing /tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/PKG-INFO
+  writing dependency_links to /tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/dependency_links.txt
+  writing entry points to /tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/entry_points.txt
+  writing requirements to /tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/requires.txt
+  writing top-level names to /tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/top_level.txt
+  writing manifest file '/tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/SOURCES.txt'
+  reading manifest file '/tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/SOURCES.txt'
+  reading manifest template 'MANIFEST.in'
+  warning: no previously-included files matching '__pycache__' found anywhere in distribution
+  warning: no previously-included files matching '__pycache__/*' found anywhere in distribution
+  warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+  adding license file 'LICENSE'
+  writing manifest file '/tmp/pip-modern-metadata-h4yfaphj/triton.egg-info/SOURCES.txt'
+  creating '/tmp/pip-modern-metadata-h4yfaphj/triton-3.9.0.dist-info'
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: triton
+  Building editable for triton (pyproject.toml): started
+  Running command Building editable for triton (pyproject.toml)
+  running editable_wheel
+  creating symlink: /opt/triton-src/python/triton/backends/nvidia -> third_party/nvidia/backend
+  creating symlink: /opt/triton-src/python/triton/language/extra/cuda -> third_party/nvidia/language/cuda
+  creating symlink: /opt/triton-src/python/triton/tools/extra/cuda -> third_party/nvidia/tools/cuda
+  creating symlink: /opt/triton-src/python/triton/backends/amd -> third_party/amd/backend
+  creating symlink: /opt/triton-src/python/triton/language/extra/hip -> third_party/amd/language/hip
+  creating symlink: /opt/triton-src/python/triton/tools/extra/hip -> third_party/amd/tools/hip
+  creating symlink: /opt/triton-src/python/triton/profiler -> /opt/triton-src/third_party/proton/proton
+  creating /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info
+  writing /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/PKG-INFO
+  writing dependency_links to /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/dependency_links.txt
+  writing entry points to /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/entry_points.txt
+  writing requirements to /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/requires.txt
+  writing top-level names to /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/top_level.txt
+  writing manifest file '/tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/SOURCES.txt'
+  reading manifest file '/tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/SOURCES.txt'
+  reading manifest template 'MANIFEST.in'
+  warning: no previously-included files matching '__pycache__' found anywhere in distribution
+  warning: no previously-included files matching '__pycache__/*' found anywhere in distribution
+  warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+  adding license file 'LICENSE'
+  writing manifest file '/tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton.egg-info/SOURCES.txt'
+  creating '/tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton-3.9.0.dist-info'
+  creating /tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton-3.9.0.dist-info/WHEEL
+  running build_py
+  running build_ext
+  CMake Deprecation Warning at CMakeLists.txt:6 (cmake_policy):
+    The OLD behavior for policy CMP0116 will be removed from a future version
+    of CMake.
+
+    The cmake-policies(7) manual explains that the OLD behaviors of all
+    policies are deprecated and that a policy should be set to OLD only under
+    specific short-term circumstances.  Projects should be ported to the NEW
+    behavior and not rely on setting a policy to OLD.
+
+
+  -- The CXX compiler identification is Clang 18.1.3
+  -- The C compiler identification is Clang 18.1.3
+  -- Detecting CXX compiler ABI info
+  -- Detecting CXX compiler ABI info - done
+  -- Check for working CXX compiler: /usr/bin/clang++ - skipped
+  -- Detecting CXX compile features
+  -- Detecting CXX compile features - done
+  -- Detecting C compiler ABI info
+  -- Detecting C compiler ABI info - done
+  -- Check for working C compiler: /usr/bin/clang - skipped
+  -- Detecting C compile features
+  -- Detecting C compile features - done
+  -- Found Python3: /usr/local/bin/python3 (found version "3.12.1") found components: Interpreter
+  downloading llvm-b010a18d-ubuntu-x64-1:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+    1  358M    1 6512k    0     0  8165k      0  0:00:44 --:--:--  0:00:44 8160k
+    8  358M    8 32.0M    0     0  17.7M      0  0:00:20  0:00:01  0:00:19 17.7M
+   16  358M   16 58.4M    0     0  20.9M      0  0:00:17  0:00:02  0:00:15 20.9M
+   23  358M   23 84.0M    0     0  22.1M      0  0:00:16  0:00:03  0:00:13 22.1M
+   31  358M   31  111M    0     0  23.2M      0  0:00:15  0:00:04  0:00:11 23.2M
+   38  358M   38  137M    0     0  23.6M      0  0:00:15  0:00:05  0:00:10 26.2M
+   45  358M   45  164M    0     0  24.1M      0  0:00:14  0:00:06  0:00:08 26.4M
+   53  358M   53  190M    0     0  24.3M      0  0:00:14  0:00:07  0:00:07 26.3M
+   60  358M   60  216M    0     0  24.5M      0  0:00:14  0:00:08  0:00:06 26.2M
+   67  358M   67  242M    0     0  24.7M      0  0:00:14  0:00:09  0:00:05 26.1M
+   74  358M   74  268M    0     0  24.8M      0  0:00:14  0:00:10  0:00:04 26.1M
+   81  358M   81  293M    0     0  24.8M      0  0:00:14  0:00:11  0:00:03 25.8M
+   89  358M   89  320M    0     0  25.0M      0  0:00:14  0:00:12  0:00:02 26.0M
+   96  358M   96  345M    0     0  25.0M      0  0:00:14  0:00:13  0:00:01 25.9M
+  100  358M  100  358M    0     0  25.1M      0  0:00:14  0:00:14 --:--:-- 25.9M
+  creating symlink: /cache/triton-home/.triton/llvm/llvm-ubuntu-x64 -> /cache/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1
+  downloading :
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+  100  292k  100  292k    0     0  2150k      0 --:--:-- --:--:-- --:--:-- 2150k
+  downloading amd-codegen-6bc4aaf6-ubuntu-x64-1:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+   20 31.9M   20 6624k    0     0  10.5M      0  0:00:03 --:--:--  0:00:03 10.5M
+  100 31.9M  100 31.9M    0     0  23.0M      0  0:00:01  0:00:01 --:--:-- 23.0M
+  copy /cache/triton-home/.triton/amd/amd-codegen-6bc4aaf6-ubuntu-x64-1/lib/libtriton_amd_codegen.so to /opt/triton-src/third_party/amd/backend/lib/libtriton_amd_codegen.so ...
+  downloading nvcc:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+   25 77.3M   25 19.5M    0     0  36.1M      0  0:00:02 --:--:--  0:00:02 36.1M
+   88 77.3M   88 68.5M    0     0  45.9M      0  0:00:01  0:00:01 --:--:-- 45.8M
+  100 77.3M  100 77.3M    0     0  46.6M      0  0:00:01  0:00:01 --:--:-- 46.6M
+  copy /cache/triton-home/.triton/nvidia/nvcc/cuda_nvcc-linux-x86_64-12.9.86-archive/bin/ptxas to /opt/triton-src/third_party/nvidia/backend/bin/ptxas ...
+  downloading nvcc-blackwell:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+   39 31.7M   39 12.4M    0     0  16.7M      0  0:00:01 --:--:--  0:00:01 16.7M
+  100 31.7M  100 31.7M    0     0  29.2M      0  0:00:01  0:00:01 --:--:-- 29.2M
+  copy /cache/triton-home/.triton/nvidia/nvcc-blackwell/cuda_nvcc-linux-x86_64-13.4.59-archive/bin/ptxas to /opt/triton-src/third_party/nvidia/backend/bin/ptxas-blackwell ...
+  downloading cuobjdump:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100  257k  100  257k    0     0   691k      0 --:--:-- --:--:-- --:--:--  691k
+  copy /cache/triton-home/.triton/nvidia/cuobjdump/cuda_cuobjdump-linux-x86_64-13.1.80-archive/bin/cuobjdump to /opt/triton-src/third_party/nvidia/backend/bin/cuobjdump ...
+  downloading nvdisasm:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100 4056k  100 4056k    0     0  16.7M      0 --:--:-- --:--:-- --:--:-- 16.7M
+  copy /cache/triton-home/.triton/nvidia/nvdisasm/cuda_nvdisasm-linux-x86_64-13.1.80-archive/bin/nvdisasm to /opt/triton-src/third_party/nvidia/backend/bin/nvdisasm ...
+  downloading nvcc-crt:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+    0 79624    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100 79624  100 79624    0     0   389k      0 --:--:-- --:--:-- --:--:--  388k
+  copy /cache/triton-home/.triton/nvidia/nvcc-crt/cuda_crt-linux-x86_64-13.1.80-archive/include to /opt/triton-src/third_party/nvidia/backend/include ...
+  downloading cudart:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100 1513k  100 1513k    0     0  8383k      0 --:--:-- --:--:-- --:--:-- 8407k
+  copy /cache/triton-home/.triton/nvidia/cudart/cuda_cudart-linux-x86_64-13.1.80-archive/include to /opt/triton-src/third_party/nvidia/backend/include ...
+  downloading cupti:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100 14.6M  100 14.6M    0     0  35.5M      0 --:--:-- --:--:-- --:--:-- 35.6M
+  copy /cache/triton-home/.triton/nvidia/cupti/cuda_cupti-linux-x86_64-12.8.90-archive/include to /opt/triton-src/third_party/nvidia/backend/include ...
+  copy /cache/triton-home/.triton/nvidia/cupti/cuda_cupti-linux-x86_64-12.8.90-archive/lib to /opt/triton-src/third_party/nvidia/backend/lib/cupti ...
+  downloading cupti-blackwell:
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   Dload  Upload   Total   Spent    Left  Speed
+
+    0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100 16.9M  100 16.9M    0     0  34.2M      0 --:--:-- --:--:-- --:--:-- 34.2M
+  copy /cache/triton-home/.triton/nvidia/cupti-blackwell/cuda_cupti-linux-x86_64-13.3.35-archive/lib to /opt/triton-src/third_party/nvidia/backend/lib/cupti-blackwell ...
+  -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+  -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+  -- Found Threads: TRUE
+  -- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.3")
+  -- Found LibXml2: /usr/lib/x86_64-linux-gnu/libxml2.so (found version "2.9.14")
+  -- Linker detection: unknown
+  -- Adding Python module
+  -- Found Python3: /usr/local/bin/python3 (found version "3.12.1") found components: Development.Module Interpreter
+  -- Found LLD distro-package @ /cache/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/lib/cmake/lld and LLD include dirs @ /__modal/volumes/vo-19eSYX1JIET4dwkQpfc9zL/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include
+  -- Performing Test PROTON_ROCPROFILER_SDK_HAS_HIP_GRAPH
+  -- Performing Test PROTON_ROCPROFILER_SDK_HAS_HIP_GRAPH - Failed
+  -- Proton ROCProfiler-SDK HIP graph tracing: disabled
+  -- Proton ROCProfiler-SDK PC sampling: disabled
+  -- Proton ROCProfiler-SDK code object source locations: disabled
+  -- Found Python3: /usr/local/bin/python3 (found version "3.12.1") found components: Interpreter Development.Module
+  -- Collecting object files from ProtonTraceDataIO
+  -- Collecting object files from Proton
+  -- Collecting object files from ProtonBackend
+  -- Collecting object files from ProtonContext
+  -- Collecting object files from ProtonData
+  -- Collecting object files from ProtonUtility
+  -- Collecting object files from ProtonDriver
+  -- Collecting object files from ProtonRuntime
+  -- Collecting object files from ProtonProfiler
+  -- Collecting object files from ProtonSession
+  -- Triton backends tuple: nvidia,amd,proton
+  -- Configuring done (98.8s)
+  -- Generating done (1.3s)
+  CMake Warning:
+    Manually-specified variables were not used by the project:
+
+      LLVM_ENABLE_WERROR
+
+
+  -- Build files have been written to: /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12
+  creating symlink: /opt/triton-src/compile_commands.json -> /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/compile_commands.json
+  [1/547] Building Dialect.h.inc...
+  [2/547] Building Dialect.cpp.inc...
+  [3/547] Building Ops.h.inc...
+  [4/547] Building Ops.cpp.inc...
+  [5/547] Building Types.cpp.inc...
+  [6/547] Building Types.h.inc...
+  [7/547] Building Dialect.cpp.inc...
+  [8/547] Building Dialect.h.inc...
+  [9/547] Building AttrDefs.cpp.inc...
+  [10/547] Building AttrDefs.h.inc...
+  [11/547] Building AttrInterfaces.cpp.inc...
+  [12/547] Building AttrInterfaces.h.inc...
+  [13/547] Building Ops.cpp.inc...
+  [14/547] Building Dialect.cpp.inc...
+  [15/547] Building OpsEnums.cpp.inc...
+  [16/547] Building OpsEnums.h.inc...
+  [17/547] Building Ops.h.inc...
+  [18/547] Building CGAEncodingAttr.h.inc...
+  [19/547] Building Dialect.h.inc...
+  [20/547] Building Types.cpp.inc...
+  [21/547] Building Ops.cpp.inc...
+  [22/547] Building Types.h.inc...
+  [23/547] Building TypeInterfaces.cpp.inc...
+  [24/547] Building TypeInterfaces.h.inc...
+  [25/547] Building OpsEnums.cpp.inc...
+  [26/547] Building OpsEnums.h.inc...
+  [27/547] Building Ops.h.inc...
+  [28/547] Building TritonNvidiaGPUAttrDefs.cpp.inc...
+  [29/547] Building TritonNvidiaGPUAttrDefs.h.inc...
+  [30/547] Building Types.cpp.inc...
+  [31/547] Building Types.h.inc...
+  [32/547] Building Dialect.cpp.inc...
+  [33/547] Building Dialect.h.inc...
+  [34/547] Building Ops.cpp.inc...
+  [35/547] Building Ops.h.inc...
+  [36/547] Building Dialect.cpp.inc...
+  [37/547] Building Dialect.h.inc...
+  [38/547] Building Passes.h.inc...
+  [39/547] Building Ops.cpp.inc...
+  [40/547] Building Ops.h.inc...
+  [41/547] Building AttrDefs.cpp.inc...
+  [42/547] Building AttrDefs.h.inc...
+  [43/547] Building AttrInterfaces.cpp.inc...
+  [44/547] Building AttrInterfaces.h.inc...
+  [45/547] Building Dialect.cpp.inc...
+  [46/547] Building Dialect.h.inc...
+  [47/547] Building OpInterfaces.cpp.inc...
+  [48/547] Building OpInterfaces.h.inc...
+  [49/547] Building OpsEnums.cpp.inc...
+  [50/547] Building Ops.cpp.inc...
+  [51/547] Building Ops.h.inc...
+  [52/547] Building TypeInterfaces.cpp.inc...
+  [53/547] Building TypeInterfaces.h.inc...
+  [54/547] Building OpsEnums.h.inc...
+  [55/547] Building Types.cpp.inc...
+  [56/547] Building TypesEnums.cpp.inc...
+  [57/547] Building Types.h.inc...
+  [58/547] Building Passes.h.inc...
+  [59/547] Building TypesEnums.h.inc...
+  [60/547] Building OpInterfaces.cpp.inc...
+  [61/547] Building Passes.h.inc...
+  [62/547] Building OpInterfaces.h.inc...
+  [63/547] Building Passes.h.inc...
+  [64/547] Building TritonNvidiaGPUOpInterfaces.cpp.inc...
+  [65/547] Building TritonNvidiaGPUOpInterfaces.h.inc...
+  [66/547] Building Dialect.cpp.inc...
+  [67/547] Building Dialect.h.inc...
+  [68/547] Building OpsEnums.cpp.inc...
+  [69/547] Building Ops.cpp.inc...
+  [70/547] Building Passes.h.inc...
+  [71/547] Building Ops.h.inc...
+  [72/547] Building OpsEnums.h.inc...
+  [73/547] Building Dialect.cpp.inc...
+  [74/547] Building Dialect.h.inc...
+  [75/547] Building GluonAttrDefs.cpp.inc...
+  [76/547] Building GluonAttrDefs.h.inc...
+  [77/547] Building Ops.cpp.inc...
+  [78/547] Building Ops.h.inc...
+  [79/547] Building TritonCanonicalize.inc...
+  [80/547] Building Dialect.cpp.inc...
+  [81/547] Building TritonCombine.inc...
+  [82/547] Building Dialect.h.inc...
+  [83/547] Building Ops.cpp.inc...
+  [84/547] Building Ops.h.inc...
+  [85/547] Building OpsConversions.inc...
+  [86/547] Building OpsEnums.cpp.inc...
+  [87/547] Building OpsEnums.h.inc...
+  [88/547] Building NVWSAttrDefs.cpp.inc...
+  [89/547] Building NVWSAttrDefs.h.inc...
+  [90/547] Building NVWSAttrEnums.cpp.inc...
+  [91/547] Building NVWSAttrEnums.h.inc...
+  [92/547] Building Passes.h.inc...
+  [93/547] Building NVWSOpInterfaces.cpp.inc...
+  [94/547] Building NVWSOpInterfaces.h.inc...
+  [95/547] Building Dialect.h.inc...
+  [96/547] Building Dialect.cpp.inc...
+  [97/547] Building Ops.cpp.inc...
+  [98/547] Building AttrDefs.cpp.inc...
+  [99/547] Building OpsConversions.inc...
+  [100/547] Building Ops.h.inc...
+  [101/547] Building AttrDefs.h.inc...
+  [102/547] Building OpsEnums.cpp.inc...
+  [103/547] Building OpsEnums.h.inc...
+  [104/547] Building AttrDefs.cpp.inc...
+  [105/547] Building AttrDefs.h.inc...
+  [106/547] Building Passes.h.inc...
+  [107/547] Building OpsEnums.cpp.inc...
+  [108/547] Building OpsEnums.h.inc...
+  [109/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_internals.cpp.o
+  [110/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_func.cpp.o
+  [111/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_type.cpp.o
+  [112/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_static_property.cpp.o
+  [113/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_ndarray.cpp.o
+  [114/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_enum.cpp.o
+  [115/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/nb_ft.cpp.o
+  [116/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/error.cpp.o
+  [117/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/common.cpp.o
+  [118/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/trampoline.cpp.o
+  [119/547] Building CXX object CMakeFiles/nanobind-static.dir/usr/local/lib/python3.12/site-packages/nanobind/src/implicit.cpp.o
+  [120/547] Building Passes.h.inc...
+  [121/547] Building Passes.h.inc...
+  [122/547] Building Passes.h.inc...
+  [123/547] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+  [124/547] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
+  [125/547] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+  [126/547] Linking CXX static library lib/libgtest.a
+  [127/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/BufferIndexAnalysis.cpp.o
+  [128/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/Allocation.cpp.o
+  [129/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/AxisInfo.cpp.o
+  [130/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/BufferRegion.cpp.o
+  [131/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/Alias.cpp.o
+  [132/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/Membar.cpp.o
+  [133/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/DiscardableAttributes.cpp.o
+  [134/547] Building CXX object lib/Analysis/CMakeFiles/TritonAnalysis.dir/Utility.cpp.o
+  [135/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/Dialect.cpp.o
+  [136/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/OpInterfaces.cpp.o
+  [137/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/Types.cpp.o
+  [138/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/Traits.cpp.o
+  [139/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/LoopAwareCSE.cpp.o
+  [140/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/Utility.cpp.o
+  [141/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/Combine.cpp.o
+  [142/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/LoopUnroll.cpp.o
+  [143/547] Building CXX object lib/Dialect/Triton/IR/CMakeFiles/TritonIR.dir/Ops.cpp.o
+  [144/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/LoopInvariantCodeMotion.cpp.o
+  [145/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/LoopPeeling.cpp.o
+  [146/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/ArithTypeConversion.cpp.o
+  [147/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/ReorderBroadcast.cpp.o
+  [148/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/RewriteTensorDescriptorToPointer.cpp.o
+  [149/547] Building CXX object lib/Dialect/Triton/Transforms/CMakeFiles/TritonTransforms.dir/FunctionTypeConversion.cpp.o
+  [150/547] Building CXX object lib/Dialect/TritonGPU/IR/CMakeFiles/TritonGPUIR.dir/Partitioning.cpp.o
+  [151/547] Building CXX object lib/Dialect/TritonGPU/IR/CMakeFiles/TritonGPUIR.dir/LinearLayoutConversions.cpp.o
+  [152/547] Building CXX object lib/Dialect/TritonGPU/IR/CMakeFiles/TritonGPUIR.dir/Types.cpp.o
+  [153/547] Building CXX object lib/Dialect/TritonGPU/IR/CMakeFiles/TritonGPUIR.dir/Traits.cpp.o
+  [154/547] Building CXX object lib/Dialect/TritonGPU/IR/CMakeFiles/TritonGPUIR.dir/Ops.cpp.o
+  [155/547] Building CXX object lib/Dialect/TritonGPU/IR/CMakeFiles/TritonGPUIR.dir/Dialect.cpp.o
+  [156/547] Building CXX object lib/Dialect/TritonNvidiaGPU/IR/CMakeFiles/TritonNvidiaGPUIR.dir/TensorMemoryUtils.cpp.o
+  [157/547] Building CXX object lib/Dialect/TritonNvidiaGPU/IR/CMakeFiles/TritonNvidiaGPUIR.dir/NvmmaSmemAttrs.cpp.o
+  [158/547] Building CXX object lib/Dialect/TritonNvidiaGPU/IR/CMakeFiles/TritonNvidiaGPUIR.dir/Dialect.cpp.o
+  [159/547] Building CXX object lib/Dialect/TritonInstrument/IR/CMakeFiles/TritonInstrumentIR.dir/Dialect.cpp.o
+  [160/547] Building CXX object lib/Dialect/TritonInstrument/IR/CMakeFiles/TritonInstrumentIR.dir/FunctionBuilder.cpp.o
+  [161/547] Building CXX object lib/Dialect/TritonNvidiaGPU/IR/CMakeFiles/TritonNvidiaGPUIR.dir/Ops.cpp.o
+  [162/547] Building CXX object lib/Tools/CMakeFiles/TritonTools.dir/GenericSwizzling.cpp.o
+  [163/547] Building CXX object lib/Dialect/Gluon/IR/CMakeFiles/GluonIR.dir/Dialect.cpp.o
+  [164/547] Building CXX object lib/Dialect/TritonInstrument/IR/CMakeFiles/TritonInstrumentIR.dir/Utility.cpp.o
+  [165/547] Building CXX object lib/Dialect/TritonInstrument/IR/CMakeFiles/TritonInstrumentIR.dir/Ops.cpp.o
+  [166/547] Building CXX object lib/Tools/CMakeFiles/TritonTools.dir/LLVMOptions.cpp.o
+  [167/547] Building GSan runtime
+  [168/547] Building NVGPUAttrDefs.cpp.inc...
+  [169/547] Building NVGPUAttrDefs.h.inc...
+  [170/547] Building Passes.h.inc...
+  [171/547] Building Passes.h.inc...
+  [172/547] Building CXX object lib/Tools/CMakeFiles/TritonTools.dir/LayoutUtils.cpp.o
+  [173/547] Building CXX object lib/Tools/CMakeFiles/TritonTools.dir/LinearLayout.cpp.o
+  [174/547] Building CXX object lib/Tools/CMakeFiles/TritonTools.dir/PluginUtils.cpp.o
+  [175/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/IR/CMakeFiles/NVWSIR.dir/Dialect.cpp.o
+  [176/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/LowerWarpGroup.cpp.o
+  [177/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/IR/CMakeFiles/NVWSIR.dir/Ops.cpp.o
+  [178/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/LowerAref.cpp.o
+  [179/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/Utilities.cpp.o
+  [180/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/InsertAref.cpp.o
+  [181/547] Building Passes.h.inc...
+  [182/547] Building TritonAMDGPUAttrDefs.cpp.inc...
+  [183/547] Building TritonAMDGPUAttrDefs.h.inc...
+  [184/547] Building TritonAMDGPUEnums.cpp.inc...
+  [185/547] Building TritonAMDGPUEnums.h.inc...
+  [186/547] Building TritonAMDGPUOpInterfaces.cpp.inc...
+  [187/547] Building TritonAMDGPUOpInterfaces.h.inc...
+  [188/547] Building Passes.h.inc...
+  [189/547] Building Passes.h.inc...
+  [190/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/AssignStagePhase.cpp.o
+  [191/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/InsertTmemAref.cpp.o
+  [192/547] Building CXX object third_party/nvidia/lib/Dialect/NVWS/Transforms/CMakeFiles/NVWSTransforms.dir/HoistTmemStore.cpp.o
+  [193/547] Building CXX object third_party/amd/test/lib/Analysis/CMakeFiles/TritonAMDGPUTestAnalysis.dir/TestAMDGPUMembar.cpp.o
+  [194/547] Building CXX object third_party/amd/test/lib/Analysis/CMakeFiles/TritonAMDGPUTestAnalysis.dir/TestAMDRangeAnalysis.cpp.o
+  [195/547] Building CXX object third_party/amd/test/lib/Analysis/CMakeFiles/TritonAMDGPUTestAnalysis.dir/TestAxisInfo.cpp.o
+  [196/547] Building CXX object lib/Conversion/TritonToTritonGPU/CMakeFiles/TritonToTritonGPU.dir/RelayoutTritonGPU.cpp.o
+  [197/547] Building CXX object lib/Conversion/TritonToTritonGPU/CMakeFiles/TritonToTritonGPU.dir/TritonGPUConversion.cpp.o
+  [198/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/AccelerateMatmul.cpp.o
+  [199/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/F32DotTC.cpp.o
+  [200/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Coalesce.cpp.o
+  [201/547] Building CXX object lib/Conversion/TritonToTritonGPU/CMakeFiles/TritonToTritonGPU.dir/TritonToTritonGPUPass.cpp.o
+  [202/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/CombineTensorSelectAndIf.cpp.o
+  [203/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/DecomposeScaledBlocked.cpp.o
+  [204/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/FuseNestedLoops.cpp.o
+  [205/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/DescriptorMemoryLayouts.cpp.o
+  [206/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/ReduceDataDuplication.cpp.o
+  [207/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/HoistTMEMAlloc.cpp.o
+  [208/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeAccumulatorInit.cpp.o
+  [209/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeDotOperands.cpp.o
+  [210/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/AssignLatencies.cpp.o
+  [211/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o
+  [212/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/MMAv5PipelineUtility.cpp.o
+  [213/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/LowerLoops.cpp.o
+  [214/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/ScheduleLoops.cpp.o
+  [215/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/WGMMAPipeline.cpp.o
+  [216/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/PipelineExpander.cpp.o
+  [217/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/TestPipelineLowerLoop.cpp.o
+  [218/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/SoftwarePipeliner.cpp.o
+  [219/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/TMAStoresPipeline.cpp.o
+  [220/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/Schedule.cpp.o
+  [221/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Pipeliner/PipeliningUtility.cpp.o
+  [222/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Prefetch.cpp.o
+  [223/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/ReorderInstructions.cpp.o
+  [224/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/CoalesceAsyncCopy.cpp.o
+  [225/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/RemoveLayoutConversions.cpp.o
+  [226/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/TargetInfo.cpp.o
+  [227/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/LayoutPropagationUtility.cpp.o
+  [228/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/CoalesceUtils.cpp.o
+  [229/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/Utility.cpp.o
+  [230/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/AutomaticWarpSpecialization.cpp.o
+  [231/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/NormalizeWSWhileLoops.cpp.o
+  [232/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/Partition.cpp.o
+  [233/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/PartitionBuilder.cpp.o
+  [234/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/OptimizePartitionWarps.cpp.o
+  [235/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/PartitionLoops.cpp.o
+  [236/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/PartitionSchedulingUtility.cpp.o
+  [237/547] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/WarpSpecialization/PartitionScheduling.cpp.o
+  [238/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/CLCLowering.cpp.o
+  [239/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/ToCLC.cpp.o
+  [240/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/ClusterBarrierMbarAllocator.cpp.o
+  [241/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/CheckMatmulTwoCTAs.cpp.o
+  [242/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/ClusterBarrierInsertion.cpp.o
+  [243/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/FenceInsertion.cpp.o
+  [244/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/FuseTMemLoadReduce.cpp.o
+  [245/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/ConSanNVIDIA.cpp.o
+  [246/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/HoistMBarrierLifecycle.cpp.o
+  [247/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/InterleaveTMem.cpp.o
+  [248/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/MBarrierUtilities.cpp.o
+  [249/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/OptimizeCTALocality.cpp.o
+  [250/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/MMALowering.cpp.o
+  [251/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/OptimizeDescriptorEncoding.cpp.o
+  [252/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/OptimizeTMemLayouts.cpp.o
+  [253/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/PromoteLHSToTMem.cpp.o
+  [254/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/AssignCGALayouts.cpp.o
+  [255/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/ProxyFenceInsertion.cpp.o
+  [256/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/RemoveTMEMTokens.cpp.o
+  [257/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/TMemBarrierInsertion.cpp.o
+  [258/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/TMAUtilities.cpp.o
+  [259/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/TensorMemoryAllocation.cpp.o
+  [260/547] Building CXX object lib/Dialect/TritonNvidiaGPU/Transforms/CMakeFiles/TritonNvidiaGPUTransforms.dir/TMALowering.cpp.o
+  [261/547] Building CXX object lib/Dialect/TritonInstrument/Transforms/CMakeFiles/TritonInstrumentTransforms.dir/PrepareConSanCaptures.cpp.o
+  [262/547] Building Types.cpp.inc...
+  [263/547] Building Types.h.inc...
+  [264/547] Building Passes.h.inc...
+  [265/547] Building Passes.h.inc...
+  [266/547] Building Passes.h.inc...
+  [267/547] Building Passes.h.inc...
+  [268/547] Building CXX object lib/Dialect/TritonInstrument/Transforms/CMakeFiles/TritonInstrumentTransforms.dir/GlobalSanitizer.cpp.o
+  [269/547] Building CXX object lib/Dialect/TritonInstrument/Transforms/CMakeFiles/TritonInstrumentTransforms.dir/ConcurrencySanitizer.cpp.o
+  [270/547] Building CXX object third_party/proton/Dialect/lib/Analysis/CMakeFiles/ProtonAnalysis.dir/ScopeIdAllocation.cpp.o
+  [271/547] Building CXX object lib/Dialect/TritonInstrument/Transforms/CMakeFiles/TritonInstrumentTransforms.dir/FpSanitizer.cpp.o
+  [272/547] Building CXX object third_party/proton/Dialect/lib/Dialect/Proton/IR/CMakeFiles/ProtonIR.dir/Dialect.cpp.o
+  [273/547] Building CXX object third_party/f2reduce/CMakeFiles/f2reduce.dir/f2reduce.cpp.o
+  [274/547] Building CXX object third_party/proton/Dialect/lib/Dialect/Proton/IR/CMakeFiles/ProtonIR.dir/Ops.cpp.o
+  [275/547] Building CXX object test/lib/Analysis/CMakeFiles/TritonTestAnalysis.dir/TestAxisInfo.cpp.o
+  [276/547] Building CXX object test/lib/Analysis/CMakeFiles/TritonTestAnalysis.dir/TestAlias.cpp.o
+  [277/547] Building CXX object test/lib/Analysis/CMakeFiles/TritonTestAnalysis.dir/TestAllocation.cpp.o
+  [278/547] Building CXX object test/lib/Dialect/CMakeFiles/TritonTestDialect.dir/TestLoopPeeling.cpp.o
+  [279/547] Linking CXX static library libnanobind-static.a
+  [280/547] Linking CXX static library lib/libgmock.a
+  [281/547] Building CXX object test/lib/Analysis/CMakeFiles/TritonTestAnalysis.dir/TestBufferRegion.cpp.o
+  [282/547] Linking CXX static library lib/libgtest_main.a
+  [283/547] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+  [284/547] Building CXX object test/lib/Analysis/CMakeFiles/TritonTestAnalysis.dir/TestMembar.cpp.o
+  [285/547] Building CXX object test/lib/Proton/CMakeFiles/TritonTestProton.dir/TestScopeIdAllocation.cpp.o
+  [286/547] Building CXX object lib/Dialect/Gluon/Transforms/CMakeFiles/GluonTransforms.dir/Canonicalize.cpp.o
+  [287/547] Building CXX object lib/Dialect/Gluon/Transforms/CMakeFiles/GluonTransforms.dir/Inline.cpp.o
+  [288/547] Building CXX object lib/Dialect/Gluon/Transforms/CMakeFiles/GluonTransforms.dir/ResolveAutoEncodings.cpp.o
+  [289/547] Building CXX object lib/Dialect/Gluon/Transforms/CMakeFiles/GluonTransforms.dir/SimplifyControlFlow.cpp.o
+  [290/547] Building CXX object lib/Dialect/Gluon/Transforms/CMakeFiles/GluonTransforms.dir/InferLayoutUtils.cpp.o
+  [291/547] Building CXX object lib/Dialect/Gluon/Transforms/CMakeFiles/GluonTransforms.dir/InferCoalescedEncodings.cpp.o
+  [292/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/DotOpToLLVM/FMA.cpp.o
+  [293/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/DotOpToLLVM/FMADotUtility.cpp.o
+  [294/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/AllocateSharedMemory.cpp.o
+  [295/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/AllocateSharedMemoryUtility.cpp.o
+  [296/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/AssertOpToLLVM.cpp.o
+  [297/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/AllocateWarpGroups.cpp.o
+  [298/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/ControlFlowOpToLLVM.cpp.o
+  [299/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/CanonicalizeLLVMIR.cpp.o
+  [300/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/ConvertLayoutOpToLLVM.cpp.o
+  [301/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/Fp4ToFpOpToLLVMBase.cpp.o
+  [302/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/FuncOpToLLVM.cpp.o
+  [303/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/GlobalScratchMemoryAllocation.cpp.o
+  [304/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/GatherOpToLLVM.cpp.o
+  [305/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/ElementwiseOpToLLVM.cpp.o
+  [306/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/HistogramOpToLLVM.cpp.o
+  [307/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/MakeRangeOpToLLVM.cpp.o
+  [308/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/MemoryOpToLLVM.cpp.o
+  [309/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/PrintOpToLLVM.cpp.o
+  [310/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/ReduceOpToLLVM.cpp.o
+  [311/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/ScanOpToLLVM.cpp.o
+  [312/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/SPMDOpToLLVM.cpp.o
+  [313/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/TypeConverter.cpp.o
+  [314/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/WarpSpecializeUtility.cpp.o
+  [315/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/ViewOpToLLVM.cpp.o
+  [316/547] Building CXX object lib/Conversion/TritonGPUToLLVM/CMakeFiles/TritonGPUToLLVM.dir/Utility.cpp.o
+  [317/547] Building CXX object lib/Conversion/TritonInstrumentToLLVM/CMakeFiles/TritonInstrumentToLLVM.dir/InstrumentationToLLVM.cpp.o
+  [318/547] Building CXX object lib/Target/LLVMIR/CMakeFiles/TritonLLVMIR.dir/LLVMDIScope.cpp.o
+  [319/547] Building CXX object lib/Conversion/TritonInstrumentToLLVM/CMakeFiles/TritonInstrumentToLLVM.dir/FpSanToLLVM.cpp.o
+  [320/547] Building CXX object lib/Target/LLVMIR/CMakeFiles/TritonLLVMIR.dir/LLVMIRBreakPhiStruct.cpp.o
+  [321/547] Building CXX object lib/Target/LLVMIR/CMakeFiles/TritonLLVMIR.dir/LLVMDILocalVariable.cpp.o
+  [322/547] Building CXX object lib/Conversion/TritonInstrumentToLLVM/CMakeFiles/TritonInstrumentToLLVM.dir/GSanToLLVM.cpp.o
+  [323/547] Building CXX object lib/Target/LLVMIR/CMakeFiles/TritonLLVMIR.dir/LLVMDIUtils.cpp.o
+  [324/547] Building CXX object third_party/nvidia/lib/Dialect/NVGPU/IR/CMakeFiles/NVGPUIR.dir/Dialect.cpp.o
+  [325/547] Building CXX object third_party/nvidia/CMakeFiles/TritonNVIDIA.dir/triton_nvidia.cc.o
+  [326/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/ConvertLayoutOpToLLVM.cpp.o
+  [327/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/DotOpToLLVM/MMAv2.cpp.o
+  [328/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/MemoryOpToLLVM.cpp.o
+  [329/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/ConvertWarpSpecializeToLLVM.cpp.o
+  [330/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/DotOpToLLVM/MMAv5.cpp.o
+  [331/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/DotOpToLLVM.cpp.o
+  [332/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/DotOpToLLVM/WGMMA.cpp.o
+  [333/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/ElementwiseOpToLLVM.cpp.o
+  [334/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/Membar.cpp.o
+  [335/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/LoadStoreOpToLLVM.cpp.o
+  [336/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/BarrierOpToLLVM.cpp.o
+  [337/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/TMAToLLVM.cpp.o
+  [338/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/TritonGPUToLLVM.cpp.o
+  [339/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/SPMDOpToLLVM.cpp.o
+  [340/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/PTXAsmFormat.cpp.o
+  [341/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/TensorMemoryToLLVM.cpp.o
+  [342/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/ClusterOpsToLLVM.cpp.o
+  [343/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/Utility.cpp.o
+  [344/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/Fp4ToFpOpToLLVM.cpp.o
+  [345/547] Building CXX object third_party/nvidia/unittest/Conversion/TritonGPUToLLVM/CMakeFiles/TestPtxAsmFormat.dir/PTXAsmFormatTest.cpp.o
+  [346/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/Allocation.cpp.o
+  [347/547] Building CXX object third_party/nvidia/lib/TritonNVIDIAGPUToLLVM/CMakeFiles/TritonNVIDIAGPUToLLVM.dir/TargetInfo.cpp.o
+  [348/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/CodePartitionUtility.cpp.o
+  [349/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/TaskIdPropagation.cpp.o
+  [350/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization.cpp.o
+  [351/547] Building CXX object third_party/nvidia/lib/NVGPUToLLVM/CMakeFiles/NVGPUToLLVM.dir/NVGPUToLLVMPass.cpp.o
+  [352/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/Utility.cpp.o
+  [353/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSBuffer.cpp.o
+  [354/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSDataPartition.cpp.o
+  [355/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSCodePartition.cpp.o
+  [356/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSLowerMem.cpp.o
+  [357/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSLowerToken.cpp.o
+  [358/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSTaskIdPropagate.cpp.o
+  [359/547] Building CXX object third_party/amd/CMakeFiles/TritonAMD.dir/python/dylib_utils.cc.o
+  [360/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSSpecialize.cpp.o
+  [361/547] Building CXX object third_party/nvidia/hopper/lib/Transforms/CMakeFiles/NVHopperTransforms.dir/WarpSpecialization/WSTaskPartition.cpp.o
+  [362/547] Building CXX object third_party/amd/lib/Analysis/CMakeFiles/TritonAMDAnalysis.dir/AxisInfoExt.cpp.o
+  [363/547] Building CXX object third_party/amd/lib/Analysis/CMakeFiles/TritonAMDAnalysis.dir/AMDGPUAllocation.cpp.o
+  [364/547] Building CXX object third_party/amd/lib/Analysis/CMakeFiles/TritonAMDAnalysis.dir/RangeAnalysis.cpp.o
+  [365/547] Building CXX object third_party/amd/CMakeFiles/TritonAMD.dir/python/triton_amd.cc.o
+  [366/547] Building CXX object third_party/amd/lib/Dialect/TritonAMDGPU/IR/CMakeFiles/TritonAMDGPUIR.dir/TargetFeatures.cpp.o
+  [367/547] Building CXX object third_party/amd/lib/Dialect/TritonAMDGPU/Utility/CMakeFiles/TritonAMDUtils.dir/CommonUtils.cpp.o
+  [368/547] Building CXX object third_party/amd/lib/Target/MIRDAG/CMakeFiles/TritonAMDMIRDAG.dir/DAGBuilder.cpp.o
+  [369/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/AsyncUtility.cpp.o
+  [370/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/AllocateSharedMemory.cpp.o
+  [371/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/AtomicRMWOpsEmitter.cpp.o
+  [372/547] Building CXX object third_party/amd/lib/Dialect/TritonAMDGPU/IR/CMakeFiles/TritonAMDGPUIR.dir/Dialect.cpp.o
+  [373/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/BufferOpsEmitter.cpp.o
+  [374/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/ConvertLayoutOpToLLVM.cpp.o
+  [375/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/TensorPtrOpsToLLVM.cpp.o
+  [376/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/ConvertWarpPipeline.cpp.o
+  [377/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/MemoryOpToLLVM.cpp.o
+  [378/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/MaskedOpsToLLVM.cpp.o
+  [379/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/DotOpToLLVM/FMA.cpp.o
+  [380/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/ConvertWarpSpecializeToLLVM.cpp.o
+  [381/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/DotOpToLLVM/MFMA.cpp.o
+  [382/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/DotOpToLLVM/WMMA.cpp.o
+  [383/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/DotOpToLLVM.cpp.o
+  [384/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/FuncOpToLLVM.cpp.o
+  [385/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/GCNAsmFormat.cpp.o
+  [386/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/ElementwiseOpToLLVM.cpp.o
+  [387/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/LoadStoreOpToLLVM.cpp.o
+  [388/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/HistogramOpToLLVM.cpp.o
+  [389/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/Membar.cpp.o
+  [390/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/BuiltinFuncToLLVM.cpp.o
+  [391/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/TritonGPUToLLVM.cpp.o
+  [392/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/Utility.cpp.o
+  [393/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/TargetInfo.cpp.o
+  [394/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/SPMDOpToLLVM.cpp.o
+  [395/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/MembarUtility.cpp.o
+  [396/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/Fp4ToFpOpToLLVM.cpp.o
+  [397/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/ScalarizePackedFOps.cpp.o
+  [398/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/BarrierOpToLLVM.cpp.o
+  [399/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/TDMUtility.cpp.o
+  [400/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/WarpIdOpToLLVM.cpp.o
+  [401/547] Building CXX object third_party/amd/lib/TritonAMDGPUToLLVM/CMakeFiles/TritonAMDGPUToLLVM.dir/ConvertFpCastOpToLLVM.cpp.o
+  [402/547] Building CXX object third_party/amd/lib/TritonAMDGPUDialectToLLVM/CMakeFiles/TritonAMDGPUDialectToLLVM.dir/TritonAMDGPUToLLVMPatterns.cpp.o
+  [403/547] Building CXX object third_party/amd/lib/TritonAMDGPUDialectToLLVM/CMakeFiles/TritonAMDGPUDialectToLLVM.dir/InThreadTransposeOpToTTG.cpp.o
+  [404/547] Building CXX object third_party/amd/lib/TritonAMDGPUDialectToLLVM/CMakeFiles/TritonAMDGPUDialectToLLVM.dir/ExtractSliceOpToLLVM.cpp.o
+  [405/547] Building CXX object third_party/amd/lib/TritonAMDGPUDialectToLLVM/CMakeFiles/TritonAMDGPUDialectToLLVM.dir/ConcatOpToLLVM.cpp.o
+  [406/547] Building CXX object third_party/amd/lib/TritonAMDGPUDialectToLLVM/CMakeFiles/TritonAMDGPUDialectToLLVM.dir/ScaledDowncastToLLVM.cpp.o
+  [407/547] Building CXX object third_party/amd/lib/TritonAMDGPUDialectToLLVM/CMakeFiles/TritonAMDGPUDialectToLLVM.dir/ScaledUpcastToLLVM.cpp.o
+  [408/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/AccelerateAMDMatmul.cpp.o
+  [409/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/BlockPingpong.cpp.o
+  [410/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/CoalesceAsyncCopy.cpp.o
+  [411/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/CanonicalizePointers.cpp.o
+  [412/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/ConSanAMD.cpp.o
+  [413/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/ConvertToBufferOps.cpp.o
+  [414/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/ConvertToTensorOps.cpp.o
+  [415/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/OptimizeBufferOpPtr.cpp.o
+  [416/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/OptimizeDescriptorEncoding.cpp.o
+  [417/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/OptimizeEpilogue.cpp.o
+  [418/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/OptimizeDotOperands.cpp.o
+  [419/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/HoistLayoutConversions.cpp.o
+  [420/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/SinkLayoutConversions.cpp.o
+  [421/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/PrepareIfCombining.cpp.o
+  [422/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/MoveUpPrologueLoads.cpp.o
+  [423/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/Pipeline.cpp.o
+  [424/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/ScheduleLoops.cpp.o
+  [425/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/WmmaGroup.cpp.o
+  [426/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/LowerLoops.cpp.o
+  [427/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/MfmaGroup.cpp.o
+  [428/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/TDMStoresPipeline.cpp.o
+  [429/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/InThreadTranspose.cpp.o
+  [430/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/FoldTrueCmpIOp.cpp.o
+  [431/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/FpSanitizer.cpp.o
+  [432/547] Linking CXX static library third_party/amd/test/lib/Analysis/libTritonAMDGPUTestAnalysis.a
+  [433/547] Building CXX object third_party/proton/common/lib/TraceDataIO/CMakeFiles/ProtonTraceDataIO.dir/ByteSpan.cpp.o
+  [434/547] Building CXX object third_party/proton/common/lib/TraceDataIO/CMakeFiles/ProtonTraceDataIO.dir/EntryDecoder.cpp.o
+  [435/547] Building CXX object third_party/proton/common/lib/TraceDataIO/CMakeFiles/ProtonTraceDataIO.dir/Parser.cpp.o
+  [436/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/UpdateAsyncWaitCount.cpp.o
+  [437/547] Building CXX object third_party/proton/common/lib/TraceDataIO/CMakeFiles/ProtonTraceDataIO.dir/CircularLayoutParser.cpp.o
+  [438/547] Building CXX object third_party/proton/common/lib/TraceDataIO/CMakeFiles/ProtonTraceDataIO.dir/TraceWriter.cpp.o
+  [439/547] Building CXX object third_party/proton/csrc/CMakeFiles/Proton.dir/Proton.cpp.o
+  [440/547] Building CXX object third_party/proton/csrc/lib/Backend/CMakeFiles/ProtonBackend.dir/RegisteredBackends.cpp.o
+  [441/547] Building CXX object third_party/proton/csrc/lib/Context/CMakeFiles/ProtonContext.dir/Context.cpp.o
+  [442/547] Building CXX object third_party/proton/csrc/lib/Backend/CMakeFiles/ProtonBackend.dir/Backend.cpp.o
+  [443/547] Building CXX object third_party/proton/csrc/lib/Context/CMakeFiles/ProtonContext.dir/Python.cpp.o
+  [444/547] Building CXX object third_party/proton/csrc/lib/Context/CMakeFiles/ProtonContext.dir/Shadow.cpp.o
+  [445/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/Utility.cpp.o
+  [446/547] Building CXX object third_party/proton/csrc/lib/Data/CMakeFiles/ProtonData.dir/Data.cpp.o
+  [447/547] Building CXX object third_party/proton/csrc/lib/Data/CMakeFiles/ProtonData.dir/Metric.cpp.o
+  [448/547] Building CXX object third_party/proton/csrc/lib/Data/CMakeFiles/ProtonData.dir/Dump/ChromeTrace.cpp.o
+  [449/547] Building CXX object third_party/proton/csrc/lib/Data/CMakeFiles/ProtonData.dir/Dump/TraceDataDump.cpp.o
+  [450/547] Building CXX object third_party/amd/lib/TritonAMDGPUTransforms/CMakeFiles/TritonAMDGPUTransforms.dir/WarpPipeliner.cpp.o
+  [451/547] Building CXX object third_party/proton/csrc/lib/Utility/CMakeFiles/ProtonUtility.dir/MsgPackWriter.cpp.o
+  [452/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/Device.cpp.o
+  [453/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/CudaApi.cpp.o
+  [454/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/CuptiApi.cpp.o
+  [455/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/HipApi.cpp.o
+  [456/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/HsaApi.cpp.o
+  [457/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/NvtxApi.cpp.o
+  [458/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/RoctracerApi.cpp.o
+  [459/547] Building CXX object third_party/proton/csrc/lib/Data/CMakeFiles/ProtonData.dir/TraceData.cpp.o
+  [460/547] Building CXX object third_party/proton/csrc/lib/Driver/CMakeFiles/ProtonDriver.dir/GPU/RocprofApi.cpp.o
+  [461/547] Building CXX object third_party/proton/csrc/lib/Runtime/CMakeFiles/ProtonRuntime.dir/CudaRuntime.cpp.o
+  [462/547] Building CXX object third_party/proton/csrc/lib/Runtime/CMakeFiles/ProtonRuntime.dir/HipRuntime.cpp.o
+  [463/547] Building CXX object third_party/proton/csrc/lib/Data/CMakeFiles/ProtonData.dir/TreeData.cpp.o
+  [464/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/Profiler.cpp.o
+  [465/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/GPUProfiler.cpp.o
+  [466/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/Graph.cpp.o
+  [467/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/Cupti/CuptiPCSampling.cpp.o
+  [468/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/RocprofSDK/RocprofSDKPCSamplingSourceLocations.cpp.o
+  [469/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/RocprofSDK/RocprofSDKPCSampling.cpp.o
+  [470/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/Cupti/CuptiProfiler.cpp.o
+  [471/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/RocTracer/RoctracerProfiler.cpp.o
+  [472/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/Instrumentation/InstrumentationProfiler.cpp.o
+  [473/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/RocprofSDK/RocprofSDKProfiler.cpp.o
+  [474/547] Building CXX object third_party/proton/csrc/lib/Profiler/CMakeFiles/ProtonProfiler.dir/Instrumentation/Metadata.cpp.o
+  [475/547] Building CXX object third_party/proton/test/unittest/TraceDataIO/CMakeFiles/TraceDataIO.dir/ByteSpanTest.cpp.o
+  [476/547] Building CXX object third_party/proton/test/unittest/TraceDataIO/CMakeFiles/TraceDataIO.dir/DecoderTest.cpp.o
+  [477/547] Building CXX object third_party/proton/test/unittest/Backend/CMakeFiles/TestBackend.dir/TestBackend.cpp.o
+  [478/547] Building CXX object third_party/proton/test/unittest/TraceDataIO/CMakeFiles/TraceDataIO.dir/CircularLayoutParserTest.cpp.o
+  [479/547] Building CXX object third_party/proton/csrc/lib/Session/CMakeFiles/ProtonSession.dir/Session.cpp.o
+  [480/547] Building CXX object third_party/proton/test/unittest/Backend/CMakeFiles/TestBackendRegistry.dir/RegisteredBackends.cpp.o
+  [481/547] Building CXX object CMakeFiles/triton.dir/python/src/main.cc.o
+  [482/547] Building CXX object third_party/proton/test/unittest/Backend/CMakeFiles/BackendRegistration.dir/BackendRegistrationTest.cpp.o
+  [483/547] Building CXX object CMakeFiles/triton.dir/python/triton/experimental/gsan/src/gsan_testing.cc.o
+  [484/547] Building CXX object third_party/proton/test/unittest/TraceDataIO/CMakeFiles/TraceDataIO.dir/ChromeTraceWriterTest.cpp.o
+  [485/547] Building CXX object CMakeFiles/triton.dir/python/src/linear_layout.cc.o
+  [486/547] Building CXX object CMakeFiles/triton.dir/python/src/interpreter.cc.o
+  [487/547] Building CXX object CMakeFiles/triton.dir/python/src/gluon_ir.cc.o
+  [488/547] Building CXX object CMakeFiles/triton.dir/python/src/ir.cc.o
+  [489/547] Building CXX object CMakeFiles/triton.dir/python/src/specialize.cc.o
+  [490/547] Building CXX object CMakeFiles/triton.dir/python/src/passes.cc.o
+  [491/547] Building CXX object CMakeFiles/triton.dir/python/src/llvm.cc.o
+  [492/547] Building CXX object third_party/proton/Dialect/CMakeFiles/TritonProton.dir/triton_proton.cc.o
+  [493/547] Building CXX object third_party/proton/Dialect/lib/Dialect/ProtonGPU/IR/CMakeFiles/ProtonGPUIR.dir/Dialect.cpp.o
+  [494/547] Building CXX object third_party/proton/Dialect/lib/Dialect/ProtonGPU/IR/CMakeFiles/ProtonGPUIR.dir/Ops.cpp.o
+  [495/547] Building CXX object third_party/proton/Dialect/lib/Dialect/ProtonGPU/IR/CMakeFiles/ProtonGPUIR.dir/Types.cpp.o
+  [496/547] Building CXX object third_party/proton/Dialect/lib/Dialect/ProtonGPU/Transforms/CMakeFiles/ProtonGPUTransforms.dir/ProtonGPUTransformsPass.cpp.o
+  [497/547] Building CXX object third_party/proton/Dialect/lib/ProtonToProtonGPU/CMakeFiles/ProtonToProtonGPU.dir/ProtonToProtonGPUPass.cpp.o
+  [498/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/CMakeFiles/ProtonGPUToLLVM.dir/AllocateProtonSharedMemory.cpp.o
+  [499/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/CMakeFiles/ProtonGPUToLLVM.dir/PatternProtonGPUOpToLLVM.cpp.o
+  [500/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/CMakeFiles/ProtonGPUToLLVM.dir/Utility.cpp.o
+  [501/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonNvidiaGPUToLLVM/CMakeFiles/ProtonNVIDIAGPUToLLVM.dir/TargetInfo.cpp.o
+  [502/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonNvidiaGPUToLLVM/CMakeFiles/ProtonNVIDIAGPUToLLVM.dir/NvidiaPatternProtonGPUOpToLLVM.cpp.o
+  [503/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonAMDGPUToLLVM/CMakeFiles/ProtonAMDGPUToLLVM.dir/TargetInfo.cpp.o
+  [504/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonAMDGPUToLLVM/CMakeFiles/ProtonAMDGPUToLLVM.dir/AMDPatternProtonGPUOpToLLVM.cpp.o
+  [505/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonAMDGPUToLLVM/CMakeFiles/ProtonAMDGPUToLLVM.dir/AddSchedBarriers.cpp.o
+  [506/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonNvidiaGPUToLLVM/CMakeFiles/ProtonNVIDIAGPUToLLVM.dir/ConvertProtonGPUToLLVM.cpp.o
+  [507/547] Building CXX object third_party/proton/Dialect/lib/ProtonGPUToLLVM/ProtonAMDGPUToLLVM/CMakeFiles/ProtonAMDGPUToLLVM.dir/ConvertProtonGPUToLLVM.cpp.o
+  [508/547] Building CXX object bin/CMakeFiles/triton-llvm-opt.dir/triton-llvm-opt.cpp.o
+  [509/547] Building CXX object bin/CMakeFiles/triton-opt.dir/triton-opt.cpp.o
+  [510/547] Building CXX object bin/CMakeFiles/triton-reduce.dir/triton-reduce.cpp.o
+  [511/547] Linking CXX static library test/lib/Dialect/libTritonTestDialect.a
+  [512/547] Building CXX object bin/CMakeFiles/triton-lsp.dir/triton-lsp.cpp.o
+  [513/547] Linking CXX static library test/lib/Analysis/libTritonTestAnalysis.a
+  [514/547] Linking CXX static library test/lib/Proton/libTritonTestProton.a
+  [515/547] Building CXX object test/lib/Instrumentation/CMakeFiles/GPUInstrumentationTestLib.dir/GPUHello.cpp.o
+  [516/547] Building CXX object bin/CMakeFiles/triton-tensor-layout.dir/triton-tensor-layout.cpp.o
+  [517/547] Building CXX object unittest/Dialect/TritonGPU/CMakeFiles/TestSwizzling.dir/SwizzleTest.cpp.o
+  [518/547] Building CXX object unittest/Analysis/CMakeFiles/TestTritonAnalysis.dir/UtilityTest.cpp.o
+  [519/547] Building CXX object unittest/Dialect/TritonGPU/CMakeFiles/Dialect.dir/DialectTest.cpp.o
+  [520/547] Building CXX object unittest/Dialect/TritonGPU/CMakeFiles/DumpLayoutTest.dir/DumpLayoutTest.cpp.o
+  [521/547] Building CXX object unittest/Dialect/TritonGPU/CMakeFiles/TestPaddedSharedLayout.dir/PaddedTest.cpp.o
+  [522/547] Building CXX object unittest/Tools/CMakeFiles/LinearLayout.dir/LayoutUtilsTest.cpp.o
+  [523/547] Building CXX object unittest/Dialect/TritonNvidiaGPU/CMakeFiles/NvmmaSmemAttrsTest.dir/NvmmaSmemAttrsTest.cpp.o
+  [524/547] Linking CXX static library lib/libgmock_main.a
+  [525/547] Linking CXX executable third_party/nvidia/unittest/Conversion/TritonGPUToLLVM/TestPtxAsmFormat
+  [526/547] Linking CXX shared library /opt/triton-src/python/triton/_C/libproton.so
+  [527/547] Linking CXX executable third_party/proton/test/unittest/TraceDataIO/TraceDataIO
+  [528/547] Linking CXX executable third_party/proton/test/unittest/Backend/BackendRegistration
+  [529/547] Building CXX object unittest/Tools/CMakeFiles/LLVMOptions.dir/LLVMOptionsTest.cpp.o
+  [530/547] Linking CXX shared library /opt/triton-src/python/triton/_C/libtriton.so
+  [531/547] Linking CXX executable bin/triton-opt
+  [532/547] Linking CXX executable bin/triton-reduce
+  [533/547] Linking CXX executable bin/triton-llvm-opt
+  [534/547] Linking CXX executable bin/triton-lsp
+  [535/547] Linking CXX shared library /opt/triton-src/python/triton/instrumentation/libGPUInstrumentationTestLib.so
+  [536/547] Linking CXX executable unittest/Analysis/TestTritonAnalysis
+  [537/547] Linking CXX executable unittest/Dialect/TritonGPU/TestSwizzling
+  [538/547] Linking CXX executable bin/triton-tensor-layout
+  [539/547] Linking CXX executable unittest/Dialect/TritonGPU/Dialect
+  [540/547] Linking CXX executable unittest/Dialect/TritonGPU/DumpLayoutTest
+  [541/547] Linking CXX executable unittest/Dialect/TritonGPU/TestPaddedSharedLayout
+  [542/547] Linking CXX executable unittest/Tools/LLVMOptions
+  [543/547] Linking CXX executable unittest/Dialect/TritonNvidiaGPU/NvmmaSmemAttrsTest
+  [544/547] Building CXX object unittest/Tools/CMakeFiles/LinearLayout.dir/LinearLayoutTest.cpp.o
+  [545/547] Linking CXX executable unittest/Tools/LinearLayout
+  [546/547] Building CXX object unittest/Dialect/TritonGPU/CMakeFiles/LinearLayoutConversions.dir/LinearLayoutConversionsTest.cpp.o
+  [547/547] Linking CXX executable unittest/Dialect/TritonGPU/LinearLayoutConversions
+  [1/42] Building TritonInstrumentDialect.md...
+  [2/42] Building TritonNvidiaGPUDialect.md...
+  [3/42] Building TritonGPUDialect.md...
+  [4/42] Building TritonDialect.md...
+  [5/42] Building GluonDialect.md...
+  [6/42] Building NVGPUDialect.md...
+  [7/42] Building ProtonDialect.md...
+  [8/42] Building GluonOps.md...
+  [9/42] Building NVWSDialect.md...
+  [10/42] Building TritonAMDGPUDialect.md...
+  [11/42] Generating ../../../../../docs/dialects/TritonDialect.md
+  [12/42] Generating ../../../../../docs/dialects/TritonGPUDialect.md
+  [13/42] Generating ../../../../../docs/dialects/TritonNvidiaGPUDialect.md
+  [14/42] Generating ../../../../../docs/dialects/TritonInstrumentDialect.md
+  [15/42] Generating ../../../../../docs/dialects/GluonOps.md
+  [16/42] Generating ../../../../../docs/dialects/GluonDialect.md
+  [17/42] Generating ../../../../../../docs/dialects/NVGPUDialect.md
+  [18/42] Generating ../../../../../../docs/dialects/NVWSDialect.md
+  [19/42] Generating ../../../../../../docs/dialects/TritonAMDGPUDialect.md
+  [20/42] Generating ../../../../../../../docs/dialects/ProtonDialect.md
+  [21/42] Building TritonInstrumentOps.md...
+  [22/42] Generating ../../../../../docs/dialects/TritonInstrumentOps.md
+  [23/42] Building NVWSOps.md...
+  [24/42] Building TritonOps.md...
+  [25/42] Building NVGPUOps.md...
+  [26/42] Building ProtonOps.md...
+  [27/42] Building TritonGPUOps.md...
+  [28/42] Generating ../../../../../../docs/dialects/NVWSOps.md
+  [29/42] Building TritonNvidiaGPUOps.md...
+  [30/42] Generating ../../../../../docs/dialects/TritonOps.md
+  [31/42] Generating ../../../../../../docs/dialects/NVGPUOps.md
+  [32/42] Building ProtonGPUDialect.md...
+  [33/42] Generating ../../../../../../../docs/dialects/ProtonOps.md
+  [34/42] Building ProtonGPUAttrDefs.md...
+  [35/42] Generating ../../../../../docs/dialects/TritonGPUOps.md
+  [36/42] Generating ../../../../../docs/dialects/TritonNvidiaGPUOps.md
+  [37/42] Generating ../../../../../../../docs/dialects/ProtonGPUDialect.md
+  [38/42] Building TritonAMDGPUOps.md...
+  [39/42] Generating ../../../../../../../docs/dialects/ProtonGPUAttrDefs.md
+  [40/42] Generating ../../../../../../docs/dialects/TritonAMDGPUOps.md
+  [41/42] Building ProtonGPUOps.md...
+  [42/42] Generating ../../../../../../../docs/dialects/ProtonGPUOps.md
+  running egg_info
+  creating /tmp/tmpdsds2dqz.build-temp/triton.egg-info
+  writing /tmp/tmpdsds2dqz.build-temp/triton.egg-info/PKG-INFO
+  writing dependency_links to /tmp/tmpdsds2dqz.build-temp/triton.egg-info/dependency_links.txt
+  writing entry points to /tmp/tmpdsds2dqz.build-temp/triton.egg-info/entry_points.txt
+  writing requirements to /tmp/tmpdsds2dqz.build-temp/triton.egg-info/requires.txt
+  writing top-level names to /tmp/tmpdsds2dqz.build-temp/triton.egg-info/top_level.txt
+  writing manifest file '/tmp/tmpdsds2dqz.build-temp/triton.egg-info/SOURCES.txt'
+  reading manifest file '/tmp/tmpdsds2dqz.build-temp/triton.egg-info/SOURCES.txt'
+  reading manifest template 'MANIFEST.in'
+  warning: no previously-included files matching '__pycache__' found anywhere in distribution
+  warning: no previously-included files matching '__pycache__/*' found anywhere in distribution
+  warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+  adding license file 'LICENSE'
+  writing manifest file '/tmp/tmpdsds2dqz.build-temp/triton.egg-info/SOURCES.txt'
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton._C' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton._C' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton._C' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton._C' to be distributed and are
+          already explicitly excluding 'triton._C' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton._C.libtriton' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton._C.libtriton' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton._C.libtriton' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton._C.libtriton' to be distributed and are
+          already explicitly excluding 'triton._C.libtriton' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd' to be distributed and are
+          already explicitly excluding 'triton.backends.amd' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.codegen' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.codegen' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.codegen' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.codegen' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.codegen' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include.hip' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include.hip' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include.hip' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include.hip' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include.hip' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include.hip.amd_detail' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include.hip.amd_detail' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include.hip.amd_detail' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include.hip.amd_detail' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include.hip.amd_detail' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include.hsa' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include.hsa' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include.hsa' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include.hsa' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include.hsa' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include.hsakmt' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include.hsakmt' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include.hsakmt' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include.hsakmt' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include.hsakmt' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include.roctracer' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include.roctracer' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include.roctracer' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include.roctracer' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include.roctracer' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.include.roctracer.ext' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.include.roctracer.ext' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.include.roctracer.ext' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.include.roctracer.ext' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.include.roctracer.ext' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.amd.lib' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.amd.lib' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.amd.lib' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.amd.lib' to be distributed and are
+          already explicitly excluding 'triton.backends.amd.lib' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.bin' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.bin' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.bin' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.bin' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.bin' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.include' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.include' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.include' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.include' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.include' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.include.Openacc' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.include.Openacc' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.include.Openacc' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.include.Openacc' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.include.Openacc' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.include.Openmp' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.include.Openmp' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.include.Openmp' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.include.Openmp' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.include.Openmp' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.include.cooperative_groups' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.include.cooperative_groups' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.include.cooperative_groups' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.include.cooperative_groups' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.include.cooperative_groups' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.include.cooperative_groups.details' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.include.cooperative_groups.details' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.include.cooperative_groups.details' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.include.cooperative_groups.details' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.include.cooperative_groups.details' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.include.crt' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.include.crt' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.include.crt' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.include.crt' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.include.crt' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.lib' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.lib' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.lib' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.lib' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.lib' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.backends.nvidia.lib.cupti' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.backends.nvidia.lib.cupti' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.backends.nvidia.lib.cupti' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.backends.nvidia.lib.cupti' to be distributed and are
+          already explicitly excluding 'triton.backends.nvidia.lib.cupti' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.experimental.gsan.src' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.experimental.gsan.src' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.experimental.gsan.src' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.experimental.gsan.src' to be distributed and are
+          already explicitly excluding 'triton.experimental.gsan.src' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.instrumentation' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.instrumentation' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.instrumentation' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.instrumentation' to be distributed and are
+          already explicitly excluding 'triton.instrumentation' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.language.extra.cuda' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.language.extra.cuda' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.language.extra.cuda' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.language.extra.cuda' to be distributed and are
+          already explicitly excluding 'triton.language.extra.cuda' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.language.extra.hip' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.language.extra.hip' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.language.extra.hip' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.language.extra.hip' to be distributed and are
+          already explicitly excluding 'triton.language.extra.hip' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.profiler' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.profiler' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.profiler' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.profiler' to be distributed and are
+          already explicitly excluding 'triton.profiler' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.profiler.hooks' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.profiler.hooks' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.profiler.hooks' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.profiler.hooks' to be distributed and are
+          already explicitly excluding 'triton.profiler.hooks' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.tools.extra.cuda' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.tools.extra.cuda' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.tools.extra.cuda' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.tools.extra.cuda' to be distributed and are
+          already explicitly excluding 'triton.tools.extra.cuda' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  /usr/local/lib/python3.12/site-packages/setuptools/command/build_py.py:215: _Warning: Package 'triton.tools.extra.hip' is absent from the `packages` configuration.
+  !!
+
+          ********************************************************************************
+          ############################
+          # Package would be ignored #
+          ############################
+          Python recognizes 'triton.tools.extra.hip' as an importable package[^1],
+          but it is absent from setuptools' `packages` configuration.
+
+          This leads to an ambiguous overall configuration. If you want to distribute this
+          package, please make sure that 'triton.tools.extra.hip' is explicitly added
+          to the `packages` configuration field.
+
+          Alternatively, you can also rely on setuptools' discovery methods
+          (for example by using `find_namespace_packages(...)`/`find_namespace:`
+          instead of `find_packages(...)`/`find:`).
+
+          You can read more about "package discovery" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+          If you don't want 'triton.tools.extra.hip' to be distributed and are
+          already explicitly excluding 'triton.tools.extra.hip' via
+          `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+          you can try to use `exclude_package_data`, or `include-package-data=False` in
+          combination with a more fine grained `package-data` configuration.
+
+          You can read more about "package data files" on setuptools documentation page:
+
+          - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+          [^1]: For Python, any directory (with suitable naming) can be imported,
+                even if it does not contain any `.py` files.
+                On the other hand, currently there is no concept of package data
+                directory, all directories are treated like packages.
+          ********************************************************************************
+
+  !!
+    check.warn(importable)
+  Editable install will be performed using a meta path finder.
+
+  Options like `package-data`, `include/exclude-package-data` or
+  `packages.find.exclude/include` may have no effect.
+
+  adding '__editable___triton_3_9_0_finder.py'
+  adding '__editable__.triton-3.9.0.pth'
+  creating '/tmp/pip-wheel-hge1dkz8/.tmp-40bszj4b/triton-3.9.0-0.editable-cp312-cp312-linux_x86_64.whl' and adding '/tmp/tmp_z7z7ndgtriton-3.9.0-0.editable-cp312-cp312-linux_x86_64.whl' to it
+  adding 'triton-3.9.0.dist-info/licenses/LICENSE'
+  adding 'triton-3.9.0.dist-info/METADATA'
+  adding 'triton-3.9.0.dist-info/WHEEL'
+  adding 'triton-3.9.0.dist-info/entry_points.txt'
+  adding 'triton-3.9.0.dist-info/top_level.txt'
+  adding 'triton-3.9.0.dist-info/RECORD'
+  /usr/local/lib/python3.12/site-packages/setuptools/command/editable_wheel.py:354: InformationOnly: Editable installation.
+  !!
+
+          ********************************************************************************
+          Please be careful with folders in your working directory with the same
+          name as your package as they may take precedence during imports.
+          ********************************************************************************
+
+  !!
+    with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+  Building editable for triton (pyproject.toml): finished with status 'done'
+  Created wheel for triton: filename=triton-3.9.0-0.editable-cp312-cp312-linux_x86_64.whl size=4179 sha256=b68ae8b45e6f2d092f5b417c37c330c749ceac99e74c7900b84e2da9682b0268
+  Stored in directory: /tmp/pip-ephem-wheel-cache-gxvfh3hg/wheels/b6/93/78/e543c64cd1eb8b85f461ea7afa6423e50091a99e91f7fcd6ff
+Successfully built triton
+Installing collected packages: triton
+  changing mode of /usr/local/bin/proton to 755
+  changing mode of /usr/local/bin/proton-viewer to 755
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+torch 2.14.1 requires triton~=3.8.0; platform_system == "Linux" and python_version < "3.15", but you have triton 3.9.0 which is incompatible.
+Successfully installed triton-3.9.0
+
+[notice] A new release of pip is available: 23.3.2 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+
+=> Step 5: RUN ccache -s
+Local storage:
+  Cache size (GB): 0.0 / 20.0 ( 0.00%)
+
+=> Step 6: RUN python3 -c 'import triton; print(triton.__version__, triton.__file__)'
+3.9.0 /opt/triton-src/python/triton/__init__.py
+Saving image...
+Image saved, took 5.35s
+
+Built image im-oi5qYeFy0VXNYVe25j5PDb in 1393.45s
+
+
+✓ Created objects.
+├── ✓ Uploaded PythonPackage:experiments
+├── ✓ Uploaded /home/chenmiaoming/triton-exp
+└── ✓ Created Function collect.
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/experiments/tma_reduction_layout/phase4/phase5/run_artifact_gate.py", line 54, in collect
+    verification = verify_remote_source_manifest(provenance, remote_root)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/experiments/tma_reduction_layout/source_provenance.py", line 237, in verify_remote_source_manifest
+    raise RuntimeError(err_msg)
+RuntimeError: CRITICAL: Remote uploaded source-file fidelity verification failed!
+Missing files (2): ['experiments/tma_reduction_layout/phase4/phase5/stage_b_audit.py', 'experiments/tma_reduction_layout/phase4/phase5/validate_artifact_gate.py']
+Mismatched files (0): []
+Local manifest digest: 8ba1036d65da7d3b2f6852341476dd16d5626ca992f9ca958845719f3451eef9
+Remote subset digest:  0e9b43bbea64aeabcf627e1acca401031a4d725f0a75bd7f57339f13a71cc715
+Stopping app - uncaught exception raised locally: RuntimeError("CRITICAL: Remote uploaded source-file fidelity verification failed!\nMissing files (2): ['experiments/tma_reduction_layout/phase4/phase5/stage_b_audit.py', 'experiments/tma_reduction_layout/phase4/phase5/validate_artifact_gate.py']\nMismatched files (0): []\nLocal manifest digest: 8ba1036d65da7d3b2f6852341476dd16d5626ca992f9ca958845719f3451eef9\nRemote subset digest:  0e9b43bbea64aeabcf627e1acca401031a4d725f0a75bd7f57339f13a71cc715").
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /run_artifact_gate.py:332 in main                                            │
+│                                                                              │
+│   331 │   │   raise RuntimeError("Wrong Phase 5 baseline")                   │
+│ ❱ 332 │   archive = collect.remote(provenance, frozen)                       │
+│   333 │   OUT.mkdir(parents=True)                                            │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_obje │
+│ ct.py:45 in wrapped                                                          │
+│                                                                              │
+│    44 │   │   await self.hydrate()                                           │
+│ ❱  45 │   │   return await method(self, *args, **kwargs)                     │
+│    46                                                                        │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_func │
+│ tions.py:2067 in remote                                                      │
+│                                                                              │
+│   2066 │   │                                                                 │
+│ ❱ 2067 │   │   return await self._call_function(args, kwargs)                │
+│   2068                                                                       │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_func │
+│ tions.py:2004 in _call_function                                              │
+│                                                                              │
+│   2003 │   │                                                                 │
+│ ❱ 2004 │   │   return await invocation.run_function()                        │
+│   2005                                                                       │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_func │
+│ tions.py:515 in run_function                                                 │
+│                                                                              │
+│    514 │   │   │   # No more retries left.                                   │
+│ ❱  515 │   │   │   return await _process_result(                             │
+│    516 │   │   │   │   await_response.output.result, await_response.output.d │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_util │
+│ s/function_utils.py:572 in _process_result                                   │
+│                                                                              │
+│   571 │   │   │                                                              │
+│ ❱ 572 │   │   │   raise exc_with_hints(exc)                                  │
+│   573                                                                        │
+│                                                                              │
+│     ...Remote call to Modal Function (ta-01M410SV5JHAQ72R83GY89N3DR)...      │
+│                                                                              │
+│ /root/experiments/tma_reduction_layout/phase4/phase5/run_artifact_gate.py:54 │
+│ in collect                                                                   │
+│                                                                              │
+│ ❱ 54 verification = verify_remote_source_manifest(provenance, remote_root)   │
+│                                                                              │
+│                                                                              │
+│ /opt/triton-src/experiments/tma_reduction_layout/source_provenance.py:237 in │
+│ verify_remote_source_manifest                                                │
+│                                                                              │
+│ ❱ 237 raise RuntimeError(err_msg)                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: CRITICAL: Remote uploaded source-file fidelity verification 
+failed!
+Missing files (2): 
+['experiments/tma_reduction_layout/phase4/phase5/stage_b_audit.py', 
+'experiments/tma_reduction_layout/phase4/phase5/validate_artifact_gate.py']
+Mismatched files (0): []
+Local manifest digest: 
+8ba1036d65da7d3b2f6852341476dd16d5626ca992f9ca958845719f3451eef9
+Remote subset digest:  
+0e9b43bbea64aeabcf627e1acca401031a4d725f0a75bd7f57339f13a71cc715
