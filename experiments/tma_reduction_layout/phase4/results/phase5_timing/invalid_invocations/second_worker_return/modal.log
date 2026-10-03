@@ -1,0 +1,96 @@
+✓ Initialized. View run at 
+https://modal.com/apps/miaomingc/main/ap-XDaG4BG8GKPI0MfOB7JR4n
+Building image im-L7JKe2MxhB7E6K42gS1v47
+
+=> Step 0: FROM base
+
+=> Step 1: ENV PYTHONPATH=/opt/triton-src
+Saving image...
+Image saved, took 944.94ms
+
+Built image im-L7JKe2MxhB7E6K42gS1v47 in 2.88s
+
+
+Building image im-b5clKBuoy05vqm0ywJe6E6
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 1.06s
+
+Built image im-b5clKBuoy05vqm0ywJe6E6 in 14.32s
+
+
+✓ Created objects.
+├── ✓ Uploaded 
+│   /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5
+│   /run_timing.py
+├── ✓ Uploaded /home/chenmiaoming/triton-exp
+└── ✓ Created Function benchmark.
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+Stopping app - uncaught exception raised locally: RuntimeError('Invalid attempt already retained; STOP instead of overwriting').
+[modal-client] 2026-10-03T23:26:01+0800 Loop attempt for _run_app.<locals>.heartbeat failed
+Traceback (most recent call last):
+  File "/home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_utils/async_utils.py", line 588, in loop_coro
+    await asyncio.wait_for(async_f(), timeout=timeout)
+  File "/home/chenmiaoming/miniforge3/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/runner.py", line 66, in _heartbeat
+    await client._stub.AppHeartbeat(request, retry=Retry(attempt_timeout=HEARTBEAT_TIMEOUT))
+modal.exception.ConflictError: App state is APP_STATE_STOPPED
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /run_timing.py:258 in main                                                   │
+│                                                                              │
+│   257 │   │   │   │   │   raw = benchmark.remote(provenance, cases, planned, │
+│ ❱ 258 │   │   │   │   │   tc.validate_invocation(raw, planned, cases, binari │
+│   259 │   │   │   │   except Exception as exc:                               │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /timing_contract.py:130 in validate_invocation                               │
+│                                                                              │
+│   129 │   number = planned["invocation"]                                     │
+│ ❱ 130 │   require(raw["status"] == "VALID_PROTOCOL_RUN" and raw["invocation" │
+│   131 │   require(raw["recompilation"] is False and raw["timing_primitive"]  │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /timing_contract.py:51 in require                                            │
+│                                                                              │
+│    50 │   if not test:                                                       │
+│ ❱  51 │   │   raise ValueError(message)                                      │
+│    52                                                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ValueError: Valid invocation identity
+
+During handling of the above exception, another exception occurred:
+
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /run_timing.py:266 in main                                                   │
+│                                                                              │
+│   265 │   │   │   │   │   if invalid_file.exists():                          │
+│ ❱ 266 │   │   │   │   │   │   raise RuntimeError("Invalid attempt already re │
+│   267 │   │   │   │   │   with invalid_file.open("xb") as f:                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Invalid attempt already retained; STOP instead of overwriting

@@ -1,0 +1,148 @@
+✓ Initialized. View run at 
+https://modal.com/apps/miaomingc/main/ap-Lg8AOFCst4uIVfV4sOhzay
+Building image im-kBTgv5o4EObm0KzvrfdVqp
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 808.50ms
+
+Built image im-kBTgv5o4EObm0KzvrfdVqp in 2.98s
+
+
+✓ Created objects.
+├── ✓ Uploaded 
+│   /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5
+│   /run_timing.py
+├── ✓ Uploaded /home/chenmiaoming/triton-exp
+└── ✓ Created Function benchmark.
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+Traceback (most recent call last):
+  File "/root/run_timing.py", line 129, in benchmark
+    descriptors[key] = driver.tensor_map(tensors[cfg][0].data_ptr(), m, n,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase4/archived_launch.py", line 38, in tensor_map
+    self.call("cuTensorMapEncodeTiled", [C.c_void_p, C.c_int, C.c_uint32, C.c_void_p,
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase4/archived_launch.py", line 27, in call
+    raise RuntimeError(f"{name}: CUDA return code {code}")
+RuntimeError: cuTensorMapEncodeTiled: CUDA return code 1
+
+Invalid entire invocation 1/2: Valid invocation identity
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+Traceback (most recent call last):
+  File "/root/run_timing.py", line 129, in benchmark
+    descriptors[key] = driver.tensor_map(tensors[cfg][0].data_ptr(), m, n,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase4/archived_launch.py", line 38, in tensor_map
+    self.call("cuTensorMapEncodeTiled", [C.c_void_p, C.c_int, C.c_uint32, C.c_void_p,
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase4/archived_launch.py", line 27, in call
+    raise RuntimeError(f"{name}: CUDA return code {code}")
+RuntimeError: cuTensorMapEncodeTiled: CUDA return code 1
+
+Invalid entire invocation 1/3: Valid invocation identity
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+Traceback (most recent call last):
+  File "/root/run_timing.py", line 129, in benchmark
+    descriptors[key] = driver.tensor_map(tensors[cfg][0].data_ptr(), m, n,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase4/archived_launch.py", line 38, in tensor_map
+    self.call("cuTensorMapEncodeTiled", [C.c_void_p, C.c_int, C.c_uint32, C.c_void_p,
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase4/archived_launch.py", line 27, in call
+    raise RuntimeError(f"{name}: CUDA return code {code}")
+RuntimeError: cuTensorMapEncodeTiled: CUDA return code 1
+
+Invalid entire invocation 1/4: Valid invocation identity
+Stopping app - uncaught exception raised locally: RuntimeError('Repeated protocol/infrastructure failure; STOP').
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /run_timing.py:274 in main                                                   │
+│                                                                              │
+│   273 │   │   │   │   │   │   f.write(tc.encode(raw))                        │
+│ ❱ 274 │   │   │   │   │   tc.validate_invocation(raw, planned, cases, binari │
+│   275 │   │   │   │   except Exception as exc:                               │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /timing_contract.py:130 in validate_invocation                               │
+│                                                                              │
+│   129 │   number = planned["invocation"]                                     │
+│ ❱ 130 │   require(raw["status"] == "VALID_PROTOCOL_RUN" and raw["invocation" │
+│   131 │   require(raw["recompilation"] is False and raw["timing_primitive"]  │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /timing_contract.py:51 in require                                            │
+│                                                                              │
+│    50 │   if not test:                                                       │
+│ ❱  51 │   │   raise ValueError(message)                                      │
+│    52                                                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ValueError: Valid invocation identity
+
+The above exception was the direct cause of the following exception:
+
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase4/phase5 │
+│ /run_timing.py:292 in main                                                   │
+│                                                                              │
+│   291 │   │   │   │   │   │   raise RuntimeError("Failure retained; STOP unt │
+│ ❱ 292 │   │   │   │   │   if retry == 3: raise RuntimeError("Repeated protoc │
+│   293 │   │   │   │   │   continue                                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Repeated protocol/infrastructure failure; STOP
