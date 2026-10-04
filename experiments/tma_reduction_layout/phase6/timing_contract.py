@@ -32,7 +32,12 @@ def inputs(stage="stage_c"):
         require(stage == "stage_d", "Known frozen stage")
         frozen = c.read(c.OUT / "stage_d_gate/launch_contract.json")
         cases, binaries, plan = frozen["cases"], frozen["binaries"], frozen["schedule"]
-    require(plan == contracts.schedule(cases), "Frozen deterministic complete schedule")
+    if stage == "stage_c":
+        expected_schedule = contracts.schedule(cases)
+    else:
+        from experiments.tma_reduction_layout.phase6 import fresh_contract
+        expected_schedule = fresh_contract.schedule(cases)
+    require(plan == expected_schedule, "Frozen deterministic complete schedule")
     for key, binding in binaries.items():
         path = ROOT / binding["archive_path"]
         require(sha(path.read_bytes()) == binding["archive_sha256"] and

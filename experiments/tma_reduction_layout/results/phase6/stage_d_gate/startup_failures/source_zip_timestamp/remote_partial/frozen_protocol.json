@@ -1,0 +1,90 @@
+{
+  "admission": "Both candidate layouts follow the frozen structural selector; three actual harnesses pass full frozen family/load/loop/resource gates. PRIMARY exact sequence, SECONDARY full opcode multiset. No outcome-based upgrade.",
+  "analysis": {
+    "fit": "Median of 100 samples at each B; three-B OLS with rational input sums; retain intercept, slope, all R2/residuals. Unit ns/additional CTA, not single-CTA latency.",
+    "metrics": "G=canonical default-4 slope; S=single default-4; gR=repeated default-4 at R; DR=gR-g0; etaR=DR-R*D1 for R=2,4,8; beta=OLS slope of gR against R over all five points.",
+    "scope": "No M/lane/warp/register causal decomposition. Single/repeated differences remain cross-harness context diagnostics. No posthoc model or coefficient fitting.",
+    "uncertainty": "Three invocation values plus mean/sample SD; fixed df2 t=4.302652729911275 sign bands. Unresolved is not practical equivalence."
+  },
+  "cache": "Reuse archived supplement CUBINs without building Triton. Fresh compilation uses serialized image builds, persistent triton-build-cache Volume, CCACHE_COMPILERCHECK=content and /cache/triton-home; save pre/post ccache stats. Workspace caches are separate.",
+  "cross_harness_residency": "Report equality across all six case binaries separately. Different occupancy forbids single-factor attribution but does not erase valid predictive observations.",
+  "dimensions": {
+    "B_DESC": 65536,
+    "B_RUN": [
+      16384,
+      32768,
+      65536
+    ],
+    "R": [
+      0,
+      1,
+      2,
+      4,
+      8
+    ],
+    "canonical_R": null,
+    "independent_invocations": 3,
+    "rounds": 10,
+    "samples_per_visit": 10,
+    "single_R": null,
+    "warmups_per_condition": 3
+  },
+  "fresh_domain": {
+    "M": [
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      512,
+      1024
+    ],
+    "N": [
+      16,
+      32,
+      64,
+      128
+    ],
+    "num_warps": [
+      16
+    ]
+  },
+  "fresh_hypotheses": {
+    "H6_01_SINGLE_CONTEXT_TRANSFER": {
+      "FALSIFIED": "MAE_S>=MAE_D AND RMSE_S>=RMSE_D",
+      "INCONCLUSIVE": "mixed ordering, undefined, invalid protocol, or n<5",
+      "SUPPORTED": "MAE_S<MAE_D AND RMSE_S<RMSE_D",
+      "minimum_cases": 5,
+      "population": "ALL_ARTIFACT_ELIGIBLE_FRESH_CASES; case means across three independent invocations",
+      "prediction_D": "G_hat=D1 (coefficient 1, intercept 0)",
+      "prediction_S": "G_hat=S (coefficient 1, intercept 0)"
+    },
+    "H6_02_REPETITION_TREND_TRANSFER": {
+      "FALSIFIED": "MAE_beta>=MAE_D AND RMSE_beta>=RMSE_D",
+      "INCONCLUSIVE": "mixed ordering, undefined, invalid protocol, or n<5",
+      "SUPPORTED": "MAE_beta<MAE_D AND RMSE_beta<RMSE_D",
+      "minimum_cases": 5,
+      "population": "SAME_ALL_ARTIFACT_ELIGIBLE_FRESH_CASES",
+      "prediction_D": "same D1 predictor as H6_01",
+      "prediction_beta": "G_hat=beta (no cross-case calibration)"
+    }
+  },
+  "fresh_role": "PROSPECTIVE_WARP16_EXTRAPOLATION; no prior timing at these case identities",
+  "fresh_strict_scope": "Report the same metrics separately for PRIMARY; PRIMARY n<5 is outcome-independent INCONCLUSIVE_BY_COVERAGE. n>=5 permits this test only within actual coverage, not universal generalization.",
+  "ordering": "Sorted full structural master conditions, cyclic deterministic rotations indexed by invocation and round. Eligibility only filters this order stably; no new seed or performance-based sorting.",
+  "phase": "PHASE_6",
+  "repair": "Only documented protocol/infrastructure failure permits replacing an entire invocation; preserve original return, partial samples, source ZIP and logs. No outcome-based repeats. Persist remote returns before retrieval.",
+  "starting_baseline": "fbc9ae41eb1d79f196bb28b196039a4b3f9671e6",
+  "stop_after": "Stage D prospective analysis and final validation/push; no further stage automatically",
+  "supplement_cases": [
+    "M32_N64_w8",
+    "M64_N64_w8",
+    "M128_N64_w8",
+    "M256_N64_w8",
+    "M512_N64_w8"
+  ],
+  "supplement_role": "OUTCOME_INFORMED_RETROSPECTIVE_MECHANISM_DIAGNOSTIC",
+  "thresholds": "Exact floating comparisons; no tuned tolerance, significance layer, adaptive repeats or case removal. Zero predictor error is also reported as a fixed descriptive reference.",
+  "timing": "Strict H100!:1; three independently dispatched single-use containers. CUDA events with exactly one archived kernel per sample. Every launch guarded by full CUBIN SHA. No Triton import or compilation."
+}
