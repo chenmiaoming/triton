@@ -109,7 +109,7 @@ def validate_invocation(raw, planned, cases, binaries):
     return {"conditions": len(tags), "samples": sum(counts.values()), "gpu_uuid": env["gpu_uuid"]}
 
 
-DERIVED = {"raw_validation.json", "results.json", "summary.md", "analysis_validation.json", "validator_suite.json"}
+DERIVED = {"raw_validation.json", "results.json", "summary.md", "analysis_validation.json", "validator_suite.json", "counter_results.json", "counter_summary.md"}
 
 
 def raw_inventory(root):

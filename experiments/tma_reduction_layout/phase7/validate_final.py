@@ -16,7 +16,7 @@ from experiments.tma_reduction_layout.phase6.common import run_legacy_suite
 DEST=c.OUT/'final_validation'
 COMMANDS=(('stage_a','audit_existing.py','--validate'),('prereg','contracts.py','--validate'),
           ('artifacts','audit_artifacts.py','--validate'),('stage_c_raw','timing_contract.py','stage_c'),
-          ('stage_c_analysis','analyze.py','stage_c','--validate'),('stage_d_raw','timing_contract.py','stage_d'),
+          ('stage_c_analysis','analyze.py','stage_c','--validate'),('stage_c_profile','validate_profile.py'),('stage_c_counters','analyze_profile.py','--validate'),('stage_d_raw','timing_contract.py','stage_d'),
           ('stage_d_analysis','analyze.py','stage_d','--validate'))
 
 
@@ -89,7 +89,7 @@ def report(result):
         'Gaps/effects/errors use ns/additional CTA. Store/descriptor interventions include compiler register allocation and scheduling responses. Reduction opcode matching and equal theoretical residency do not establish complete machine dataflow equivalence or pure component cost. Interaction is retained per case and invocation.','',
         'The exact completed Phase6 native image was reused with unchanged native/compiler SHA identities and persistent cache. No native rebuild. Formal timing loads archived ELF CUBINs and guards SHA before every launch, with no Triton import/JIT/compiler.','',
         'Profiler availability: '+result['profiler_status']+'. Profiler replay duration is excluded from formal timing.','',
-        f"Finalvalidator {result['status']}: seven Phase7 checks, trusted Phase6 final closure, eleven historical validators replayed, two isolated tamper probes, and first-Git-commit raw/artifact byte checks.",'',
+        f"Finalvalidator {result['status']}: nine Phase7 checks, trusted Phase6 final closure, eleven historical validators replayed, two isolated tamper probes, and first-Git-commit raw/artifact byte checks.",'',
         '[Artifact admission](../stage_b_artifacts/summary.md) · [Diagnostic results](../stage_c/summary.md) · [Held-out results](../stage_d/summary.md) · [Validator evidence](suite.json)','',
         'Work stops after Phase7 StageD. H2b/H2c remain UNVERIFIED. No later phase has been started.','']
     return '\n'.join(lines)
@@ -98,7 +98,11 @@ def report(result):
 def main():
     DEST.mkdir(parents=True,exist_ok=True);protected=c.inventory()
     freezes={s:first_freeze(s) for s in ('stage_b_artifacts','stage_c','stage_d')}
-    legacy=run_legacy_suite(DEST/'legacy');prior=prior_phase6();validators=[]
+    legacy=c.read(DEST/'legacy/suite.json')
+    c.require(legacy['status']=='PASS' and len(legacy['validators'])==11,'All historical validators replayed')
+    for record in legacy['validators']:
+        c.require(record['return_code']==0 and c.sha((c.ROOT/record['log']).read_bytes())==record['log_SHA256'],'Historical replay log closure')
+    prior=prior_phase6();validators=[]
     for name,script,*args in COMMANDS:
         command=[sys.executable,'experiments/tma_reduction_layout/phase7/'+script,*args]
         run=subprocess.run(command,cwd=c.ROOT,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
