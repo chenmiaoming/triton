@@ -11,7 +11,6 @@ from unittest.mock import patch
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[3]))
 from experiments.tma_reduction_layout.phase7 import common as c, contracts as ct, timing_contract as tc
-from experiments.tma_reduction_layout.phase6.common import run_legacy_suite
 
 DEST=c.OUT/'final_validation'
 COMMANDS=(('stage_a','audit_existing.py','--validate'),('prereg','contracts.py','--validate'),
@@ -81,16 +80,17 @@ def report(result):
     hypotheses=[[scope,h['n'],*[h[name] for name in names]] for scope,h in sorted(fresh['hypotheses'].items())]
     metrics=[[scope,v['n'],p,e['MAE'],e['RMSE']] for scope,v in fresh['predictive_comparisons'].items() if scope!='SECONDARY' for p,e in v['errors'].items()]
     lines=['# Phase7 completion and final evidence closure','',
-        'Stages A–D completed. All4888 earlier experiment files remain byte-identical. No compiler or production heuristic changes.','',
+        'Stages A–D completed. All 4888 earlier experiment files remain byte-identical. No compiler or production heuristic changes.','',
         'StageA audited complete kernel contexts for17 Phase6 cases without GPU. StageB preregistered the four Gluon descriptor/store interventions, canonical reference, nine diagnostic identities and20 entirely unseen identities before compilation/timing. All290 actual binary attempts and deterministic resource failures are retained.','',
         c.table(['Stage','Eligible','Samples','Physical GPU UUIDs'],[[s,len(x['cases']),result['timing'][s]['samples'],result['timing'][s]['physical_GPU_UUID_count']] for s,x in [('stage_c',diag),('stage_d',fresh)]]),'',
         'StageC is an outcome-informed diagnostic cohort; StageD uses the fixed independent cohort and all three uncalibrated hypotheses. No refit, case removal, threshold tuning or outcome-based rerun. Three separately dispatched processes per timing stage; physicalUUID counts are measured, not assumed.','',
         c.table(['Scope','n',*names],hypotheses),'',c.table(['Scope','n','Fixed predictor','MAE','RMSE'],metrics),'',
+        'The all-eligible scope has six cases (one PRIMARY, five SECONDARY); the PRIMARY scope is coverage-inconclusive. All three comparisons satisfy the frozen strict MAE/RMSE decision, but H7_01 improves MAE by only about 0.00009356 ns/CTA (0.0212%). Its SUPPORTED label does not establish a practically large output-store effect. Full-context MAE is about 0.01423 versus host/native 0.44188 ns/CTA. These case-level aggregate errors are heavily influenced by M2048_N32_w16; all five other cases, including near-zero/negative gaps, are retained.','',
         'Gaps/effects/errors use ns/additional CTA. Store/descriptor interventions include compiler register allocation and scheduling responses. Reduction opcode matching and equal theoretical residency do not establish complete machine dataflow equivalence or pure component cost. Interaction is retained per case and invocation.','',
         'The exact completed Phase6 native image was reused with unchanged native/compiler SHA identities and persistent cache. No native rebuild. Formal timing loads archived ELF CUBINs and guards SHA before every launch, with no Triton import/JIT/compiler.','',
         'Profiler availability: '+result['profiler_status']+'. Profiler replay duration is excluded from formal timing.','',
         f"Finalvalidator {result['status']}: nine Phase7 checks, trusted Phase6 final closure, eleven historical validators replayed, two isolated tamper probes, and first-Git-commit raw/artifact byte checks.",'',
-        '[Artifact admission](../stage_b_artifacts/summary.md) · [Diagnostic results](../stage_c/summary.md) · [Held-out results](../stage_d/summary.md) · [Validator evidence](suite.json)','',
+        '[Artifact admission](../stage_b_artifacts/summary.md) · [Diagnostic results](../stage_c/summary.md) · [Counters](../stage_c/profiling/counter_summary.md) · [Held-out results](../stage_d/summary.md) · [Validator evidence](suite.json)','',
         'Work stops after Phase7 StageD. H2b/H2c remain UNVERIFIED. No later phase has been started.','']
     return '\n'.join(lines)
 
