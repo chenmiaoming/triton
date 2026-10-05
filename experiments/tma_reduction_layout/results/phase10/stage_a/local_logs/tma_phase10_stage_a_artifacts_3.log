@@ -1,0 +1,63 @@
+✓ Initialized. View run at 
+https://modal.com/apps/chenmiaoming/main/ap-FF4TL2OlZlCYuYiLgwJhrE
+Building image im-VzKnNVcKNm242WpCkFbdSZ
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Building image im-KVmnBxXjRmXptoqu58vWka
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 705.23ms
+
+Built image im-VzKnNVcKNm242WpCkFbdSZ in 2.23s
+
+
+Image saved, took 670.46ms
+
+Built image im-KVmnBxXjRmXptoqu58vWka in 2.13s
+
+
+✓ Created objects.
+├── ✓ Uploaded 
+│   /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/results/phase
+│   10/stage_a/upstream_source.tar
+├── ✓ Uploaded /tmp/tma-phase10-stage-a-scripts/experiments
+├── ✓ Uploaded 
+│   /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase10/build
+│   _native.py
+├── ✓ Created Function research_sm90.
+├── ✓ Created Function research_sm100.
+├── ✓ Created Function research_sm120.
+├── ✓ Created Function main_sm90.
+├── ✓ Created Function main_sm100.
+└── ✓ Created Function main_sm120.
+Stopping app - uncaught exception raised locally: FileExistsError(17, 'File exists').
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase10/run_a │
+│ rtifacts.py:147 in main                                                      │
+│                                                                              │
+│   146 │   │   │   call=function.spawn(protocol)                              │
+│ ❱ 147 │   │   │   c.write_once(root/'dispatch.json',{'call_id':call.object_i │
+│   148 │   │   │   result=call.get()                                          │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase10/commo │
+│ n.py:21 in write_once                                                        │
+│                                                                              │
+│   20 │   data = value if isinstance(value,bytes) else encode(value)          │
+│ ❱ 21 │   with path.open('xb') as f:                                          │
+│   22 │   │   f.write(data)                                                   │
+│                                                                              │
+│ /home/chenmiaoming/miniforge3/lib/python3.12/pathlib.py:1013 in open         │
+│                                                                              │
+│   1012 │   │   │   encoding = io.text_encoding(encoding)                     │
+│ ❱ 1013 │   │   return io.open(self, mode, buffering, encoding, errors, newli │
+│   1014                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FileExistsError: [Errno 17] File exists: 
+'/home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/results/phase10/
+stage_a/artifacts/sm100/main/dispatch.json'

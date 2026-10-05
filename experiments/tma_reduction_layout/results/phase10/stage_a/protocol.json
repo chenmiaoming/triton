@@ -1,0 +1,82 @@
+{
+  "baseline_experiment_HEAD": "e6c525e7d125bfc147e92c98afcf7ef8093f94e9",
+  "cases": [
+    {
+      "M": 32,
+      "N": 128,
+      "num_warps": 4
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "num_warps": 8
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "num_warps": 8
+    }
+  ],
+  "global_shape": [
+    1,
+    8192,
+    8192
+  ],
+  "next": "implement a frozen compiler prototype with lit tests; held-out production-patch timing is a later separately authorized stage",
+  "no_outcome_reruns": true,
+  "paths": [
+    "host",
+    "device"
+  ],
+  "phase": "10",
+  "repair": {
+    "correction": "fresh JITFunction per condition; actual post-compile hook count; final LocalLoad layout assertion; full artifact and timing run replacement; no outcome-based rerun",
+    "prior_run": "invalid_invocations/jit_cache_alias",
+    "reason": "research default/vector4 reused one in-memory JIT object and produced identical vector8 binaries; whole prior artifact/timing run invalid for the intended contrast"
+  },
+  "review_url": "https://github.com/triton-lang/triton/pull/11991#pullrequestreview-5346968250",
+  "scope": "current-main residual audit; research_vector4 uses the historical experimental compiler, not a patch to current main",
+  "source_tar_SHA256": "c28f32cc23f6b97a7d9b6124c741130c5d52a103c44afc4ad19c222c8bd7bbfd",
+  "stage": "A",
+  "targets": {
+    "sm100": {
+      "cc": [
+        10,
+        0
+      ],
+      "gpu": "B200:1",
+      "name": "B200"
+    },
+    "sm120": {
+      "cc": [
+        12,
+        0
+      ],
+      "gpu": "RTX-PRO-6000:1",
+      "name": "RTX PRO 6000"
+    },
+    "sm90": {
+      "cc": [
+        9,
+        0
+      ],
+      "gpu": "H100!:1",
+      "name": "H100"
+    }
+  },
+  "timing": {
+    "invocations": 3,
+    "metric": "CUDA driver event whole-kernel us; one archived CUBIN launch per sample",
+    "paired_same_worker": true,
+    "rounds": 10,
+    "rule": "per invocation median; descriptive mean and t(df2) band; fixed 3% practical threshold",
+    "samples_per_visit": 5,
+    "warmups": 3
+  },
+  "upstream_HEAD": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "variants": [
+    "upstream_main",
+    "research_default",
+    "research_vector4"
+  ]
+}
