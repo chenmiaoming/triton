@@ -1,0 +1,117 @@
+{
+  "checks": [
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase9.preregister",
+        "--validate"
+      ],
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "StageA PASS; 9489 prior files protected; 18 pairs/target\n"
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase9.audit_artifacts",
+        "--validate"
+      ],
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "sm90 artifact gate PASS: 18/18 pairs\nsm100 artifact gate PASS: 18/18 pairs\nsm120 artifact gate PASS: 16/18 pairs\n"
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase9.timing_contract"
+      ],
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "{\n  \"eligible_pairs\": 18,\n  \"physical_GPU_UUIDs\": [\n    \"GPU-7aa56364-bf69-e945-dada-5d834a054492\",\n    \"GPU-8e2b74c8-0854-4190-a9dd-3864c45e53a0\",\n    \"GPU-deb54391-3471-a0d2-f07a-4306533e493d\"\n  ],\n  \"processes\": 3,\n  \"samples\": 32400,\n  \"status\": \"PASS\",\n  \"target\": \"sm90\"\n}\n{\n  \"eligible_pairs\": 18,\n  \"physical_GPU_UUIDs\": [\n    \"GPU-19684a18-dfd6-0e56-d6e6-31829fab5966\",\n    \"GPU-2a44da9c-295f-e231-14be-130d454725d0\",\n    \"GPU-3db5d783-6b79-65ca-9757-96c85e3b47ef\"\n  ],\n  \"processes\": 3,\n  \"samples\": 32400,\n  \"status\": \"PASS\",\n  \"target\": \"sm100\"\n}\n{\n  \"eligible_pairs\": 16,\n  \"physical_GPU_UUIDs\": [\n    \"GPU-31f570fa-cff5-4cbe-0958-f3d1dcb4bcde\",\n    \"GPU-7dfdfe52-1090-4281-8d4e-bd1a8727c4fa\"\n  ],\n  \"processes\": 3,\n  \"samples\": 28800,\n  \"status\": \"PASS\",\n  \"target\": \"sm120\"\n}\n"
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase9.analyze",
+        "--validate"
+      ],
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "sm90 {'reduction': {'BENEFIT': 6, 'WITHIN_PRACTICAL_BAND': 6}, 'load_copy': {'WITHIN_PRACTICAL_BAND': 3}, 'store_copy': {'WITHIN_PRACTICAL_BAND': 3}} PASS\nsm100 {'reduction': {'BENEFIT': 8, 'WITHIN_PRACTICAL_BAND': 4}, 'load_copy': {'WITHIN_PRACTICAL_BAND': 3}, 'store_copy': {'WITHIN_PRACTICAL_BAND': 3}} PASS\nsm120 {'reduction': {'BENEFIT': 3, 'UNAVAILABLE': 2, 'WITHIN_PRACTICAL_BAND': 7}, 'load_copy': {'WITHIN_PRACTICAL_BAND': 3}, 'store_copy': {'WITHIN_PRACTICAL_BAND': 3}} PASS\n"
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase9.scope",
+        "--validate"
+      ],
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "Scope report PASS; global vector4 policy justified=False; PR approval required\n"
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.validate_final",
+        "--committed"
+      ],
+      "return_code": 0,
+      "stderr": "",
+      "stdout": "stage_b {'first_commit': '147123b136bd5c2fe9d634169fbebd9934163f4f', 'protected_files': 1158}\nstage_c {'first_commit': 'f4eb82d7bd28b209d5df7b198fb359ed4604f37f', 'protected_files': 42}\nstage_d {'first_commit': 'af64d2f478f3d09c1fb1966307cd7a8e86293fd1', 'protected_files': 17}\nPASS committed Phase8 final closure; 8174 prior files unchanged; no writes\n"
+    }
+  ],
+  "committed_originals": [
+    {
+      "first_commit": "7946f20e87ae27879ff06747e2e0e2d080b03361",
+      "original_files": 1324,
+      "stage": "stage_b",
+      "status": "PASS"
+    },
+    {
+      "first_commit": "ec6d2de14cadb0d4603b87a647e14c68d1550992",
+      "original_files": 44,
+      "stage": "stage_c",
+      "status": "PASS"
+    }
+  ],
+  "independent_statistics": {
+    "independently_rederived_condition_medians": 936,
+    "status": "PASS"
+  },
+  "integrity_probes": [
+    {
+      "probe": "actual_argument_flip",
+      "reason": "Actual marshalled kernel arguments",
+      "status": "REJECTED_AS_REQUIRED"
+    },
+    {
+      "probe": "launch_SHA_flip",
+      "reason": "Every timed launch SHA guard",
+      "status": "REJECTED_AS_REQUIRED"
+    },
+    {
+      "probe": "frozen_order_swap",
+      "reason": "Frozen visit order",
+      "status": "REJECTED_AS_REQUIRED"
+    },
+    {
+      "probe": "positive_finite_sample_byte_mutation",
+      "reason": "Frozen original bytes: /tmp/tma-phase9-tamper-v6mkp1yi",
+      "semantic_protocol_remains_valid": true,
+      "status": "REJECTED_AS_REQUIRED"
+    }
+  ],
+  "no_PR_created": true,
+  "no_compiler_edit": true,
+  "protected_prior_files": 9489,
+  "same_compiler_source_across_targets": true,
+  "same_timing_source_across_targets": true,
+  "status": "PASS",
+  "stop_after_phase9": true
+}

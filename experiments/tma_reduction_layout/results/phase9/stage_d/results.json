@@ -1,0 +1,873 @@
+{
+  "PR_requires_user_approval": true,
+  "global_vector4_policy_justified": false,
+  "limitations": [
+    "same native compiler but architecture-selected ptxas/toolchain identities differ and are recorded",
+    "three separate timing processes may reuse a physical GPU; UUIDs measured, not assumed",
+    "process bands are descriptive and not familywise corrected",
+    "historically selected shapes and a limited BF16/max kernel family; no arbitrary workload or all-TMA safety claim",
+    "unavailable shapes are not performance equivalence; throughput effects are not intrinsic descriptor/lane/bank latency"
+  ],
+  "next_fix_requirements": [
+    "identify original good/bad compiler contrast separately from optimization baseline",
+    "use explicit target/IR applicability conditions; descriptor load/reduction context analysis belongs in an analysis/transformation",
+    "preserve descriptor store and unrelated consumers unless independently justified",
+    "freeze a minimal patch and verify it on new cases before claiming held-out policy validation",
+    "retain all regressions/resource exclusions; no threshold tuning or negative-case removal"
+  ],
+  "no_PR_created": true,
+  "no_production_change": true,
+  "reason": "Finite retrospective matrix and incomplete/uncertain safety coverage do not establish a universal vector4 policy",
+  "regressions": [],
+  "secondary_regressions": [],
+  "secondary_unresolved": [
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          2.057289193977884,
+          0.5415629499548398,
+          -0.16038302973964855
+        ],
+        "lower_percent": -2.0028175333696607,
+        "mean_percent": 0.8128230380643584,
+        "sample_SD_percent": 1.1334478591946584,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 60.175999999046326,
+            "default_us": 61.43999844789505,
+            "difference_us": 1.2639984488487244
+          },
+          "2": {
+            "cand4_us": 58.768000453710556,
+            "default_us": 59.087999165058136,
+            "difference_us": 0.31999871134757996
+          },
+          "3": {
+            "cand4_us": 59.95200015604496,
+            "default_us": 59.856001287698746,
+            "difference_us": -0.0959988683462143
+          }
+        },
+        "upper_percent": 3.628463609498377
+      },
+      "pair": "M32_N64_w8:store_copy",
+      "target": "sm90"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          -0.5219185560611763,
+          -1.4095759157009407,
+          0.8868029541677687
+        ],
+        "lower_percent": -3.224862654684702,
+        "mean_percent": -0.34823050586478277,
+        "sample_SD_percent": 1.1580002731349597,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 61.63199990987778,
+            "default_us": 61.3120011985302,
+            "difference_us": -0.31999871134757996
+          },
+          "2": {
+            "cand4_us": 61.00800074636936,
+            "default_us": 60.15999987721443,
+            "difference_us": -0.8480008691549301
+          },
+          "3": {
+            "cand4_us": 60.80000102519989,
+            "default_us": 61.344001442193985,
+            "difference_us": 0.5440004169940948
+          }
+        },
+        "upper_percent": 2.528401642955137
+      },
+      "pair": "M32_N128_w4:reduction",
+      "target": "sm90"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          0.8593461808246332,
+          -1.533301865311437,
+          -4.309546520762334
+        ],
+        "lower_percent": -8.087178479234407,
+        "mean_percent": -1.6611674017497124,
+        "sample_SD_percent": 2.5868175692704423,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 35.071998834609985,
+            "default_us": 35.37600114941597,
+            "difference_us": 0.3040023148059845
+          },
+          "2": {
+            "cand4_us": 33.904001116752625,
+            "default_us": 33.39200094342232,
+            "difference_us": -0.512000173330307
+          },
+          "3": {
+            "cand4_us": 36.01599857211113,
+            "default_us": 34.52799841761589,
+            "difference_us": -1.4880001544952393
+          }
+        },
+        "upper_percent": 4.764843675734982
+      },
+      "pair": "M32_N16_w4:reduction",
+      "target": "sm90"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          2.085339415464362,
+          2.10862731982628,
+          0.5937472601471417
+        ],
+        "lower_percent": -0.5602570082667635,
+        "mean_percent": 1.5959046651459279,
+        "sample_SD_percent": 0.8679718773772674,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 48.8319993019104,
+            "default_us": 49.87199977040291,
+            "difference_us": 1.040000468492508
+          },
+          "2": {
+            "cand4_us": 49.02400076389313,
+            "default_us": 50.08000135421753,
+            "difference_us": 1.0560005903244019
+          },
+          "3": {
+            "cand4_us": 50.89600011706352,
+            "default_us": 51.19999870657921,
+            "difference_us": 0.30399858951568604
+          }
+        },
+        "upper_percent": 3.7520663385586195
+      },
+      "pair": "M32_N256_w4:reduction",
+      "target": "sm100"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          -3.9895644643132773,
+          -5.548298355018597,
+          1.4092261781745823
+        ],
+        "lower_percent": -11.779412050651489,
+        "mean_percent": -2.7095455470524303,
+        "sample_SD_percent": 3.651112601510047,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 89.24800157546997,
+            "default_us": 85.82399785518646,
+            "difference_us": -3.4240037202835083
+          },
+          "2": {
+            "cand4_us": 90.40000289678574,
+            "default_us": 85.64799651503563,
+            "difference_us": -4.752006381750107
+          },
+          "3": {
+            "cand4_us": 86.19200065732002,
+            "default_us": 87.42400258779526,
+            "difference_us": 1.232001930475235
+          }
+        },
+        "upper_percent": 6.360320956546628
+      },
+      "pair": "M256_N64_w8:reduction",
+      "target": "sm100"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          -2.1806855623476515,
+          -2.8126549475634057,
+          1.204457110118747
+        ],
+        "lower_percent": -6.628906125496252,
+        "mean_percent": -1.2629611332641035,
+        "sample_SD_percent": 2.1600835439390713,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 162.6880019903183,
+            "default_us": 159.2160016298294,
+            "difference_us": -3.4720003604888916
+          },
+          "2": {
+            "cand4_us": 163.7599989771843,
+            "default_us": 159.28000211715698,
+            "difference_us": -4.479996860027313
+          },
+          "3": {
+            "cand4_us": 158.79999846220016,
+            "default_us": 160.73599457740784,
+            "difference_us": 1.9359961152076721
+          }
+        },
+        "upper_percent": 4.102983858968045
+      },
+      "pair": "M512_N64_w8:reduction",
+      "target": "sm100"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          -2.4157516565661123,
+          -0.8557451210345765,
+          -3.1317151258102203
+        ],
+        "lower_percent": -5.025386676730306,
+        "mean_percent": -2.134403967803636,
+        "sample_SD_percent": 1.1637771509780561,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 54.9440011382103,
+            "default_us": 53.647998720407486,
+            "difference_us": -1.2960024178028107
+          },
+          "2": {
+            "cand4_us": 52.799999713897705,
+            "default_us": 52.352000027894974,
+            "difference_us": -0.4479996860027313
+          },
+          "3": {
+            "cand4_us": 53.74399945139885,
+            "default_us": 52.112000063061714,
+            "difference_us": -1.6319993883371353
+          }
+        },
+        "upper_percent": 0.7565787411230334
+      },
+      "pair": "M32_N64_w8:load_copy",
+      "target": "sm120"
+    },
+    {
+      "B_RUN": 16384,
+      "effect": {
+        "invocation_values_percent": [
+          -3.053881159091715,
+          -7.457093868414812,
+          0.03126489427351978
+        ],
+        "lower_percent": -12.84219722934792,
+        "mean_percent": -3.4932367110776688,
+        "sample_SD_percent": 3.763463061527035,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 84.76800099015236,
+            "default_us": 82.2560004889965,
+            "difference_us": -2.5120005011558533
+          },
+          "2": {
+            "cand4_us": 87.15200051665306,
+            "default_us": 81.10399916768074,
+            "difference_us": -6.048001348972321
+          },
+          "3": {
+            "cand4_us": 102.31999680399895,
+            "default_us": 102.35199704766273,
+            "difference_us": 0.03200024366378784
+          }
+        },
+        "upper_percent": 5.855723807192582
+      },
+      "pair": "M32_N128_w4:reduction",
+      "target": "sm120"
+    },
+    {
+      "B_RUN": 32768,
+      "effect": {
+        "invocation_values_percent": [
+          -0.54691204555292,
+          -2.989002923022303,
+          -0.40486139506512137
+        ],
+        "lower_percent": -4.922263340848966,
+        "mean_percent": -1.3135921212134483,
+        "sample_SD_percent": 1.452685655239751,
+        "status": "UNRESOLVED",
+        "times": {
+          "1": {
+            "cand4_us": 38.24000060558319,
+            "default_us": 38.03199902176857,
+            "difference_us": -0.20800158381462097
+          },
+          "2": {
+            "cand4_us": 37.487998604774475,
+            "default_us": 36.400001496076584,
+            "difference_us": -1.0879971086978912
+          },
+          "3": {
+            "cand4_us": 35.711999982595444,
+            "default_us": 35.5679988861084,
+            "difference_us": -0.1440010964870453
+          }
+        },
+        "upper_percent": 2.295079098422069
+      },
+      "pair": "M32_N16_w4:reduction",
+      "target": "sm120"
+    }
+  ],
+  "status": "CROSS_ARCHITECTURE_SCOPE_ASSESSED",
+  "stop_after_phase9": true,
+  "targets": {
+    "sm100": {
+      "original_case": {
+        "effects_by_B_RUN": {
+          "16384": {
+            "invocation_values_percent": [
+              16.005038355438064,
+              16.1593961336087,
+              15.223332418565693
+            ],
+            "lower_percent": 14.549263880709663,
+            "mean_percent": 15.795922302537486,
+            "sample_SD_percent": 0.501847548903615,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 42.65600070357323,
+                "default_us": 50.783999264240265,
+                "difference_us": 8.127998560667038
+              },
+              "2": {
+                "cand4_us": 42.75200143456459,
+                "default_us": 50.992000848054886,
+                "difference_us": 8.239999413490295
+              },
+              "3": {
+                "cand4_us": 44.64000090956688,
+                "default_us": 52.65599861741066,
+                "difference_us": 8.01599770784378
+              }
+            },
+            "upper_percent": 17.04258072436531
+          },
+          "32768": {
+            "invocation_values_percent": [
+              16.28056333031133,
+              16.26002900255127,
+              15.900500380622391
+            ],
+            "lower_percent": 15.61605038189072,
+            "mean_percent": 16.147030904494997,
+            "sample_SD_percent": 0.2137484246838223,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 83.26400071382523,
+                "default_us": 99.45599734783173,
+                "difference_us": 16.1919966340065
+              },
+              "2": {
+                "cand4_us": 83.47200229763985,
+                "default_us": 99.67999905347824,
+                "difference_us": 16.207996755838394
+              },
+              "3": {
+                "cand4_us": 85.4720026254654,
+                "default_us": 101.6319990158081,
+                "difference_us": 16.159996390342712
+              }
+            },
+            "upper_percent": 16.678011427099275
+          },
+          "65536": {
+            "invocation_values_percent": [
+              16.711407783536256,
+              16.30763910200568,
+              16.34024776581125
+            ],
+            "lower_percent": 15.89591601118537,
+            "mean_percent": 16.453098217117727,
+            "sample_SD_percent": 0.2242960216238618,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 158.84800255298615,
+                "default_us": 190.71999937295914,
+                "difference_us": 31.871996819972992
+              },
+              "2": {
+                "cand4_us": 159.13600474596024,
+                "default_us": 190.14400243759155,
+                "difference_us": 31.007997691631317
+              },
+              "3": {
+                "cand4_us": 161.29600256681442,
+                "default_us": 192.80000030994415,
+                "difference_us": 31.50399774312973
+              }
+            },
+            "upper_percent": 17.010280423050084
+          }
+        },
+        "eligible": true,
+        "pair": "M32_N64_w8:reduction",
+        "primary": {
+          "invocation_values_percent": [
+            16.711407783536256,
+            16.30763910200568,
+            16.34024776581125
+          ],
+          "lower_percent": 15.89591601118537,
+          "mean_percent": 16.453098217117727,
+          "sample_SD_percent": 0.2242960216238618,
+          "status": "BENEFIT",
+          "times": {
+            "1": {
+              "cand4_us": 158.84800255298615,
+              "default_us": 190.71999937295914,
+              "difference_us": 31.871996819972992
+            },
+            "2": {
+              "cand4_us": 159.13600474596024,
+              "default_us": 190.14400243759155,
+              "difference_us": 31.007997691631317
+            },
+            "3": {
+              "cand4_us": 161.29600256681442,
+              "default_us": 192.80000030994415,
+              "difference_us": 31.50399774312973
+            }
+          },
+          "upper_percent": 17.010280423050084
+        },
+        "resource_context": {
+          "eligible": true,
+          "origin": "original canonical positive case",
+          "pair": "M32_N64_w8:reduction",
+          "registers": {
+            "4": 22,
+            "default": 30
+          },
+          "resident_blocks": {
+            "4": 8,
+            "default": 8
+          },
+          "resource_stratum": "MATCHED_ZERO_LOCAL_RESIDENCY",
+          "same_CUBIN": false,
+          "target": "sm100"
+        },
+        "secondary_grid_slope_difference_ns_per_additional_CTA": {
+          "invocation_values": [
+            0.4824218454554545,
+            0.46156526423146715,
+            0.47649275204873565
+          ],
+          "mean": 0.4734932872452191,
+          "sample_SD": 0.010746945469241318
+        },
+        "status": "BENEFIT",
+        "target": "sm100"
+      },
+      "status_counts": {
+        "load_copy": {
+          "WITHIN_PRACTICAL_BAND": 3
+        },
+        "reduction": {
+          "BENEFIT": 8,
+          "WITHIN_PRACTICAL_BAND": 4
+        },
+        "store_copy": {
+          "WITHIN_PRACTICAL_BAND": 3
+        }
+      },
+      "validation": {
+        "eligible_pairs": 18,
+        "physical_GPU_UUIDs": [
+          "GPU-19684a18-dfd6-0e56-d6e6-31829fab5966",
+          "GPU-2a44da9c-295f-e231-14be-130d454725d0",
+          "GPU-3db5d783-6b79-65ca-9757-96c85e3b47ef"
+        ],
+        "processes": 3,
+        "samples": 32400,
+        "status": "PASS",
+        "target": "sm100"
+      }
+    },
+    "sm120": {
+      "original_case": {
+        "effects_by_B_RUN": {
+          "16384": {
+            "invocation_values_percent": [
+              32.11930103266099,
+              32.70944727969974,
+              32.53968124234336
+            ],
+            "lower_percent": 31.701430816896035,
+            "mean_percent": 32.456143184901364,
+            "sample_SD_percent": 0.30381261248402125,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 37.87199966609478,
+                "default_us": 55.79200014472008,
+                "difference_us": 17.920000478625298
+              },
+              "2": {
+                "cand4_us": 36.240000277757645,
+                "default_us": 53.85600030422211,
+                "difference_us": 17.616000026464462
+              },
+              "3": {
+                "cand4_us": 35.360001027584076,
+                "default_us": 52.41600051522255,
+                "difference_us": 17.055999487638474
+              }
+            },
+            "upper_percent": 33.21085555290669
+          },
+          "32768": {
+            "invocation_values_percent": [
+              22.01846139845171,
+              20.332718497297364,
+              13.758609281409367
+            ],
+            "lower_percent": 7.8615932725518025,
+            "mean_percent": 18.703263059052812,
+            "sample_SD_percent": 4.364359405201498,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 97.29600325226784,
+                "default_us": 124.76799637079239,
+                "difference_us": 27.47199311852455
+              },
+              "2": {
+                "cand4_us": 96.54399752616882,
+                "default_us": 121.18399888277054,
+                "difference_us": 24.640001356601715
+              },
+              "3": {
+                "cand4_us": 106.20799660682678,
+                "default_us": 123.1519989669323,
+                "difference_us": 16.944002360105515
+              }
+            },
+            "upper_percent": 29.544932845553824
+          },
+          "65536": {
+            "invocation_values_percent": [
+              17.180787722272314,
+              14.681169570834566,
+              14.411053572603494
+            ],
+            "lower_percent": 11.630773064447986,
+            "mean_percent": 15.424336955236791,
+            "sample_SD_percent": 1.5271149714051815,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 209.6319943666458,
+                "default_us": 253.12000513076782,
+                "difference_us": 43.48801076412201
+              },
+              "2": {
+                "cand4_us": 209.58399772644043,
+                "default_us": 245.64799666404724,
+                "difference_us": 36.06399893760681
+              },
+              "3": {
+                "cand4_us": 209.1519981622696,
+                "default_us": 244.36800181865692,
+                "difference_us": 35.21600365638733
+              }
+            },
+            "upper_percent": 19.217900846025596
+          }
+        },
+        "eligible": true,
+        "pair": "M32_N64_w8:reduction",
+        "primary": {
+          "invocation_values_percent": [
+            17.180787722272314,
+            14.681169570834566,
+            14.411053572603494
+          ],
+          "lower_percent": 11.630773064447986,
+          "mean_percent": 15.424336955236791,
+          "sample_SD_percent": 1.5271149714051815,
+          "status": "BENEFIT",
+          "times": {
+            "1": {
+              "cand4_us": 209.6319943666458,
+              "default_us": 253.12000513076782,
+              "difference_us": 43.48801076412201
+            },
+            "2": {
+              "cand4_us": 209.58399772644043,
+              "default_us": 245.64799666404724,
+              "difference_us": 36.06399893760681
+            },
+            "3": {
+              "cand4_us": 209.1519981622696,
+              "default_us": 244.36800181865692,
+              "difference_us": 35.21600365638733
+            }
+          },
+          "upper_percent": 19.217900846025596
+        },
+        "resource_context": {
+          "eligible": true,
+          "origin": "original canonical positive case",
+          "pair": "M32_N64_w8:reduction",
+          "registers": {
+            "4": 22,
+            "default": 29
+          },
+          "resident_blocks": {
+            "4": 6,
+            "default": 6
+          },
+          "resource_stratum": "MATCHED_ZERO_LOCAL_RESIDENCY",
+          "same_CUBIN": false,
+          "target": "sm120"
+        },
+        "secondary_grid_slope_difference_ns_per_additional_CTA": {
+          "invocation_values": [
+            0.5156950107578142,
+            0.37151224725156284,
+            0.3963449444199796
+          ],
+          "mean": 0.42785073414311886,
+          "sample_SD": 0.0770819590606901
+        },
+        "status": "BENEFIT",
+        "target": "sm120"
+      },
+      "status_counts": {
+        "load_copy": {
+          "WITHIN_PRACTICAL_BAND": 3
+        },
+        "reduction": {
+          "BENEFIT": 3,
+          "UNAVAILABLE": 2,
+          "WITHIN_PRACTICAL_BAND": 7
+        },
+        "store_copy": {
+          "WITHIN_PRACTICAL_BAND": 3
+        }
+      },
+      "validation": {
+        "eligible_pairs": 16,
+        "physical_GPU_UUIDs": [
+          "GPU-31f570fa-cff5-4cbe-0958-f3d1dcb4bcde",
+          "GPU-7dfdfe52-1090-4281-8d4e-bd1a8727c4fa"
+        ],
+        "processes": 3,
+        "samples": 28800,
+        "status": "PASS",
+        "target": "sm120"
+      }
+    },
+    "sm90": {
+      "original_case": {
+        "effects_by_B_RUN": {
+          "16384": {
+            "invocation_values_percent": [
+              30.129386226553454,
+              30.912165135126816,
+              28.282398213627054
+            ],
+            "lower_percent": 26.420330808114333,
+            "mean_percent": 29.774649858435776,
+            "sample_SD_percent": 1.3502951282969864,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 54.43200096487999,
+                "default_us": 77.90399715304375,
+                "difference_us": 23.471996188163757
+              },
+              "2": {
+                "cand4_us": 52.352000027894974,
+                "default_us": 75.77600330114365,
+                "difference_us": 23.424003273248672
+              },
+              "3": {
+                "cand4_us": 54.44800108671188,
+                "default_us": 75.9199969470501,
+                "difference_us": 21.47199586033821
+              }
+            },
+            "upper_percent": 33.128968908757216
+          },
+          "32768": {
+            "invocation_values_percent": [
+              33.32956812875506,
+              33.55186938859109,
+              33.723599031433096
+            ],
+            "lower_percent": 33.04425688556614,
+            "mean_percent": 33.535012182926415,
+            "sample_SD_percent": 0.19755559243775828,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 94.41599994897842,
+                "default_us": 141.61600172519684,
+                "difference_us": 47.200001776218414
+              },
+              "2": {
+                "cand4_us": 92.43200346827507,
+                "default_us": 139.1039937734604,
+                "difference_us": 46.67199030518532
+              },
+              "3": {
+                "cand4_us": 92.38400310277939,
+                "default_us": 139.39200341701508,
+                "difference_us": 47.00800031423569
+              }
+            },
+            "upper_percent": 34.02576748028669
+          },
+          "65536": {
+            "invocation_values_percent": [
+              34.60667550701578,
+              35.01703564851622,
+              34.551538381239496
+            ],
+            "lower_percent": 34.093275536667555,
+            "mean_percent": 34.72508317892383,
+            "sample_SD_percent": 0.2543368023616288,
+            "status": "BENEFIT",
+            "times": {
+              "1": {
+                "cand4_us": 175.56799948215485,
+                "default_us": 268.48000288009644,
+                "difference_us": 92.91200339794159
+              },
+              "2": {
+                "cand4_us": 173.93600195646286,
+                "default_us": 267.66400039196014,
+                "difference_us": 93.72799843549728
+              },
+              "3": {
+                "cand4_us": 175.35999417304993,
+                "default_us": 267.93600618839264,
+                "difference_us": 92.57601201534271
+              }
+            },
+            "upper_percent": 35.35689082118011
+          }
+        },
+        "eligible": true,
+        "pair": "M32_N64_w8:reduction",
+        "primary": {
+          "invocation_values_percent": [
+            34.60667550701578,
+            35.01703564851622,
+            34.551538381239496
+          ],
+          "lower_percent": 34.093275536667555,
+          "mean_percent": 34.72508317892383,
+          "sample_SD_percent": 0.2543368023616288,
+          "status": "BENEFIT",
+          "times": {
+            "1": {
+              "cand4_us": 175.56799948215485,
+              "default_us": 268.48000288009644,
+              "difference_us": 92.91200339794159
+            },
+            "2": {
+              "cand4_us": 173.93600195646286,
+              "default_us": 267.66400039196014,
+              "difference_us": 93.72799843549728
+            },
+            "3": {
+              "cand4_us": 175.35999417304993,
+              "default_us": 267.93600618839264,
+              "difference_us": 92.57601201534271
+            }
+          },
+          "upper_percent": 35.35689082118011
+        },
+        "resource_context": {
+          "eligible": true,
+          "origin": "original canonical positive case",
+          "pair": "M32_N64_w8:reduction",
+          "registers": {
+            "4": 22,
+            "default": 29
+          },
+          "resident_blocks": {
+            "4": 8,
+            "default": 8
+          },
+          "resource_stratum": "MATCHED_ZERO_LOCAL_RESIDENCY",
+          "same_CUBIN": false,
+          "target": "sm90"
+        },
+        "secondary_grid_slope_difference_ns_per_additional_CTA": {
+          "invocation_values": [
+            1.4102261372629852,
+            1.4311522948316582,
+            1.4386164041622709
+          ],
+          "mean": 1.4266649454189715,
+          "sample_SD": 0.014717474043354875
+        },
+        "status": "BENEFIT",
+        "target": "sm90"
+      },
+      "status_counts": {
+        "load_copy": {
+          "WITHIN_PRACTICAL_BAND": 3
+        },
+        "reduction": {
+          "BENEFIT": 6,
+          "WITHIN_PRACTICAL_BAND": 6
+        },
+        "store_copy": {
+          "WITHIN_PRACTICAL_BAND": 3
+        }
+      },
+      "validation": {
+        "eligible_pairs": 18,
+        "physical_GPU_UUIDs": [
+          "GPU-7aa56364-bf69-e945-dada-5d834a054492",
+          "GPU-8e2b74c8-0854-4190-a9dd-3864c45e53a0",
+          "GPU-deb54391-3471-a0d2-f07a-4306533e493d"
+        ],
+        "processes": 3,
+        "samples": 32400,
+        "status": "PASS",
+        "target": "sm90"
+      }
+    }
+  },
+  "unavailable": [
+    {
+      "pair": "M2048_N32_w16:reduction",
+      "status": "UNAVAILABLE",
+      "target": "sm120"
+    },
+    {
+      "pair": "M512_N128_w32:reduction",
+      "status": "UNAVAILABLE",
+      "target": "sm120"
+    }
+  ],
+  "unresolved": []
+}
