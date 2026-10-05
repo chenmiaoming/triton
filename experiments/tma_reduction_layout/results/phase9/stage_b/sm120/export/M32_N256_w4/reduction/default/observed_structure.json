@@ -1,0 +1,97 @@
+{
+  "PTX_target": "sm_120a",
+  "TTGIR_local_operations": [
+    "    %x = ttg.local_alloc : () -> !ttg.memdesc<1x32x256xbf16, #shared, #smem, mutable> loc(#loc20)",
+    "    %x_5 = ttg.local_alloc : () -> !ttg.memdesc<1xi64, #shared1, #smem, mutable> loc(#loc20)",
+    "    %x_6 = ttg.local_load %x : !ttg.memdesc<1x32x256xbf16, #shared, #smem, mutable> -> tensor<1x32x256xbf16, #blocked> loc(#loc20)"
+  ],
+  "initial_localload": [
+    {
+      "line": 228,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r44, %r45, %r46, %r47}, [%r41]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r44, %r45, %r46, %r47}, [%r41];"
+    },
+    {
+      "line": 229,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r48, %r49, %r50, %r51}, [%r41+1024]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r48, %r49, %r50, %r51}, [%r41+1024];"
+    },
+    {
+      "line": 230,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r52, %r53, %r54, %r55}, [%r41+2048]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r52, %r53, %r54, %r55}, [%r41+2048];"
+    },
+    {
+      "line": 231,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r56, %r57, %r58, %r59}, [%r41+3072]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r56, %r57, %r58, %r59}, [%r41+3072];"
+    },
+    {
+      "line": 232,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r60, %r61, %r62, %r63}, [%r43+512]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r60, %r61, %r62, %r63}, [%r43+512];"
+    },
+    {
+      "line": 233,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r64, %r65, %r66, %r67}, [%r43+1536]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r64, %r65, %r66, %r67}, [%r43+1536];"
+    },
+    {
+      "line": 234,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r68, %r69, %r70, %r71}, [%r43+2560]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r68, %r69, %r70, %r71}, [%r43+2560];"
+    },
+    {
+      "line": 235,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r72, %r73, %r74, %r75}, [%r43+3584]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r72, %r73, %r74, %r75}, [%r43+3584];"
+    }
+  ],
+  "layout": {
+    "blocked": {
+      "order": [
+        2,
+        1,
+        0
+      ],
+      "sizePerThread": [
+        1,
+        1,
+        8
+      ],
+      "threadsPerWarp": [
+        1,
+        1,
+        32
+      ],
+      "warpsPerCTA": [
+        1,
+        4,
+        1
+      ]
+    },
+    "shared": {
+      "elementBitWidth": 16,
+      "family": "nvmma_shared",
+      "rank": 3,
+      "swizzlingByteWidth": 128,
+      "transposed": false
+    }
+  }
+}

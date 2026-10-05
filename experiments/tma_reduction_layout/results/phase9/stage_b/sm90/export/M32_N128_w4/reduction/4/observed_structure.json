@@ -1,0 +1,97 @@
+{
+  "PTX_target": "sm_90a",
+  "TTGIR_local_operations": [
+    "    %x = ttg.local_alloc : () -> !ttg.memdesc<1x32x128xbf16, #shared, #smem, mutable> loc(#loc20)",
+    "    %x_5 = ttg.local_alloc : () -> !ttg.memdesc<1xi64, #shared1, #smem, mutable> loc(#loc20)",
+    "    %x_6 = ttg.local_load %x : !ttg.memdesc<1x32x128xbf16, #shared, #smem, mutable> -> tensor<1x32x128xbf16, #blocked> loc(#loc20)"
+  ],
+  "initial_localload": [
+    {
+      "line": 230,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r43, %r44}, [%r40]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r43, %r44}, [%r40];"
+    },
+    {
+      "line": 231,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r45, %r46}, [%r40+1024]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r45, %r46}, [%r40+1024];"
+    },
+    {
+      "line": 232,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r47, %r48}, [%r40+2048]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r47, %r48}, [%r40+2048];"
+    },
+    {
+      "line": 233,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r49, %r50}, [%r40+3072]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r49, %r50}, [%r40+3072];"
+    },
+    {
+      "line": 234,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r51, %r52}, [%r42+512]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r51, %r52}, [%r42+512];"
+    },
+    {
+      "line": 235,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r53, %r54}, [%r42+1536]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r53, %r54}, [%r42+1536];"
+    },
+    {
+      "line": 236,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r55, %r56}, [%r42+2560]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r55, %r56}, [%r42+2560];"
+    },
+    {
+      "line": 237,
+      "opcode": "ld.shared.v2.b32",
+      "operands": "{%r57, %r58}, [%r42+3584]",
+      "predicate": null,
+      "text": "ld.shared.v2.b32 \t{%r57, %r58}, [%r42+3584];"
+    }
+  ],
+  "layout": {
+    "blocked": {
+      "order": [
+        2,
+        1,
+        0
+      ],
+      "sizePerThread": [
+        1,
+        1,
+        4
+      ],
+      "threadsPerWarp": [
+        1,
+        1,
+        32
+      ],
+      "warpsPerCTA": [
+        1,
+        4,
+        1
+      ]
+    },
+    "shared": {
+      "elementBitWidth": 16,
+      "family": "nvmma_shared",
+      "rank": 3,
+      "swizzlingByteWidth": 128,
+      "transposed": false
+    }
+  }
+}

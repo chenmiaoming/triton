@@ -1,0 +1,69 @@
+{
+  "PTX_target": "sm_90a",
+  "TTGIR_local_operations": [
+    "    %x = ttg.local_alloc : () -> !ttg.memdesc<1x32x128xbf16, #shared, #smem, mutable> loc(#loc20)",
+    "    %x_5 = ttg.local_alloc : () -> !ttg.memdesc<1xi64, #shared1, #smem, mutable> loc(#loc20)",
+    "    %x_6 = ttg.local_load %x : !ttg.memdesc<1x32x128xbf16, #shared, #smem, mutable> -> tensor<1x32x128xbf16, #blocked> loc(#loc20)"
+  ],
+  "initial_localload": [
+    {
+      "line": 227,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r40, %r41, %r42, %r43}, [%r39]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r40, %r41, %r42, %r43}, [%r39];"
+    },
+    {
+      "line": 228,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r44, %r45, %r46, %r47}, [%r39+1024]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r44, %r45, %r46, %r47}, [%r39+1024];"
+    },
+    {
+      "line": 229,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r48, %r49, %r50, %r51}, [%r39+2048]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r48, %r49, %r50, %r51}, [%r39+2048];"
+    },
+    {
+      "line": 230,
+      "opcode": "ld.shared.v4.b32",
+      "operands": "{%r52, %r53, %r54, %r55}, [%r39+3072]",
+      "predicate": null,
+      "text": "ld.shared.v4.b32 \t{%r52, %r53, %r54, %r55}, [%r39+3072];"
+    }
+  ],
+  "layout": {
+    "blocked": {
+      "order": [
+        2,
+        1,
+        0
+      ],
+      "sizePerThread": [
+        1,
+        1,
+        8
+      ],
+      "threadsPerWarp": [
+        1,
+        2,
+        16
+      ],
+      "warpsPerCTA": [
+        1,
+        4,
+        1
+      ]
+    },
+    "shared": {
+      "elementBitWidth": 16,
+      "family": "nvmma_shared",
+      "rank": 3,
+      "swizzlingByteWidth": 128,
+      "transposed": false
+    }
+  }
+}
