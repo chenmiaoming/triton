@@ -1,0 +1,168 @@
+✓ Initialized. View run at 
+https://modal.com/apps/chenmiaoming/main/ap-lLS51sDFhAYCjN7OtUGV9p
+Building image im-dNsWKtpbiNzhZUlNOtAogD
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 634.76ms
+
+Built image im-dNsWKtpbiNzhZUlNOtAogD in 2.16s
+
+
+Building image im-vi2wY77cioDzBAtyCi2zva
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 785.20ms
+
+Built image im-vi2wY77cioDzBAtyCi2zva in 2.71s
+
+
+Building image im-ViOE33A7hoRzMYqgFKbsQo
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 786.99ms
+
+Built image im-ViOE33A7hoRzMYqgFKbsQo in 2.45s
+
+
+Building image im-kr31DEEb2WxjmNIWpOVP35
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 737.88ms
+
+Built image im-kr31DEEb2WxjmNIWpOVP35 in 2.28s
+
+
+Building image im-fqy6AvOxSaPYiUwax45cU9
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python3 /opt/phase10-prototype-build.py
+ninja -C /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12
+ninja: Entering directory `/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12'
+[1/22] Linking CXX shared library /opt/triton-src/python/triton/_C/libproton.so
+[2/22] Linking CXX executable third_party/proton/test/unittest/Backend/BackendRegistration
+[3/22] Linking CXX executable third_party/proton/test/unittest/TraceDataIO/TraceDataIO
+[4/22] Linking CXX shared library /opt/triton-src/python/triton/instrumentation/libGPUInstrumentationTestLib.so
+[5/22] Linking CXX executable unittest/Tools/LLVMOptions
+[6/22] Linking CXX executable unittest/Tools/LinearLayout
+[7/22] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o
+FAILED: [code=1] lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o 
+/usr/bin/ccache /usr/bin/clang++  -I/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/lib/Dialect/TritonGPU/Transforms -I/opt/triton-src/lib/Dialect/TritonGPU/Transforms -I/opt/triton-src/include -I/opt/triton-src/. -I/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/include -I/opt/triton-src/third_party -I/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/third_party -isystem /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include -D__STDC_FORMAT_MACROS  -fPIC -fvisibility=hidden -Werror -Wno-covered-switch-default  -O2 -g -std=gnu++20 -fno-exceptions -fno-rtti -MD -MT lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o -MF lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o.d -o lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o -c /opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp
+/opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:108:41: error: no member named 'getInterLayout' in 'mlir::ReduceOpHelper'
+  108 |     auto intermediate = ReduceOpHelper::getInterLayout(ll, axis);
+      |                         ~~~~~~~~~~~~~~~~^
+/opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:137:67: error: too many arguments to function call, expected 0, have 1
+  137 |     auto resultType = dyn_cast<RankedTensorType>(reduce.getResult(0).getType());
+      |                                                  ~~~~~~~~~~~~~~~~ ^
+/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/include/triton/Dialect/Triton/IR/Ops.h.inc:11075:35: note: 'getResult' declared here
+ 11075 |   ::mlir::Operation::result_range getResult() {
+       |                                   ^
+/opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:143:37: error: too many arguments to function call, expected 0, have 1
+  143 |     Value result = reduce.getResult(0);
+      |                    ~~~~~~~~~~~~~~~~ ^
+/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/include/triton/Dialect/Triton/IR/Ops.h.inc:11075:35: note: 'getResult' declared here
+ 11075 |   ::mlir::Operation::result_range getResult() {
+       |                                   ^
+/opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:143:11: error: no viable conversion from '::mlir::Operation::result_range' (aka 'mlir::ResultRange') to 'Value'
+  143 |     Value result = reduce.getResult(0);
+      |           ^        ~~~~~~~~~~~~~~~~~~~
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/Value.h:96:7: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from '::mlir::Operation::result_range' (aka 'mlir::ResultRange') to 'const Value &' for 1st argument
+   96 | class Value {
+      |       ^~~~~
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/Value.h:96:7: note: candidate constructor (the implicit move constructor) not viable: no known conversion from '::mlir::Operation::result_range' (aka 'mlir::ResultRange') to 'Value &&' for 1st argument
+   96 | class Value {
+      |       ^~~~~
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/Value.h:98:13: note: candidate constructor not viable: no known conversion from '::mlir::Operation::result_range' (aka 'mlir::ResultRange') to 'detail::ValueImpl *' for 1st argument
+   98 |   constexpr Value(detail::ValueImpl *impl = nullptr) : impl(impl) {}
+      |             ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/ADT/STLExtras.h:1299:3: note: candidate template ignored: requirement 'std::is_constructible<mlir::Value, llvm::iterator_range<llvm::detail::indexed_accessor_range_base<mlir::ResultRange, mlir::detail::OpResultImpl *, mlir::OpResult, mlir::OpResult, mlir::OpResult>::iterator>>::value' was not satisfied [with RangeT = mlir::Value]
+ 1299 |   operator RangeT() const {
+      |   ^
+In file included from /opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:4:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Dialect/Arith/IR/Arith.h:12:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Bytecode/BytecodeOpInterface.h:17:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Bytecode/BytecodeImplementation.h:19:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/Dialect.h:17:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/OperationSupport.h:23:
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/TypeRange.h:152:51: error: member reference base type 'std::nullptr_t' is not a structure or union
+  152 |   ValueTypeRange(Container &&c) : ValueTypeRange(c.begin(), c.end()) {}
+      |                                                  ~^~~~~~
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:616:58: note: in instantiation of function template specialization 'mlir::ValueTypeRange<mlir::ResultRange>::ValueTypeRange<std::nullptr_t>' requested here
+  616 |   static inline bool isPresent(const T &t) { return t != T(nullptr); }
+      |                                                          ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:624:65: note: in instantiation of member function 'llvm::ValueIsPresent<mlir::ValueTypeRange<mlir::ResultRange>>::isPresent' requested here
+  624 |   return ValueIsPresent<typename simplify_type<T>::SimpleType>::isPresent(
+      |                                                                 ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:644:18: note: in instantiation of function template specialization 'llvm::detail::isPresent<mlir::ValueTypeRange<mlir::ResultRange>>' requested here
+  644 |   assert(detail::isPresent(Val) && "dyn_cast on a non-existent value");
+      |                  ^
+In file included from /opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:4:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Dialect/Arith/IR/Arith.h:12:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Bytecode/BytecodeOpInterface.h:17:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Bytecode/BytecodeImplementation.h:17:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/Attributes.h:12:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/AttributeSupport.h:17:
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/StorageUniquerSupport.h:111:19: error: static assertion failed due to requirement 'std::is_convertible<mlir::RankedTensorType, const mlir::ValueTypeRange<mlir::ResultRange> *>::value': casting from a non-convertible type
+  111 |     static_assert(std::is_convertible<ConcreteT, T>::value,
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:64:57: note: in instantiation of function template specialization 'mlir::detail::StorageUserBase<mlir::RankedTensorType, mlir::TensorType, mlir::detail::RankedTensorTypeStorage, mlir::detail::TypeUniquer, mlir::ShapedType::Trait, mlir::ValueSemantics>::classof<const mlir::ValueTypeRange<mlir::ResultRange> *>' requested here
+   64 |   static inline bool doit(const From &Val) { return To::classof(&Val); }
+      |                                                         ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:81:32: note: in instantiation of member function 'llvm::isa_impl<mlir::RankedTensorType, mlir::ValueTypeRange<mlir::ResultRange>>::doit' requested here
+   81 |     return isa_impl<To, From>::doit(Val);
+      |                                ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:137:37: note: in instantiation of member function 'llvm::isa_impl_cl<mlir::RankedTensorType, const mlir::ValueTypeRange<mlir::ResultRange>>::doit' requested here
+  137 |     return isa_impl_cl<To, FromTy>::doit(Val);
+      |                                     ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:257:58: note: in instantiation of member function 'llvm::isa_impl_wrap<mlir::RankedTensorType, const mlir::ValueTypeRange<mlir::ResultRange>, const mlir::ValueTypeRange<mlir::ResultRange>>::doit' requested here
+  257 |         typename simplify_type<const From>::SimpleType>::doit(f);
+      |                                                          ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:493:16: note: in instantiation of member function 'llvm::CastIsPossible<mlir::RankedTensorType, const mlir::ValueTypeRange<mlir::ResultRange>>::isPossible' requested here
+  493 |     if (!Self::isPossible(f))
+      |                ^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/llvm/Support/Casting.h:645:36: note: in instantiation of member function 'llvm::CastInfo<mlir::RankedTensorType, const mlir::ValueTypeRange<mlir::ResultRange>>::doCastIfPossible' requested here
+  645 |   return CastInfo<To, const From>::doCastIfPossible(Val);
+      |                                    ^
+In file included from /opt/triton-src/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp:4:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Dialect/Arith/IR/Arith.h:12:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Bytecode/BytecodeOpInterface.h:17:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/Bytecode/BytecodeImplementation.h:17:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/Attributes.h:12:
+In file included from /__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/AttributeSupport.h:17:
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/StorageUniquerSupport.h:113:15: error: member reference type 'const mlir::ValueTypeRange<mlir::ResultRange> *' is a pointer; did you mean to use '->'?
+  113 |     return val.getTypeID() == getTypeID();
+      |            ~~~^
+/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/include/mlir/IR/StorageUniquerSupport.h:113:16: error: no member named 'getTypeID' in 'mlir::ValueTypeRange<mlir::ResultRange>'
+  113 |     return val.getTypeID() == getTypeID();
+      |            ~~~ ^
+8 errors generated.
+ninja: build stopped: subcommand failed.
+make: *** [Makefile:19: all] Error 1
+Traceback (most recent call last):
+  File "/opt/phase10-prototype-build.py", line 24, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/opt/phase10-prototype-build.py", line 19, in main
+    if code:raise RuntimeError(f'Build failed: {command}, code={code}')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Build failed: ['make'], code=2
+Terminating task due to error: failed to run builder command "python3 /opt/phase10-prototype-build.py": container exit status: 1
+Runner failed with exit code: -1
+Stopping app - uncaught exception raised locally: ImageBuildError('Image build for im-fqy6AvOxSaPYiUwax45cU9 failed.\nView the build logs:\n  modal image logs im-fqy6AvOxSaPYiUwax45cU9').
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Image build for im-fqy6AvOxSaPYiUwax45cU9 failed.                            │
+│ View the build logs:                                                         │
+│   modal image logs im-fqy6AvOxSaPYiUwax45cU9                                 │
+╰──────────────────────────────────────────────────────────────────────────────╯

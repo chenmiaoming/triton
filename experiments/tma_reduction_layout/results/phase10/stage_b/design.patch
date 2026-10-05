@@ -1,0 +1,389 @@
+diff --git a/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp b/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp
+index 999c0b208c..64d84b9f75 100644
+--- a/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp
++++ b/lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp
+@@ -1,6 +1,7 @@
+ #include <memory>
+ #include <numeric>
+ 
++#include "mlir/Dialect/Arith/IR/Arith.h"
+ #include "mlir/IR/ImplicitLocOpBuilder.h"
+ #include "mlir/Pass/Pass.h"
+ #include "mlir/Pass/PassManager.h"
+@@ -10,6 +11,7 @@
+ #include "triton/Analysis/Utility.h"
+ #include "triton/Dialect/Triton/IR/Utility.h"
+ #include "triton/Dialect/TritonGPU/IR/Dialect.h"
++#include "triton/Dialect/TritonGPU/IR/LinearLayoutConversions.h"
+ #include "triton/Dialect/TritonGPU/Transforms/Passes.h"
+ #include "triton/Dialect/TritonGPU/Transforms/Utility.h"
+ #include "triton/Tools/LayoutUtils.h"
+@@ -22,6 +24,211 @@ namespace gpu {
+ #include "triton/Dialect/TritonGPU/Transforms/Passes.h.inc"
+ 
+ namespace {
++// An instruction-count proxy for a descriptor load followed by a scalar f32
++// reduction. This deliberately keeps synchronization and register footprint as
++// separate constraints: a smaller instruction count cannot pay for an extra
++// rendezvous or a larger live input tensor. It is not a GPU cycle estimate.
++struct DescriptorReductionCost {
++  uint64_t instructions = 0;
++  unsigned barriers = 0;
++  unsigned inputRegisters = 0;
++};
++
++static DescriptorReductionCost getDescriptorReductionCost(
++    RankedTensorType loadType, RankedTensorType reductionType,
++    RankedTensorType resultType, unsigned axis, unsigned vectorSize) {
++  auto *ctx = loadType.getContext();
++  auto reg = StringAttr::get(ctx, "register");
++  auto lane = StringAttr::get(ctx, "lane");
++  auto warp = StringAttr::get(ctx, "warp");
++  auto block = StringAttr::get(ctx, "block");
++  auto ll = toLinearLayout(reductionType).removeZeroBasesAlongDim(reg);
++  auto registers = [&](const LinearLayout &layout) {
++    return layout.removeZeroBasesAlongDim(reg).getInDimSize(reg);
++  };
++  auto axisBits = [&](const LinearLayout &layout, StringAttr dim) {
++    return llvm::count_if(layout.getBases().lookup(dim),
++                          [&](auto &basis) { return basis[axis] != 0; });
++  };
++  DescriptorReductionCost cost;
++  cost.inputRegisters = registers(ll);
++  cost.instructions = llvm::divideCeil(cost.inputRegisters, vectorSize);
++  // The optional widening has one scalar f32 result per logical input.
++  if (loadType.getElementType() != reductionType.getElementType())
++    cost.instructions += cost.inputRegisters;
++
++  auto countConversion = [&](const LinearLayout &src, const LinearLayout &dst) {
++    auto uniqueSrc = src.removeZeroBasesAlongDim(reg);
++    auto uniqueDst = dst.removeZeroBasesAlongDim(reg);
++    auto conversion = minimalCvtLayout(uniqueSrc, uniqueDst);
++    if (conversion.getNumInDims() <= 1)
++      return;
++    bool canShuffle = isPermutationMatrixLayout(uniqueSrc) &&
++                      isPermutationMatrixLayout(uniqueDst);
++    if (canShuffle) {
++      auto local = invertAndComposeLocal(uniqueSrc, uniqueDst, {warp, block});
++      canShuffle = local.isIdentityOnOutDim(warp) &&
++                   local.isIdentityOnOutDim(block) &&
++                   local.sublayoutIsZero({warp, block}, reg);
++    }
++    unsigned transpositions = 0;
++    if (canShuffle) {
++      transpositions =
++          getWarpLayoutConvertDecomposition(uniqueSrc, uniqueDst, 32)
++              .mixedTranspositions.size();
++      canShuffle = transpositions < 2;
++    }
++    if (canShuffle) {
++      // Conservatively charge a shuffle plus two select/permute instructions
++      // per register-lane transposition. Use the lowering's shuffle gate.
++      cost.instructions += (1 + 2 * transpositions) * registers(dst);
++    } else {
++      // A shared-memory round trip has stores, loads, and a rendezvous.
++      // Count scalar transfers conservatively; no assumed vector packing.
++      cost.instructions += registers(src) + registers(dst);
++      ++cost.barriers;
++    }
++  };
++  unsigned before = registers(ll);
++  ll = ReduceOpHelper::zeroBasesAlongDimAndReorder(ll, axis, reg)
++           .removeZeroBasesAlongDim(reg);
++  cost.instructions += before - registers(ll);
++  auto reduceLanes = [&](LinearLayout layout) {
++    // Each lane stage emits a shuffle and one scalar combine operation.
++    cost.instructions += 2 * registers(layout) * axisBits(layout, lane);
++    return ReduceOpHelper::zeroBasesAlongDimAndReorder(layout, axis, lane);
++  };
++  ll = reduceLanes(std::move(ll));
++  auto axisDim = *std::next(ll.getOutDimNames().begin(), axis);
++  unsigned rounds = 0;
++  while (ll.getOutDimSize(axisDim) != 1) {
++    // ReduceOp lowering synchronizes before reusing its temporary storage.
++    if (rounds++ != 0)
++      ++cost.barriers;
++    auto intermediate = ReduceOpHelper::getInterLayout(ll, axis);
++    countConversion(ll, intermediate);
++    ll = reduceLanes(std::move(intermediate));
++  }
++  // Include the conversion back to the existing reduction-result ownership.
++  // This prevents a reduction-local layout from hiding communication at its
++  // output. Later conversion elimination may make this estimate conservative.
++  auto output = removeStandardDim(ll, axis);
++  auto destination = toLinearLayout(resultType);
++  if (output != destination) {
++    ++cost.barriers;
++    countConversion(output, destination);
++  }
++  return cost;
++}
++
++struct OptimizeDescriptorReductionPattern
++    : public OpRewritePattern<triton::ReduceOp> {
++  using OpRewritePattern::OpRewritePattern;
++
++  LogicalResult matchAndRewrite(triton::ReduceOp reduce,
++                                PatternRewriter &rewriter) const override {
++    auto mod = reduce->getParentOfType<ModuleOp>();
++    auto target = mod->getAttrOfType<StringAttr>("ttg.target");
++    if (!target || !target.getValue().starts_with("cuda:") ||
++        TritonGPUDialect::getThreadsPerWarp(mod) != 32 ||
++        TritonGPUDialect::getNumCTAs(mod) != 1 || reduce.getNumOperands() != 1)
++      return failure();
++    auto reductionType = cast<RankedTensorType>(reduce.getOperand(0).getType());
++    auto resultType = dyn_cast<RankedTensorType>(reduce.getResult(0).getType());
++    auto encoding = dyn_cast<BlockedEncodingAttr>(reductionType.getEncoding());
++    if (!resultType || !encoding || !reductionType.getElementType().isF32() ||
++        reduce.getAxis() == reductionType.getRank() - 1)
++      return failure();
++    auto costResultType = resultType;
++    Value result = reduce.getResult(0);
++    while (result.hasOneUse()) {
++      auto cvt = dyn_cast<ConvertLayoutOp>(*result.getUsers().begin());
++      if (!cvt)
++        break;
++      costResultType = cvt.getType();
++      result = cvt.getResult();
++    }
++    // Only count a single supported scalar combine, using the region's actual
++    // return value and its two block arguments rather than its operation name.
++    Block &body = reduce.getRegion().front();
++    if (body.getOperations().size() != 2)
++      return failure();
++    Operation &combine = body.front();
++    if (!isa<arith::AddFOp, arith::MulFOp, arith::MaximumFOp, arith::MinimumFOp,
++             arith::MaxNumFOp, arith::MinNumFOp>(combine) ||
++        combine.getOperand(0) != body.getArgument(0) ||
++        combine.getOperand(1) != body.getArgument(1) ||
++        body.back().getOperand(0) != combine.getResult(0))
++      return failure();
++    Value input = reduce.getOperand(0);
++    auto ext = input.getDefiningOp<arith::ExtFOp>();
++    if (ext) {
++      if (!input.hasOneUse())
++        return failure();
++      input = ext.getIn();
++    }
++    auto load = input.getDefiningOp<DescriptorLoadOp>();
++    if (!load || !input.hasOneUse() || load->getBlock() != reduce->getBlock())
++      return failure();
++    auto loadType = load.getType();
++    if (loadType.getEncoding() != encoding ||
++        !isa<FloatType>(loadType.getElementType()) ||
++        loadType.getElementTypeBitWidth() < 16)
++      return failure();
++    auto sizePerThread = llvm::to_vector(encoding.getSizePerThread());
++    if (llvm::any_of(ArrayRef<unsigned>(sizePerThread).drop_back(),
++                     [](unsigned size) { return size != 1; }))
++      return failure();
++    unsigned vectorSize = sizePerThread.back();
++    auto original = getDescriptorReductionCost(
++        loadType, reductionType, costResultType, reduce.getAxis(), vectorSize);
++    auto bestCost = original;
++    auto best = encoding;
++    for (unsigned candidate = vectorSize / 2; candidate; candidate /= 2) {
++      sizePerThread.back() = candidate;
++      auto layout = BlockedEncodingAttr::get(
++          reduce.getContext(), loadType.getShape(), sizePerThread,
++          encoding.getOrder(), lookupNumWarps(load), 32,
++          encoding.getCGALayout());
++      auto cost = getDescriptorReductionCost(
++          loadType.cloneWithEncoding(layout),
++          reductionType.cloneWithEncoding(layout), costResultType,
++          reduce.getAxis(), candidate);
++      if (cost.inputRegisters <= original.inputRegisters &&
++          cost.barriers <= original.barriers &&
++          cost.instructions < bestCost.instructions) {
++        best = layout;
++        bestCost = cost;
++      }
++    }
++    if (best == encoding)
++      return failure();
++    rewriter.setInsertionPoint(load);
++    auto *newLoad = rewriter.clone(*load);
++    newLoad->getResult(0).setType(loadType.cloneWithEncoding(best));
++    Value newInput = newLoad->getResult(0);
++    if (ext) {
++      rewriter.setInsertionPoint(ext);
++      auto newExt = arith::ExtFOp::create(rewriter, ext.getLoc(),
++                                          reductionType.cloneWithEncoding(best),
++                                          newInput);
++      newInput = newExt.getResult();
++    }
++    rewriter.setInsertionPoint(reduce);
++    auto *newReduce = rewriter.clone(*reduce);
++    newReduce->setOperand(0, newInput);
++    newReduce->getResult(0).setType(resultType.cloneWithEncoding(
++        SliceEncodingAttr::get(reduce.getContext(), reduce.getAxis(), best)));
++    auto cvt = ConvertLayoutOp::create(rewriter, reduce.getLoc(), resultType,
++                                       newReduce->getResult(0));
++    rewriter.replaceOp(reduce, cvt.getResult());
++    if (ext)
++      rewriter.eraseOp(ext);
++    rewriter.eraseOp(load);
++    return success();
++  }
++};
++
+ // Change the destination layout of reshape ops allowing reorder when used by a
+ // reduction in order to minimize the amount of cross thread communication for
+ // the reduction.
+@@ -248,6 +455,7 @@ class TritonGPUOptimizeThreadLocalityPass
+     // First try to optimize the layout of views and gathers.
+     mlir::RewritePatternSet layoutPatterns(&getContext());
+     layoutPatterns.add<OptimizeReshapeLayoutPattern>(&getContext());
++    layoutPatterns.add<OptimizeDescriptorReductionPattern>(&getContext());
+     layoutPatterns.add<OptimizeGatherLayoutPattern>(&getContext());
+     if (mlir::applyPatternsGreedily(mod, std::move(layoutPatterns)).failed()) {
+       signalPassFailure();
+diff --git a/test/TritonGPU/optimize-locality.mlir b/test/TritonGPU/optimize-locality.mlir
+index 6e30fd6633..07e5384117 100644
+--- a/test/TritonGPU/optimize-locality.mlir
++++ b/test/TritonGPU/optimize-locality.mlir
+@@ -1002,3 +1002,144 @@ module attributes {"ttg.target" = "cuda:80", "ttg.num-ctas" = 1 : i32, "ttg.num-
+     tt.return
+   }
+ }
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 1, parent = #src}>
++// CHECK: [[$CHOSEN:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_reduce_instruction_cost
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$CHOSEN]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} {
++  tt.func @descriptor_reduce_instruction_cost(%desc: !tt.tensordesc<1x32x64xbf16>, %i: i32) -> tensor<1x64xf32, #slice> {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x64xbf16, #src> to tensor<1x32x64xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 1 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %r = arith.maximumf %a, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x64xf32, #src>) -> tensor<1x64xf32, #slice>
++    tt.return %red : tensor<1x64xf32, #slice>
++  }
++}
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 1, parent = #src}>
++// CHECK: [[$CHOSEN:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 1, 32], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_sum_instruction_cost
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x128xbf16, [[$CHOSEN]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 4 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} {
++  tt.func @descriptor_sum_instruction_cost(%desc: !tt.tensordesc<1x32x128xbf16>, %i: i32) -> tensor<1x128xf32, #slice> {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x128xbf16> -> tensor<1x32x128xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x128xbf16, #src> to tensor<1x32x128xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 1 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %r = arith.addf %a, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x128xf32, #src>) -> tensor<1x128xf32, #slice>
++    tt.return %red : tensor<1x128xf32, #slice>
++  }
++}
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 1, parent = #src}>
++// CHECK: [[$DEFAULT:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_reduce_multi_load_use
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} {
++  tt.func @descriptor_reduce_multi_load_use(%desc: !tt.tensordesc<1x32x64xbf16>, %i: i32) -> (tensor<1x32x64xbf16, #src>, tensor<1x64xf32, #slice>) {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x64xbf16, #src> to tensor<1x32x64xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 1 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %r = arith.maximumf %a, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x64xf32, #src>) -> tensor<1x64xf32, #slice>
++    tt.return %load, %red : tensor<1x32x64xbf16, #src>, tensor<1x64xf32, #slice>
++  }
++}
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 1, parent = #src}>
++// CHECK: [[$DEFAULT:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_reduce_multi_ext_use
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} {
++  tt.func @descriptor_reduce_multi_ext_use(%desc: !tt.tensordesc<1x32x64xbf16>, %i: i32) -> (tensor<1x32x64xf32, #src>, tensor<1x64xf32, #slice>) {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x64xbf16, #src> to tensor<1x32x64xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 1 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %r = arith.maximumf %a, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x64xf32, #src>) -> tensor<1x64xf32, #slice>
++    tt.return %wide, %red : tensor<1x32x64xf32, #src>, tensor<1x64xf32, #slice>
++  }
++}
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 2, parent = #src}>
++// CHECK: [[$DEFAULT:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_reduce_innermost
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} {
++  tt.func @descriptor_reduce_innermost(%desc: !tt.tensordesc<1x32x64xbf16>, %i: i32) -> tensor<1x32xf32, #slice> {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x64xbf16, #src> to tensor<1x32x64xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 2 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %r = arith.maximumf %a, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x64xf32, #src>) -> tensor<1x32xf32, #slice>
++    tt.return %red : tensor<1x32xf32, #slice>
++  }
++}
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 1, parent = #src}>
++// CHECK: [[$DEFAULT:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_reduce_custom_combiner
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} {
++  tt.func @descriptor_reduce_custom_combiner(%desc: !tt.tensordesc<1x32x64xbf16>, %i: i32) -> tensor<1x64xf32, #slice> {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x64xbf16, #src> to tensor<1x32x64xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 1 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %sum = arith.addf %a, %b : f32
++      %r = arith.maximumf %sum, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x64xf32, #src>) -> tensor<1x64xf32, #slice>
++    tt.return %red : tensor<1x64xf32, #slice>
++  }
++}
++
++// -----
++
++#src = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 8, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++#slice = #ttg.slice<{dim = 1, parent = #src}>
++// CHECK: [[$DEFAULT:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 8, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
++// CHECK-LABEL: @descriptor_reduce_non_nvidia
++// CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
++module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "hip:gfx942", "ttg.threads-per-warp" = 64 : i32} {
++  tt.func @descriptor_reduce_non_nvidia(%desc: !tt.tensordesc<1x32x64xbf16>, %i: i32) -> tensor<1x64xf32, #slice> {
++    %load = tt.descriptor_load %desc[%i, %i, %i] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #src>
++    %wide = arith.extf %load : tensor<1x32x64xbf16, #src> to tensor<1x32x64xf32, #src>
++    %red = "tt.reduce"(%wide) <{axis = 1 : i32}> ({
++    ^bb0(%a: f32, %b: f32):
++      %r = arith.maximumf %a, %b : f32
++      tt.reduce.return %r : f32
++    }) : (tensor<1x32x64xf32, #src>) -> tensor<1x64xf32, #slice>
++    tt.return %red : tensor<1x64xf32, #slice>
++  }
++}

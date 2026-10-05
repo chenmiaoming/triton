@@ -1,0 +1,24 @@
+{
+  "calibration": false,
+  "choice": "enumerate all smaller power-of-two contiguous sizesPerThread; keep default on ties",
+  "components": [
+    "ceil(unique input values / descriptor shared-load vector size)",
+    "optional scalar widening",
+    "in-thread scalar combines",
+    "shuffle plus scalar combine per unique reduction lane basis",
+    "inter-warp layout conversion using ReduceOpHelper.getInterLayout and actual shuffle eligibility",
+    "conversion to existing result ownership, including scratch-reuse synchronization"
+  ],
+  "constraints": [
+    "same or fewer scalar f32 input values per lane",
+    "no additional modeled rendezvous"
+  ],
+  "cost_kind": "uncalibrated instruction-count proxy; not a latency/cycle model",
+  "design_informed_by_prior_phases": true,
+  "held_out_validation": false,
+  "new_timing_results_used_for_design": false,
+  "next_gate": "actual frozen patch correctness and held-out performance on multiple architectures; not authorized in this two-stage scope",
+  "patch_SHA256": "ac285cecdbf55448024116b823e8e0051b9c1ed98d7442fc963f9649c7dc12cb",
+  "scope": "single-use NVIDIA descriptor_load -> optional single-use extf -> one-input non-innermost f32 reduction with supported one-op scalar combine; one CTA",
+  "upstream_HEAD": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad"
+}

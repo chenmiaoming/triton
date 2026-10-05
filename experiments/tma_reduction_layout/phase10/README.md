@@ -61,3 +61,73 @@ Read-only validation:
 See [accepted Stage A results](../results/phase10/stage_a/summary.md),
 [protocol](../results/phase10/stage_a/protocol.json), and
 [full analysis](../results/phase10/stage_a/analysis.json).
+
+## Stage B
+
+[compiler_prototype.patch](compiler_prototype.patch) contains the actual native
+change and tests against the pinned clean upstream. It was built and checked
+in a separate checkout of that upstream. The experiment branch stores this
+applyable patch and checked source exports because its historical native API
+differs from current upstream. A future PR should use a clean upstream branch.
+
+The rule belongs to `OptimizeThreadLocality`, before TMA lowering, and compares
+smaller power-of-two contiguous vectors against the existing layout. Its
+instruction-count proxy includes descriptor shared-load vectorization,
+optional widening, in-thread combines, lane shuffles, inter-warp conversions
+and conversion to the existing output ownership. It uses current linear
+layouts, `ReduceOpHelper::getInterWarpReductionLayout` and the lowering's
+shuffle eligibility. Candidates must not increase modeled rendezvous or
+unique scalar input values per lane; strict cost improvement is required.
+No coefficient was fitted to the new timing outcomes. This is a prototype
+instruction proxy, not a calibrated GPU latency model or actual register count.
+
+The scope is one CTA, CUDA with 32 lanes/warp, a single-use descriptor load,
+an optional single-use widening, and one-input non-innermost FP32 reduction
+with a supported single scalar combine. It requires a contiguous-last-dimension
+blocked layout. Multi-use inputs, complex combiners and unsupported layouts
+keep the existing policy. Cross-operation reasoning is in the transformation;
+the lowerings are unchanged. The current Gluon pipeline does not run this pass.
+
+Nine added lit cases cover two positive choices and seven fallback boundaries,
+including an eligible large-input case where load cost retains the default.
+The positive choices are vector1 for `(32,64,8)` and vector2 for `(32,128,4)`.
+The complete H100 pipeline also selects vector2 for `(32,128,8)` in these tests.
+This differs from the historical fixed-vector4 candidate.
+
+Validation ran `make`, `make triton-opt`, two targeted lit files and the full
+lit suite: 303 passed, two unsupported, no failures. The existing CUDA descriptor
+test file adds 54 correctness cases: host/device × three tile/warp identities ×
+BF16/FP16/FP32 × max/min/sum. Exact finite quarter-multiple inputs give an
+independent PyTorch oracle with zero tolerance. All passed on strict H100.
+The final formatted Python test reused the same native image without `make`.
+A fresh disk cache retains all 54 complete compiler outputs and verifies the
+observed layouts in the full pipeline. No prototype GPU timing was performed.
+
+The initial design snapshot is retained before Stage A timing outcomes. Failed
+attempts preserve the outdated helper API compile error, missing LLVM tools
+without the cache mount, and incorrect predicted lit vector expectations.
+The cost equations were retained while fixing API names and test expectations.
+A final contiguous-order guard adds a scope boundary, and Python formatting is
+checked with the repository's pinned YAPF and Ruff versions. The final Python
+check's first import failure is also retained; explicitly mounting its module
+fixed it. Every successful and failed original export remains unchanged.
+
+The clean upstream build reused 68 direct ccache hits with 305 misses for the
+updated upstream. The final prototype native build compiled one C++ translation
+unit (one cache miss) and linked existing objects. Artifact/timing workers did
+not rebuild the native compiler. The persistent cache and exact Modal image
+IDs are recorded, and the active local profile was not changed.
+
+Read-only final validation, including first-commit raw-byte checks:
+
+```sh
+.venv/bin/python -m experiments.tma_reduction_layout.phase10.validate_final --committed
+```
+
+See [prototype results](../results/phase10/stage_b/summary.md) and
+[final closure](../results/phase10/final_validation/summary.md). The next gate
+is separately frozen performance validation of this actual patch against the
+same upstream/toolchain, across held-out shapes and architectures. Instruction
+counts do not cover bank conflicts, latency, scheduling, cache/bandwidth or
+actual register allocation/residency. Prototype correctness has only been
+checked on H100. No PR was created/updated, and work stops after Stage B.

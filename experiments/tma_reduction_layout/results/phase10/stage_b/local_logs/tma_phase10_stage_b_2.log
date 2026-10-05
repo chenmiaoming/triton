@@ -1,0 +1,219 @@
+✓ Initialized. View run at 
+https://modal.com/apps/chenmiaoming/main/ap-dKgeojWo3498LE9qlN718E
+Building image im-OlkdLg9tqbgMHtMxk9GzuU
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 1.61s
+
+Built image im-OlkdLg9tqbgMHtMxk9GzuU in 3.28s
+
+
+Building image im-eavCi56O3aRdvjN9k2YEtn
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 500.90ms
+
+Built image im-eavCi56O3aRdvjN9k2YEtn in 2.09s
+
+
+Building image im-EC2rqxqhdcnLd3GxVfSKzF
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 944.34ms
+
+Built image im-EC2rqxqhdcnLd3GxVfSKzF in 2.46s
+
+
+Building image im-isMHglyN8CEi2Y1jP9BAYj
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 631.65ms
+
+Built image im-isMHglyN8CEi2Y1jP9BAYj in 2.28s
+
+
+Building image im-JtbdhzgZ9wPrIC5eCtT751
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python3 /opt/phase10-prototype-build.py
+ninja -C /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12
+ninja: Entering directory `/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12'
+[1/22] Linking CXX executable third_party/proton/test/unittest/Backend/BackendRegistration
+[2/22] Linking CXX executable third_party/proton/test/unittest/TraceDataIO/TraceDataIO
+[3/22] Linking CXX shared library /opt/triton-src/python/triton/_C/libproton.so
+[4/22] Linking CXX shared library /opt/triton-src/python/triton/instrumentation/libGPUInstrumentationTestLib.so
+[5/22] Linking CXX executable unittest/Tools/LLVMOptions
+[6/22] Linking CXX executable unittest/Tools/LinearLayout
+[7/22] Building CXX object lib/Dialect/TritonGPU/Transforms/CMakeFiles/TritonGPUTransforms.dir/OptimizeThreadLocality.cpp.o
+[8/22] Linking CXX executable unittest/Dialect/TritonGPU/TestPaddedSharedLayout
+[9/22] Linking CXX executable unittest/Dialect/TritonNvidiaGPU/NvmmaSmemAttrsTest
+[10/22] Linking CXX executable unittest/Analysis/TestTritonAnalysis
+[11/22] Linking CXX executable unittest/Dialect/TritonGPU/Dialect
+[12/22] Linking CXX executable unittest/Dialect/TritonGPU/DumpLayoutTest
+[13/22] Linking CXX executable unittest/Dialect/TritonGPU/TestSwizzling
+[14/22] Linking CXX executable unittest/Dialect/TritonGPU/LinearLayoutConversions
+[15/22] Linking CXX executable third_party/nvidia/unittest/Conversion/TritonGPUToLLVM/TestPtxAsmFormat
+[16/22] Linking CXX executable bin/triton-llvm-opt
+[17/22] Linking CXX shared library /opt/triton-src/python/triton/_C/libtriton.so
+[18/22] Linking CXX static library test/lib/Analysis/libTritonTestAnalysis.a
+[19/22] Linking CXX executable bin/triton-tensor-layout
+[20/22] Linking CXX executable bin/triton-reduce
+[21/22] Linking CXX executable bin/triton-lsp
+[22/22] Linking CXX executable bin/triton-opt
+ninja -C /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12 triton-opt
+ninja: Entering directory `/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12'
+ninja: no work to do.
+Saving image...
+Image saved, took 5.21s
+
+Built image im-JtbdhzgZ9wPrIC5eCtT751 in 43.92s
+
+
+Building image im-zNIzIQMZQf6yPYVty7aH6N
+
+=> Step 0: FROM base
+
+=> Step 1: COPY --from=ghcr.io/astral-sh/uv:latest /uv /.uv/uv
+Getting image source signatures
+Copying blob sha256:f3f7502ac07c10bd911c63b27afb9b3f5902b8554ccbe381bde627178ad1915b
+Copying blob sha256:dcd00f4c468462b2a68c19a552a5b67c3fd23b41967f8622f7f1620cad1d105d
+Copying config sha256:2832daefdfaee215fd647b8bc850821ece2a4c4f7703a11895c6d4631ef0858e
+Writing manifest to image destination
+Unpacking OCI image
+   • unpacking rootfs ...     
+   • ... done                 
+   • unpacked image rootfs: /tmp/task-data/ta-01M45TGSE99KVAMD403N9BKHJB/registry-unpack37fuF1
+
+=> Step 2: RUN /.uv/uv pip install --python $(command -v python) --compile-bytecode pytest pytest-instafail pytest-xdist
+Using Python 3.12.1 environment at: /usr/local
+Resolved 8 packages in 47ms
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Prepared 7 packages in 64ms
+Installed 7 packages in 48ms
+Bytecode compiled 472 files in 245ms
+ + execnet==2.1.2
+ + iniconfig==2.3.0
+ + pluggy==1.6.0
+ + pygments==2.21.0
+ + pytest==9.1.1
+ + pytest-instafail==0.5.0
+ + pytest-xdist==3.8.0
+Saving image...
+Image saved, took 747.45ms
+
+Built image im-zNIzIQMZQf6yPYVty7aH6N in 4.23s
+
+
+Building image im-d96k9wElH5fmElG9mDirD6
+
+=> Step 0: FROM base
+
+=> Step 1: ENV PYTHONPATH=/opt/triton-src
+
+=> Step 2: ENV PATH=/opt/phase9-cuda-tools/bin:/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin
+Saving image...
+Image saved, took 698.16ms
+
+Built image im-d96k9wElH5fmElG9mDirD6 in 2.29s
+
+
+Building image im-yYR8TFY6vPeOFijJ4XQjeT
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 807.58ms
+
+Built image im-yYR8TFY6vPeOFijJ4XQjeT in 3.09s
+
+
+✓ Created objects.
+├── ✓ Uploaded 
+│   /tmp/tma-phase10-prototype-source-2/lib/Dialect/TritonGPU/Transforms/Optimiz
+│   eThreadLocality.cpp
+├── ✓ Uploaded 
+│   /tmp/tma-phase10-prototype-source-2/test/TritonGPU/optimize-locality.mlir
+├── ✓ Uploaded 
+│   /tmp/tma-phase10-prototype-source-2/python/test/unit/cuda/test_tensor_descri
+│   ptor_cuda.py
+├── ✓ Uploaded 
+│   /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase10/build
+│   _prototype.py
+├── ✓ Uploaded /tmp/tma-phase10-prototype-scripts/experiments
+├── ✓ Created Function check.
+└── ✓ Created Function check_gpu.
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+lit: /usr/local/lib/python3.12/site-packages/lit/llvm/subst.py:130: note: Did not find mlir-translate in /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin:/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/bin:/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin/FileCheck
+lit: /usr/local/lib/python3.12/site-packages/lit/llvm/subst.py:130: note: Did not find llc in /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin:/__modal/volumes/vo-UFi3Xs0ZVhMnjeILXm4LG6/triton-home/.triton/llvm/llvm-b010a18d-ubuntu-x64-1/bin:/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin/FileCheck
+-- Testing: 1 tests, 1 workers --
+FAIL: TRITON :: TritonGPU/optimize-locality.mlir (1 of 1)
+******************** TEST 'TRITON :: TritonGPU/optimize-locality.mlir' FAILED ********************
+Exit Code: 127
+
+Command Output (stdout):
+--
+# RUN: at line 1
+/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin/triton-opt /opt/triton-src/test/TritonGPU/optimize-locality.mlir -split-input-file -tritongpu-optimize-thread-locality -canonicalize | FileCheck /opt/triton-src/test/TritonGPU/optimize-locality.mlir
+# executed command: FileCheck /opt/triton-src/test/TritonGPU/optimize-locality.mlir
+# .---command stderr------------
+# | 'FileCheck': command not found
+# `-----------------------------
+# error: command failed with exit status: 127
+
+--
+
+********************
+********************
+Failed Tests (1):
+  TRITON :: TritonGPU/optimize-locality.mlir
+
+
+Testing Time: 0.62s
+
+Total Discovered Tests: 1
+  Failed: 1 (100.00%)
+
+Stopping app - uncaught exception raised locally: AssertionError('Native/lit failure archived').
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase10/run_p │
+│ rototype.py:101 in main                                                      │
+│                                                                              │
+│   100 │   with zipfile.ZipFile(io.BytesIO(result['zip'])) as z:z.extractall( │
+│ ❱ 101 │   assert result['result']['status']=='OK','Native/lit failure archiv │
+│   102 │   gpu=check_gpu.remote(expected)                                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+AssertionError: Native/lit failure archived

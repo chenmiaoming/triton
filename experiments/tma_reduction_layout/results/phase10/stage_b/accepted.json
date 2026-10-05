@@ -1,0 +1,121 @@
+{
+  "GPU_correctness": {
+    "GPU_timing": false,
+    "call_id": "fc-01M45VFPNY1V2W6YEAW22NFG06",
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "-s",
+      "--tb=short",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py::test_tensor_descriptor_partial_reduction_layout"
+    ],
+    "gpu_environment": {
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13000,
+      "gpu_uuid": "GPU-ea03fa8a-8251-6aa8-07ff-ea59bdb96121"
+    },
+    "gpu_name": "NVIDIA H100 80GB HBM3",
+    "native_SHA256": "7d65ade1690264f8c323266606efb97c5aca75d3c0606359edfa49785368fd48",
+    "return_code": 0,
+    "status": "OK"
+  },
+  "attempt": "experiments/tma_reduction_layout/results/phase10/stage_b/attempts/92563b78ffa84536a1ec1d3529cd7f9e",
+  "result": {
+    "GPU_timing": false,
+    "call_id": "fc-01M45VEQSN5R3QY358MT0PW23V",
+    "checks": [
+      {
+        "command": [
+          "lit",
+          "-v",
+          "test/TritonGPU/optimize-locality.mlir"
+        ],
+        "cwd": "/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12",
+        "return_code": 0,
+        "tag": "targeted"
+      },
+      {
+        "command": [
+          "lit",
+          "-v",
+          "test/TritonGPU/coalesce.mlir"
+        ],
+        "cwd": "/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12",
+        "return_code": 0,
+        "tag": "coalesce"
+      },
+      {
+        "command": [
+          "ninja",
+          "check-triton-lit-tests"
+        ],
+        "cwd": "/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12",
+        "return_code": 0,
+        "tag": "full_lit"
+      }
+    ],
+    "image_id": "im-KaEq6823Uj1qypGzBbwFr9",
+    "native_SHA256": "7d65ade1690264f8c323266606efb97c5aca75d3c0606359edfa49785368fd48",
+    "status": "OK"
+  },
+  "source": {
+    "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "561253af00084715b81f291ee6063a2ffd974b0f3bf805541c581ff08f3cb847",
+    "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "17330dabf9c0050c097809251fd002f13ec828705571d54f64314b73b225afaf",
+    "test/TritonGPU/optimize-locality.mlir": "62daa6009e358de2019dce4639e10af21596a644f4f060146f372c795603e5ac"
+  }
+}

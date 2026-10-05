@@ -1,0 +1,154 @@
+-- Testing: 1 tests, 1 workers --
+FAIL: TRITON :: TritonGPU/optimize-locality.mlir (1 of 1)
+******************** TEST 'TRITON :: TritonGPU/optimize-locality.mlir' FAILED ********************
+Exit Code: 1
+
+Command Output (stdout):
+--
+# RUN: at line 1
+/opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin/triton-opt /opt/triton-src/test/TritonGPU/optimize-locality.mlir -split-input-file -tritongpu-optimize-thread-locality -canonicalize | FileCheck /opt/triton-src/test/TritonGPU/optimize-locality.mlir
+# executed command: /opt/triton-src/build/cmake.linux-x86_64-cpython-3.12/bin/triton-opt /opt/triton-src/test/TritonGPU/optimize-locality.mlir -split-input-file -tritongpu-optimize-thread-locality -canonicalize
+# executed command: FileCheck /opt/triton-src/test/TritonGPU/optimize-locality.mlir
+# .---command stderr------------
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1010:11: error: CHECK: expected string not found in input
+# | // CHECK: [[$CHOSEN:#.*]] = #ttg.blocked<{sizePerThread = [1, 1, 4], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
+# |           ^
+# | <stdin>:813:11: note: scanning from here
+# |  scf.yield %14 : tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>>
+# |           ^
+# | <stdin>:813:11: note: pattern attempts to capture variables: "$CHOSEN"
+# |  scf.yield %14 : tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>>
+# |           ^
+# | <stdin>:822:4: note: possible intended match here
+# | #blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}>
+# |    ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1012:63: error: undefined variable: $CHOSEN
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$CHOSEN]]>
+# |                                                               ^
+# | <stdin>:826:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked1>
+# |                                                             ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1032:64: error: undefined variable: $CHOSEN
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x128xbf16, [[$CHOSEN]]>
+# |                                                                ^
+# | <stdin>:843:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x128xbf16> -> tensor<1x32x128xbf16, #blocked1>
+# |                                                             ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1052:63: error: undefined variable: $DEFAULT
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
+# |                                                               ^
+# | <stdin>:859:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked>
+# |                                                             ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1072:63: error: undefined variable: $DEFAULT
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
+# |                                                               ^
+# | <stdin>:874:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked>
+# |                                                             ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1092:63: error: undefined variable: $DEFAULT
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
+# |                                                               ^
+# | <stdin>:889:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked>
+# |                                                             ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1112:63: error: undefined variable: $DEFAULT
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
+# |                                                               ^
+# | <stdin>:904:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked>
+# |                                                             ^
+# | /opt/triton-src/test/TritonGPU/optimize-locality.mlir:1133:63: error: undefined variable: $DEFAULT
+# | // CHECK: tt.descriptor_load {{.*}} -> tensor<1x32x64xbf16, [[$DEFAULT]]>
+# |                                                               ^
+# | <stdin>:920:61: note: possible intended match here
+# |  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked>
+# |                                                             ^
+# | 
+# | Input file: <stdin>
+# | Check file: /opt/triton-src/test/TritonGPU/optimize-locality.mlir
+# | 
+# | -dump-input=help explains the following input dump.
+# | 
+# | Input was:
+# | <<<<<<
+# |               .
+# |               .
+# |               .
+# |             808:  tt.reduce.return %15 : f32 
+# |             809:  }) : (tensor<32x128xf32, #blocked>) -> tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>> 
+# |             810:  %13 = ttg.convert_layout %arg8 : tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<32xf32, #blocked1> 
+# |             811:  tt.store %arg6, %13 : tensor<32x!tt.ptr<f32>, #blocked1> 
+# |             812:  %14 = arith.addf %arg8, %12 : tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>> 
+# |             813:  scf.yield %14 : tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>> 
+# | check:1010'0              {                                                                  search range start (exclusive)
+# | check:1010'1                                                                                 error: no match found in search range
+# | check:1010'2                                                                                 pattern attempts to capture variables: "$CHOSEN"
+# |             814:  } 
+# |             815:  %4 = ttg.convert_layout %3 : tensor<32xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<32xf32, #blocked1> 
+# |             816:  tt.store %arg5, %4 : tensor<32x!tt.ptr<f32>, #blocked1> 
+# |             817:  tt.return 
+# |             818:  } 
+# |             819: } 
+# |             820:  
+# |             821: // ----- 
+# |             822: #blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}> 
+# | check:1010'3        ?                                                                                                                           possible intended match
+# |             823: #blocked1 = #ttg.blocked<{sizePerThread = [1, 1, 1], threadsPerWarp = [1, 1, 32], warpsPerCTA = [1, 4, 2], order = [2, 1, 0]}> 
+# |             824: module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 8 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} { 
+# |             825:  tt.func @descriptor_reduce_instruction_cost(%arg0: !tt.tensordesc<1x32x64xbf16>, %arg1: i32) -> tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> { 
+# | check:1010'4                                                 }                                                                                                                   search range end (exclusive)
+# | check:1012'0                                                {                                                                                                                    search range start (exclusive)
+# | check:1012'1                                                                                                                                                                     error: match failed for invalid pattern
+# | check:1012'2                                                                                                                                                                     undefined variable: $CHOSEN
+# |             826:  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x64xbf16> -> tensor<1x32x64xbf16, #blocked1> 
+# | check:1012'3                                                                 ?                                                           possible intended match
+# |             827:  %1 = arith.extf %0 : tensor<1x32x64xbf16, #blocked1> to tensor<1x32x64xf32, #blocked1> 
+# |             828:  %2 = "tt.reduce"(%1) <{axis = 1 : i32}> ({ 
+# |             829:  ^bb0(%arg2: f32, %arg3: f32): 
+# |             830:  %4 = arith.maximumf %arg2, %arg3 : f32 
+# |             831:  tt.reduce.return %4 : f32 
+# |               .
+# |               .
+# |               .
+# |             837:  
+# |             838: // ----- 
+# |             839: #blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 2, 16], warpsPerCTA = [1, 4, 1], order = [2, 1, 0]}> 
+# |             840: #blocked1 = #ttg.blocked<{sizePerThread = [1, 1, 2], threadsPerWarp = [1, 1, 32], warpsPerCTA = [1, 2, 2], order = [2, 1, 0]}> 
+# |             841: module attributes {"ttg.num-ctas" = 1 : i32, "ttg.num-warps" = 4 : i32, ttg.target = "cuda:90", "ttg.threads-per-warp" = 32 : i32} { 
+# |             842:  tt.func @descriptor_sum_instruction_cost(%arg0: !tt.tensordesc<1x32x128xbf16>, %arg1: i32) -> tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> { 
+# | check:1012'4                                              }                                                                                                                     search range end (exclusive)
+# | check:1032'0                                             {                                                                                                                      search range start (exclusive)
+# | check:1032'1                                                                                                                                                                    error: match failed for invalid pattern
+# | check:1032'2                                                                                                                                                                    undefined variable: $CHOSEN
+# |             843:  %0 = tt.descriptor_load %arg0[%arg1, %arg1, %arg1] : !tt.tensordesc<1x32x128xbf16> -> tensor<1x32x128xbf16, #blocked1> 
+# | check:1032'3                                                                 ?                                                             possible intended match
+# |             844:  %1 = arith.extf %0 : tensor<1x32x128xbf16, #blocked1> to tensor<1x32x128xf32, #blocked1> 
+# |             845:  %2 = "tt.reduce"(%1) <{axis = 1 : i32}> ({ 
+# |             846:  ^bb0(%arg2: f32, %arg3: f32): 
+# |             847:  %4 = arith.addf %arg2, %arg3 : f32 
+# |             848:  tt.reduce.return %4 : f32 
+# |               .
+# |               .
+# |               .
+# |             853: } 
+# |             854:  
+# |             855: // ----- 
+# |             856: #blocked = #ttg.blocked<{sizePerThread = [1, 1, 8], threadsPerWarp = [1, 4, 8], warpsPerCTA = [1, 8, 1], order = [2, 1, 0]}> 
+# |             857: module attributes {"ttg.num-ctas" = 1 : i32, 
+# | ...
+# `---data was truncated (10240/21290) (change limit with -D output_limit=N)
+# error: command failed with exit status: 1
+
+--
+
+********************
+********************
+Failed Tests (1):
+  TRITON :: TritonGPU/optimize-locality.mlir
+
+
+Testing Time: 0.40s
+
+Total Discovered Tests: 1
+  Failed: 1 (100.00%)
