@@ -1,0 +1,200 @@
+{
+  "first_commit_freezes": {
+    "stage_b": {
+      "first_commit": "147123b136bd5c2fe9d634169fbebd9934163f4f",
+      "protected_files": 1158
+    },
+    "stage_c": {
+      "first_commit": "f4eb82d7bd28b209d5df7b198fb359ed4604f37f",
+      "protected_files": 42
+    }
+  },
+  "isolated_corruption_probes": [
+    "ACTUAL_MODE_ARGUMENT",
+    "PER_LAUNCH_SHA",
+    "POSITIVE_FINITE_SAMPLE_BYTES",
+    "FROZEN_MASTER_ORDER"
+  ],
+  "no_next_phase": true,
+  "prior_files_unchanged": 8174,
+  "prior_replay": {
+    "GPU_work": false,
+    "independent_checkout_per_validator": true,
+    "initial_attempt_retained": "attempt_1/disposition.json",
+    "isolated_checkout": true,
+    "records": [
+      {
+        "command": [
+          "/home/chenmiaoming/miniforge3/bin/python3",
+          "-m",
+          "experiments.tma_reduction_layout.phase7.validate_final"
+        ],
+        "label": "phase7",
+        "log_SHA256": "1399dd319c0d4a7b19fa09af0819b2b7c72a205fdc6c83b3a07e5258244b1cdd",
+        "return_code": 0,
+        "separate_checkout": true
+      },
+      {
+        "command": [
+          "/home/chenmiaoming/miniforge3/bin/python3",
+          "-m",
+          "experiments.tma_reduction_layout.diagnostics.validate_ncu_bank"
+        ],
+        "label": "bank_probe",
+        "log_SHA256": "4d5fd145af15b777cd8cea2b05c6562114173c4fa22e256e434dba1db0e37185",
+        "return_code": 0,
+        "separate_checkout": true
+      }
+    ],
+    "status": "PASS",
+    "trusted_commit": "7907562cae9d6fc76184ef17d07fb9e28c364ecf"
+  },
+  "profiler_metadata_deviations": [
+    "PROFILER_WORKER_UUID_NOT_CAPTURED_IN_ORIGINAL_EXPORT"
+  ],
+  "stage_d_raw_manifest_SHA256": "8bc7854dce5ccefa9482e0a009cb6a951d42ea2310164ec127b6cad060559f73",
+  "status": "PASS",
+  "timing": {
+    "stage_c": {
+      "physical_UUIDs": 3,
+      "prior_files_unchanged": 8174,
+      "records": [
+        {
+          "gpu_uuid": "GPU-5cbcea40-2802-4456-6a1b-f7238b8c7378",
+          "invocation": 1,
+          "physical_binaries": 32,
+          "same_module_and_function_across_modes": true,
+          "samples": 12000
+        },
+        {
+          "gpu_uuid": "GPU-f3e87bf7-0317-7401-1102-6caf82243dc6",
+          "invocation": 2,
+          "physical_binaries": 32,
+          "same_module_and_function_across_modes": true,
+          "samples": 12000
+        },
+        {
+          "gpu_uuid": "GPU-5475f5fe-d5bc-4514-0a01-52801451225e",
+          "invocation": 3,
+          "physical_binaries": 32,
+          "same_module_and_function_across_modes": true,
+          "samples": 12000
+        }
+      ],
+      "stage": "stage_c",
+      "status": "PASS",
+      "total_samples": 36000
+    },
+    "stage_d": {
+      "physical_UUIDs": 3,
+      "prior_files_unchanged": 8174,
+      "records": [
+        {
+          "gpu_uuid": "GPU-723a2352-43f3-cd04-a872-106796e9eac3",
+          "invocation": 1,
+          "physical_binaries": 72,
+          "same_module_and_function_across_modes": true,
+          "samples": 27000
+        },
+        {
+          "gpu_uuid": "GPU-e79e7d36-7e53-1add-85b0-37a2342885bd",
+          "invocation": 2,
+          "physical_binaries": 72,
+          "same_module_and_function_across_modes": true,
+          "samples": 27000
+        },
+        {
+          "gpu_uuid": "GPU-4a7703bd-457d-3b6c-dd26-00415244d6bc",
+          "invocation": 3,
+          "physical_binaries": 72,
+          "same_module_and_function_across_modes": true,
+          "samples": 27000
+        }
+      ],
+      "stage": "stage_d",
+      "status": "PASS",
+      "total_samples": 81000
+    }
+  },
+  "validators": [
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.preregister",
+        "--validate"
+      ],
+      "label": "prereg",
+      "log_SHA256": "76c95a114702bc9df443b8a401b6d02dea7bdcef1ab5262221189a8b8092201b",
+      "return_code": 0
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.audit_artifacts",
+        "--validate"
+      ],
+      "label": "artifacts",
+      "log_SHA256": "8b2e9d9b94085be6f8e682d9bd200f47b11877701ca71a7fb8632d70f96a2c9a",
+      "return_code": 0
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.timing_contract",
+        "stage_c"
+      ],
+      "label": "stage_c_raw",
+      "log_SHA256": "ae899c03418cc6f4ea8225789705f627f7986e299cfe44a0edfa27967d3bd970",
+      "return_code": 0
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.analyze",
+        "stage_c",
+        "--validate"
+      ],
+      "label": "stage_c_analysis",
+      "log_SHA256": "374e2e10ac59c61580b561653c8fbb0e7863bfb9a8164a7a7e65807e813fa1b7",
+      "return_code": 0
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.validate_profile",
+        "--validate"
+      ],
+      "label": "stage_c_counters",
+      "log_SHA256": "bd597d171ac1dbb1269ae26f95145c5f47206ec74eb49ea312eb87940a7d85be",
+      "return_code": 0
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.timing_contract",
+        "stage_d"
+      ],
+      "label": "stage_d_raw",
+      "log_SHA256": "9f0d16845cc98e882b8500a249d3e71c58c797b80a8c7c3c5114bde87f87df1b",
+      "return_code": 0
+    },
+    {
+      "command": [
+        "/home/chenmiaoming/miniforge3/bin/python3",
+        "-m",
+        "experiments.tma_reduction_layout.phase8.analyze",
+        "stage_d",
+        "--validate"
+      ],
+      "label": "stage_d_analysis",
+      "log_SHA256": "943c1e82b485b043932b5a0d967417f670b452e36d385f7ce09e64869400e2dd",
+      "return_code": 0
+    }
+  ]
+}
