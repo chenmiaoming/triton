@@ -1,0 +1,36 @@
+.version 9.0
+.target sm_90
+.address_size 64
+.visible .entry ordinary_conflict32(.param .u64 output) .reqntid 32,1,1 {
+    .shared .align 16 .b8 tile[4096];
+    .reg .pred %p;
+    .reg .b32 %lane, %bid, %i, %base, %addr, %v0, %v1, %v2, %v3, %offset;
+    .reg .b64 %out, %dst, %byte;
+    ld.param.u64 %out, [output];
+    mov.u32 %lane, %tid.x;
+    mov.u32 %bid, %ctaid.x;
+    mov.u32 %base, tile;
+
+    mov.u32 %i, %lane;
+init_loop:
+    mad.lo.u32 %addr, %i, 4, %base;
+    add.u32 %v0, %i, 1;
+    st.shared.b32 [%addr], %v0;
+    add.u32 %i, %i, 32;
+    setp.lt.u32 %p, %i, 1024;
+    @%p bra init_loop;
+
+    bar.sync 0;
+
+    mad.lo.u32 %addr, %lane, 128, %base;
+    ld.shared.b32 %v0, [%addr];
+    mov.b32 %v1, %v0;
+    mov.b32 %v2, %v0;
+    mov.b32 %v3, %v0;
+
+    mad.lo.u32 %offset, %bid, 32, %lane;
+    mul.wide.u32 %byte, %offset, 16;
+    add.u64 %dst, %out, %byte;
+    st.global.v4.b32 [%dst], {%v0, %v1, %v2, %v3};
+    ret;
+}

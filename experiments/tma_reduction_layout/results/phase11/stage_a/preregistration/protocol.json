@@ -1,0 +1,71 @@
+{
+  "NCU_worker_UUID_required_from_driver": true,
+  "accepted_plan_SHA256": "964ddf7b158039683dc452a901486e3f3a5c24dfa03b2764f3a88c3063aaba68",
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "date": "2026-10-15",
+  "fixture_grid": 128,
+  "fixture_threads": 32,
+  "fixtures": [
+    "ordinary_contiguous",
+    "ordinary_conflict32",
+    "matrix_x4"
+  ],
+  "hardware_and_software_passes_separate": true,
+  "instrument_fixtures_are_compiler_reproducers": false,
+  "matrix_expected": "one warp collective ldmatrix.x4 per warp; separate metric coverage test",
+  "matrix_values": "0x3f80 BF16 bits",
+  "max_infrastructure_retries_per_target": 2,
+  "missing_metrics_are_zero": false,
+  "ordinary_conflict32_expected": "32 distinct shared words on the same bank per warp",
+  "ordinary_contiguous_expected": "one conflict-free scalar shared read per warp",
+  "outcome_based_retries": false,
+  "profile_durations_are_timing_samples": false,
+  "scope_after_completion": "B H100 only; stop after B; C and D not executed this turn",
+  "stage": "A",
+  "status": "FROZEN_BEFORE_GPU_COLLECTION",
+  "targets": {
+    "sm100": {
+      "cc": [
+        10,
+        0
+      ],
+      "gpu": "B200:1",
+      "name": "B200"
+    },
+    "sm120": {
+      "cc": [
+        12,
+        0
+      ],
+      "gpu": "RTX-PRO-6000:1",
+      "name": "RTX PRO 6000"
+    },
+    "sm90": {
+      "cc": [
+        9,
+        0
+      ],
+      "gpu": "H100!:1",
+      "name": "H100"
+    }
+  },
+  "upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/analyze_ir.py": "db734889eeee5559ba6e64c9c1fecb75dee09bd988fab8c5c1b10355f80e5254",
+    "experiments/tma_reduction_layout/phase11/calibration.py": "1b382c74518329b071aaabab92feb162c9c92b7084450470e5cfb8f8161c7b17",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/prepare_draft.py": "9a53a258a2b37dab4358f5245e74e686c5da44a668980bfe0d0f02cc6e0a1b6d",
+    "experiments/tma_reduction_layout/phase11/preregister_a.py": "086ac6f329ff2b76d9e21adb54c07d7ce674b15f5d38213c1d4152216ec1de75",
+    "experiments/tma_reduction_layout/phase11/run_stage_a.py": "f4b52023766754fdd6d96d3c3abdad20ed8290646e82c6b1413a0c88fa211957",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}

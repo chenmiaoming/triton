@@ -1,0 +1,32 @@
+.version 9.0
+.target sm_90
+.address_size 64
+.visible .entry matrix_x4(.param .u64 output) .reqntid 32,1,1 {
+    .shared .align 16 .b8 tile[4096];
+    .reg .pred %p;
+    .reg .b32 %lane, %bid, %i, %base, %addr, %v0, %v1, %v2, %v3, %offset;
+    .reg .b64 %out, %dst, %byte;
+    ld.param.u64 %out, [output];
+    mov.u32 %lane, %tid.x;
+    mov.u32 %bid, %ctaid.x;
+    mov.u32 %base, tile;
+
+    mov.u32 %i, %lane;
+init_loop:
+    mad.lo.u32 %addr, %i, 2, %base;
+    st.shared.b16 [%addr], 0x3f80;
+    add.u32 %i, %i, 32;
+    setp.lt.u32 %p, %i, 256;
+    @%p bra init_loop;
+
+    bar.sync 0;
+
+    mad.lo.u32 %addr, %lane, 16, %base;
+    ldmatrix.sync.aligned.m8n8.x4.shared.b16 {%v0, %v1, %v2, %v3}, [%addr];
+
+    mad.lo.u32 %offset, %bid, 32, %lane;
+    mul.wide.u32 %byte, %offset, 16;
+    add.u64 %dst, %out, %byte;
+    st.global.v4.b32 [%dst], {%v0, %v1, %v2, %v3};
+    ret;
+}
