@@ -1,6 +1,14 @@
 # Phase 11 — Explicit Gluon layout experiments
 
-阶段 A、B 和用户单独批准的 C1 均已完成，每阶段单独 commit。当前停在 C1；C2/C3/D 未执行，PR 仍需用户批准。
+阶段 A、B、C1 和用户单独批准的 C1.5 均已完成，每阶段单独 commit。当前停在 C1.5；C2/C3/D 未执行，PR 仍需用户批准。
+
+[C1.5 方案](c15/PLAN.md)、[结果](../results/phase11/stage_c15/summary.md)和[最终验证](../results/phase11/stage_c15/validation.json)记录 BF16 MR 与稳态区间拟合修正。
+MR 在 BF16 状态上先私有步进，再 single-use widening 供给 max；8/8 个布局的 PTX max opcode 种类/静态数量匹配原完整 kernel。
+需要 BF16 局部 combine 的 7 个布局恢复 `max.bf16`/`max.bf16x2`；32×64/vec8 原本没有这一步。
+新编译 8 个 MR、复用 8 个原 ML CUBIN，新增 96 项完整输出检查、64 份 MR NCU 报告和 7,680 个同轮 ML/MR event 样本。
+所有主斜率统一使用 K=16/64/256，单列 T1、T1−b、拟合截距与相邻区间斜率；旧 C1 同区间重拟合只写在 C1.5 derived output。
+动态 K 倍检查通过，BF16 真实 SASS 的 `HMNMX2`/`VHMNMX` 计数均保留。ML 仍存在区间依赖，CTA 线性缩放和 45 µs 底座可加性尚未实测验证。
+C1.5 完成后停止，等待用户决定 C2。
 
 2026-10-15：[后续实验 review draft](FOLLOWUP_PLAN.md)保存 C/D 的讨论草案；用户随后只批准了 C1。
 实际 C1 以 [C1 方案](c1/PLAN.md)和结果目录的冻结协议为准：两种几何各覆盖 N-first vec1/2/4/8，
