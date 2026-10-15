@@ -1,0 +1,4357 @@
+{
+  "status": "PASS",
+  "GPU_UUID": "GPU-69464998-e901-74ba-63ff-ae7022f8aed9",
+  "compiler": {
+    "version": "3.7.1",
+    "path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/__init__.py",
+    "native_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/_C/libtriton.so",
+    "native_SHA256": "e1e17b42f65d04185099e8512cdedf3989355e7e7d3f429022c5302e4833f3d7",
+    "cache_directory": "/tmp/triton-exp-a10-native371-kernel-cache",
+    "native_builds": 0,
+    "ptxas_SHA256": "c960a4f238b17d5c5d3c01ad2bbc1ebd2c5aecc459cb4d223bff10b45f9b8fca",
+    "ptxas_version": "ptxas: NVIDIA (R) Ptx optimizing assembler\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:21:21_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+    "cache_CUBINs_before": 22,
+    "cache_CUBINs_after": 22
+  },
+  "analyzer_SHA256": "38191e13187e3e55969349f8911c4814f73316c19bbcc17ac79d1c7d17692c7c",
+  "artifact_count": 22,
+  "correctness_checks": 44,
+  "timing_samples": 1980,
+  "timing_scope": "one A10, three temporal process repeats, descriptive",
+  "artifacts": {
+    "M32_N128_w4:canonical": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "5883cf4a3419f92fcbc723cbef683de45a84d829af5724f6177cdea352b25c89",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:canonical",
+        "path": "direct",
+        "variant": "canonical"
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/canonical",
+      "static_SASS_sites": {
+        "global_load": 4,
+        "async_global_to_shared": 0,
+        "shared_load": 13,
+        "shared_store": 14,
+        "shuffle": 16,
+        "barrier": 4,
+        "max": 28
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 7,
+        "LOP3.LUT": 13,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.128": 4,
+        "HMNMX2.BF16_V2": 12,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 16,
+        "FMNMX": 16,
+        "STS": 12,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS": 12,
+        "IMAD.MOV": 1,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 13
+      }
+    },
+    "M32_N128_w4:direct:vec1": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 0,
+      "num_regs": 40,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "2421523dfa923266de84102a87d63b668b478f3237fc02c6a804f3753c182823",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:direct:vec1",
+        "path": "direct",
+        "variant": "vec1",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/direct/vec1",
+      "static_SASS_sites": {
+        "global_load": 32,
+        "async_global_to_shared": 0,
+        "shared_load": 0,
+        "shared_store": 0,
+        "shuffle": 0,
+        "barrier": 0,
+        "max": 31
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 2,
+        "SHF.R.U32.HI": 1,
+        "LOP3.LUT": 2,
+        "IMAD": 1,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.U16": 32,
+        "HMNMX2.BF16_V2": 31,
+        "LEA.HI.X": 1,
+        "IMAD.U32": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 13
+      }
+    },
+    "M32_N128_w4:direct:vec2": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 1024,
+      "num_regs": 28,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "df03eee6ba03c574e1ab7e185f1d3712afdc19bb4d8c8fd7e09be9b179941760",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:direct:vec2",
+        "path": "direct",
+        "variant": "vec2",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            2,
+            2
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/direct/vec2",
+      "static_SASS_sites": {
+        "global_load": 16,
+        "async_global_to_shared": 0,
+        "shared_load": 5,
+        "shared_store": 6,
+        "shuffle": 2,
+        "barrier": 4,
+        "max": 17
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 2,
+        "IMAD.SHL.U32": 6,
+        "LOP3.LUT": 9,
+        "SGXT.U32": 1,
+        "IMAD": 4,
+        "LEA": 5,
+        "LEA.HI.X.SX32": 4,
+        "LEA.HI": 1,
+        "LDG.E": 16,
+        "IADD3": 2,
+        "HMNMX2.BF16_V2": 15,
+        "PRMT": 1,
+        "IMAD.U32": 2,
+        "STS": 6,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS": 5,
+        "SHFL.BFLY": 2,
+        "FMNMX": 2,
+        "IMAD.MOV": 1,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 8
+      }
+    },
+    "M32_N128_w4:direct:vec4": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 28,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "be26de4c6c473983ea2f67a1c94daa3a3585ef8734f3c43a03425e7478aa5c46",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:direct:vec4",
+        "path": "direct",
+        "variant": "vec4",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/direct/vec4",
+      "static_SASS_sites": {
+        "global_load": 8,
+        "async_global_to_shared": 0,
+        "shared_load": 9,
+        "shared_store": 9,
+        "shuffle": 8,
+        "barrier": 4,
+        "max": 22
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 3,
+        "IMAD.SHL.U32": 6,
+        "LOP3.LUT": 7,
+        "SGXT.U32": 1,
+        "IMAD": 4,
+        "LEA": 4,
+        "LEA.HI.X.SX32": 3,
+        "IMAD.IADD": 1,
+        "LDG.E.64": 8,
+        "IADD3": 1,
+        "HMNMX2.BF16_V2": 14,
+        "PRMT": 2,
+        "IMAD.U32": 4,
+        "STS": 8,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS": 8,
+        "SHFL.BFLY": 8,
+        "FMNMX": 8,
+        "LEA.HI.X": 1,
+        "STS.128": 1,
+        "LDSM.16.M88": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 8
+      }
+    },
+    "M32_N128_w4:direct:vec8": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "c538ad42223719a35e7e95f38e8d889a26e849a3dc470513cef5e7b8901a89fa",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:direct:vec8",
+        "path": "direct",
+        "variant": "vec8",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/direct/vec8",
+      "static_SASS_sites": {
+        "global_load": 4,
+        "async_global_to_shared": 0,
+        "shared_load": 13,
+        "shared_store": 14,
+        "shuffle": 16,
+        "barrier": 4,
+        "max": 28
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 7,
+        "LOP3.LUT": 13,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.128": 4,
+        "HMNMX2.BF16_V2": 12,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 16,
+        "FMNMX": 16,
+        "STS": 12,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS": 12,
+        "IMAD.MOV": 1,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 13
+      }
+    },
+    "M32_N128_w4:direct:vec8_within": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 512,
+      "num_regs": 27,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "14d8e1f4f289c0ba12458f9d55451b4d3fffa13bfb79b9dfe3646d6d007e98f9",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:direct:vec8_within",
+        "path": "direct",
+        "variant": "vec8_within",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/direct/vec8_within",
+      "static_SASS_sites": {
+        "global_load": 4,
+        "async_global_to_shared": 0,
+        "shared_load": 1,
+        "shared_store": 2,
+        "shuffle": 24,
+        "barrier": 0,
+        "max": 36
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 4,
+        "LOP3.LUT": 7,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IADD3": 1,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.128": 4,
+        "HMNMX2.BF16_V2": 12,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 24,
+        "FMNMX": 24,
+        "STS.128": 2,
+        "NOP": 12,
+        "LDSM.16.M88": 1,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1
+      }
+    },
+    "M32_N128_w4:cp_async:vec1": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 8192,
+      "num_regs": 34,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "cc9ed1a449bb848b971486fbb025da0c2e16448334ab225ff3f005d81ca638ba",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:cp_async:vec1",
+        "path": "cp_async",
+        "variant": "vec1",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/cp_async/vec1",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 4,
+        "shared_load": 32,
+        "shared_store": 0,
+        "shuffle": 0,
+        "barrier": 1,
+        "max": 31
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 1,
+        "IMAD.SHL.U32": 7,
+        "LOP3.LUT": 16,
+        "IMAD": 3,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "IADD3": 3,
+        "LDGSTS.E.BYPASS.128": 4,
+        "IMAD.X": 3,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 1,
+        "LDS.U16": 32,
+        "HMNMX2.BF16_V2": 31,
+        "LEA.HI.X": 1,
+        "PRMT": 1,
+        "IMAD.U32": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 8
+      }
+    },
+    "M32_N128_w4:cp_async:vec2": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 8192,
+      "num_regs": 23,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "b3ff62bebbd53ffd84cc0f926f78cd6f61931447561ec43a1f81f7905f833ce5",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:cp_async:vec2",
+        "path": "cp_async",
+        "variant": "vec2",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            2,
+            2
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/cp_async/vec2",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 4,
+        "shared_load": 9,
+        "shared_store": 6,
+        "shuffle": 2,
+        "barrier": 6,
+        "max": 17
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 9,
+        "LOP3.LUT": 18,
+        "SHF.R.S32.HI": 1,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 5,
+        "SGXT": 1,
+        "IMAD.IADD": 4,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "IADD3": 3,
+        "LDGSTS.E.BYPASS.128": 4,
+        "IMAD.X": 3,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 6,
+        "LDSM.16.M88.4": 4,
+        "HMNMX2.BF16_V2": 15,
+        "IMAD.MOV": 1,
+        "PRMT": 1,
+        "IMAD.U32": 2,
+        "STS": 6,
+        "LDS": 5,
+        "SHFL.BFLY": 2,
+        "FMNMX": 2,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 11
+      }
+    },
+    "M32_N128_w4:cp_async:vec4": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 8192,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "407812ab515834d7aa6581f206f8844b3a78c4fc5a8850b72482dd43cd6def8d",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:cp_async:vec4",
+        "path": "cp_async",
+        "variant": "vec4",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/cp_async/vec4",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 4,
+        "shared_load": 17,
+        "shared_store": 9,
+        "shuffle": 8,
+        "barrier": 6,
+        "max": 22
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 3,
+        "IMAD.SHL.U32": 8,
+        "LOP3.LUT": 17,
+        "IMAD": 4,
+        "IMAD.IADD": 3,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "IADD3": 3,
+        "LDGSTS.E.BYPASS.128": 4,
+        "IMAD.X": 3,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 6,
+        "LDS.64": 8,
+        "HMNMX2.BF16_V2": 14,
+        "PRMT": 3,
+        "IMAD.U32": 4,
+        "STS": 8,
+        "LDS": 8,
+        "SHFL.BFLY": 8,
+        "FMNMX": 8,
+        "LEA.HI.X": 1,
+        "STS.128": 1,
+        "LDSM.16.M88": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 15
+      }
+    },
+    "M32_N128_w4:cp_async:vec8": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 8192,
+      "num_regs": 34,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "253aa315dbf39c9addd33040b214786c93a8eca213396537bb58fd21f8e973be",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:cp_async:vec8",
+        "path": "cp_async",
+        "variant": "vec8",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/cp_async/vec8",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 4,
+        "shared_load": 17,
+        "shared_store": 14,
+        "shuffle": 16,
+        "barrier": 6,
+        "max": 28
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 2,
+        "IMAD.SHL.U32": 8,
+        "LOP3.LUT": 16,
+        "IMAD": 3,
+        "IMAD.U32": 9,
+        "LEA": 3,
+        "IMAD.IADD": 2,
+        "LEA.HI.X.SX32": 2,
+        "IADD3": 3,
+        "LDGSTS.E.BYPASS.128": 4,
+        "IMAD.X": 3,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 6,
+        "LDS.128": 4,
+        "HMNMX2.BF16_V2": 12,
+        "PRMT": 5,
+        "SHFL.BFLY": 16,
+        "FMNMX": 16,
+        "STS": 12,
+        "IMAD.MOV": 1,
+        "LDS": 12,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1,
+        "NOP": 8
+      }
+    },
+    "M32_N128_w4:cp_async:vec8_within": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 8192,
+      "num_regs": 27,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "83a58f99f3bd3e604467c10122c230571660a7f870f3142d38e0bed5b3eb506c",
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "M32_N128_w4:cp_async:vec8_within",
+        "path": "cp_async",
+        "variant": "vec8_within",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N128_w4/cp_async/vec8_within",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 4,
+        "shared_load": 5,
+        "shared_store": 2,
+        "shuffle": 24,
+        "barrier": 2,
+        "max": 36
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 2,
+        "IMAD.SHL.U32": 11,
+        "LOP3.LUT": 15,
+        "IMAD": 5,
+        "IMAD.IADD": 3,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "IADD3": 3,
+        "LDGSTS.E.BYPASS.128": 4,
+        "IMAD.X": 3,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 2,
+        "LDS.128": 4,
+        "HMNMX2.BF16_V2": 12,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 24,
+        "FMNMX": 24,
+        "STS.128": 2,
+        "LEA.HI.X": 1,
+        "NOP": 10,
+        "LDSM.16.M88": 1,
+        "STG.E": 1,
+        "EXIT": 1,
+        "BRA": 1
+      }
+    },
+    "M32_N64_w8:canonical": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 25,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "da588aa4b447723baea0f1f843369d4c6690db21f72b61daa631b87d99b82b78",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:canonical",
+        "path": "direct",
+        "variant": "canonical"
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/canonical",
+      "static_SASS_sites": {
+        "global_load": 1,
+        "async_global_to_shared": 0,
+        "shared_load": 11,
+        "shared_store": 12,
+        "shuffle": 22,
+        "barrier": 4,
+        "max": 22
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 8,
+        "LOP3.LUT": 13,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.128": 1,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 22,
+        "FMNMX": 22,
+        "STS": 10,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "ISETP.NE.U32.AND": 1,
+        "LDS": 10,
+        "IMAD.MOV": 1,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 9
+      }
+    },
+    "M32_N64_w8:direct:vec1": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 1024,
+      "num_regs": 24,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "e2fb407a9290a39ad295f279a08973d2d5b149d1afd265bc9dd0a0c874985e41",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:direct:vec1",
+        "path": "direct",
+        "variant": "vec1",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            2
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/direct/vec1",
+      "static_SASS_sites": {
+        "global_load": 8,
+        "async_global_to_shared": 0,
+        "shared_load": 2,
+        "shared_store": 2,
+        "shuffle": 2,
+        "barrier": 2,
+        "max": 9
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 5,
+        "SHF.R.U32.HI": 2,
+        "LOP3.LUT": 7,
+        "SGXT.U32": 1,
+        "LEA.HI": 1,
+        "IMAD": 3,
+        "LEA": 5,
+        "IADD3": 2,
+        "LEA.HI.X.SX32": 4,
+        "LDG.E.U16": 8,
+        "HMNMX2.BF16_V2": 7,
+        "PRMT": 1,
+        "IMAD.U32": 1,
+        "STS": 2,
+        "BAR.SYNC.DEFER_BLOCKING": 2,
+        "LDS": 2,
+        "SHFL.BFLY": 2,
+        "FMNMX": 2,
+        "EXIT": 2,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 14
+      }
+    },
+    "M32_N64_w8:direct:vec2": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 19,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "9dc4b86e806a2f0ee5afc7d91ba386d7679c457605989be68ab1bbbb178921e5",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:direct:vec2",
+        "path": "direct",
+        "variant": "vec2",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/direct/vec2",
+      "static_SASS_sites": {
+        "global_load": 4,
+        "async_global_to_shared": 0,
+        "shared_load": 5,
+        "shared_store": 6,
+        "shuffle": 6,
+        "barrier": 4,
+        "max": 9
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "SHF.R.U32.HI": 2,
+        "IMAD.SHL.U32": 7,
+        "LOP3.LUT": 11,
+        "SGXT.U32": 1,
+        "LEA.HI": 1,
+        "IMAD": 4,
+        "LEA": 4,
+        "IADD3": 1,
+        "LEA.HI.X.SX32": 3,
+        "LDG.E": 4,
+        "HMNMX2.BF16_V2": 3,
+        "PRMT": 1,
+        "IMAD.U32": 2,
+        "STS": 6,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS": 5,
+        "SHFL.BFLY": 6,
+        "FMNMX": 6,
+        "IMAD.MOV": 1,
+        "EXIT": 2,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 15
+      }
+    },
+    "M32_N64_w8:direct:vec4": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 19,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "aafe41852dfa8950d5c8e398fcd9857f3e5ad7b7d96fdd5f06649649d1432839",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:direct:vec4",
+        "path": "direct",
+        "variant": "vec4",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/direct/vec4",
+      "static_SASS_sites": {
+        "global_load": 2,
+        "async_global_to_shared": 0,
+        "shared_load": 7,
+        "shared_store": 7,
+        "shuffle": 10,
+        "barrier": 4,
+        "max": 12
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 7,
+        "LOP3.LUT": 11,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.64": 2,
+        "HMNMX2.BF16_V2": 2,
+        "PRMT": 2,
+        "IMAD.U32": 4,
+        "SHFL.BFLY": 10,
+        "FMNMX": 10,
+        "STS": 6,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS": 6,
+        "LEA.HI.X": 1,
+        "STS.128": 1,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 10
+      }
+    },
+    "M32_N64_w8:direct:vec8": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 25,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "793147c2dfc02335f7bcc41653ccbc71888733059a470af8ae8585be8c075b55",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:direct:vec8",
+        "path": "direct",
+        "variant": "vec8",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/direct/vec8",
+      "static_SASS_sites": {
+        "global_load": 1,
+        "async_global_to_shared": 0,
+        "shared_load": 11,
+        "shared_store": 12,
+        "shuffle": 22,
+        "barrier": 4,
+        "max": 22
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 8,
+        "LOP3.LUT": 13,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.128": 1,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 22,
+        "FMNMX": 22,
+        "STS": 10,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "ISETP.NE.U32.AND": 1,
+        "LDS": 10,
+        "IMAD.MOV": 1,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 9
+      }
+    },
+    "M32_N64_w8:direct:vec8_within": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 256,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "8ca9079b06e751562b3321de8e92be8faf141304e5ecbb612852ade152191104",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:direct:vec8_within",
+        "path": "direct",
+        "variant": "vec8_within",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            32,
+            1
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            8
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/direct/vec8_within",
+      "static_SASS_sites": {
+        "global_load": 1,
+        "async_global_to_shared": 0,
+        "shared_load": 1,
+        "shared_store": 2,
+        "shuffle": 40,
+        "barrier": 1,
+        "max": 40
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 5,
+        "LOP3.LUT": 7,
+        "SHF.R.U32.HI": 1,
+        "IMAD": 1,
+        "LEA.HI": 1,
+        "IMAD.IADD": 1,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDG.E.128": 1,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 40,
+        "FMNMX": 40,
+        "STS.128": 2,
+        "BAR.SYNC.DEFER_BLOCKING": 1,
+        "LEA.HI.X": 1,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 9
+      }
+    },
+    "M32_N64_w8:cp_async:vec1": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 4096,
+      "num_regs": 22,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "f65b202fc5d846d7dd15a2aa45e7effb1a556adf236fdfc9f13a1afb20fe2a42",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:cp_async:vec1",
+        "path": "cp_async",
+        "variant": "vec1",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            2
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/cp_async/vec1",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 1,
+        "shared_load": 10,
+        "shared_store": 2,
+        "shuffle": 2,
+        "barrier": 4,
+        "max": 9
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 8,
+        "LOP3.LUT": 14,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "SHF.R.U32.HI": 2,
+        "LDGSTS.E.BYPASS.128": 1,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 4,
+        "LDS.U16": 8,
+        "HMNMX2.BF16_V2": 7,
+        "PRMT": 1,
+        "IMAD.IADD": 1,
+        "IMAD.U32": 1,
+        "STS": 2,
+        "LDS": 2,
+        "SHFL.BFLY": 2,
+        "FMNMX": 2,
+        "EXIT": 2,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 9
+      }
+    },
+    "M32_N64_w8:cp_async:vec2": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 4096,
+      "num_regs": 21,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "a20e6714e7b341c754c717878e1106af7278378c9ca91bd5e3fa9a6b6270e5c3",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:cp_async:vec2",
+        "path": "cp_async",
+        "variant": "vec2",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/cp_async/vec2",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 1,
+        "shared_load": 6,
+        "shared_store": 6,
+        "shuffle": 6,
+        "barrier": 6,
+        "max": 9
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 10,
+        "LOP3.LUT": 17,
+        "SHF.R.U32.HI": 3,
+        "IMAD": 3,
+        "IMAD.IADD": 3,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "ISETP.NE.U32.AND": 1,
+        "LDGSTS.E.BYPASS.128": 1,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 6,
+        "LDSM.16.M88.4": 1,
+        "HMNMX2.BF16_V2": 3,
+        "PRMT": 1,
+        "IMAD.U32": 2,
+        "STS": 6,
+        "LDS": 5,
+        "SHFL.BFLY": 6,
+        "FMNMX": 6,
+        "IMAD.MOV": 1,
+        "EXIT": 2,
+        "LEA.HI.X": 1,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 13
+      }
+    },
+    "M32_N64_w8:cp_async:vec4": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 4096,
+      "num_regs": 19,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "8547f6294bb4c9f78f3128b1d55d0f444d7fde169ae3895015a2a8c243a0ed3e",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:cp_async:vec4",
+        "path": "cp_async",
+        "variant": "vec4",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/cp_async/vec4",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 1,
+        "shared_load": 9,
+        "shared_store": 7,
+        "shuffle": 10,
+        "barrier": 6,
+        "max": 12
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 10,
+        "LOP3.LUT": 16,
+        "SHF.R.U32.HI": 1,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDGSTS.E.BYPASS.128": 1,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 6,
+        "LDS.64": 2,
+        "IMAD.IADD": 1,
+        "HMNMX2.BF16_V2": 2,
+        "PRMT": 2,
+        "IMAD.U32": 4,
+        "SHFL.BFLY": 10,
+        "FMNMX": 10,
+        "STS": 6,
+        "LDS": 6,
+        "LEA.HI.X": 1,
+        "STS.128": 1,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 9
+      }
+    },
+    "M32_N64_w8:cp_async:vec8": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 4096,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "6e8eb1be7670b20ac3c5437ed11a9e0f66f7d599f8e06597c6a92d7a056ac63b",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:cp_async:vec8",
+        "path": "cp_async",
+        "variant": "vec8",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/cp_async/vec8",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 1,
+        "shared_load": 12,
+        "shared_store": 12,
+        "shuffle": 22,
+        "barrier": 6,
+        "max": 22
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 9,
+        "LOP3.LUT": 15,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDGSTS.E.BYPASS.128": 1,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 6,
+        "LDS.128": 1,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 22,
+        "FMNMX": 22,
+        "STS": 10,
+        "ISETP.NE.U32.AND": 1,
+        "LDS": 10,
+        "IMAD.MOV": 1,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 9
+      }
+    },
+    "M32_N64_w8:cp_async:vec8_within": {
+      "function_name": "explicit",
+      "dynamic_smem_bytes": 4096,
+      "num_regs": 27,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "a4e82646b208edc88de7dea14fef267ddd7909a86d0bda7c467d8fb50238feef",
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "M32_N64_w8:cp_async:vec8_within",
+        "path": "cp_async",
+        "variant": "vec8_within",
+        "layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            32,
+            1
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            8
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "copy_layout": {
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "shared_layout": {
+          "swizzle_byte_width": 128,
+          "element_bitwidth": 16,
+          "rank": 3,
+          "transposed": false
+        }
+      },
+      "archive_path": "collect/1/artifacts/M32_N64_w8/cp_async/vec8_within",
+      "static_SASS_sites": {
+        "global_load": 0,
+        "async_global_to_shared": 1,
+        "shared_load": 2,
+        "shared_store": 2,
+        "shuffle": 40,
+        "barrier": 3,
+        "max": 40
+      },
+      "opcodes": {
+        "IMAD.MOV.U32": 1,
+        "S2R": 2,
+        "ULDC.64": 1,
+        "IMAD.SHL.U32": 8,
+        "LOP3.LUT": 12,
+        "SHF.R.U32.HI": 2,
+        "IMAD": 2,
+        "IMAD.IADD": 2,
+        "LEA": 3,
+        "LEA.HI.X.SX32": 2,
+        "LDGSTS.E.BYPASS.128": 1,
+        "LDGDEPBAR": 1,
+        "DEPBAR.LE": 1,
+        "BAR.SYNC.DEFER_BLOCKING": 3,
+        "LDS.128": 1,
+        "PRMT": 4,
+        "IMAD.U32": 8,
+        "SHFL.BFLY": 40,
+        "FMNMX": 40,
+        "LEA.HI.X": 1,
+        "STS.128": 2,
+        "LDSM.16.M88": 1,
+        "EXIT": 2,
+        "STG.E": 1,
+        "BRA": 1,
+        "NOP": 10
+      }
+    }
+  },
+  "timing": {
+    "M32_N128_w4:canonical": {
+      "worker_medians_us": [
+        298.0960011482239,
+        298.3680069446564,
+        300.03198981285095
+      ],
+      "median_of_worker_medians_us": 298.3680069446564
+    },
+    "M32_N128_w4:cp_async:vec1": {
+      "worker_medians_us": [
+        295.9359884262085,
+        295.9359884262085,
+        297.92000353336334
+      ],
+      "median_of_worker_medians_us": 295.9359884262085
+    },
+    "M32_N128_w4:cp_async:vec2": {
+      "worker_medians_us": [
+        295.9359884262085,
+        295.9359884262085,
+        297.9840040206909
+      ],
+      "median_of_worker_medians_us": 295.9359884262085
+    },
+    "M32_N128_w4:cp_async:vec4": {
+      "worker_medians_us": [
+        297.7440059185028,
+        297.87200689315796,
+        303.00799012184143
+      ],
+      "median_of_worker_medians_us": 297.87200689315796
+    },
+    "M32_N128_w4:cp_async:vec8": {
+      "worker_medians_us": [
+        300.03198981285095,
+        300.03198981285095,
+        305.02399802207947
+      ],
+      "median_of_worker_medians_us": 300.03198981285095
+    },
+    "M32_N128_w4:cp_async:vec8_within": {
+      "worker_medians_us": [
+        295.9359884262085,
+        295.9359884262085,
+        297.9840040206909
+      ],
+      "median_of_worker_medians_us": 295.9359884262085
+    },
+    "M32_N128_w4:direct:vec1": {
+      "worker_medians_us": [
+        313.26399743556976,
+        313.1679892539978,
+        315.39198756217957
+      ],
+      "median_of_worker_medians_us": 313.26399743556976
+    },
+    "M32_N128_w4:direct:vec2": {
+      "worker_medians_us": [
+        297.9840040206909,
+        297.93600738048553,
+        299.9679893255234
+      ],
+      "median_of_worker_medians_us": 297.9840040206909
+    },
+    "M32_N128_w4:direct:vec4": {
+      "worker_medians_us": [
+        296.88000679016113,
+        296.9599962234497,
+        299.50401186943054
+      ],
+      "median_of_worker_medians_us": 296.9599962234497
+    },
+    "M32_N128_w4:direct:vec8": {
+      "worker_medians_us": [
+        298.8799959421158,
+        297.9840040206909,
+        301.64800584316254
+      ],
+      "median_of_worker_medians_us": 298.8799959421158
+    },
+    "M32_N128_w4:direct:vec8_within": {
+      "worker_medians_us": [
+        324.5439976453781,
+        324.6079981327057,
+        326.7040103673935
+      ],
+      "median_of_worker_medians_us": 324.6079981327057
+    },
+    "M32_N64_w8:canonical": {
+      "worker_medians_us": [
+        421.88799381256104,
+        422.39999771118164,
+        425.3919869661331
+      ],
+      "median_of_worker_medians_us": 422.39999771118164
+    },
+    "M32_N64_w8:cp_async:vec1": {
+      "worker_medians_us": [
+        278.52800488471985,
+        279.32800352573395,
+        284.67199206352234
+      ],
+      "median_of_worker_medians_us": 279.32800352573395
+    },
+    "M32_N64_w8:cp_async:vec2": {
+      "worker_medians_us": [
+        282.6240062713623,
+        282.6240062713623,
+        287.6000106334686
+      ],
+      "median_of_worker_medians_us": 282.6240062713623
+    },
+    "M32_N64_w8:cp_async:vec4": {
+      "worker_medians_us": [
+        394.23999190330505,
+        395.6480026245117,
+        400.2559930086136
+      ],
+      "median_of_worker_medians_us": 395.6480026245117
+    },
+    "M32_N64_w8:cp_async:vec8": {
+      "worker_medians_us": [
+        455.6800127029419,
+        454.5599967241287,
+        463.9519900083542
+      ],
+      "median_of_worker_medians_us": 455.6800127029419
+    },
+    "M32_N64_w8:cp_async:vec8_within": {
+      "worker_medians_us": [
+        301.05599761009216,
+        301.05599761009216,
+        307.6000064611435
+      ],
+      "median_of_worker_medians_us": 301.05599761009216
+    },
+    "M32_N64_w8:direct:vec1": {
+      "worker_medians_us": [
+        279.4240117073059,
+        279.4400006532669,
+        286.20800375938416
+      ],
+      "median_of_worker_medians_us": 279.4400006532669
+    },
+    "M32_N64_w8:direct:vec2": {
+      "worker_medians_us": [
+        285.69599986076355,
+        285.69599986076355,
+        291.7279899120331
+      ],
+      "median_of_worker_medians_us": 285.69599986076355
+    },
+    "M32_N64_w8:direct:vec4": {
+      "worker_medians_us": [
+        368.6400055885315,
+        367.1039938926697,
+        375.328004360199
+      ],
+      "median_of_worker_medians_us": 368.6400055885315
+    },
+    "M32_N64_w8:direct:vec8": {
+      "worker_medians_us": [
+        421.88799381256104,
+        420.3359931707382,
+        430.08001148700714
+      ],
+      "median_of_worker_medians_us": 421.88799381256104
+    },
+    "M32_N64_w8:direct:vec8_within": {
+      "worker_medians_us": [
+        315.39198756217957,
+        315.15198945999146,
+        317.440003156662
+      ],
+      "median_of_worker_medians_us": 315.39198756217957
+    }
+  },
+  "profiles": {
+    "0_hardware": {
+      "tag": "M32_N128_w4:direct:vec1",
+      "kind": "hardware",
+      "report_SHA256": "8098647e1fe02f734422dc50d32b60aa8e479285c4b9f5fa95b4e6e6c4cd30ba",
+      "metrics": {
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum": 0.0,
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum": 0.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum": 0.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum": 0.0,
+        "smsp__inst_executed.sum": 5373952.0
+      }
+    },
+    "0_source": {
+      "tag": "M32_N128_w4:direct:vec1",
+      "kind": "source",
+      "report_SHA256": "4fa56c828a19f8eaa5fcccaa170b3d8b4bf07135cd5e3b4e35cdadc1f36f21f4",
+      "dynamic_warp_instructions_ignoring_predicates": {
+        "global_load": 2097152,
+        "async_global_to_shared": 0,
+        "shared_load": 0,
+        "shared_store": 0,
+        "shuffle": 0,
+        "barrier": 0,
+        "max": 2031616
+      },
+      "predicated_on_thread_instructions": {
+        "global_load": 67108864,
+        "async_global_to_shared": 0,
+        "shared_load": 0,
+        "shared_store": 0,
+        "shuffle": 0,
+        "barrier": 0,
+        "max": 65011712
+      },
+      "sites": [
+        {
+          "PC": "0x7f89a2c0ccb0",
+          "instruction": "      LDG.E.U16 R24, [R2.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ccc0",
+          "instruction": "      LDG.E.U16 R26, [R2.64+0x4000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ccd0",
+          "instruction": "      LDG.E.U16 R30, [R2.64+0x8000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cce0",
+          "instruction": "      LDG.E.U16 R22, [R2.64+0xc000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ccf0",
+          "instruction": "      LDG.E.U16 R20, [R2.64+0x10000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd00",
+          "instruction": "      LDG.E.U16 R18, [R2.64+0x14000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd10",
+          "instruction": "      LDG.E.U16 R16, [R2.64+0x18000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd20",
+          "instruction": "      LDG.E.U16 R14, [R2.64+0x1c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd30",
+          "instruction": "      LDG.E.U16 R12, [R2.64+0x20000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd40",
+          "instruction": "      LDG.E.U16 R10, [R2.64+0x24000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd50",
+          "instruction": "      LDG.E.U16 R8, [R2.64+0x28000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd60",
+          "instruction": "      LDG.E.U16 R6, [R2.64+0x2c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd70",
+          "instruction": "      LDG.E.U16 R4, [R2.64+0x30000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd80",
+          "instruction": "      LDG.E.U16 R37, [R2.64+0x34000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cd90",
+          "instruction": "      LDG.E.U16 R35, [R2.64+0x38000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cda0",
+          "instruction": "      LDG.E.U16 R33, [R2.64+0x3c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cdb0",
+          "instruction": "      LDG.E.U16 R31, [R2.64+0x40000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cdc0",
+          "instruction": "      LDG.E.U16 R29, [R2.64+0x44000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cdd0",
+          "instruction": "      LDG.E.U16 R27, [R2.64+0x48000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cde0",
+          "instruction": "      LDG.E.U16 R25, [R2.64+0x4c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cdf0",
+          "instruction": "      LDG.E.U16 R23, [R2.64+0x50000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce00",
+          "instruction": "      LDG.E.U16 R21, [R2.64+0x54000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce10",
+          "instruction": "      LDG.E.U16 R19, [R2.64+0x58000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce20",
+          "instruction": "      LDG.E.U16 R17, [R2.64+0x5c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce30",
+          "instruction": "      LDG.E.U16 R15, [R2.64+0x60000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce40",
+          "instruction": "      LDG.E.U16 R13, [R2.64+0x64000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce50",
+          "instruction": "      LDG.E.U16 R11, [R2.64+0x68000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce60",
+          "instruction": "      LDG.E.U16 R9, [R2.64+0x6c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce70",
+          "instruction": "      LDG.E.U16 R7, [R2.64+0x70000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce80",
+          "instruction": "      LDG.E.U16 R28, [R2.64+0x7c000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ce90",
+          "instruction": "      HMNMX2.BF16_V2 R32, R24.H0_H0, R26.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cea0",
+          "instruction": "      LDG.E.U16 R26, [R2.64+0x74000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ceb0",
+          "instruction": "      LDG.E.U16 R24, [R2.64+0x78000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cec0",
+          "instruction": "      HMNMX2.BF16_V2 R30, R32.H0_H0, R30.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0ced0",
+          "instruction": "      HMNMX2.BF16_V2 R22, R30.H0_H0, R22.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cee0",
+          "instruction": "      HMNMX2.BF16_V2 R20, R22.H0_H0, R20.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cef0",
+          "instruction": "      HMNMX2.BF16_V2 R18, R20.H0_H0, R18.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf00",
+          "instruction": "      HMNMX2.BF16_V2 R16, R18.H0_H0, R16.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf10",
+          "instruction": "      HMNMX2.BF16_V2 R14, R16.H0_H0, R14.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf20",
+          "instruction": "      HMNMX2.BF16_V2 R12, R14.H0_H0, R12.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf30",
+          "instruction": "      HMNMX2.BF16_V2 R10, R12.H0_H0, R10.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf40",
+          "instruction": "      HMNMX2.BF16_V2 R3, R10.H0_H0, R8.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf50",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R6.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf60",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R4.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf70",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R37.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf80",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R35.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cf90",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R33.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cfa0",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R31.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cfb0",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R29.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cfc0",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R27.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cfd0",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R25.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cfe0",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R23.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0cff0",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R21.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d000",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R19.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d010",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R17.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d020",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R15.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d030",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R13.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d040",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R11.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d050",
+          "instruction": "      HMNMX2.BF16_V2 R3, R3.H0_H0, R9.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d060",
+          "instruction": "      HMNMX2.BF16_V2 R13, R3.H0_H0, R7.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d0c0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R13.H0_H0, R26.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d0d0",
+          "instruction": "      HMNMX2.BF16_V2 R14, R12.H0_H0, R24.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f89a2c0d0e0",
+          "instruction": "      HMNMX2.BF16_V2 R4, R14.H0_H0, R28.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        }
+      ]
+    },
+    "1_hardware": {
+      "tag": "M32_N128_w4:direct:vec8",
+      "kind": "hardware",
+      "report_SHA256": "f564332edab62374ff8f64e48f17a5aa24c62db8ed2e55d90f8a16f471747717",
+      "metrics": {
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum": 7864320.0,
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum": 7864320.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum": 8727048.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum": 9175040.0,
+        "smsp__inst_executed.sum": 8519680.0
+      }
+    },
+    "1_source": {
+      "tag": "M32_N128_w4:direct:vec8",
+      "kind": "source",
+      "report_SHA256": "70d2ac8efd61e230c0274b769970be894102a1dbd85441ca03f9e4a8578a4cdb",
+      "dynamic_warp_instructions_ignoring_predicates": {
+        "global_load": 262144,
+        "async_global_to_shared": 0,
+        "shared_load": 851968,
+        "shared_store": 917504,
+        "shuffle": 1048576,
+        "barrier": 262144,
+        "max": 1835008
+      },
+      "predicated_on_thread_instructions": {
+        "global_load": 8388608,
+        "async_global_to_shared": 0,
+        "shared_load": 27262976,
+        "shared_store": 14680064,
+        "shuffle": 33554432,
+        "barrier": 8388608,
+        "max": 58720256
+      },
+      "sites": [
+        {
+          "PC": "0x7f2006bfd8f0",
+          "instruction": "      LDG.E.128 R4, [R22.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd900",
+          "instruction": "      LDG.E.128 R8, [R22.64+0x20000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd910",
+          "instruction": "      LDG.E.128 R12, [R22.64+0x40000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd920",
+          "instruction": "      LDG.E.128 R16, [R22.64+0x60000]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd960",
+          "instruction": "      HMNMX2.BF16_V2 R4, R4, R8, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd970",
+          "instruction": "      HMNMX2.BF16_V2 R11, R7, R11, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd980",
+          "instruction": "      HMNMX2.BF16_V2 R5, R5, R9, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd990",
+          "instruction": "      HMNMX2.BF16_V2 R7, R6, R10, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd9a0",
+          "instruction": "      HMNMX2.BF16_V2 R8, R4, R12, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd9b0",
+          "instruction": "      HMNMX2.BF16_V2 R11, R11, R15, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd9c0",
+          "instruction": "      HMNMX2.BF16_V2 R5, R5, R13, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd9d0",
+          "instruction": "      HMNMX2.BF16_V2 R9, R7, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd9e0",
+          "instruction": "      HMNMX2.BF16_V2 R4, R8, R16, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfd9f0",
+          "instruction": "      HMNMX2.BF16_V2 R6, R5, R17, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfda00",
+          "instruction": "      HMNMX2.BF16_V2 R10, R11, R19, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfda10",
+          "instruction": "      HMNMX2.BF16_V2 R8, R9, R18, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdaa0",
+          "instruction": "      SHFL.BFLY PT, R13, R4, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdad0",
+          "instruction": "      SHFL.BFLY PT, R12, R5, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb00",
+          "instruction": "      SHFL.BFLY PT, R15, R6, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb10",
+          "instruction": "      SHFL.BFLY PT, R14, R7, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb20",
+          "instruction": "      SHFL.BFLY PT, R17, R8, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb30",
+          "instruction": "      SHFL.BFLY PT, R16, R9, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb40",
+          "instruction": "      SHFL.BFLY PT, R19, R10, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb50",
+          "instruction": "      FMNMX R13, R4, R13, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb70",
+          "instruction": "      SHFL.BFLY PT, R18, R11, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdb80",
+          "instruction": "      FMNMX R12, R5, R12, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdbb0",
+          "instruction": "      FMNMX R15, R6, R15, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdbc0",
+          "instruction": "@!P0  STS [R21], R13",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdbd0",
+          "instruction": "      FMNMX R14, R7, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdbe0",
+          "instruction": "@!P0  STS [R21+0x10], R12",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdbf0",
+          "instruction": "      FMNMX R17, R8, R17, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdc00",
+          "instruction": "@!P0  STS [R21+0x20], R15",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdc10",
+          "instruction": "      FMNMX R16, R9, R16, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdc20",
+          "instruction": "@!P0  STS [R21+0x30], R14",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdc30",
+          "instruction": "      FMNMX R19, R10, R19, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdc40",
+          "instruction": "@!P0  STS [R21+0x40], R17",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdc50",
+          "instruction": "      FMNMX R18, R11, R18, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdc60",
+          "instruction": "@!P0  STS [R21+0x50], R16",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdc70",
+          "instruction": "@!P0  STS [R21+0x60], R19",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdc80",
+          "instruction": "@!P0  STS [R21+0x70], R18",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f2006bfdc90",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdcb0",
+          "instruction": "      LDS R6, [R5.X4]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdcc0",
+          "instruction": "      LDS R9, [R5.X4+0x200]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdcd0",
+          "instruction": "      LDS R12, [R5.X4+0x400]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdce0",
+          "instruction": "      LDS R15, [R5.X4+0x600]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdcf0",
+          "instruction": "      SHFL.BFLY PT, R7, R6, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd00",
+          "instruction": "      SHFL.BFLY PT, R8, R9, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd10",
+          "instruction": "      SHFL.BFLY PT, R11, R12, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd20",
+          "instruction": "      SHFL.BFLY PT, R14, R15, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd30",
+          "instruction": "      FMNMX R7, R6, R7, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd40",
+          "instruction": "      FMNMX R10, R9, R8, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd50",
+          "instruction": "      SHFL.BFLY PT, R8, R7, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd60",
+          "instruction": "      FMNMX R13, R12, R11, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd70",
+          "instruction": "      SHFL.BFLY PT, R11, R10, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd80",
+          "instruction": "      FMNMX R17, R15, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdd90",
+          "instruction": "      SHFL.BFLY PT, R14, R13, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdda0",
+          "instruction": "      SHFL.BFLY PT, R22, R17, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfddb0",
+          "instruction": "      FMNMX R6, R7, R8, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfddd0",
+          "instruction": "      FMNMX R16, R10, R11, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdde0",
+          "instruction": "@!P0  STS [R5.X4], R6",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f2006bfddf0",
+          "instruction": "      FMNMX R18, R13, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfde00",
+          "instruction": "@!P0  STS [R5.X4+0x200], R16",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f2006bfde10",
+          "instruction": "      FMNMX R22, R17, R22, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfde20",
+          "instruction": "@!P0  STS [R5.X4+0x400], R18",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f2006bfde40",
+          "instruction": "@!P0  STS [R5.X4+0x600], R22",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f2006bfde60",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdef0",
+          "instruction": "      LDS R12, [R4]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf00",
+          "instruction": "      LDS R13, [R4+0x10]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf10",
+          "instruction": "      LDS R14, [R4+0x20]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf20",
+          "instruction": "      LDS R15, [R4+0x30]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf30",
+          "instruction": "      LDS R8, [R4+0x40]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf40",
+          "instruction": "      LDS R9, [R4+0x50]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf50",
+          "instruction": "      LDS R10, [R4+0x60]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf60",
+          "instruction": "      LDS R11, [R4+0x70]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdf70",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdfc0",
+          "instruction": "      STS.128 [R3.X16], R12",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdfd0",
+          "instruction": "      STS.128 [R6+0x100], R8",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdfe0",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f2006bfdff0",
+          "instruction": "      LDSM.16.M88 R7, [R7]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        }
+      ]
+    },
+    "2_hardware": {
+      "tag": "M32_N128_w4:cp_async:vec1",
+      "kind": "hardware",
+      "report_SHA256": "0b8828b8804daed362516fd88f54f1253188e9c9e817bc56549bf0761eac2671",
+      "metrics": {
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum": 878.0,
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum": 0.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum": 2098289.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum": 0.0,
+        "smsp__inst_executed.sum": 7798784.0
+      }
+    },
+    "2_source": {
+      "tag": "M32_N128_w4:cp_async:vec1",
+      "kind": "source",
+      "report_SHA256": "f7fd4e9cb8f3983273b0065f99986c2b67d1bef73f0095626f3ceb5ecf514b3f",
+      "dynamic_warp_instructions_ignoring_predicates": {
+        "global_load": 0,
+        "async_global_to_shared": 262144,
+        "shared_load": 2097152,
+        "shared_store": 0,
+        "shuffle": 0,
+        "barrier": 65536,
+        "max": 2031616
+      },
+      "predicated_on_thread_instructions": {
+        "global_load": 0,
+        "async_global_to_shared": 8388608,
+        "shared_load": 67108864,
+        "shared_store": 0,
+        "shuffle": 0,
+        "barrier": 2097152,
+        "max": 65011712
+      },
+      "sites": [
+        {
+          "PC": "0x7f7e9ec120c0",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R17][R4.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12130",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R17+0x400][R6.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12150",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R17+0x800][R12.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12180",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R17+0xc00][R14.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12200",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12210",
+          "instruction": "      LDS.U16 R12, [R11]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12220",
+          "instruction": "      LDS.U16 R15, [R10+0x80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12230",
+          "instruction": "      LDS.U16 R19, [R9+0x100]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12240",
+          "instruction": "      LDS.U16 R21, [R8+0x180]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12250",
+          "instruction": "      LDS.U16 R23, [R7+0x200]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12260",
+          "instruction": "      LDS.U16 R25, [R5+0x280]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12270",
+          "instruction": "      LDS.U16 R27, [R4+0x300]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12280",
+          "instruction": "      LDS.U16 R29, [R6+0x380]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12290",
+          "instruction": "      LDS.U16 R31, [R11+0x400]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec122a0",
+          "instruction": "      LDS.U16 R17, [R10+0x480]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec122b0",
+          "instruction": "      LDS.U16 R13, [R9+0x500]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec122c0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R15.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec122d0",
+          "instruction": "      LDS.U16 R15, [R8+0x580]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec122e0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R19.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec122f0",
+          "instruction": "      LDS.U16 R19, [R7+0x600]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12300",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R21.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12310",
+          "instruction": "      LDS.U16 R21, [R5+0x680]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12320",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R23.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12330",
+          "instruction": "      LDS.U16 R23, [R4+0x700]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12340",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R25.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12350",
+          "instruction": "      LDS.U16 R25, [R6+0x780]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12360",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R27.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12370",
+          "instruction": "      LDS.U16 R27, [R11+0x800]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12380",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R29.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12390",
+          "instruction": "      LDS.U16 R29, [R10+0x880]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec123a0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R31.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec123b0",
+          "instruction": "      LDS.U16 R31, [R9+0x900]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec123c0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R17.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec123d0",
+          "instruction": "      LDS.U16 R17, [R8+0x980]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec123e0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R13.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec123f0",
+          "instruction": "      LDS.U16 R13, [R7+0xa00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12400",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R15.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12410",
+          "instruction": "      LDS.U16 R11, [R11+0xc00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12420",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R19.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12430",
+          "instruction": "      LDS.U16 R15, [R5+0xa80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12440",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R21.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12450",
+          "instruction": "      LDS.U16 R19, [R4+0xb00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12460",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R23.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12470",
+          "instruction": "      LDS.U16 R21, [R6+0xb80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12480",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R25.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12490",
+          "instruction": "      LDS.U16 R23, [R10+0xc80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec124a0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R27.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec124b0",
+          "instruction": "      LDS.U16 R9, [R9+0xd00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec124c0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R29.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec124d0",
+          "instruction": "      LDS.U16 R25, [R8+0xd80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec124e0",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R31.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec124f0",
+          "instruction": "      LDS.U16 R7, [R7+0xe00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12500",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R17.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12510",
+          "instruction": "      LDS.U16 R5, [R5+0xe80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12520",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R13.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12530",
+          "instruction": "      LDS.U16 R13, [R4+0xf00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12540",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R15.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12550",
+          "instruction": "      LDS.U16 R15, [R6+0xf80]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12570",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R19.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12590",
+          "instruction": "      HMNMX2.BF16_V2 R12, R12.H0_H0, R21.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec125b0",
+          "instruction": "      HMNMX2.BF16_V2 R11, R12.H0_H0, R11.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec125c0",
+          "instruction": "      HMNMX2.BF16_V2 R11, R11.H0_H0, R23.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec125d0",
+          "instruction": "      HMNMX2.BF16_V2 R9, R11.H0_H0, R9.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec125e0",
+          "instruction": "      HMNMX2.BF16_V2 R9, R9.H0_H0, R25.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec125f0",
+          "instruction": "      HMNMX2.BF16_V2 R7, R9.H0_H0, R7.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12600",
+          "instruction": "      HMNMX2.BF16_V2 R5, R7.H0_H0, R5.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12610",
+          "instruction": "      HMNMX2.BF16_V2 R5, R5.H0_H0, R13.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f7e9ec12620",
+          "instruction": "      HMNMX2.BF16_V2 R5, R5.H0_H0, R15.H0_H0, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        }
+      ]
+    },
+    "3_hardware": {
+      "tag": "M32_N128_w4:cp_async:vec8",
+      "kind": "hardware",
+      "report_SHA256": "16325bb64fcca35a533bd45bc5e798e29f5ac91de34f4e6da82df0a3d44bd5a2",
+      "metrics": {
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum": 7869282.0,
+        "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum": 8001912.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum": 9779655.0,
+        "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum": 9312632.0,
+        "smsp__inst_executed.sum": 9895936.0
+      }
+    },
+    "3_source": {
+      "tag": "M32_N128_w4:cp_async:vec8",
+      "kind": "source",
+      "report_SHA256": "c9b39e912d334cd8a8b3abfac01bbc76469117cc862b25744d60709297cf7c68",
+      "dynamic_warp_instructions_ignoring_predicates": {
+        "global_load": 0,
+        "async_global_to_shared": 262144,
+        "shared_load": 1114112,
+        "shared_store": 917504,
+        "shuffle": 1048576,
+        "barrier": 393216,
+        "max": 1835008
+      },
+      "predicated_on_thread_instructions": {
+        "global_load": 0,
+        "async_global_to_shared": 8388608,
+        "shared_load": 35651584,
+        "shared_store": 14680064,
+        "shuffle": 33554432,
+        "barrier": 12582912,
+        "max": 58720256
+      },
+      "sites": [
+        {
+          "PC": "0x7f5262bfcb80",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R31][R6.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcbe0",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R31+0x400][R24.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcbf0",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R31+0x800][R26.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc00",
+          "instruction": "      LDGSTS.E.BYPASS.128 [R31+0xc00][R28.64]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc30",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc40",
+          "instruction": "      LDS.128 R8, [R31]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc50",
+          "instruction": "      LDS.128 R12, [R31+0x400]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc60",
+          "instruction": "      LDS.128 R16, [R31+0x800]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc70",
+          "instruction": "      LDS.128 R20, [R31+0xc00]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc80",
+          "instruction": "      HMNMX2.BF16_V2 R8, R8, R12, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcc90",
+          "instruction": "      HMNMX2.BF16_V2 R11, R11, R15, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcca0",
+          "instruction": "      HMNMX2.BF16_V2 R9, R9, R13, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfccb0",
+          "instruction": "      HMNMX2.BF16_V2 R10, R10, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfccc0",
+          "instruction": "      HMNMX2.BF16_V2 R8, R8, R16, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfccd0",
+          "instruction": "      HMNMX2.BF16_V2 R19, R11, R19, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcce0",
+          "instruction": "      HMNMX2.BF16_V2 R9, R9, R17, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfccf0",
+          "instruction": "      HMNMX2.BF16_V2 R11, R10, R18, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcd00",
+          "instruction": "      HMNMX2.BF16_V2 R4, R8, R20, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcd10",
+          "instruction": "      HMNMX2.BF16_V2 R7, R9, R21, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcd20",
+          "instruction": "      HMNMX2.BF16_V2 R19, R19, R23, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcd30",
+          "instruction": "      HMNMX2.BF16_V2 R9, R11, R22, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcde0",
+          "instruction": "      SHFL.BFLY PT, R13, R4, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfce20",
+          "instruction": "      SHFL.BFLY PT, R17, R8, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfce50",
+          "instruction": "      SHFL.BFLY PT, R15, R6, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfce60",
+          "instruction": "      SHFL.BFLY PT, R14, R7, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfce70",
+          "instruction": "      SHFL.BFLY PT, R16, R9, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfce80",
+          "instruction": "      SHFL.BFLY PT, R19, R10, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfce90",
+          "instruction": "      SHFL.BFLY PT, R18, R11, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcea0",
+          "instruction": "      FMNMX R13, R4, R13, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcec0",
+          "instruction": "      SHFL.BFLY PT, R21, R12, 0x10, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfced0",
+          "instruction": "      FMNMX R17, R8, R17, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcef0",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf00",
+          "instruction": "      FMNMX R15, R6, R15, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf20",
+          "instruction": "      FMNMX R14, R7, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf30",
+          "instruction": "      FMNMX R16, R9, R16, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf40",
+          "instruction": "      FMNMX R19, R10, R19, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf50",
+          "instruction": "      FMNMX R18, R11, R18, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf60",
+          "instruction": "      FMNMX R21, R12, R21, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfcf70",
+          "instruction": "@!P0  STS [R8], R13",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcf80",
+          "instruction": "@!P0  STS [R8+0x10], R15",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcf90",
+          "instruction": "@!P0  STS [R8+0x20], R14",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcfa0",
+          "instruction": "@!P0  STS [R8+0x30], R17",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcfb0",
+          "instruction": "@!P0  STS [R8+0x40], R16",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcfc0",
+          "instruction": "@!P0  STS [R8+0x50], R19",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcfd0",
+          "instruction": "@!P0  STS [R8+0x60], R18",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfcff0",
+          "instruction": "@!P0  STS [R8+0x70], R21",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 1048576
+        },
+        {
+          "PC": "0x7f5262bfd000",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd030",
+          "instruction": "      LDS R7, [R6.X4]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd040",
+          "instruction": "      LDS R11, [R6.X4+0x200]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd050",
+          "instruction": "      LDS R15, [R6.X4+0x400]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd060",
+          "instruction": "      LDS R20, [R6.X4+0x600]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd070",
+          "instruction": "      SHFL.BFLY PT, R10, R7, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd080",
+          "instruction": "      SHFL.BFLY PT, R12, R11, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd090",
+          "instruction": "      SHFL.BFLY PT, R14, R15, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd0a0",
+          "instruction": "      SHFL.BFLY PT, R9, R20, 0x2, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd0b0",
+          "instruction": "      FMNMX R10, R7, R10, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd0c0",
+          "instruction": "      FMNMX R12, R11, R12, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd0d0",
+          "instruction": "      FMNMX R14, R15, R14, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd0e0",
+          "instruction": "      SHFL.BFLY PT, R13, R12, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd0f0",
+          "instruction": "      FMNMX R8, R20, R9, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd100",
+          "instruction": "      SHFL.BFLY PT, R17, R14, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd110",
+          "instruction": "      SHFL.BFLY PT, R9, R10, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd120",
+          "instruction": "      SHFL.BFLY PT, R19, R8, 0x1, 0x1f",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd130",
+          "instruction": "      FMNMX R11, R12, R13, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd140",
+          "instruction": "      FMNMX R17, R14, R17, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd150",
+          "instruction": "@!P0  STS [R6.X4+0x200], R11",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f5262bfd160",
+          "instruction": "      FMNMX R7, R10, R9, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd170",
+          "instruction": "@!P0  STS [R6.X4+0x400], R17",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f5262bfd180",
+          "instruction": "      FMNMX R19, R8, R19, !PT",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd190",
+          "instruction": "@!P0  STS [R6.X4], R7",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f5262bfd1a0",
+          "instruction": "@!P0  STS [R6.X4+0x600], R19",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 524288
+        },
+        {
+          "PC": "0x7f5262bfd1b0",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd240",
+          "instruction": "      LDS R12, [R4]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd250",
+          "instruction": "      LDS R13, [R4+0x10]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd260",
+          "instruction": "      LDS R14, [R4+0x20]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd270",
+          "instruction": "      LDS R15, [R4+0x30]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd280",
+          "instruction": "      LDS R8, [R4+0x40]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd290",
+          "instruction": "      LDS R9, [R4+0x50]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd2a0",
+          "instruction": "      LDS R10, [R4+0x60]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd2b0",
+          "instruction": "      LDS R11, [R4+0x70]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd2c0",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd310",
+          "instruction": "      STS.128 [R5.X16], R12",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd320",
+          "instruction": "      STS.128 [R6+0x100], R8",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd330",
+          "instruction": "      BAR.SYNC.DEFER_BLOCKING 0x0",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        },
+        {
+          "PC": "0x7f5262bfd340",
+          "instruction": "      LDSM.16.M88 R7, [R7]",
+          "warp_instructions_ignoring_predicates": 65536,
+          "predicated_on_thread_instructions": 2097152
+        }
+      ]
+    }
+  },
+  "direct_column_local_reduction_without_shared_memory": true,
+  "native_builds": 0,
+  "TMA_executed": false,
+  "Phase11_C_started": false
+}

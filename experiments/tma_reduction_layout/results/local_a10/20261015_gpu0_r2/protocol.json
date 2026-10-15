@@ -1,0 +1,1249 @@
+{
+  "status": "FROZEN_BEFORE_COMPILATION_AND_TIMING",
+  "GPU_UUID": "GPU-69464998-e901-74ba-63ff-ae7022f8aed9",
+  "physical_device_index": 0,
+  "CC": [
+    8,
+    6
+  ],
+  "input_shape": [
+    1,
+    8192,
+    8192
+  ],
+  "output_shape": [
+    256,
+    8192
+  ],
+  "dtype": "bfloat16",
+  "output": "float32",
+  "axis": 1,
+  "role": "Non-TMA path diagnostic; not Phase 11 C1 or cross-architecture model calibration",
+  "compiler": "Installed unmodified Triton 3.7.1, hexcute environment; not pinned Phase 11 native",
+  "cases": [
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:canonical",
+      "path": "direct",
+      "variant": "canonical"
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:direct:vec1",
+      "path": "direct",
+      "variant": "vec1",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:direct:vec2",
+      "path": "direct",
+      "variant": "vec2",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:direct:vec4",
+      "path": "direct",
+      "variant": "vec4",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:direct:vec8",
+      "path": "direct",
+      "variant": "vec8",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:direct:vec8_within",
+      "path": "direct",
+      "variant": "vec8_within",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:cp_async:vec1",
+      "path": "cp_async",
+      "variant": "vec1",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:cp_async:vec2",
+      "path": "cp_async",
+      "variant": "vec2",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:cp_async:vec4",
+      "path": "cp_async",
+      "variant": "vec4",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:cp_async:vec8",
+      "path": "cp_async",
+      "variant": "vec8",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "M32_N128_w4:cp_async:vec8_within",
+      "path": "cp_async",
+      "variant": "vec8_within",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:canonical",
+      "path": "direct",
+      "variant": "canonical"
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:direct:vec1",
+      "path": "direct",
+      "variant": "vec1",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:direct:vec2",
+      "path": "direct",
+      "variant": "vec2",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:direct:vec4",
+      "path": "direct",
+      "variant": "vec4",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:direct:vec8",
+      "path": "direct",
+      "variant": "vec8",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:direct:vec8_within",
+      "path": "direct",
+      "variant": "vec8_within",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:cp_async:vec1",
+      "path": "cp_async",
+      "variant": "vec1",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:cp_async:vec2",
+      "path": "cp_async",
+      "variant": "vec2",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:cp_async:vec4",
+      "path": "cp_async",
+      "variant": "vec4",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:cp_async:vec8",
+      "path": "cp_async",
+      "variant": "vec8",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "M32_N64_w8:cp_async:vec8_within",
+      "path": "cp_async",
+      "variant": "vec8_within",
+      "layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "copy_layout": {
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "shared_layout": {
+        "swizzle_byte_width": 128,
+        "element_bitwidth": 16,
+        "rank": 3,
+        "transposed": false
+      }
+    }
+  ],
+  "source_SHA256": {
+    "experiment.py": "8a446f372b0612fc0b6bb5baa530b981262e849f844ddbbc79db4fa5f0a4a163",
+    "kernels.py": "deb0f4cc62af192ea4083a513df6079de207b9784c70a71a1e04adb6db3144b0"
+  },
+  "dependency_SHA256": {
+    "phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b",
+    "phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024"
+  },
+  "correctness_patterns": [
+    "quarter",
+    "random_seed42_finite"
+  ],
+  "timing": {
+    "invocations": 3,
+    "rounds": 6,
+    "samples_per_visit": 5,
+    "warmups": 3,
+    "single_launch_events": true,
+    "graphs": false,
+    "batch_divide": false,
+    "outcome_based_repeats": false,
+    "unit": "three temporal repeats on one physical A10",
+    "interpretation": "descriptive diagnostic; no unique-winner or broad non-regression claim"
+  },
+  "native_builds": 0,
+  "PR_authorized": false
+}
