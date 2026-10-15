@@ -1,0 +1,262 @@
+{
+  "status": "PASS",
+  "input_attachment_SHA256": "b8edc60151121a45ed244ef279f6a018990dfb2290fb30a6551da235d0d718ac",
+  "source_versions": {
+    "experiment_upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+    "v3_7_1": "f797708c0626e5f9840ca5b0a98790e2c7cb09ad",
+    "observed_main": "4eda6cc91e86553a2517d1c764ea2967985553ad"
+  },
+  "main_source_comparison": {
+    "lib/Dialect/TritonGPU/Transforms/Coalesce.cpp": true,
+    "lib/Dialect/TritonGPU/Transforms/CoalesceUtils.cpp": true,
+    "lib/Dialect/TritonGPU/Transforms/Utility.cpp": true,
+    "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": true,
+    "lib/Dialect/TritonGPU/Transforms/RemoveLayoutConversions.cpp": true,
+    "include/triton/Dialect/TritonGPU/IR/TritonGPUAttrDefs.td": false,
+    "third_party/nvidia/backend/compiler.py": false
+  },
+  "protected_source_metadata": {
+    "source_audit/local_sources.json": "7e22e76bd59b353517105838ef164dac94d0b8d03628e9e8ea57bea470007874",
+    "source_audit/observed_main.json": "54013ace71edcbb2a94e0a6f4f78655ec589f631e944d92da2c1ae43af996f71"
+  },
+  "existing_evidence_SHA256": {
+    "results/local_a10/20261015_gpu0_r2/analysis.json": "cd56e1f077382c102368e0f773e124c2c546217c9d483b2c92dbc4d4d1a3d3d1",
+    "results/local_a10_versions/20261015_gpu0_r2/analysis.json": "36f0e6b06df79dcb2a9f3f2711547852fac3e9a4de8f034e5e8ff1014b4cbe9a",
+    "results/phase11/stage_b/interpretation.md": "0fb3b3423ad164db70ace913ad2e290ec042da7cff0bcff13b465827727a1be6",
+    "results/phase11/stage_b/summary.md": "b895effae15edd625f2ad7aa6b1ee498376f0e18b5677ac9647600cda525ddeb",
+    "reports/opening_report_2026_10_15/input/followup_review_draft.md": "8eed2193e75df4a6103af680a5c3baab9b8459e16fbea00d7e37c3402fbef4d9",
+    "results/phase10/stage_c/artifacts/sm90/baseline/export/M32_N128_w4/bfloat16/max/reduce/host/baseline/kernel.ptx": "7a8138c1d647d5adc316ab6d3f3a535eed6079659dea5a11fd436bcefd071e44",
+    "results/phase10/stage_c/artifacts/sm90/patch/export/M32_N128_w4/bfloat16/max/reduce/host/patch/kernel.ptx": "1d382ea7b04967684197c4164be03b1536b6ebde8ce859a8a3c708a50dd081f5",
+    "results/phase11/stage_b/artifacts/attempt_4/export/M32_N128_w4/bfloat16/max/host/upstream_default/kernel.ttgir": "5ad0b02b0afcb9779518f39d97ea6ee5124f3f08344fb14e1fbb8b52c20fa018",
+    "results/phase11/stage_b/artifacts/attempt_4/export/M32_N64_w8/bfloat16/max/host/upstream_default/kernel.ttgir": "c40ebb6d418a25c08bc58533837122c2b6591b7ba7b983afb2bdc0c8ff243158"
+  },
+  "cases": [
+    {
+      "BM": 32,
+      "BN": 128,
+      "warps": 4,
+      "logical_elements_per_thread": 32,
+      "TMA_default_vec": 8,
+      "ordinary_default_vec": 8,
+      "layouts": {
+        "main": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "release_3_5_3_6": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        }
+      },
+      "H100_TMA_actual_input_layout": {
+        "sizePerThread": [
+          1,
+          1,
+          8
+        ],
+        "threadsPerWarp": [
+          1,
+          2,
+          16
+        ],
+        "warpsPerCTA": [
+          1,
+          4,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "column_contributors": 8,
+      "A10_same_cohort_us": {
+        "canonical": 298.3680069446564,
+        "direct:vec1": 313.26399743556976,
+        "direct:vec2": 297.9840040206909,
+        "direct:vec4": 296.9599962234497,
+        "direct:vec8": 298.8799959421158
+      },
+      "Gluon_vec1_vs_vec8_time_reduction": -0.048126343980009034,
+      "default_vs_fastest_measured_Gluon_time_ratio_descriptive": 1.0047414154738445
+    },
+    {
+      "BM": 32,
+      "BN": 64,
+      "warps": 8,
+      "logical_elements_per_thread": 8,
+      "TMA_default_vec": 8,
+      "ordinary_default_vec": 8,
+      "layouts": {
+        "main": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "release_3_5_3_6": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        }
+      },
+      "H100_TMA_actual_input_layout": {
+        "sizePerThread": [
+          1,
+          1,
+          8
+        ],
+        "threadsPerWarp": [
+          1,
+          4,
+          8
+        ],
+        "warpsPerCTA": [
+          1,
+          8,
+          1
+        ],
+        "order": [
+          2,
+          1,
+          0
+        ]
+      },
+      "column_contributors": 32,
+      "A10_same_cohort_us": {
+        "canonical": 422.39999771118164,
+        "direct:vec1": 279.4400006532669,
+        "direct:vec2": 285.69599986076355,
+        "direct:vec4": 368.6400055885315,
+        "direct:vec8": 421.88799381256104
+      },
+      "Gluon_vec1_vs_vec8_time_reduction": 0.33764410281507506,
+      "default_vs_fastest_measured_Gluon_time_ratio_descriptive": 1.511594606082547
+    }
+  ],
+  "packed_max_audit": {
+    "baseline": {
+      "packed_max_lines": [
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137
+      ],
+      "conversion_lines": [
+        127,
+        128,
+        130,
+        131,
+        139,
+        140,
+        142,
+        143
+      ]
+    },
+    "patch": {
+      "packed_max_lines": [
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141
+      ],
+      "conversion_lines": [
+        143,
+        144
+      ]
+    }
+  },
+  "scope": "CPU source reconstruction checked against existing final TTGIR; not an instrumented compiler trace",
+  "new_GPU_experiments": 0,
+  "native_builds": 0,
+  "new_main_performance_tested": false
+}

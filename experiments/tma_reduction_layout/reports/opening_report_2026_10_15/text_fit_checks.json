@@ -1,0 +1,2144 @@
+[
+  {
+    "text": "1. 研究问题",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "切入点：取数布局与部分归约的局部性",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "从 TMA 的版本回归出发，研究哪些配置需要改选布局，哪些配置应保留默认。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[1] Issue #9703；[2,3] H100 与 A10 既有实验",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "编译器需要把一个逻辑张量分配到寄存器、lane 和 warp；同一数学计算可以有不同布局。",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.3252777777777778
+  },
+  {
+    "text": "连续 N 维的向量化可能降低取数成本；沿 M 维规约的线程局部性可能减少通信。",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.3252777777777778
+  },
+  {
+    "text": "已有 BF16/max 对照表明：某些配置有明显优化空间，另一些配置的默认布局已接近较快候选。",
+    "size": 19,
+    "lines": 2,
+    "used_height_in": 0.6148611111111112,
+    "box_height_in": 0.6498611111111112
+  },
+  {
+    "text": "研究问题",
+    "size": 20,
+    "lines": 1,
+    "used_height_in": 0.3055555555555556,
+    "box_height_in": 0.4
+  },
+  {
+    "text": "如何用编译期信息和硬件校准参数预测完整“取数—归约—输出”的成本？",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.3252777777777778
+  },
+  {
+    "text": "能否在未见形状上选到较好布局，并在收益小或预测不确定时回退默认？",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.3252777777777778
+  },
+  {
+    "text": "1. 研究问题",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "两种取数路径，归约算术都使用寄存器中的值",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "TMA 的初始 shared staging，与归约/输出转换使用的 shared 临时存储，需要分开。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[1,4] Triton/Gluon 数据路径；[3] A10 归档 SASS 与 NCU",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "TMA / host descriptor",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.3
+  },
+  {
+    "text": "Global memory",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.46
+  },
+  {
+    "text": "Shared memory",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.46
+  },
+  {
+    "text": "Registers",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.46
+  },
+  {
+    "text": "→",
+    "size": 20,
+    "lines": 1,
+    "used_height_in": 0.3055555555555556,
+    "box_height_in": 0.35
+  },
+  {
+    "text": "→",
+    "size": 20,
+    "lines": 1,
+    "used_height_in": 0.3055555555555556,
+    "box_height_in": 0.35
+  },
+  {
+    "text": "TMA",
+    "size": 14,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.27
+  },
+  {
+    "text": "local_load",
+    "size": 14,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.27
+  },
+  {
+    "text": "→  partial max",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.35
+  },
+  {
+    "text": "普通 tl.load",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.3
+  },
+  {
+    "text": "Global memory / cache",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.46
+  },
+  {
+    "text": "→  tl.load  →",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.35
+  },
+  {
+    "text": "Registers",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.46
+  },
+  {
+    "text": "→  partial max",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.35
+  },
+  {
+    "text": "跨线程规约或结果重排仍可能使用 shared memory 和同步；它们不是普通 load 的初始取数。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "vec = sizePerThread[N] 描述基本连续元素归属；不是 TMA 传输宽度，也不等于硬件加载次数。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "2. 当前编译器选择机制",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "TMA 与普通 load：两个入口，都是先构造访存布局",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "核对实验 upstream 20d9d98、v3.7.1 与今日 main 4eda6cc；核心选择规则一致，非新增性能实验。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[S1,S2] Coalesce.cpp / CoalesceUtils.cpp / Utility.cpp",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "TMA / descriptor",
+    "size": 21,
+    "lines": 1,
+    "used_height_in": 0.32083333333333336,
+    "box_height_in": 0.38
+  },
+  {
+    "text": "普通 tl.load",
+    "size": 21,
+    "lines": 1,
+    "used_height_in": 0.32083333333333336,
+    "box_height_in": 0.38
+  },
+  {
+    "text": "# pickDescriptorLoadStoreLayout\nE = max(numElems / (warps * 32), 1)\nV = min(E, 128 / element_bits)\nSPT = [1, ..., V]",
+    "size": 13,
+    "lines": 4,
+    "used_height_in": 0.8648611111111111,
+    "box_height_in": 1.0
+  },
+  {
+    "text": "# buildCoalescedEncoding\norder <- pointer contiguity\nV0 <- min(alignment, contiguity,\n          128 / element_bits)",
+    "size": 13,
+    "lines": 4,
+    "used_height_in": 0.8648611111111111,
+    "box_height_in": 1.0
+  },
+  {
+    "text": "N 优先；BF16 的目标上限为 8，FP32 为 4。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.2947222222222222
+  },
+  {
+    "text": "再按 shape 和 warp 数分配 lane/warp。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.2947222222222222
+  },
+  {
+    "text": "此函数不读取后续 reduce axis。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.2947222222222222
+  },
+  {
+    "text": "用指针连续性与对齐约束向量宽度。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.2947222222222222
+  },
+  {
+    "text": "协调相关同 shape/order 的内存操作，并受每线程元素量限制。",
+    "size": 17,
+    "lines": 2,
+    "used_height_in": 0.5501388888888888,
+    "box_height_in": 0.5851388888888889
+  },
+  {
+    "text": "再调用同一个 blocked-layout 构造器。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.2947222222222222
+  },
+  {
+    "text": "这两个入口没有对本例的 vec1/2/4/8 做完整“加载—部分规约—输出”的校准时间比较。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "2. 当前编译器选择机制",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "同样选 vec8，为什么同列贡献线程会从 8 变成 32？",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "BlockedEncodingAttr 的构造器从连续 N 维开始分配 lane/warp，再把剩余资源放到 M 维。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[S3] TritonGPUAttrDefs.td：shape-based builder；[3] 实际 TTGIR",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "分配过程",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "32×128 / 4 warps",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "32×64 / 8 warps",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "平均元素 / 线程",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "4096 / 128 = 32",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "2048 / 256 = 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "默认 V（BF16）",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "min(32, 8) = 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "min(8, 8) = 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "N 上的线程位置",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "128 / 8 = 16",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "64 / 8 = 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "threadsPerWarp [M,N]",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "[2,16]",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "[4,8]",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "warpsPerCTA [M,N]",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "[4,1]",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "[8,1]",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "每列贡献线程",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "2 × 4 = 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "4 × 8 = 32",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "规则使用了 shape 和 warp 数，但没有用部分规约的预测时间来决定如何分配这些线程。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "2. 当前编译器选择机制",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "后续 pass 为什么没有把本例改回线程局部布局？",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "编译器有布局传播与局部优化；本例没有命中能改写它的特定规约模式。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[S4,S5] RemoveLayoutConversions.cpp / OptimizeThreadLocality.cpp",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "Coalesce",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.51
+  },
+  {
+    "text": "RemoveLayoutConversions",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.51
+  },
+  {
+    "text": "OptimizeThreadLocality",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.51
+  },
+  {
+    "text": "→",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.31
+  },
+  {
+    "text": "→",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.31
+  },
+  {
+    "text": "相关阶段",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "本例中的行为 / 限制",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "布局传播",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.77
+  },
+  {
+    "text": "descriptor 是 anchor；普通 load 在本例也作为内存 anchor，布局可向 cast / reduce 等传播。",
+    "size": 17,
+    "lines": 2,
+    "used_height_in": 0.5501388888888888,
+    "box_height_in": 0.77
+  },
+  {
+    "text": "规约模式优化",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.77
+  },
+  {
+    "text": "循环规约变换要求 axis == rank−1，并匹配特定 scf.for 累加结构等条件。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.77
+  },
+  {
+    "text": "本例",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.7000000000000001
+  },
+  {
+    "text": "[1,BM,BN] 的 axis=1，不是最后一维；也没有对应循环结构，因此不匹配。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.7000000000000001
+  },
+  {
+    "text": "最终 TTGIR 保留 vec8；这说明规则链的结果，不说明编译器比较过所有候选的完整成本。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "2. 当前编译器选择机制",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "需要比较完整路径，同时满足资源约束",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "同列贡献线程少、vec 更小、静态指令更少，都不是完整 kernel 更快的充分条件。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[1,S1–S5] 问题讨论、源码与已有编译产物",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "成本 / 约束",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "布局改变的内容",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "建模要求",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "取数路径",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "TMA shared-load；普通 global/cache load",
+    "size": 16,
+    "lines": 2,
+    "used_height_in": 0.5177777777777778,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "按实际访问模板校准",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "线程内规约",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "每线程同列值数、packed max / widening",
+    "size": 16,
+    "lines": 2,
+    "used_height_in": 0.5177777777777778,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "预测实际操作及依赖",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "跨线程合并",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "lane / warp 归属、shuffle / shared / barrier",
+    "size": 16,
+    "lines": 2,
+    "used_height_in": 0.5177777777777778,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "校准通信与同步子图",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "输出路径",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "结果 SliceLayout、转换与 store",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "保留实际消费者要求",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "资源可行性",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "寄存器、SMEM、spill 与可达驻留",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "先合法性门，再预测时间",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.55
+  },
+  {
+    "text": "目标是预测成本与适用条件；用微基准校准参数，再用完整 kernel 检验组合误差。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.4
+  },
+  {
+    "text": "3. 已完成实验",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "A10 普通 load：默认布局与固定候选的对照",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "BF16/max；同批 Triton 3.7.1；单位 µs。普通 Triton 与显式布局 Gluon 分别保留产物。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[3] results/local_a10/20261015_gpu0_r2：3 次进程重复，完整输出检查通过",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "tile / warps",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "Triton 默认",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "Gluon vec1",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "vec2",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "vec4",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "vec8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "32×128 / 4",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "298.368",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "313.264",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "297.984",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "296.960",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "298.880",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "32×64 / 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "422.400",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "279.440",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "285.696",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "368.640",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "421.888",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.62
+  },
+  {
+    "text": "32×128 / w4：默认实现接近已测较快候选；直接改成 vec1 反而更慢。",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.3252777777777778
+  },
+  {
+    "text": "32×64 / w8：同一 Gluon kernel 的 vec8→vec1，耗时减少约 33.8%（约 1.51× 加速）。",
+    "size": 19,
+    "lines": 1,
+    "used_height_in": 0.2902777777777778,
+    "box_height_in": 0.3252777777777778
+  },
+  {
+    "text": "描述性对照，不宣称全局或唯一最优；Triton↔Gluon 的时间差不直接作为纯布局因果收益。",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "3. 已完成实验",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "H100 TMA：收益同样依赖形状与 warp 数",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "固定未修改 upstream 20d9d98；BF16/max；原始 host descriptor 路径；full grid。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[2] Phase 11 Stage B interpretation.md / summary.md：7 次 worker 调用",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "tile / warps",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "vec1 µs",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "vec2 µs",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "vec4 µs",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "vec8 µs",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "32×128 / 4",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "56.048",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "56.160",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "56.464",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "57.296",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "32×64 / 8",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "61.392",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "62.048",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "68.528",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "112.096",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "配对 vec1 / vec8 对照",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "耗时减少估计",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "95% 同条件同时区间",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "32×128 / 4",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "2.332%",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "[0.801%, 3.841%]",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "32×64 / 8",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "46.652%",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "[41.056%, 51.718%]",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.43000000000000005
+  },
+  {
+    "text": "原始几何差异小；补充几何有明确机会，vec1/vec2 尚未分出超过 3% 的稳定差异。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.51
+  },
+  {
+    "text": "4. 初版模型反思",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "早期模型的不足：逻辑分数不能替代硬件成本",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "以下是早期 H100 32×128/w4 归档代码的静态对照，不是本轮测得的阶段时间。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[5] Phase 10 归档 PTX；[6] NCU 指标定义",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "项目",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "默认 vec8",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "早期 vec2 候选",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "旧加载分数（无量纲，已弃用）",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "4",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "16",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "初始加载 PTX 静态条数",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "4",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "4",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "PTX opcode",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "ld.shared.v4.b32",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "ldmatrix...x4...b16",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.48
+  },
+  {
+    "text": "BF16→FP32 转换静态条数",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "8",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "2",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "局部操作顺序",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.56
+  },
+  {
+    "text": "BF16 packed max 后转换",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.56
+  },
+  {
+    "text": "BF16 packed max 后转换",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.56
+  },
+  {
+    "text": "初始加载硬件成本",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "此对照未单独确认",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "此对照未单独确认",
+    "size": 15.5,
+    "lines": 1,
+    "used_height_in": 0.23680555555555557,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "静态结构需要匹配实际 lowering，再经微基准校准；PTX 条数不能换算 requests、wavefront 或时间。",
+    "size": 16.5,
+    "lines": 1,
+    "used_height_in": 0.2520833333333334,
+    "box_height_in": 0.45
+  },
+  {
+    "text": "5. 下一步方案",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "先验证微基准能测到什么，再校准子图有效成本",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "首版固定 H100、host TMA、BF16 partial max；循环、反馈和 checksum 的附加工作显式保留。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[7] Phase 11 FOLLOWUP_PLAN.md：review draft，尚未执行 C1",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "子图",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "合法 Gluon 构造",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "用途",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.44000000000000006
+  },
+  {
+    "text": "ML 取数",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "TMA 预填 shared；指定布局读取并形成 checksum",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "访问模板、有效延迟/吞吐",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "MR 规约",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "驻留寄存器；max 与有界、非幂等的数据依赖反馈",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "局部计算与交换/同步子图",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "MO 输出",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "实际结果布局 → 固定输出布局 → store",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "消费者与转换路径成本",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "MC 全图",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "原始 host TMA → load → max → 输出",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "检验组合预测与资源匹配",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.5800000000000001
+  },
+  {
+    "text": "同一 CUBIN 用 runtime K=1/16/64/256；NCU 核对目标操作确实随 K 增长。",
+    "size": 16.5,
+    "lines": 1,
+    "used_height_in": 0.2520833333333334,
+    "box_height_in": 0.28708333333333336
+  },
+  {
+    "text": "C1 最多 16 个程序，先检查重复、模板与资源；无法辨识时修订方案，不冒充裸指令延迟。",
+    "size": 16.5,
+    "lines": 1,
+    "used_height_in": 0.2520833333333334,
+    "box_height_in": 0.28708333333333336
+  },
+  {
+    "text": "5. 下一步方案",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "模型在编译期做选择，完整 kernel 的实测用于评价",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "灰盒：静态依赖与资源结构 + 每架构校准参数；不是逐个运行待优化 kernel 再挑赢家。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[7] FOLLOWUP_PLAN.md：静态计划、参数辨识、冻结预测与留出评价",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "编译期特征 / target\nshape / dtype / layout",
+    "size": 17,
+    "lines": 2,
+    "used_height_in": 0.5501388888888888,
+    "box_height_in": 0.78
+  },
+  {
+    "text": "依赖图与资源计划\n硬件校准参数 θ",
+    "size": 17,
+    "lines": 2,
+    "used_height_in": 0.5501388888888888,
+    "box_height_in": 0.78
+  },
+  {
+    "text": "预测各合法候选时间\n不确定则回退默认",
+    "size": 17,
+    "lines": 2,
+    "used_height_in": 0.5501388888888888,
+    "box_height_in": 0.78
+  },
+  {
+    "text": "→",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.31
+  },
+  {
+    "text": "→",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.31
+  },
+  {
+    "text": "预测时只用静态信息与已冻结参数；测试 kernel 的实测时间、NCU 与最终寄存器数不作输入。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "对照默认布局、固定 vec 与简单局部性基线；报告收益/退化、回退覆盖率与最坏选择损失。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "模型冻结后测新的留出形状；跨架构区分参数直接迁移与仅重校准硬件参数的迁移。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "selection regret = T(selected) / min(T(same candidate set)) - 1",
+    "size": 15.2,
+    "lines": 1,
+    "used_height_in": 0.23222222222222222,
+    "box_height_in": 0.34
+  },
+  {
+    "text": "6. 研究进度与计划",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "已完成问题表征；下一步是校准可行性与选择模型",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "把已经完成的证据、尚待验证的机制，以及后续交付分开汇报。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[2,3,7] 既有实验、源码审计与后续 review draft",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "阶段",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "具体内容 / 可交付",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "状态",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.45000000000000007
+  },
+  {
+    "text": "问题表征",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "TMA/Gluon 与 A10 对照、默认选择机制、原始证据",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "已完成；分项归因待校准",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "C1 可行性",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "8 布局的 ML/MR，检查动态重复、模板与资源",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "计划中；最多 16 个程序",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "C2 / C3",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "正式校准、静态计划、参数辨识与冻结选择器",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "C1 通过后推进",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "D1 / D2",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "新形状留出评价；H100 后再做 B200 等迁移",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "模型冻结后执行",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.6900000000000001
+  },
+  {
+    "text": "预期产出：可解释的布局选择模型、可复现实验与编译器原型；上游改动以验证结果为依据。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.6
+  },
+  {
+    "text": "附录 A. 普通 load 实际程序",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "A10 上运行的普通 Triton DSL",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "与前述 TMA 程序具有相同数学操作；仍保留 [1,BM,BN]，所以规约 axis=1。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[3] local_a10_versions/kernels.py：与上一轮 canonical 函数 AST 一致",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "@triton.jit\ndef canonical(x, out, BM: tl.constexpr, BN: tl.constexpr):\n    pid = tl.program_id(0)\n    pm, pn = pid // (8192 // BN), pid % (8192 // BN)\n    rows = pm * BM + tl.arange(0, BM)\n    cols = pn * BN + tl.arange(0, BN)\n    offsets = tl.expand_dims(rows[:, None] * 8192 + cols[None, :], 0)\n    values = tl.load(x + offsets).to(tl.float32)\n    result = tl.max(values, axis=1)\n    tl.store(out + pm * 8192 + cols, tl.reshape(result, [BN]))",
+    "size": 13.2,
+    "lines": 10,
+    "used_height_in": 2.2311666666666667,
+    "box_height_in": 3.48
+  },
+  {
+    "text": "输入 [1,8192,8192] BF16；输出 [256,8192] FP32；未在源码指定布局，由编译器自动选择。",
+    "size": 17,
+    "lines": 1,
+    "used_height_in": 0.25972222222222224,
+    "box_height_in": 0.52
+  },
+  {
+    "text": "附录 B. 版本回归与优化空间",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "A10：没有版本回归，不代表默认布局总是合适",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "独立版本对照批次；同 Python/Torch/ptxas；统一加载归档 CUBIN 配对计时。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "[3] local_a10_versions/20261015_gpu0_r2：7 次进程重复，2,520 个 event 样本",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "配置",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "3.5.1 µs",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "3.6.0 µs",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "3.7.1 µs",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "32×128 / 4 warps",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "298.032",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "298.224",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "298.832",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "32×64 / 8 warps",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "436.224",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "436.208",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "436.976",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.59
+  },
+  {
+    "text": "这两个配置中，三个版本的有效 M/N 默认分布均为 vec8，未观察到该发布边界的回归。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "本表与第 12 页是不同批次，不能把本表约 436 µs 和另一批约 279 µs 混算收益。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "原始 TMA issue 的版本回归与普通路径的长期优化机会，是两种不同证据。",
+    "size": 18,
+    "lines": 1,
+    "used_height_in": 0.275,
+    "box_height_in": 0.31000000000000005
+  },
+  {
+    "text": "附录 C. 参考与证据",
+    "size": 10.5,
+    "lines": 1,
+    "used_height_in": 0.16041666666666668,
+    "box_height_in": 0.24
+  },
+  {
+    "text": "源码版本、原始证据与后续方案索引",
+    "size": 28,
+    "lines": 1,
+    "used_height_in": 0.4277777777777778,
+    "box_height_in": 0.58
+  },
+  {
+    "text": "源码与数据分别固定版本；所有新增结论均可回到归档文件核对。",
+    "size": 16,
+    "lines": 1,
+    "used_height_in": 0.24444444444444446,
+    "box_height_in": 0.53
+  },
+  {
+    "text": "随交付：mechanism_audit.md、audit.json、source_audit/、speaker_notes.md",
+    "size": 9,
+    "lines": 1,
+    "used_height_in": 0.1375,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "0",
+    "size": 10,
+    "lines": 1,
+    "used_height_in": 0.1527777777777778,
+    "box_height_in": 0.2
+  },
+  {
+    "text": "[1] 原始回归",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "Triton Issue #9703：GB300，TMA descriptor load + partial max",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[2] H100 布局实验",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "results/phase11/stage_b/{summary,interpretation}.md；upstream 20d9d98",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[3] A10 两轮实验",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "results/local_a10/ 与 results/local_a10_versions/；本地 commit 942d380",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[4] 布局语义",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "Triton / Gluon layouts：逻辑元素到 register / lane / warp 的映射",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[5] 早期代码审计",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "Phase10：32×128/w4 BF16 host 路径 baseline / patch 的原始 PTX",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[6] NCU 定义",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "Instructions、Requests、Wavefronts、Bank Conflicts 分别核对",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[7] 后续 review draft",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "phase11/FOLLOWUP_PLAN.md：C1/C2/C3、保留评价与架构迁移",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  },
+  {
+    "text": "[S1–S5] 当前机制",
+    "size": 14.5,
+    "lines": 1,
+    "used_height_in": 0.2215277777777778,
+    "box_height_in": 0.39
+  },
+  {
+    "text": "main 4eda6cc91e86：Coalesce、builder、传播与 ThreadLocality",
+    "size": 14.0,
+    "lines": 1,
+    "used_height_in": 0.2138888888888889,
+    "box_height_in": 0.43
+  }
+]
