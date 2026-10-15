@@ -1,0 +1,1014 @@
+{
+  "PPT_modified": false,
+  "PR_authorized": false,
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "python/triton/experimental/gluon/language/_standard.py": "4cc18ae7223dd7b65bbd93f048e97d7bca8b838f9e22a05944745ffd55b7cf4f",
+      "python/triton/language/core.py": "7f240f7ef05e050bb3e26e1001d66217b62357917059c99eeb47b0060e272194",
+      "python/triton/language/standard.py": "9dc7303392f1744a56913ef6f5434b24ac87a6bdcd4087c2b300d7091a64b609",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "cases": [
+    {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "dtype": "bfloat16",
+      "full_grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "host"
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:device",
+      "dtype": "bfloat16",
+      "full_grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "device"
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:float32:max:host",
+      "dtype": "float32",
+      "full_grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "host"
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:float32:max:device",
+      "dtype": "float32",
+      "full_grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "device"
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "dtype": "bfloat16",
+      "full_grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "host"
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:device",
+      "dtype": "bfloat16",
+      "full_grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "device"
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:float32:max:host",
+      "dtype": "float32",
+      "full_grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "host"
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:float32:max:device",
+      "dtype": "float32",
+      "full_grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "device"
+    }
+  ],
+  "correctness": {
+    "NaN_policy": "PropagateNan.NONE / maxnum for tested quiet-NaN mixtures; compare mask and all non-NaN values",
+    "oracle": "Pairwise PyTorch fp32 fmax over 32 rows, complete output",
+    "patterns": [
+      "quarter",
+      "random_seed42",
+      "NaN/inf/mixed-zero/all-negative-zero"
+    ],
+    "signed_zero": "record actual/reference f32 bits and zero signs; no fixed bit-sign oracle"
+  },
+  "date": "2026-10-15",
+  "layout_control": "Gluon explicit BlockedLayout + smem.load; unmodified native compiler",
+  "reproduction": {
+    "NCU_bridge_repeats_per_binary": 3,
+    "fingerprint_families": [
+      "max.",
+      "cvt.",
+      "shfl.",
+      "st.shared",
+      "ld.shared",
+      "ldmatrix",
+      "bar.sync",
+      "selp.",
+      "redux."
+    ],
+    "fingerprint_scope": "complete filtered whole-kernel sequence; includes output",
+    "hardware_software_profiles_separate": true,
+    "input_layout_alone_establishes_equivalence": false,
+    "no_C1_C2_intervention_this_stage": true
+  },
+  "revision": 3,
+  "revision_reason": "Correct boundary oracle to pinned source semantics: tl.max -> _elementwise_max -> maximum(PropagateNan.NONE), observed arith.maxnumf. Use pairwise torch.fmax. All 8 anchors passed finite and random checks in attempt 2; boundary mismatches and all original outputs retained. No kernel/layout/timing/statistics change; no performance samples collected.",
+  "stage": "B",
+  "stage_A_analysis_SHA256": "4999f72ac329f6554eff10a1873e2e7dd84522b618cd7d6ba50138b0e3957136",
+  "stage_A_commit": "fa8cdc0509466d819c61a90023a5d6478fb6efd9",
+  "statistics": {
+    "bridge_interval": "95% paired t, df6, descriptive within each separately reported bridge",
+    "global_significance_or_non_regression_claim": false,
+    "interval": "95% Bonferroni simultaneous t, df6, 6 unordered pairs in each 4-layout family",
+    "normal_log_ratio_and_independent_invocation_assumptions_reported": true,
+    "practical_margin_percent": 3,
+    "unit": "worker median, paired log time ratios across 7 invocations",
+    "winner": "advantage lower bounds >3% against all candidates; otherwise possible-best set"
+  },
+  "status": "FROZEN_BEFORE_ARTIFACTS_AND_TIMING",
+  "stop_after": "B; report and await discussion before C/D",
+  "supersedes_protocol_SHA256": "49eae9e2c8244f2758bfea2af06604efdea547b3bcc49bfa201e6b87e35f808d",
+  "targets": {
+    "sm90": {
+      "cc": [
+        9,
+        0
+      ],
+      "gpu": "H100!:1",
+      "name": "H100"
+    }
+  },
+  "timing": {
+    "batch_divide": false,
+    "bridge_orders": "4 alternating/reverse rows per two-binary bridge, 5 samples per visit",
+    "fractions": [
+      1,
+      16
+    ],
+    "fresh_processes": true,
+    "gluon_orders": "2K Williams/cyclic and reverse rows for K unique physical candidates",
+    "graphs": false,
+    "input": "finite quarter multiples (linear index % 97 - 48)/4",
+    "main_population": "four Gluon layouts; canonical bridge is a separate cohort",
+    "outcome_based_repeats": false,
+    "physical_GPUs_independence_assumed": false,
+    "sample_kernel_launches": 1,
+    "samples_per_visit": 5,
+    "warmup_launches_per_binary": 3,
+    "worker_invocations": 7
+  },
+  "upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/analyze_ir.py": "db734889eeee5559ba6e64c9c1fecb75dee09bd988fab8c5c1b10355f80e5254",
+    "experiments/tma_reduction_layout/phase11/analyze_b.py": "af5115761af795145714d000f2c04cce7453d469e180b781c917ce914cc8c409",
+    "experiments/tma_reduction_layout/phase11/artifact_audit.py": "3b6b3d7ba822fa3203c82146ea7e7975a28b74db6c93831b37b9f0c7e2e0ef84",
+    "experiments/tma_reduction_layout/phase11/calibration.py": "590b25f835c3fa6482aa894894cc79cc138a2d8bc4552ab215c28c1a2b22e4bd",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/data.py": "5db34afec1ba752151a97d3e633cd84238185c790fa3a5c58531c74bf411ee9c",
+    "experiments/tma_reduction_layout/phase11/kernels.py": "36adb2ffe0bdff0afe2f760edcc135f6d53b20680f7c122122e78ce850bfdfb3",
+    "experiments/tma_reduction_layout/phase11/launch.py": "b5574c3ae1733acd4f32015cf2b9c570eec4097481cf2ad885c0c6ce3c72cb54",
+    "experiments/tma_reduction_layout/phase11/prepare_draft.py": "9a53a258a2b37dab4358f5245e74e686c5da44a668980bfe0d0f02cc6e0a1b6d",
+    "experiments/tma_reduction_layout/phase11/prepare_profiles.py": "eb667e3a039f1d775daee2351648fa2b8a7e33d27723da198a955d12555256dd",
+    "experiments/tma_reduction_layout/phase11/preregister_a.py": "086ac6f329ff2b76d9e21adb54c07d7ce674b15f5d38213c1d4152216ec1de75",
+    "experiments/tma_reduction_layout/phase11/preregister_b.py": "6f5b7fb2687d56e95f1284d9e5bc980dadcd0b6f407b78071aa8d989c332411a",
+    "experiments/tma_reduction_layout/phase11/profile_one.py": "41b4b91628429f3f074a0ea7ffe23c05c9916ca303560bac88ff3a1275be1205",
+    "experiments/tma_reduction_layout/phase11/run_artifacts.py": "c27c26e89686d18d71e90af4b5b96491193d445907f78634cbc5ce17e99c9a2b",
+    "experiments/tma_reduction_layout/phase11/run_profiles.py": "0a9a62523f5d9ba0f32eaf0ef867b9f13586be26eab5ce5301bc6788b93dd655",
+    "experiments/tma_reduction_layout/phase11/run_stage_a.py": "f9aea67dc6ba36d7fe95d10bc1722dc2887baf7a29016379b3aa8a139ed3dcf9",
+    "experiments/tma_reduction_layout/phase11/run_timing.py": "8160fc2d31a9ed368ec8c055e401e5df67b91fd2c8dc4a58568541da445fac1c",
+    "experiments/tma_reduction_layout/phase11/schedule.py": "69e1eee32592026686843a377042d04e91a5a717debf1c34b38f1b7cd7195a6a",
+    "experiments/tma_reduction_layout/phase11/validate_a.py": "e33bd1b1fa922f0d0f2da674d2f295151c86c3db9d52a90065b5cae7f3fca44d",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}

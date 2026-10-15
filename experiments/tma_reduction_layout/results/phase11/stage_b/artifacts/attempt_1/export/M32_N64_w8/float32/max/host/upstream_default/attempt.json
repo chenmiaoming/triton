@@ -1,0 +1,161 @@
+{
+  "M": 32,
+  "N": 64,
+  "actual_jit_post_compile_events": 1,
+  "candidates": [
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "variant": "fixed_vec1"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec2"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec4"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec8"
+    }
+  ],
+  "case_id": "M32_N64_w8:float32:max:host",
+  "dtype": "float32",
+  "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py\", line 130, in compile_one\n    compiled[(case['full_grid'],1,1)](arg,out,**kwargs)\nTypeError: CompiledKernel.__getitem__.<locals>.runner() got an unexpected keyword argument 'BM'\n",
+  "files": {
+    "error.txt": "93bc937fe4dd1766933aa5167ed8538dc7b90509a899a71503e67923e179d1a9",
+    "kernel.cubin": "b455969c804c7627aed1e1ab5f2cd3c9803f45fe4880ad51e68e4bbcee4ec557",
+    "kernel.llir": "6d416210bf390d22b6eb3a980d0cabc923d282ba267b168859120ecb32309806",
+    "kernel.ptx": "cc07bb41d100090f8fc0cb5874d8bd49e9d1201a7c9571bdcfe2821ccee592be",
+    "kernel.resource.txt": "003cb9f43815bb2b73fcac04752d56bf37e1df6d4afa96e0a7e8263c3713867c",
+    "kernel.sass": "bc0d01f823de657eef23db6881f54debd0d42369317120d7d34946c61667f49c",
+    "kernel.ttgir": "c150250a1d032aa3e28b1d4782cdd4c18324991fe4e061e1a7d9885581ee404d",
+    "kernel.ttir": "a5b660a18b80ca16618ca15b835f45f788ac96ba4ee5e259f470b1db1de5b336",
+    "metadata.json": "fb959dbd6fd87d6b71ff3ef288bef56dc3a2da91f954b233854c429bd27f51bb",
+    "occupancy.json": "87f796d22db62311380400617126946dbfe39e81693754c4fb1aefee9975717b"
+  },
+  "full_grid": 32768,
+  "num_warps": 8,
+  "observed_layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "sizePerThread": [
+      1,
+      1,
+      4
+    ],
+    "threadsPerWarp": [
+      1,
+      2,
+      16
+    ],
+    "warpsPerCTA": [
+      1,
+      8,
+      1
+    ]
+  },
+  "observed_shared_layout": {
+    "elementBitWidth": 32,
+    "family": "nvmma_shared",
+    "name": "shared",
+    "rank": 3,
+    "raw_attrs": "swizzlingByteWidth = 128, transposed = false, elementBitWidth = 32, rank = 3",
+    "swizzlingByteWidth": 128,
+    "transposed": false
+  },
+  "op": "max",
+  "path": "host",
+  "pipeline": "triton",
+  "status": "FAILED",
+  "tag": "M32_N64_w8:float32:max:host:upstream_default",
+  "variant": "upstream_default"
+}

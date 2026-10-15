@@ -1,0 +1,211 @@
+{
+  "M": 32,
+  "N": 64,
+  "candidates": [
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "variant": "fixed_vec1"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec2"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec4"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec8"
+    }
+  ],
+  "case_id": "M32_N64_w8:bfloat16:max:host",
+  "compiler_cache_events": [
+    {
+      "cache_hit": true,
+      "compile_hash": "1c221ed95d81884e9890c8975e2b21cb64fbdaa56d6b397df24195fd075706e8"
+    }
+  ],
+  "correctness": {
+    "boundary": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 256,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 256,
+      "first_tile_columns_0_to_5_f32_bits": [
+        1094713344,
+        1094713344,
+        0,
+        -2147483648,
+        -8388608,
+        2139095040
+      ],
+      "input_SHA256": "f1ec202faa6010fa7a42157c037a670fc30835fdbaa1d825bd34a4a9a9a014c1",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    },
+    "quarter": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 0,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 0,
+      "input_SHA256": "14a731b6fff54bac7a10f6fa557964929189ff629518e48b7ae0e2ff6668986a",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    },
+    "random": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 0,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 0,
+      "input_SHA256": "91b232ebe4853d787335fdf64a4fbb3db54ddb2f013099b5f6c94464e4106301",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    }
+  },
+  "dtype": "bfloat16",
+  "files": {
+    "correctness.json": "fe9bcd59c7bd0cf0300b1805495da78c5068afc1939ee4732602c5c51f917106",
+    "correctness_boundary.json": "84fc45babefa7fcc79486bc0e499ce6585a285f20d401530e9ad648aef7723ea",
+    "correctness_quarter.json": "8acded329406d03159aba801bd377f9d34e7de8f9587fb18f4d01c7fe3248e03",
+    "correctness_random.json": "432956003041c630dabae6782265a584d45d17857ed39715ac7c97f30de4eaa7",
+    "kernel.cubin": "4b73cef622057d91f7fd8f73ecaa6143c2d2e04e4d72f469017da094f25e3417",
+    "kernel.llir": "f76efb2bb04d7c2e8360b4967f19ccedb77c55f7d7ab51777b80ae9f9a29bfa5",
+    "kernel.ptx": "d7938d8c6abe882f6ad073d16acfd98515ef8a6b716502cdad2704ace739b291",
+    "kernel.resource.txt": "36cec12b533e835cfc472296291cebca13044c9b1eeca269dd91f71fab5e2639",
+    "kernel.sass": "a131dd604ce3b412e7a154a0296893fcc57e1919410cf1d7c9f17c22a114be78",
+    "kernel.ttgir": "c40ebb6d418a25c08bc58533837122c2b6591b7ba7b983afb2bdc0c8ff243158",
+    "kernel.ttir": "02d83ff896b7d81e3112877583b40103f256cfbe8dc72ebe22fbac1a73ee1532",
+    "metadata.json": "5652e7a503c89f69059a5a9b22f5e449c41cf8fcb02f11a7a38b5971d706f59b",
+    "occupancy.json": "ea94eb24103f80de6d40133e4900eaf26d26dda050bf16f05b805fd366091319"
+  },
+  "full_grid": 32768,
+  "num_warps": 8,
+  "observed_layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "sizePerThread": [
+      1,
+      1,
+      8
+    ],
+    "threadsPerWarp": [
+      1,
+      4,
+      8
+    ],
+    "warpsPerCTA": [
+      1,
+      8,
+      1
+    ]
+  },
+  "observed_shared_layout": {
+    "elementBitWidth": 16,
+    "family": "nvmma_shared",
+    "name": "shared",
+    "rank": 3,
+    "raw_attrs": "swizzlingByteWidth = 128, transposed = false, elementBitWidth = 16, rank = 3",
+    "swizzlingByteWidth": 128,
+    "transposed": false
+  },
+  "op": "max",
+  "path": "host",
+  "pipeline": "triton",
+  "status": "OK",
+  "tag": "M32_N64_w8:bfloat16:max:host:upstream_default",
+  "variant": "upstream_default"
+}

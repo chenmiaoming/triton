@@ -1,0 +1,151 @@
+{
+  "M": 32,
+  "N": 128,
+  "candidates": [
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "variant": "fixed_vec1"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "variant": "fixed_vec2"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "variant": "fixed_vec4"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "variant": "fixed_vec8"
+    }
+  ],
+  "case_id": "M32_N128_w4:bfloat16:max:device",
+  "dtype": "bfloat16",
+  "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py\", line 95, in compile_one\n    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 364, in warmup\n    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 765, in run\n    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 919, in _do_compile\n    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 661, in _call_hook\n    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 393, in serialize_specialization_data\n    serialized_obj = json.dumps(obj)\n                     ^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/json/__init__.py\", line 231, in dumps\n    return _default_encoder.encode(obj)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/json/encoder.py\", line 200, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/json/encoder.py\", line 258, in iterencode\n    return _iterencode(o, 0)\n           ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/json/encoder.py\", line 180, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\nTypeError: Object of type BlockedLayout is not JSON serializable\n",
+  "files": {
+    "error.txt": "1784bfc5705fbec534d95c48c36e312b1bac3b3285cb1ab9c158ff9c9c8139eb"
+  },
+  "full_grid": 16384,
+  "num_warps": 4,
+  "op": "max",
+  "path": "device",
+  "pipeline": "gluon",
+  "requested_layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "size_per_thread": [
+      1,
+      1,
+      1
+    ],
+    "threads_per_warp": [
+      1,
+      1,
+      32
+    ],
+    "warps_per_cta": [
+      1,
+      1,
+      4
+    ]
+  },
+  "requested_shared_layout": {
+    "elementBitWidth": 16,
+    "family": "nvmma_shared",
+    "name": "shared",
+    "rank": 3,
+    "raw_attrs": "swizzlingByteWidth = 128, transposed = false, elementBitWidth = 16, rank = 3",
+    "swizzlingByteWidth": 128,
+    "transposed": false
+  },
+  "status": "FAILED",
+  "tag": "M32_N128_w4:bfloat16:max:device:fixed_vec1",
+  "variant": "fixed_vec1"
+}

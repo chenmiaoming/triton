@@ -1,0 +1,1328 @@
+✓ Initialized. View run at 
+https://modal.com/apps/chenmiaoming/main/ap-WO9m8uSGyoEF1IOoILPe06
+Building image im-7qpWl3lQNkQHoJc93R3ZZw
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 988.07ms
+
+Built image im-7qpWl3lQNkQHoJc93R3ZZw in 2.93s
+
+
+✓ Created objects.
+├── ✓ Uploaded /tmp/tma-phase11-stage-b-revision-4/experiments
+└── ✓ Created Function collect.
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.3
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+/opt/nvidia/entrypoint.d/50-gpu-driver-check.sh: line 5: ldconfig: command not found
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+M32_N128_w4:bfloat16:max:host:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:host:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:host:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:host:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:host:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:host:canonical_layout_reproduction FAILED
+M32_N128_w4:bfloat16:max:device:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:device:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:device:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:device:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:device:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:bfloat16:max:device:canonical_layout_reproduction FAILED
+M32_N128_w4:float32:max:host:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:host:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:host:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:host:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:host:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:host:canonical_layout_reproduction FAILED
+M32_N128_w4:float32:max:device:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:device:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:device:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:device:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:device:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N128_w4:float32:max:device:canonical_layout_reproduction FAILED
+M32_N64_w8:bfloat16:max:host:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:host:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:host:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:host:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:host:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:host:canonical_layout_reproduction FAILED
+M32_N64_w8:bfloat16:max:device:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:device:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:device:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:device:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:device:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:bfloat16:max:device:canonical_layout_reproduction FAILED
+M32_N64_w8:float32:max:host:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:host:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:host:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:host:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:host:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:host:canonical_layout_reproduction FAILED
+M32_N64_w8:float32:max:device:upstream_default OK
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:device:fixed_vec1 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:device:fixed_vec2 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:device:fixed_vec4 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:device:fixed_vec8 FAILED
+Traceback (most recent call last):
+  File "/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py", line 95, in compile_one
+    compiled = template.warmup(*args,**kwargs,num_warps=w,grid=(1,))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 364, in warmup
+    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 919, in _do_compile
+    self._call_hook(knobs.runtime.jit_post_compile_hook, key, signature, target, device, constexprs, options,
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 661, in _call_hook
+    specialization_data = serialize_specialization_data(full_name, signature, constants, configs[0], options, key,
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/triton-src/python/triton/runtime/jit.py", line 393, in serialize_specialization_data
+    serialized_obj = json.dumps(obj)
+                     ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type BlockedLayout is not JSON serializable
+
+M32_N64_w8:float32:max:device:canonical_layout_reproduction FAILED
+Artifacts returned 48
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/chenmiaoming/main/ap-WO9m8uSGyoEF1IOoILPe06

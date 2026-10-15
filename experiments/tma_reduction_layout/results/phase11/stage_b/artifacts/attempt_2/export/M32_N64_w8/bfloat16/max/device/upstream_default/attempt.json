@@ -1,0 +1,207 @@
+{
+  "M": 32,
+  "N": 64,
+  "actual_jit_post_compile_events": 1,
+  "candidates": [
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "variant": "fixed_vec1"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec2"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec4"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "variant": "fixed_vec8"
+    }
+  ],
+  "case_id": "M32_N64_w8:bfloat16:max:device",
+  "correctness": {
+    "boundary": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 256,
+      "expected_nan_count": 512,
+      "expected_negative_zero_count": 512,
+      "first_tile_columns_0_to_5_f32_bits": [
+        1094713344,
+        1094713344,
+        0,
+        -2147483648,
+        -8388608,
+        2139095040
+      ],
+      "input_SHA256": "f1ec202faa6010fa7a42157c037a670fc30835fdbaa1d825bd34a4a9a9a014c1",
+      "nan_mask_equal": false,
+      "non_nan_values_equal": true,
+      "pass": false,
+      "signed_zero_bit_equality_required": false
+    },
+    "quarter": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 0,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 0,
+      "input_SHA256": "14a731b6fff54bac7a10f6fa557964929189ff629518e48b7ae0e2ff6668986a",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    },
+    "random": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 0,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 0,
+      "input_SHA256": "91b232ebe4853d787335fdf64a4fbb3db54ddb2f013099b5f6c94464e4106301",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    }
+  },
+  "dtype": "bfloat16",
+  "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/run_artifacts.py\", line 139, in compile_one\n    assert checked['pass'], checked\nAssertionError: {'nan_mask_equal': False, 'non_nan_values_equal': True, 'actual_nan_count': 0, 'expected_nan_count': 512, 'actual_negative_zero_count': 256, 'expected_negative_zero_count': 512, 'signed_zero_bit_equality_required': False, 'pass': False, 'input_SHA256': 'f1ec202faa6010fa7a42157c037a670fc30835fdbaa1d825bd34a4a9a9a014c1', 'first_tile_columns_0_to_5_f32_bits': [1094713344, 1094713344, 0, -2147483648, -8388608, 2139095040]}\n",
+  "files": {
+    "correctness_boundary.json": "5d50d750c55812565e54e8ce4f38e4e4adf65d6edfd09b5ac13dc70313f5ac72",
+    "correctness_quarter.json": "8acded329406d03159aba801bd377f9d34e7de8f9587fb18f4d01c7fe3248e03",
+    "correctness_random.json": "432956003041c630dabae6782265a584d45d17857ed39715ac7c97f30de4eaa7",
+    "error.txt": "a9c5ff85c3befce00b40b9ecba146a072543f46e86f7a87a1c087ff8bd3f2393",
+    "kernel.cubin": "8ff2698eb5e771ca64e64018526ce74d52bb964b1b06bb8e916f84a1970e73a8",
+    "kernel.llir": "f8ed2c0c87d8fa71e752110cc41d9a1571bc615bf7500427aa4b0766d5c0d2f1",
+    "kernel.ptx": "15ee41b8077f97d56db42708ed5a0be92f1ad707618d8854dfe540225a0aae54",
+    "kernel.resource.txt": "99e77ab8b35c76e5628a038e4525b793725b73e0b0adbf42d75cc851e6b9c588",
+    "kernel.sass": "43b89203e60dd6f00e24228eb37ae707c75fb1bf81f7bfe058db9e6a8dc8f544",
+    "kernel.ttgir": "4b28010d8a4b9467bab45f2a60b1aa2ee1c0d671aba5cb0f322adb4580ce47a3",
+    "kernel.ttir": "a822bab0b2292da45d7220a41b8efecb8d6e89fd3a94fc6267821aac857c2792",
+    "metadata.json": "876eab036fd460d1e0ddd0875aaaf0456bb3d0adc617ddae3105e55b1a4e8070",
+    "occupancy.json": "bc406754ebbdd82dd9e5467c7369bdf2cdee6ebb02f7d6c0d652a51d912d6695"
+  },
+  "full_grid": 32768,
+  "num_warps": 8,
+  "observed_layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "sizePerThread": [
+      1,
+      1,
+      8
+    ],
+    "threadsPerWarp": [
+      1,
+      4,
+      8
+    ],
+    "warpsPerCTA": [
+      1,
+      8,
+      1
+    ]
+  },
+  "observed_shared_layout": {
+    "elementBitWidth": 16,
+    "family": "nvmma_shared",
+    "name": "shared",
+    "rank": 3,
+    "raw_attrs": "swizzlingByteWidth = 128, transposed = false, elementBitWidth = 16, rank = 3",
+    "swizzlingByteWidth": 128,
+    "transposed": false
+  },
+  "op": "max",
+  "path": "device",
+  "pipeline": "triton",
+  "status": "FAILED",
+  "tag": "M32_N64_w8:bfloat16:max:device:upstream_default",
+  "variant": "upstream_default"
+}

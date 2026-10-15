@@ -1,0 +1,242 @@
+{
+  "M": 32,
+  "N": 128,
+  "candidates": [
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "variant": "fixed_vec1"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "variant": "fixed_vec2"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "variant": "fixed_vec4"
+    },
+    {
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "variant": "fixed_vec8"
+    }
+  ],
+  "case_id": "M32_N128_w4:bfloat16:max:host",
+  "compiler_cache_events": [
+    {
+      "cache_hit": true,
+      "compile_hash": "12d885474094319285bf132d00acf080f84673a6749ef93a851a081cb4995be2"
+    }
+  ],
+  "correctness": {
+    "boundary": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 256,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 256,
+      "first_tile_columns_0_to_5_f32_bits": [
+        1094713344,
+        1094713344,
+        0,
+        -2147483648,
+        -8388608,
+        2139095040
+      ],
+      "input_SHA256": "f1ec202faa6010fa7a42157c037a670fc30835fdbaa1d825bd34a4a9a9a014c1",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    },
+    "quarter": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 0,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 0,
+      "input_SHA256": "14a731b6fff54bac7a10f6fa557964929189ff629518e48b7ae0e2ff6668986a",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    },
+    "random": {
+      "actual_nan_count": 0,
+      "actual_negative_zero_count": 0,
+      "expected_nan_count": 0,
+      "expected_negative_zero_count": 0,
+      "input_SHA256": "91b232ebe4853d787335fdf64a4fbb3db54ddb2f013099b5f6c94464e4106301",
+      "nan_mask_equal": true,
+      "non_nan_values_equal": true,
+      "pass": true,
+      "signed_zero_bit_equality_required": false
+    }
+  },
+  "dtype": "bfloat16",
+  "files": {
+    "correctness.json": "fe9bcd59c7bd0cf0300b1805495da78c5068afc1939ee4732602c5c51f917106",
+    "correctness_boundary.json": "84fc45babefa7fcc79486bc0e499ce6585a285f20d401530e9ad648aef7723ea",
+    "correctness_quarter.json": "8acded329406d03159aba801bd377f9d34e7de8f9587fb18f4d01c7fe3248e03",
+    "correctness_random.json": "432956003041c630dabae6782265a584d45d17857ed39715ac7c97f30de4eaa7",
+    "kernel.cubin": "1135944fa62712bc1cf9985b9c26ac61acff428b6bea6caeb781cc14b9c51f4d",
+    "kernel.glir": "3a9de71ab237ca6116647e765c75052de7e6ef3ee382896542a714d47d90cf99",
+    "kernel.llir": "e5145ff8b51cbb9c3b7523cffef585819ff54484994efa70b0727b9a3c6132d5",
+    "kernel.ptx": "ca63787fbe216c077663f57447c53eb1657966ff2854432f6c5c320be21f9029",
+    "kernel.resource.txt": "eb41883d567817f3cf85926db11d409ff80b433711134a952d7250ca91edcf4c",
+    "kernel.sass": "61dd9d38eba4bc59418844c701978a5f5ed5f7acf641b1f58055f04d0b71f7b6",
+    "kernel.ttgir": "b3910dcb56e063e57e07417d4665f01dc450306ed5ce141d214b190fec7e1ce9",
+    "metadata.json": "57f1cdbc143acf19aa583c8e1479d7764bd53e6d1cbe5da938b8323e6e3e117f",
+    "occupancy.json": "8ed04e8f81146453a55a18290c775555f391f8dbead59a29bf28c87701eb089f"
+  },
+  "full_grid": 16384,
+  "num_warps": 4,
+  "observed_layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "sizePerThread": [
+      1,
+      1,
+      8
+    ],
+    "threadsPerWarp": [
+      1,
+      2,
+      16
+    ],
+    "warpsPerCTA": [
+      1,
+      4,
+      1
+    ]
+  },
+  "observed_shared_layout": {
+    "elementBitWidth": 16,
+    "family": "nvmma_shared",
+    "name": "shared",
+    "rank": 3,
+    "raw_attrs": "swizzlingByteWidth = 128, transposed = false, elementBitWidth = 16, rank = 3",
+    "swizzlingByteWidth": 128,
+    "transposed": false
+  },
+  "op": "max",
+  "path": "host",
+  "pipeline": "gluon",
+  "requested_layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "size_per_thread": [
+      1,
+      1,
+      8
+    ],
+    "threads_per_warp": [
+      1,
+      2,
+      16
+    ],
+    "warps_per_cta": [
+      1,
+      4,
+      1
+    ]
+  },
+  "requested_shared_layout": {
+    "elementBitWidth": 16,
+    "family": "nvmma_shared",
+    "name": "shared",
+    "rank": 3,
+    "raw_attrs": "swizzlingByteWidth = 128, transposed = false, elementBitWidth = 16, rank = 3",
+    "swizzlingByteWidth": 128,
+    "transposed": false
+  },
+  "status": "OK",
+  "tag": "M32_N128_w4:bfloat16:max:host:fixed_vec8",
+  "variant": "fixed_vec8"
+}
