@@ -1,6 +1,19 @@
 # Phase 11 — Explicit Gluon layout experiments
 
-阶段A、B均已完成，每阶段单独commit。工作停在阶段B，等待讨论是否调整后续方案；阶段C、D未执行，PR仍需用户批准。
+阶段 A、B 和用户单独批准的 C1 均已完成，每阶段单独 commit。当前停在 C1；C2/C3/D 未执行，PR 仍需用户批准。
+
+2026-10-15：[后续实验 review draft](FOLLOWUP_PLAN.md)保存 C/D 的讨论草案；用户随后只批准了 C1。
+实际 C1 以 [C1 方案](c1/PLAN.md)和结果目录的冻结协议为准：两种几何各覆盖 N-first vec1/2/4/8，
+MR 改为私有输入步进和结果寄存器单向累加，去掉草案中的归约结果反向广播反馈。
+原始 `PLAN.md`、review draft 和 A/B 冻结记录保留。
+
+[C1 结果](../results/phase11/stage_c1/summary.md)、[完整分析](../results/phase11/stage_c1/analysis.json)和[最终验证](../results/phase11/stage_c1/validation.json)覆盖 H100 的 8 布局、16 程序、192 项完整输出检查、3 个计时 worker 的 7,680 个单 kernel event 样本和 128 份 NCU 报告。
+所有目标 opcode 的逻辑 body 合计动态计数严格随 K=1/16/64/256 增长；四路展开/尾部副本的逐 PC 原值与技术解释修订保留。
+MR 循环 IR 没有结果广播、反向转换或显式 shared 读写，底层 scratch 属于实际规约 lowering。native/ccache 未变，原始证据及失败记录保持 write-once。
+
+C1 在 32×64 上测到 MR 的通信/同步成本随 vec2→4→8 增长，组合斜率复现退化方向；但当前 ML+MR 的量级不匹配完整 kernel，且不能解释 32×128 的平坦表现。
+MR 的私有更新让 7/8 个布局失去原 kernel 的 BF16 packed-max 优化；ML 在小 K 有非线性、完整 tile checksum 输出及资源扰动。
+这些结果支持继续修正探针，尚不足以启动正式校准或宣称 cost model 已成立。C1 后等待用户审阅。
 
 阶段A已完成。三种架构上的普通shared load无冲突/32路冲突对照，以及ldmatrix.x4对照均通过输出正确性和独立NCU report-import核对。三种架构上还分别核对两个归档kernel的真实动态shared指令与wavefront计数。工具校准没有正式性能样本，没有重建Triton native。
 

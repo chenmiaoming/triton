@@ -1,0 +1,765 @@
+{
+  "D": 1,
+  "K": [
+    1,
+    16,
+    64,
+    256
+  ],
+  "ML": {
+    "TMA_fills_before_loop": 2,
+    "consumer": "FP32 elementwise accumulator, full-tile final store",
+    "extra_buffer_occupancy_limit_recorded": true,
+    "reduction": false,
+    "runtime_memdesc_view": "slot=i&1",
+    "slots": "current tile and tile offset 128 in M-tile coordinate"
+  },
+  "MR": {
+    "explicit_smem_store_in_source": false,
+    "fixture_costs_retained": [
+      "private stepping",
+      "BF16 rounding",
+      "result accumulation",
+      "loop control"
+    ],
+    "input_state": "BF16; each element privately wraps at >=8 by -16, otherwise adds row-dependent quarter step",
+    "not_a_serial_reduction_result_dependency_chain": true,
+    "reduction_result_feedback": false,
+    "result": "FP32 max over M, accumulated in native SliceLayout; one final global store",
+    "step": "((local_m*13 + local_n*7) % 7 + 1)/4"
+  },
+  "PR_authorized": false,
+  "analysis": {
+    "additivity_is_hypothesis": true,
+    "intercepts_not_TMA_latency": true,
+    "no_cost_model_fit_in_C1": true,
+    "slopes": "per-worker OLS T=a+b*K over all four K, plus all adjacent deltaT/deltaK",
+    "trend": "relative slopes bML+bMR versus vec1 and adjacent vec2->vec4->vec8; compare existing host BF16 Stage B only",
+    "uncertainty": "descriptive spread across three invocations; not independent devices",
+    "unmatched_templates_or_loop_artifacts_reported": true
+  },
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "cases": [
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec1:ML",
+      "vec": 1
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec1:MR",
+      "vec": 1
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:ML",
+      "vec": 2
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:MR",
+      "vec": 2
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec4:ML",
+      "vec": 4
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec4:MR",
+      "vec": 4
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:ML",
+      "vec": 8
+    },
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:MR",
+      "vec": 8
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec1:ML",
+      "vec": 1
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec1:MR",
+      "vec": 1
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:ML",
+      "vec": 2
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:MR",
+      "vec": 2
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec4:ML",
+      "vec": 4
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec4:MR",
+      "vec": 4
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ML",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:ML",
+      "vec": 8
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "MR",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:MR",
+      "vec": 8
+    }
+  ],
+  "correctness": {
+    "K": [
+      1,
+      16,
+      64,
+      256
+    ],
+    "full_output_grid": 2,
+    "oracle": "CPU numpy reference with round-to-nearest-even BF16 state",
+    "patterns": [
+      "quarter",
+      "random",
+      "boundary"
+    ],
+    "timing_worker_checks": "all output for grid1; first two and last CTA for throughput grid"
+  },
+  "date": "2026-10-15",
+  "input_shape": [
+    1,
+    8192,
+    8192
+  ],
+  "logical_program_limit": 16,
+  "native_rebuild": false,
+  "old_draft_overrides": [
+    "C1 layout list now all four natural vecs per geometry",
+    "MR result-broadcast feedback removed; iteration recurrence is private input state only"
+  ],
+  "parent_commit": "4cd99234562b9e57e413142f041b734edea82f12",
+  "previous_protocol_SHA256": "ad1b997dd2f1611863f3decfec39ad880889283b0dca980dae8e52d48457fe2c",
+  "profile": "chenmiaoming",
+  "profiles": {
+    "K": [
+      1,
+      16,
+      64,
+      256
+    ],
+    "families": [
+      "LDS/LDSM",
+      "STS",
+      "SHFL",
+      "BAR.SYNC",
+      "max",
+      "conversion"
+    ],
+    "gate": "per-PC loop instructions strictly K times their K=1 counts; fixed setup/output separately identified",
+    "grid": 1,
+    "hardware_software_separate": true,
+    "metrics": [
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum",
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum",
+      "smsp__inst_executed.sum"
+    ],
+    "no_profiler_duration_in_timing": true,
+    "repeats": 1,
+    "report_limit": 128,
+    "source_section": "InstructionStats"
+  },
+  "revision": 3,
+  "stage": "C1",
+  "status": "FROZEN_BEFORE_GPU_EXECUTION",
+  "stop_after": "C1; user review before C2/C3/D",
+  "target": {
+    "cc": [
+      9,
+      0
+    ],
+    "gpu": "H100!:1"
+  },
+  "technical_revision_reason": "NCU tools image lacked NumPy; add numpy 2.2.6 only. Kernel and reference sources, cases, K, and compiled CUBINs unchanged. Prior NCU child exited before any CUDA launch.",
+  "timing": {
+    "K_is_runtime_same_CUBIN": true,
+    "batch_divide": false,
+    "graphs": false,
+    "grids": [
+      "1",
+      "64*actual_SM_count"
+    ],
+    "occupancy": "natural only in C1",
+    "one_kernel_per_event_sample": true,
+    "order": "seeded shuffle, 4 visits x 5 samples, rotated by worker",
+    "outcome_based_repeats": false,
+    "samples_per_cell": 20,
+    "subprocess_or_JIT_in_timing": false,
+    "warmups_per_cell": 3,
+    "worker_invocations": 3
+  },
+  "upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "user_authorization": "H100; eight layouts; ML/MR; at most sixteen logical programs; stop after C1",
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/c1/common.py": "280bd4a1ae5f3a30ba900e0e4220973f1229fff2450f8eec634ec5a524a79ff4",
+    "experiments/tma_reduction_layout/phase11/c1/data.py": "ab91063c89267e4c6b9cb5f83d80f41607603971da6b5501534c3271ebe589c9",
+    "experiments/tma_reduction_layout/phase11/c1/driver.py": "f0846bbce1995576df0baf6a0dca22bfc3857cc008d57374611a2c94cd83ecf8",
+    "experiments/tma_reduction_layout/phase11/c1/kernels.py": "e0369449a91ef4db3c48c541f11bccd5e9d744f144725c84d5db9a67d06c080e",
+    "experiments/tma_reduction_layout/phase11/c1/profile_one.py": "388ab44fc05d251f6e0bace734cf3f34bc5b98a285f69a075145a2db366834cd",
+    "experiments/tma_reduction_layout/phase11/c1/run.py": "e15323393d7a2768b513a83a13db04b3071d90d8188c8e58f1af05b3b04618ee",
+    "experiments/tma_reduction_layout/phase11/c1/timing.py": "f19d9bd7bc6e4b999d3c98041fbf4461490d3fd89edf9dbe4a715b6725b15df1",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/launch.py": "b5574c3ae1733acd4f32015cf2b9c570eec4097481cf2ad885c0c6ce3c72cb54",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "M": 32,
+  "N": 64,
+  "correctness": [],
+  "dtype": "bfloat16",
+  "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/c1/run.py\", line 86, in collect\n    compiled = kernels.micro.warmup(desc, out, 16, **kwargs, num_warps=w, grid=(1,))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 364, in warmup\n    return self.run(grid=grid, warmup=True, *map(MockTensor.wrap_dtype, args), **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 765, in run\n    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/runtime/jit.py\", line 917, in _do_compile\n    kernel = self.compile(src, target=target, options=options.__dict__)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/compiler/compiler.py\", line 307, in compile\n    module = src.make_ir(target, options, codegen_fns, module_map, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/_runtime.py\", line 46, in make_ir\n    module = ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 22:17:\n    if FAMILY == 'ML':\n        # Both slots are filled once, outside the measured repetition loop.\n        # Runtime memdesc indexing prevents a single invariant load from\n        # representing all K iterations. NCU must confirm every load PC.\n        smem = gl.allocate_shared_memory(gl.bfloat16, [2, 1, BM, BN], shared_layout)\n        mbarrier.expect(bar, 2 * desc.block_type.nbytes)\n        tma.async_load(desc, [0, pm * BM, pn * BN], bar, smem.index(0))\n        tma.async_load(desc, [0, ((pm + 128) % 256) * BM, pn * BN], bar, smem.index(1))\n        mbarrier.wait(bar, phase=0)\n        mbarrier.invalidate(bar)\n        acc = gl.full([1, BM, BN], 0, gl.float32, register_layout)\n        for i in gl.range(0, K, loop_unroll_factor=1, num_stages=1):\n                 ^\nAttributeError(\"module 'triton.experimental.gluon.language' has no attribute 'range'\")\n",
+  "family": "ML",
+  "layout": {
+    "order": [
+      2,
+      1,
+      0
+    ],
+    "size_per_thread": [
+      1,
+      1,
+      1
+    ],
+    "threads_per_warp": [
+      1,
+      1,
+      32
+    ],
+    "warps_per_cta": [
+      1,
+      4,
+      2
+    ]
+  },
+  "num_warps": 8,
+  "path": "host",
+  "shared_layout": {
+    "element_bitwidth": 16,
+    "rank": 3,
+    "swizzle_byte_width": 128,
+    "transposed": false
+  },
+  "status": "FAILED",
+  "tag": "M32_N64_w8:vec1:ML",
+  "vec": 1
+}
