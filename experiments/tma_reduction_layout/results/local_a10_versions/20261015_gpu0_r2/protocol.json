@@ -1,0 +1,124 @@
+{
+  "status": "FROZEN_BEFORE_COMPILATION_AND_TIMING",
+  "question": "Does ordinary tl.load change its compiler-selected layout or regress across the original release boundary?",
+  "GPU_UUID": "GPU-69464998-e901-74ba-63ff-ae7022f8aed9",
+  "physical_device_index": 0,
+  "CC": [
+    8,
+    6
+  ],
+  "input_shape": [
+    1,
+    8192,
+    8192
+  ],
+  "output_shape": [
+    256,
+    8192
+  ],
+  "input_dtype": "bfloat16",
+  "output_dtype": "float32",
+  "reduction_axis": 1,
+  "cases": [
+    {
+      "version": "3.5.1",
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "3.5.1:M32_N128_w4"
+    },
+    {
+      "version": "3.5.1",
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "3.5.1:M32_N64_w8"
+    },
+    {
+      "version": "3.6.0",
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "3.6.0:M32_N128_w4"
+    },
+    {
+      "version": "3.6.0",
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "3.6.0:M32_N64_w8"
+    },
+    {
+      "version": "3.7.1",
+      "BM": 32,
+      "BN": 128,
+      "num_warps": 4,
+      "grid": 16384,
+      "tag": "3.7.1:M32_N128_w4"
+    },
+    {
+      "version": "3.7.1",
+      "BM": 32,
+      "BN": 64,
+      "num_warps": 8,
+      "grid": 32768,
+      "tag": "3.7.1:M32_N64_w8"
+    }
+  ],
+  "source_SHA256": {
+    "analyze.py": "2e268f0ef9c8cd06d3e283543090a15f6a502a998cf4aa458deab352072d2393",
+    "dispatch.py": "87529f22c5707e2cfd82cc410db284216d7c61d647cc1aec1a3397a3cf387e76",
+    "experiment.py": "440d2154d26bc909222487aa497f8d46b00d16a6ab55962ff7784edc09d19b4c",
+    "kernels.py": "a62b888727df71e0a89b836f6271dd42db7f645b612accbc40a2fc171607d8f7"
+  },
+  "dependency_SHA256": {
+    "local_a10/experiment.py": "8a446f372b0612fc0b6bb5baa530b981262e849f844ddbbc79db4fa5f0a4a163",
+    "local_a10/kernels.py": "deb0f4cc62af192ea4083a513df6079de207b9784c70a71a1e04adb6db3144b0",
+    "phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b",
+    "phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024"
+  },
+  "kernel_AST_identical_to_previous_plain_Triton_anchor": true,
+  "toolchains_SHA256": "6a8a581d8bd1d5c0063ef530c4b2ca5867a594ab1b4f45207c5b30c98696be81",
+  "common_ptxas": {
+    "path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+    "SHA256": "c960a4f238b17d5c5d3c01ad2bbc1ebd2c5aecc459cb4d223bff10b45f9b8fca"
+  },
+  "compile_options": "num_warps per case; other compiler options use release defaults",
+  "correctness_patterns": [
+    "quarter",
+    "random_seed42_finite"
+  ],
+  "timing": {
+    "invocations": 7,
+    "rounds": 12,
+    "samples_per_visit": 5,
+    "warmups": 6,
+    "single_launch_events": true,
+    "graphs": false,
+    "batch_divide": false,
+    "order": "rotate by round+invocation; reverse on odd parity",
+    "unit": "seven temporal process repeats on one physical A10",
+    "primary_contrast": "3.6.0 / 3.5.1",
+    "secondary_contrast": "3.7.1 / 3.5.1",
+    "estimator": "geometric mean of paired process median time ratios",
+    "interval": "95% Student t on seven paired process log ratios, df=6",
+    "practical_slowdown_threshold": 1.03,
+    "decision": "lower bound >1.03: detected; upper bound <1.03: excludes 3% in this workload; otherwise inconclusive",
+    "outcome_based_repeats": false
+  },
+  "native_builds": 0,
+  "manual_layouts": false,
+  "TMA": false,
+  "Phase11_C_started": false,
+  "PR_authorized": false,
+  "prior_failed_collector": {
+    "path": "20261015_gpu0/collect/3.5.1/1/raw.json",
+    "SHA256": "534407be85eaf543bbe5166b45075443c7d0a6399180aab0e152c4e1329ac1b7",
+    "reason": "Legacy CompiledKernel launch wrapper expects constexpr arguments; no timing collected",
+    "repair": "Use the same archived-CUBIN CUDA driver launcher for all correctness checks and timing"
+  }
+}

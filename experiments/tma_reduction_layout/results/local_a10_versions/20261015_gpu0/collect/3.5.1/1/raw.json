@@ -1,0 +1,128 @@
+{
+  "status": "FAILED",
+  "version": "3.5.1",
+  "artifacts": {
+    "3.5.1:M32_N128_w4": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "8d8b475e6b34f0b6914da2cf43aefbd335e82920b11ca6712312968c621e1fda",
+      "case": {
+        "version": "3.5.1",
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "3.5.1:M32_N128_w4"
+      },
+      "archive_path": "collect/3.5.1/1/artifacts/3.5.1/M32_N128_w4"
+    },
+    "3.5.1:M32_N64_w8": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 25,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "0f8b04ca8de1d2d13f191e6d494041da5074434aff3f343c98179f0b0a7b24f9",
+      "case": {
+        "version": "3.5.1",
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "3.5.1:M32_N64_w8"
+      },
+      "archive_path": "collect/3.5.1/1/artifacts/3.5.1/M32_N64_w8"
+    }
+  },
+  "correctness": [],
+  "errors": {},
+  "protocol_SHA256": "d38253866216409e18469cf3a79802dfda1c162905a8463205c2f33a037380b6",
+  "environment": {
+    "gpu_uuid": "GPU-69464998-e901-74ba-63ff-ae7022f8aed9",
+    "driver_API_version": 13040,
+    "device_limits": {
+      "max_threads_per_sm": 1536,
+      "max_threads_per_block": 1024,
+      "max_registers_per_block": 65536,
+      "max_registers_per_sm": 65536,
+      "max_shared_memory_per_sm": 102400,
+      "warp_size": 32,
+      "max_shared_memory_per_block_optin": 101376
+    },
+    "checked_cuda_calls": [
+      {
+        "api": "cuInit",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGet",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetUuid_v2",
+        "return_code": 0
+      },
+      {
+        "api": "cuDriverGetVersion",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      }
+    ],
+    "name": "NVIDIA A10",
+    "CC": [
+      8,
+      6
+    ],
+    "torch": "2.13.0+cu130",
+    "torch_cuda": "13.0",
+    "physical_device_index": 0,
+    "CUDA_VISIBLE_DEVICES": "GPU-69464998-e901-74ba-63ff-ae7022f8aed9"
+  },
+  "compiler": {
+    "version": "3.5.1",
+    "module_path": "/tmp/triton-exp-a10-release-packages/3.5.1/triton/__init__.py",
+    "native_path": "/tmp/triton-exp-a10-release-packages/3.5.1/triton/_C/libtriton.so",
+    "native_SHA256": "5a9fda48d18d1da1c6ce3d50b415b053bcfdedc4d1109f4acc8ae7833d134437",
+    "ptxas_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+    "ptxas_SHA256": "c960a4f238b17d5c5d3c01ad2bbc1ebd2c5aecc459cb4d223bff10b45f9b8fca",
+    "compiler_resolved_ptxas": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+    "ptxas_version": "ptxas: NVIDIA (R) Ptx optimizing assembler\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:21:21_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+    "cache_directory": "/tmp/triton-exp-a10-default-version-3.5.1-kernel-cache",
+    "native_builds": 0,
+    "cache_CUBINs_before": 0
+  },
+  "error": "Traceback (most recent call last):\n  File \"/home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/local_a10_versions/experiment.py\", line 154, in collect\n    compiled[tag][(case['grid'], 1, 1)](x, out)\n  File \"/tmp/triton-exp-a10-release-packages/3.5.1/triton/compiler/compiler.py\", line 506, in runner\n    self.run(grid[0], grid[1], grid[2], stream, self.function, self.packed_metadata, launch_metadata,\n  File \"/tmp/triton-exp-a10-release-packages/3.5.1/triton/backends/nvidia/driver.py\", line 712, in __call__\n    self.launch(gridX, gridY, gridZ, stream, function, self.launch_cooperative_grid, self.launch_pdl,\nTypeError: function takes exactly 17 arguments (15 given)\n",
+  "CUDA_return_codes": [
+    0
+  ]
+}

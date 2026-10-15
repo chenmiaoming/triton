@@ -1,0 +1,845 @@
+{
+  "status": "PASS",
+  "protocol_SHA256": "ca00ccc9b4c1cdcd023caf2627f4d7377d76768d0cb33499b27d1ac349c7e185",
+  "analyzer_SHA256": "2e268f0ef9c8cd06d3e283543090a15f6a502a998cf4aa458deab352072d2393",
+  "environment": {
+    "torch": "2.13.0+cu130",
+    "torch_cuda": "13.0",
+    "CC": [
+      8,
+      6
+    ],
+    "gpu_uuid": "GPU-69464998-e901-74ba-63ff-ae7022f8aed9"
+  },
+  "artifacts": {
+    "3.5.1:M32_N128_w4": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "8d8b475e6b34f0b6914da2cf43aefbd335e82920b11ca6712312968c621e1fda",
+      "case": {
+        "version": "3.5.1",
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "3.5.1:M32_N128_w4"
+      },
+      "archive_path": "collect/3.5.1/1/artifacts/3.5.1/M32_N128_w4",
+      "layouts": {
+        "global_load_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "reduction_input_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "load_line": 41,
+        "load_operation": "    %values_16 = tt.load %values_15 : tensor<1x32x128x!tt.ptr<bf16>, #blocked> loc(#loc43)",
+        "reduce_line": 43,
+        "reduce_operation": "    %result = \"tt.reduce\"(%values_17) <{axis = 1 : i32}> ({\n    ^bb0(%result_18: f32 loc(callsite(#loc1 at #loc45)), %result_19: f32 loc(callsite(#loc1 at #loc45))):\n      %result_20 = arith.maxnumf %result_18, %result_19 : f32 loc(#loc48)\n      tt.reduce.return %result_20 : f32 loc(#loc46)\n    }) : (tensor<1x32x128xf32, #blocked>) -> tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> loc(#loc46)\n    %2 = arith.muli %0, %c8192_i32 : i32 loc(#loc22)\n    %3 = tt.addptr %out, %2 : !tt.ptr<f32>, i32 loc(#loc23)\n    %4 = tt.splat %3 : !tt.ptr<f32> -> tensor<128x!tt.ptr<f32>, #blocked1> loc(#loc24)\n    %5 = tt.addptr %4, %cols_8 : tensor<128x!tt.ptr<f32>, #blocked1>, tensor<128xi32, #blocked1> loc(#loc24)\n    %6 = tt.reshape %result : tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<128xf32, #linear> loc(#loc25)\n    %7 = ttg.convert_layout %6 : tensor<128xf32, #linear> -> tensor<128xf32, #blocked1> loc(#loc26)\n    tt.store %5, %7 : tensor<128x!tt.ptr<f32>, #blocked1> loc(#loc26)",
+        "column_contributor_threads": 8,
+        "column_contributor_warps": 4,
+        "column_values_per_contributor": 4,
+        "base_tile_M": 8,
+        "repeats_in_M": 4
+      },
+      "SASS": {
+        "instruction_text_SHA256": "b43003d8b66caae8e1b99454d5db0911ffa1660d66e4fbd1dd1611b13fa627ea",
+        "static_sites_only": true,
+        "opcodes": {
+          "BAR.SYNC.DEFER_BLOCKING": 4,
+          "BRA": 1,
+          "EXIT": 1,
+          "FMNMX": 16,
+          "HMNMX2.BF16_V2": 12,
+          "IMAD": 2,
+          "IMAD.IADD": 2,
+          "IMAD.MOV": 1,
+          "IMAD.MOV.U32": 1,
+          "IMAD.SHL.U32": 7,
+          "IMAD.U32": 8,
+          "LDG.E.128": 4,
+          "LDS": 12,
+          "LDSM.16.M88": 1,
+          "LEA": 3,
+          "LEA.HI.X": 1,
+          "LEA.HI.X.SX32": 2,
+          "LOP3.LUT": 12,
+          "PRMT": 4,
+          "S2R": 2,
+          "SHF.R.U32.HI": 2,
+          "SHFL.BFLY": 16,
+          "STG.E": 1,
+          "STS": 12,
+          "STS.128": 2,
+          "ULDC.64": 1
+        }
+      }
+    },
+    "3.5.1:M32_N64_w8": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 25,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "0f8b04ca8de1d2d13f191e6d494041da5074434aff3f343c98179f0b0a7b24f9",
+      "case": {
+        "version": "3.5.1",
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "3.5.1:M32_N64_w8"
+      },
+      "archive_path": "collect/3.5.1/1/artifacts/3.5.1/M32_N64_w8",
+      "layouts": {
+        "global_load_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "reduction_input_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "load_line": 41,
+        "load_operation": "    %values_16 = tt.load %values_15 : tensor<1x32x64x!tt.ptr<bf16>, #blocked> loc(#loc43)",
+        "reduce_line": 43,
+        "reduce_operation": "    %result = \"tt.reduce\"(%values_17) <{axis = 1 : i32}> ({\n    ^bb0(%result_18: f32 loc(callsite(#loc1 at #loc45)), %result_19: f32 loc(callsite(#loc1 at #loc45))):\n      %result_20 = arith.maxnumf %result_18, %result_19 : f32 loc(#loc48)\n      tt.reduce.return %result_20 : f32 loc(#loc46)\n    }) : (tensor<1x32x64xf32, #blocked>) -> tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> loc(#loc46)\n    %2 = arith.muli %0, %c8192_i32 : i32 loc(#loc22)\n    %3 = tt.addptr %out, %2 : !tt.ptr<f32>, i32 loc(#loc23)\n    %4 = tt.splat %3 : !tt.ptr<f32> -> tensor<64x!tt.ptr<f32>, #blocked1> loc(#loc24)\n    %5 = tt.addptr %4, %cols_8 : tensor<64x!tt.ptr<f32>, #blocked1>, tensor<64xi32, #blocked1> loc(#loc24)\n    %6 = tt.reshape %result : tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<64xf32, #linear> loc(#loc25)\n    %7 = ttg.convert_layout %6 : tensor<64xf32, #linear> -> tensor<64xf32, #blocked1> loc(#loc26)\n    tt.store %5, %7 : tensor<64x!tt.ptr<f32>, #blocked1> loc(#loc26)",
+        "column_contributor_threads": 32,
+        "column_contributor_warps": 8,
+        "column_values_per_contributor": 1,
+        "base_tile_M": 32,
+        "repeats_in_M": 1
+      },
+      "SASS": {
+        "instruction_text_SHA256": "6ec6b629e1e2f5655d0a8c13e71cd4a117084b86b44188848f5365b937a434f2",
+        "static_sites_only": true,
+        "opcodes": {
+          "BAR.SYNC.DEFER_BLOCKING": 4,
+          "BRA": 1,
+          "EXIT": 2,
+          "FMNMX": 22,
+          "IMAD": 2,
+          "IMAD.IADD": 2,
+          "IMAD.MOV": 1,
+          "IMAD.MOV.U32": 1,
+          "IMAD.SHL.U32": 7,
+          "IMAD.U32": 8,
+          "LDG.E.128": 1,
+          "LDS": 10,
+          "LDSM.16.M88": 1,
+          "LEA": 3,
+          "LEA.HI.X": 1,
+          "LEA.HI.X.SX32": 2,
+          "LOP3.LUT": 13,
+          "PRMT": 4,
+          "S2R": 2,
+          "SHF.R.U32.HI": 2,
+          "SHFL.BFLY": 22,
+          "STG.E": 1,
+          "STS": 10,
+          "STS.128": 2,
+          "ULDC.64": 1
+        }
+      }
+    },
+    "3.6.0:M32_N128_w4": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "df8bd5458d2c95db1ebf8fd3a491dd1daf974f136f88e1c5b6daa2a61100cec9",
+      "case": {
+        "version": "3.6.0",
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "3.6.0:M32_N128_w4"
+      },
+      "archive_path": "collect/3.6.0/1/artifacts/3.6.0/M32_N128_w4",
+      "layouts": {
+        "global_load_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "reduction_input_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "load_line": 41,
+        "load_operation": "    %values_16 = tt.load %values_15 : tensor<1x32x128x!tt.ptr<bf16>, #blocked> loc(#loc43)",
+        "reduce_line": 43,
+        "reduce_operation": "    %result = \"tt.reduce\"(%values_17) <{axis = 1 : i32}> ({\n    ^bb0(%result_18: f32 loc(callsite(#loc1 at #loc45)), %result_19: f32 loc(callsite(#loc1 at #loc45))):\n      %result_20 = arith.maxnumf %result_18, %result_19 : f32 loc(#loc48)\n      tt.reduce.return %result_20 : f32 loc(#loc46)\n    }) : (tensor<1x32x128xf32, #blocked>) -> tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> loc(#loc46)\n    %2 = arith.muli %0, %c8192_i32 : i32 loc(#loc22)\n    %3 = tt.addptr %out, %2 : !tt.ptr<f32>, i32 loc(#loc23)\n    %4 = tt.splat %3 : !tt.ptr<f32> -> tensor<128x!tt.ptr<f32>, #blocked1> loc(#loc24)\n    %5 = tt.addptr %4, %cols_8 : tensor<128x!tt.ptr<f32>, #blocked1>, tensor<128xi32, #blocked1> loc(#loc24)\n    %6 = tt.reshape %result : tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<128xf32, #linear> loc(#loc25)\n    %7 = ttg.convert_layout %6 : tensor<128xf32, #linear> -> tensor<128xf32, #blocked1> loc(#loc26)\n    tt.store %5, %7 : tensor<128x!tt.ptr<f32>, #blocked1> loc(#loc26)",
+        "column_contributor_threads": 8,
+        "column_contributor_warps": 4,
+        "column_values_per_contributor": 4,
+        "base_tile_M": 8,
+        "repeats_in_M": 4
+      },
+      "SASS": {
+        "instruction_text_SHA256": "2faf09352734af0993c111568dc3122fc5b95c93047814b2eba21def03d672e9",
+        "static_sites_only": true,
+        "opcodes": {
+          "BAR.SYNC.DEFER_BLOCKING": 4,
+          "BRA": 1,
+          "EXIT": 1,
+          "FMNMX": 16,
+          "HMNMX2.BF16_V2": 12,
+          "IMAD": 3,
+          "IMAD.IADD": 1,
+          "IMAD.MOV": 1,
+          "IMAD.MOV.U32": 1,
+          "IMAD.SHL.U32": 7,
+          "IMAD.U32": 8,
+          "LDG.E.128": 4,
+          "LDS": 12,
+          "LDSM.16.M88": 1,
+          "LEA": 3,
+          "LEA.HI.X": 1,
+          "LEA.HI.X.SX32": 2,
+          "LOP3.LUT": 11,
+          "PRMT": 5,
+          "S2R": 2,
+          "SGXT.U32": 1,
+          "SHF.R.U32.HI": 2,
+          "SHFL.BFLY": 16,
+          "STG.E": 1,
+          "STS": 12,
+          "STS.128": 2,
+          "ULDC.64": 1
+        }
+      }
+    },
+    "3.6.0:M32_N64_w8": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 25,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "ec5569fb80eaa36f72742fdc0e9505e76cff52b30fb06c740a14dc8c6cdd2467",
+      "case": {
+        "version": "3.6.0",
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "3.6.0:M32_N64_w8"
+      },
+      "archive_path": "collect/3.6.0/1/artifacts/3.6.0/M32_N64_w8",
+      "layouts": {
+        "global_load_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "reduction_input_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            0,
+            1
+          ]
+        },
+        "load_line": 41,
+        "load_operation": "    %values_16 = tt.load %values_15 : tensor<1x32x64x!tt.ptr<bf16>, #blocked> loc(#loc43)",
+        "reduce_line": 43,
+        "reduce_operation": "    %result = \"tt.reduce\"(%values_17) <{axis = 1 : i32}> ({\n    ^bb0(%result_18: f32 loc(callsite(#loc1 at #loc45)), %result_19: f32 loc(callsite(#loc1 at #loc45))):\n      %result_20 = arith.maxnumf %result_18, %result_19 : f32 loc(#loc48)\n      tt.reduce.return %result_20 : f32 loc(#loc46)\n    }) : (tensor<1x32x64xf32, #blocked>) -> tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> loc(#loc46)\n    %2 = arith.muli %0, %c8192_i32 : i32 loc(#loc22)\n    %3 = tt.addptr %out, %2 : !tt.ptr<f32>, i32 loc(#loc23)\n    %4 = tt.splat %3 : !tt.ptr<f32> -> tensor<64x!tt.ptr<f32>, #blocked1> loc(#loc24)\n    %5 = tt.addptr %4, %cols_8 : tensor<64x!tt.ptr<f32>, #blocked1>, tensor<64xi32, #blocked1> loc(#loc24)\n    %6 = tt.reshape %result : tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<64xf32, #linear> loc(#loc25)\n    %7 = ttg.convert_layout %6 : tensor<64xf32, #linear> -> tensor<64xf32, #blocked1> loc(#loc26)\n    tt.store %5, %7 : tensor<64x!tt.ptr<f32>, #blocked1> loc(#loc26)",
+        "column_contributor_threads": 32,
+        "column_contributor_warps": 8,
+        "column_values_per_contributor": 1,
+        "base_tile_M": 32,
+        "repeats_in_M": 1
+      },
+      "SASS": {
+        "instruction_text_SHA256": "208ef40ad80877b328702f04e7456aa8ca51e638293d04f13307d5e1f83c4605",
+        "static_sites_only": true,
+        "opcodes": {
+          "BAR.SYNC.DEFER_BLOCKING": 4,
+          "BRA": 1,
+          "EXIT": 2,
+          "FMNMX": 22,
+          "IMAD": 3,
+          "IMAD.IADD": 1,
+          "IMAD.MOV": 1,
+          "IMAD.MOV.U32": 1,
+          "IMAD.SHL.U32": 7,
+          "IMAD.U32": 8,
+          "ISETP.GE.U32.AND": 1,
+          "ISETP.NE.U32.AND": 1,
+          "LDG.E.128": 1,
+          "LDS": 10,
+          "LDSM.16.M88": 1,
+          "LEA": 3,
+          "LEA.HI.X": 1,
+          "LEA.HI.X.SX32": 2,
+          "LOP3.LUT": 10,
+          "PRMT": 4,
+          "S2R": 2,
+          "SGXT.U32": 1,
+          "SHF.R.U32.HI": 2,
+          "SHFL.BFLY": 22,
+          "STG.E": 1,
+          "STS": 10,
+          "STS.128": 2,
+          "ULDC.64": 1
+        }
+      }
+    },
+    "3.7.1:M32_N128_w4": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 26,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "155716ed4c86a2d2734b8116edb07986e500533886f98002b67e8a1faf74a0eb",
+      "case": {
+        "version": "3.7.1",
+        "BM": 32,
+        "BN": 128,
+        "num_warps": 4,
+        "grid": 16384,
+        "tag": "3.7.1:M32_N128_w4"
+      },
+      "archive_path": "collect/3.7.1/1/artifacts/3.7.1/M32_N128_w4",
+      "layouts": {
+        "global_load_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "reduction_input_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            2,
+            16
+          ],
+          "warpsPerCTA": [
+            1,
+            4,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "load_line": 41,
+        "load_operation": "    %values_16 = tt.load %values_15 : tensor<1x32x128x!tt.ptr<bf16>, #blocked> loc(#loc43)",
+        "reduce_line": 43,
+        "reduce_operation": "    %result = \"tt.reduce\"(%values_17) <{axis = 1 : i32}> ({\n    ^bb0(%result_18: f32 loc(callsite(#loc1 at #loc45)), %result_19: f32 loc(callsite(#loc1 at #loc45))):\n      %result_20 = arith.maxnumf %result_18, %result_19 : f32 loc(#loc48)\n      tt.reduce.return %result_20 : f32 loc(#loc46)\n    }) : (tensor<1x32x128xf32, #blocked>) -> tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> loc(#loc46)\n    %2 = arith.muli %0, %c8192_i32 : i32 loc(#loc22)\n    %3 = tt.addptr %out, %2 : !tt.ptr<f32>, i32 loc(#loc23)\n    %4 = tt.splat %3 : !tt.ptr<f32> -> tensor<128x!tt.ptr<f32>, #blocked1> loc(#loc24)\n    %5 = tt.addptr %4, %cols_8 : tensor<128x!tt.ptr<f32>, #blocked1>, tensor<128xi32, #blocked1> loc(#loc24)\n    %6 = tt.reshape %result : tensor<1x128xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<128xf32, #linear> loc(#loc25)\n    %7 = ttg.convert_layout %6 : tensor<128xf32, #linear> -> tensor<128xf32, #blocked1> loc(#loc26)\n    tt.store %5, %7 : tensor<128x!tt.ptr<f32>, #blocked1> loc(#loc26)",
+        "column_contributor_threads": 8,
+        "column_contributor_warps": 4,
+        "column_values_per_contributor": 4,
+        "base_tile_M": 8,
+        "repeats_in_M": 4
+      },
+      "SASS": {
+        "instruction_text_SHA256": "7d7858ed63fcabe88a553b7f63a42ec8989574c7ed6d72914201dbd4435baf5e",
+        "static_sites_only": true,
+        "opcodes": {
+          "BAR.SYNC.DEFER_BLOCKING": 4,
+          "BRA": 1,
+          "EXIT": 1,
+          "FMNMX": 16,
+          "HMNMX2.BF16_V2": 12,
+          "IMAD": 2,
+          "IMAD.IADD": 2,
+          "IMAD.MOV": 1,
+          "IMAD.MOV.U32": 1,
+          "IMAD.SHL.U32": 7,
+          "IMAD.U32": 8,
+          "LDG.E.128": 4,
+          "LDS": 12,
+          "LDSM.16.M88": 1,
+          "LEA": 3,
+          "LEA.HI.X": 1,
+          "LEA.HI.X.SX32": 2,
+          "LOP3.LUT": 13,
+          "PRMT": 4,
+          "S2R": 2,
+          "SHF.R.U32.HI": 2,
+          "SHFL.BFLY": 16,
+          "STG.E": 1,
+          "STS": 12,
+          "STS.128": 2,
+          "ULDC.64": 1
+        }
+      }
+    },
+    "3.7.1:M32_N64_w8": {
+      "function_name": "canonical",
+      "dynamic_smem_bytes": 2048,
+      "num_regs": 25,
+      "num_spills": 0,
+      "global_scratch_size": 0,
+      "CUBIN_SHA256": "072ea7142774d25698c3bbe0a44d0abbc78a97bb388b365df279fbd964efd4c1",
+      "case": {
+        "version": "3.7.1",
+        "BM": 32,
+        "BN": 64,
+        "num_warps": 8,
+        "grid": 32768,
+        "tag": "3.7.1:M32_N64_w8"
+      },
+      "archive_path": "collect/3.7.1/1/artifacts/3.7.1/M32_N64_w8",
+      "layouts": {
+        "global_load_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "reduction_input_layout": {
+          "sizePerThread": [
+            1,
+            1,
+            8
+          ],
+          "threadsPerWarp": [
+            1,
+            4,
+            8
+          ],
+          "warpsPerCTA": [
+            1,
+            8,
+            1
+          ],
+          "order": [
+            2,
+            1,
+            0
+          ]
+        },
+        "load_line": 41,
+        "load_operation": "    %values_16 = tt.load %values_15 : tensor<1x32x64x!tt.ptr<bf16>, #blocked> loc(#loc43)",
+        "reduce_line": 43,
+        "reduce_operation": "    %result = \"tt.reduce\"(%values_17) <{axis = 1 : i32}> ({\n    ^bb0(%result_18: f32 loc(callsite(#loc1 at #loc45)), %result_19: f32 loc(callsite(#loc1 at #loc45))):\n      %result_20 = arith.maxnumf %result_18, %result_19 : f32 loc(#loc48)\n      tt.reduce.return %result_20 : f32 loc(#loc46)\n    }) : (tensor<1x32x64xf32, #blocked>) -> tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> loc(#loc46)\n    %2 = arith.muli %0, %c8192_i32 : i32 loc(#loc22)\n    %3 = tt.addptr %out, %2 : !tt.ptr<f32>, i32 loc(#loc23)\n    %4 = tt.splat %3 : !tt.ptr<f32> -> tensor<64x!tt.ptr<f32>, #blocked1> loc(#loc24)\n    %5 = tt.addptr %4, %cols_8 : tensor<64x!tt.ptr<f32>, #blocked1>, tensor<64xi32, #blocked1> loc(#loc24)\n    %6 = tt.reshape %result : tensor<1x64xf32, #ttg.slice<{dim = 1, parent = #blocked}>> -> tensor<64xf32, #linear> loc(#loc25)\n    %7 = ttg.convert_layout %6 : tensor<64xf32, #linear> -> tensor<64xf32, #blocked1> loc(#loc26)\n    tt.store %5, %7 : tensor<64x!tt.ptr<f32>, #blocked1> loc(#loc26)",
+        "column_contributor_threads": 32,
+        "column_contributor_warps": 8,
+        "column_values_per_contributor": 1,
+        "base_tile_M": 32,
+        "repeats_in_M": 1
+      },
+      "SASS": {
+        "instruction_text_SHA256": "c9e8792c5f50633761910fed57ce7b7e477094cdb20b2a51b4d67d5610f8020b",
+        "static_sites_only": true,
+        "opcodes": {
+          "BAR.SYNC.DEFER_BLOCKING": 4,
+          "BRA": 1,
+          "EXIT": 2,
+          "FMNMX": 22,
+          "IMAD": 2,
+          "IMAD.IADD": 2,
+          "IMAD.MOV": 1,
+          "IMAD.MOV.U32": 1,
+          "IMAD.SHL.U32": 8,
+          "IMAD.U32": 8,
+          "ISETP.NE.U32.AND": 1,
+          "LDG.E.128": 1,
+          "LDS": 10,
+          "LDSM.16.M88": 1,
+          "LEA": 3,
+          "LEA.HI.X": 1,
+          "LEA.HI.X.SX32": 2,
+          "LOP3.LUT": 13,
+          "PRMT": 4,
+          "S2R": 2,
+          "SHF.R.U32.HI": 2,
+          "SHFL.BFLY": 22,
+          "STG.E": 1,
+          "STS": 10,
+          "STS.128": 2,
+          "ULDC.64": 1
+        }
+      }
+    }
+  },
+  "compilers": {
+    "3.5.1": {
+      "version": "3.5.1",
+      "module_path": "/tmp/triton-exp-a10-release-packages/3.5.1/triton/__init__.py",
+      "native_path": "/tmp/triton-exp-a10-release-packages/3.5.1/triton/_C/libtriton.so",
+      "native_SHA256": "5a9fda48d18d1da1c6ce3d50b415b053bcfdedc4d1109f4acc8ae7833d134437",
+      "ptxas_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+      "ptxas_SHA256": "c960a4f238b17d5c5d3c01ad2bbc1ebd2c5aecc459cb4d223bff10b45f9b8fca",
+      "compiler_resolved_ptxas": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+      "ptxas_version": "ptxas: NVIDIA (R) Ptx optimizing assembler\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:21:21_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+      "cache_directory": "/tmp/triton-exp-a10-default-version-3.5.1-kernel-cache",
+      "native_builds": 0,
+      "cache_CUBINs_before": 2,
+      "cache_CUBINs_after": 2
+    },
+    "3.6.0": {
+      "version": "3.6.0",
+      "module_path": "/tmp/triton-exp-a10-release-packages/3.6.0/triton/__init__.py",
+      "native_path": "/tmp/triton-exp-a10-release-packages/3.6.0/triton/_C/libtriton.so",
+      "native_SHA256": "28daaa70a904e4f8add754e518533e8a69b94ab8b16431ce77d45f1f25282b87",
+      "ptxas_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+      "ptxas_SHA256": "c960a4f238b17d5c5d3c01ad2bbc1ebd2c5aecc459cb4d223bff10b45f9b8fca",
+      "compiler_resolved_ptxas": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+      "ptxas_version": "ptxas: NVIDIA (R) Ptx optimizing assembler\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:21:21_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+      "cache_directory": "/tmp/triton-exp-a10-default-version-3.6.0-kernel-cache",
+      "native_builds": 0,
+      "cache_CUBINs_before": 0,
+      "cache_CUBINs_after": 2
+    },
+    "3.7.1": {
+      "version": "3.7.1",
+      "module_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/__init__.py",
+      "native_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/_C/libtriton.so",
+      "native_SHA256": "e1e17b42f65d04185099e8512cdedf3989355e7e7d3f429022c5302e4833f3d7",
+      "ptxas_path": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+      "ptxas_SHA256": "c960a4f238b17d5c5d3c01ad2bbc1ebd2c5aecc459cb4d223bff10b45f9b8fca",
+      "compiler_resolved_ptxas": "/home/chenmiaoming/miniforge3/envs/hexcute/lib/python3.12/site-packages/triton/backends/nvidia/bin/ptxas",
+      "ptxas_version": "ptxas: NVIDIA (R) Ptx optimizing assembler\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:21:21_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+      "cache_directory": "/tmp/triton-exp-a10-default-version-3.7.1-kernel-cache",
+      "native_builds": 0,
+      "cache_CUBINs_before": 0,
+      "cache_CUBINs_after": 2
+    }
+  },
+  "compile_correctness_checks": 12,
+  "timing_correctness_checks": 42,
+  "timing_samples": 2520,
+  "timing": {
+    "3.5.1:M32_N128_w4": {
+      "process_medians_us": [
+        298.0320006608963,
+        297.9840040206909,
+        298.799991607666,
+        299.00801181793213,
+        297.9840040206909,
+        297.9840040206909,
+        299.00801181793213
+      ],
+      "median_of_process_medians_us": 298.0320006608963
+    },
+    "3.5.1:M32_N64_w8": {
+      "process_medians_us": [
+        432.12801218032837,
+        433.1519901752472,
+        436.2240135669708,
+        440.3199851512909,
+        436.2240135669708,
+        436.2240135669708,
+        436.2240135669708
+      ],
+      "median_of_process_medians_us": 436.2240135669708
+    },
+    "3.6.0:M32_N128_w4": {
+      "process_medians_us": [
+        297.9840040206909,
+        298.0480045080185,
+        298.224002122879,
+        299.00801181793213,
+        297.9840040206909,
+        298.8319993019104,
+        298.96000027656555
+      ],
+      "median_of_process_medians_us": 298.224002122879
+    },
+    "3.6.0:M32_N64_w8": {
+      "process_medians_us": [
+        432.12801218032837,
+        432.96000361442566,
+        436.2240135669708,
+        440.3199851512909,
+        436.1120015382767,
+        436.2240135669708,
+        436.20800971984863
+      ],
+      "median_of_process_medians_us": 436.20800971984863
+    },
+    "3.7.1:M32_N128_w4": {
+      "process_medians_us": [
+        297.9840040206909,
+        298.8319993019104,
+        298.8159954547882,
+        299.00801181793213,
+        297.9840040206909,
+        298.99200797080994,
+        299.00801181793213
+      ],
+      "median_of_process_medians_us": 298.8319993019104
+    },
+    "3.7.1:M32_N64_w8": {
+      "process_medians_us": [
+        433.119997382164,
+        433.1519901752472,
+        437.24799156188965,
+        441.3439929485321,
+        436.97600066661835,
+        435.13600528240204,
+        437.23200261592865
+      ],
+      "median_of_process_medians_us": 436.97600066661835
+    }
+  },
+  "comparisons": {
+    "M32_N128_w4": {
+      "3.6.0": {
+        "paired_process_ratios": [
+          0.9998389547427828,
+          1.0002147782648196,
+          0.9980723242939602,
+          1.0,
+          1.0,
+          1.0028457745039248,
+          0.999839430585573
+        ],
+        "geomean_time_ratio": 1.0001150511263286,
+        "CI95": [
+          0.9988185524202878,
+          1.001413232729519
+        ],
+        "decision": "excludes_3_percent_slowdown_for_this_workload",
+        "unit": "temporal process repeats on one A10; not independent GPUs"
+      },
+      "3.7.1": {
+        "paired_process_ratios": [
+          0.9998389547427828,
+          1.0028457745039248,
+          1.000053560400173,
+          1.0,
+          1.0,
+          1.0033827451692643,
+          1.0
+        ],
+        "geomean_time_ratio": 1.0008734198162663,
+        "CI95": [
+          0.9994517490980263,
+          1.0022971127908415
+        ],
+        "decision": "excludes_3_percent_slowdown_for_this_workload",
+        "unit": "temporal process repeats on one A10; not independent GPUs"
+      }
+    },
+    "M32_N64_w8": {
+      "3.6.0": {
+        "paired_process_ratios": [
+          1.0,
+          0.9995567686050713,
+          1.0,
+          1.0,
+          0.9997432236071137,
+          1.0,
+          0.9999633127782414
+        ],
+        "geomean_time_ratio": 0.9998947445524093,
+        "CI95": [
+          0.9997318169567332,
+          1.0000576987006078
+        ],
+        "decision": "excludes_3_percent_slowdown_for_this_workload",
+        "unit": "temporal process repeats on one A10; not independent GPUs"
+      },
+      "3.7.1": {
+        "paired_process_ratios": [
+          1.0022955818041754,
+          1.0,
+          1.002347367322917,
+          1.002325599181898,
+          1.0017238553501413,
+          0.9975058496306239,
+          1.0023107142605827
+        ],
+        "geomean_time_ratio": 1.0012141108139463,
+        "CI95": [
+          0.9995092189128061,
+          1.0029219107987133
+        ],
+        "decision": "excludes_3_percent_slowdown_for_this_workload",
+        "unit": "temporal process repeats on one A10; not independent GPUs"
+      }
+    }
+  },
+  "native_builds": 0,
+  "manual_layouts": false,
+  "TMA_executed": false,
+  "Phase11_C_started": false
+}
