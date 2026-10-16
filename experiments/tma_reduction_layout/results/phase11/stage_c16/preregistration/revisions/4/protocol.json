@@ -1,0 +1,2565 @@
+{
+  "K": [
+    16,
+    64,
+    256
+  ],
+  "PR_authorized": false,
+  "analysis": {
+    "HBM_evidence": "DRAM bytes and throughput, L2 hits, cache perturbation, independent transfer control",
+    "calibration_point": "M32_N64_w8:vec4:FULL",
+    "counter_interpretation": "Report achieved bandwidth and all utilization values; do not call flat timing alone proof of HBM saturation",
+    "frozen_predictions": [
+      {
+        "C_onchip_us": 22.91190727448567,
+        "N": 64,
+        "floor_us": 61.4,
+        "offset_us": 26.6,
+        "predicted_us": 61.4,
+        "vec": 1
+      },
+      {
+        "C_onchip_us": 25.683855834117356,
+        "N": 64,
+        "floor_us": 61.4,
+        "offset_us": 26.6,
+        "predicted_us": 61.4,
+        "vec": 2
+      },
+      {
+        "C_onchip_us": 42.128254647378796,
+        "N": 64,
+        "floor_us": 61.4,
+        "offset_us": 26.6,
+        "predicted_us": 68.7282546473788,
+        "vec": 4
+      },
+      {
+        "C_onchip_us": 85.32622258728546,
+        "N": 64,
+        "floor_us": 61.4,
+        "offset_us": 26.6,
+        "predicted_us": 111.92622258728545,
+        "vec": 8
+      },
+      {
+        "C_onchip_us": 19.73130131438697,
+        "N": 128,
+        "floor_us": 56.1,
+        "offset_us": 26.6,
+        "predicted_us": 56.1,
+        "vec": 1
+      },
+      {
+        "C_onchip_us": 16.838603377514243,
+        "N": 128,
+        "floor_us": 56.1,
+        "offset_us": 26.6,
+        "predicted_us": 56.1,
+        "vec": 2
+      },
+      {
+        "C_onchip_us": 18.80704165365101,
+        "N": 128,
+        "floor_us": 56.1,
+        "offset_us": 26.6,
+        "predicted_us": 56.1,
+        "vec": 4
+      },
+      {
+        "C_onchip_us": 26.37552632311894,
+        "N": 128,
+        "floor_us": 56.1,
+        "offset_us": 26.6,
+        "predicted_us": 56.1,
+        "vec": 8
+      }
+    ],
+    "full_grid_error_reference_percent": 3,
+    "primary": "Frozen 26.6us offset and 61.4/56.1us platforms; no refit",
+    "secondary": "Same-worker micro slopes plus independently measured TMA control time; offset calibrated on N64 vec4 only; remaining 7 FULL points held out",
+    "secondary_offset_is_empirical_not_pure_hardware_latency": true,
+    "smaller_grids": "diagnostic only; no arbitrary extension of full-grid offset scaling",
+    "three_workers_are_not_three_independent_devices": true
+  },
+  "authorization": "User asked to validate the proposed overlap mechanism and its numerical agreement",
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "cache_eviction_bytes": 268435456,
+  "date": "2026-10-16",
+  "micro_grid": 8448,
+  "native_rebuild": false,
+  "new_cases": [
+    {
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "TMA",
+      "full_grid": 32768,
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:control:TMA"
+    },
+    {
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "TMA",
+      "full_grid": 16384,
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:control:TMA"
+    }
+  ],
+  "new_program_limit": 2,
+  "parent_commit": "0ef1a8e83df050a7d0920a110af05f056c8bb2e1",
+  "previous_protocol_SHA256": "58bfb95661c8022004d3ec2d10a1c353b2e940e44e8a6fa3b9b36915953caf9a",
+  "profile": "chenmiaoming",
+  "profiles": {
+    "cache_control": "none",
+    "cases": "8 FULL + 2 TMA, full grid, warm and cold",
+    "clock_control": "none",
+    "metrics": [
+      "dram__bytes_read.sum",
+      "dram__bytes_write.sum",
+      "dram__throughput.avg.pct_of_peak_sustained_elapsed",
+      "lts__t_sector_hit_rate.pct",
+      "gpu__time_duration.sum",
+      "sm__throughput.avg.pct_of_peak_sustained_elapsed",
+      "sm__cycles_elapsed.avg.per_second",
+      "dram__cycles_elapsed.avg.per_second"
+    ],
+    "profiler_durations_in_formal_statistics": false,
+    "replay": "application",
+    "report_limit": 20
+  },
+  "reused_bindings": {
+    "M32_N128_w4:vec1:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N128_w4/bfloat16/max/host/fixed_vec1",
+      "files": {
+        "kernel.cubin": "49046c6d6f45ab61e28f2f2cdc9f2787e8c54342937a69ec7284359a450efee0",
+        "kernel.glir": "a3ea3dc76c1e01ee983ada23c7952aaf40c6ed866c9189fb69aae0a5290032dc",
+        "kernel.llir": "e09b7a250b301ab397ac854be6b46a4ec5f611831dde15974723f1c6d9afde1c",
+        "kernel.ptx": "b00d6ef761aa6c10825f0ca4a254ef6dfa55f4e9278cb3e1f39a88b509c102c5",
+        "kernel.resource.txt": "66174eedecc65b4a72dbbece002bb7928aa2c0ca1647b60f65ac4a9389d4aec6",
+        "kernel.sass": "c0b33a0e43b479108110fddcebc537b7d35c7b28003e840c0461a504310c0f8d",
+        "kernel.ttgir": "2a35e6a1a9ebe885610a28a4e1505d18472f15e979e65128a53ef9690a9247b4"
+      }
+    },
+    "M32_N128_w4:vec1:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec1/ML",
+      "files": {
+        "kernel.cubin": "8cabb4b47a2d14cc0aa964e8bb4a3053f9f1851cb3fcd8f8253472019ec7f170",
+        "kernel.glir": "a55e8134231949fac01b1b83b3faa4e50360ec40a322888bd9a762fffc14c729",
+        "kernel.llir": "02917e559176adda5468bc7a9381a529353103ba7cf6335310134d086a5cb757",
+        "kernel.ptx": "417100727e9a2197c9f44c3a099ed01afe40a5a91c4a53ae0e591e21272e3cf2",
+        "kernel.resource.txt": "79def1138fdd45612c74dc7ca1beda2069504c20832c1ce74efd3c717be6edfd",
+        "kernel.sass": "e59c530919bd43a319b21563eda2fe15530b7917449ece776f4ca9c40dce9fd1",
+        "kernel.ttgir": "2125b3c290dff6a99a5838221295dab44d671056a7567aa1d072529bac9f9cd7"
+      }
+    },
+    "M32_N128_w4:vec1:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec1/MR",
+      "files": {
+        "kernel.cubin": "5fc3332ec869802e1c33d4692a382e8c275b036adeb63f375c59fc54de111b07",
+        "kernel.glir": "303b4699707dd34fb815fb8d0fabad18e3f76f8853e15d35052dac382e322707",
+        "kernel.llir": "9d564efa947e547837f8b8be10cab8721909b6afd0dc16b6edc064533c724692",
+        "kernel.ptx": "a06384422d0eb16da3ba8c1b03673dfc1886a4f7a7081142ad7f47775fc58a7a",
+        "kernel.resource.txt": "f4e7fd924ced65ee2cc959c668b0233e23a5690dc5104861fa6b8d602c14dc67",
+        "kernel.sass": "7ba075b22713e7ec5131e77d42f888e1057df3f13fdf8725cf10ba06039dda47",
+        "kernel.ttgir": "9b5bde8d5210b5de6fc0fb131c2914e37498cdacaf24e2433560b375b5813302"
+      }
+    },
+    "M32_N128_w4:vec2:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N128_w4/bfloat16/max/host/fixed_vec2",
+      "files": {
+        "kernel.cubin": "7d71942d44a33895d5d3049caa6a4b0321746c8267e8f09486093d9062a2b45e",
+        "kernel.glir": "acfef2cbcc12f962337151ab2b7f8b719a6b21201b83d6ab1613f9d13b1fa69f",
+        "kernel.llir": "3f3da0e4f8178a1432f15a391053e732da4828335f8ab8087334a8abe337b13c",
+        "kernel.ptx": "0292c235ae98e5f6a7948513c84074851038d5e683708392535380e846d3018d",
+        "kernel.resource.txt": "cbffc54f8006cc47d96d8620da767251f7a657b2ae07a36a92893c050e07fd06",
+        "kernel.sass": "a82b787df0081aa9e3c72142eb0b7bfa6ec9a7664327dc60d5555f498e5d7cd3",
+        "kernel.ttgir": "ef8a4be6fb884037c85cd4fedad9ea0ee02d303eef9264d60bf4e87763d5e7c5"
+      }
+    },
+    "M32_N128_w4:vec2:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec2/ML",
+      "files": {
+        "kernel.cubin": "d31f8c96c3330c0cf59221470f959589e6162ef7929080bb807147557559729d",
+        "kernel.glir": "61709295a62f54a6aa834fbf3d84837540ada2c691a1537c8ffa84d281b1d23c",
+        "kernel.llir": "fe7fef67352798ea8558db44bd2ea445223d766be12e2c4bf03c014db61f81da",
+        "kernel.ptx": "447967305db6241da86bd0b3ffe0332311d20c7caa9c9cbbfd72bf96ac1c01b2",
+        "kernel.resource.txt": "78f43efc6a20f0a121335b2c4c56de4aad7e327cd3d3e162f5d34486676ea201",
+        "kernel.sass": "1df49836622470e6255bd89ab22c2555082b200c7912c1d7dcd525489d20c5b0",
+        "kernel.ttgir": "d60346097cbb043a35df95ec64dc303cc285836cd84c953a7d9fa8452652f93c"
+      }
+    },
+    "M32_N128_w4:vec2:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec2/MR",
+      "files": {
+        "kernel.cubin": "68d14187360dba5e5a162b6ae5003ff6d9d83dcf263dc0bd57b0974ebaecf5da",
+        "kernel.glir": "b567583129531615a40b4caf0c394e4f7247ab0b9fc6db70cccd5bc5bc61b89e",
+        "kernel.llir": "8b1950c7f35bbc65af20124dba0ca696a47448a8e4338e7ee66f6aadd8309d8b",
+        "kernel.ptx": "2f939ab7f45502d278d953c05142e19edd710aef07e371cb2d315830f35da5ed",
+        "kernel.resource.txt": "7169163223806530dbdaa894d80a6a84592637aa7b62b93805676a64927f1164",
+        "kernel.sass": "77b31e2cc75b87c2f1d6bedf8cdddb81849b8bc7c11a14c27c5271bc78a38fe4",
+        "kernel.ttgir": "4bf953ac14d5913b29670a437334944ce79594955d1396b7a5054024ff98eefb"
+      }
+    },
+    "M32_N128_w4:vec4:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N128_w4/bfloat16/max/host/fixed_vec4",
+      "files": {
+        "kernel.cubin": "c58a77aa6747bc01965c9c42d3e0fcafdb589389bfb0cacf725d0a8438b7396b",
+        "kernel.glir": "6087130b28ee482b757facbc87e8b9b9d99d4d465c3af197305cb939ab16a113",
+        "kernel.llir": "c164b49bc4e1685c21b87787b38c791413ce0ed9fe687fa832ea5074c7e08271",
+        "kernel.ptx": "d2a86f92b02fc52953948d649924f20e5e9aba6b74858109705bb93b94a4ab4e",
+        "kernel.resource.txt": "e918b3066ef08948b742650ded5fae237310f39dc357d7e220f9635bd77937ef",
+        "kernel.sass": "804c3a55818bd32b3295f878d85ddef4b9d43d8c9dda2d48e220ff52bbf119b9",
+        "kernel.ttgir": "5645188f6c032a212870aa852a0ca644b20c6992a59026b4ebc728d34ef12bee"
+      }
+    },
+    "M32_N128_w4:vec4:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec4/ML",
+      "files": {
+        "kernel.cubin": "f62fd95c83d235bf870b291b3b397cc80731b424b4eefd67f9f0f521617cdbe2",
+        "kernel.glir": "c14d0c6b9e176f4f36ef9563e9e568d4035324e70421f4a625aa5a95441df739",
+        "kernel.llir": "ca1ac68733eb5e39e9a4bdeb47dc736adb1d22b268fb82b9b6715b9cfc2ceb6c",
+        "kernel.ptx": "49fe0b6fbb0489c2cec69501094646ca38d65afa3e7e7139e6f0fe6fc9a073c6",
+        "kernel.resource.txt": "78f43efc6a20f0a121335b2c4c56de4aad7e327cd3d3e162f5d34486676ea201",
+        "kernel.sass": "237a99086b257f5e5a71afb3874ced1c90b1a389c70cd40e6122a70bf8903882",
+        "kernel.ttgir": "599ff5648b423a7d32b6c08b1cd3d02dff52aac2658a41596a80bab070f99378"
+      }
+    },
+    "M32_N128_w4:vec4:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec4/MR",
+      "files": {
+        "kernel.cubin": "4c7a2e5ed4cf0af0dddd3b85e5b204203c183088e321d4746865303085ae5237",
+        "kernel.glir": "41b27e1a187ccbbd737ee386f1568e60305f830a66a542271172a5223efa0ed6",
+        "kernel.llir": "566af18a0a9b273edb281854e9e2dc6cffa595e113a4d81d9c0450204b2d9ff9",
+        "kernel.ptx": "8d9d65fac7cad2e8623faa8f7f8249c5f4da74d9087ce892e7ccdbf1d7c981a4",
+        "kernel.resource.txt": "14c870c780497ebc1f8e0470bdfa5bab1497a71cdb1fe0fcff4bb12ed9ee6c5c",
+        "kernel.sass": "2497cf607e84c8379ecb8291dbdbab515e6a5584905c4b249d721f76c2d7c4f8",
+        "kernel.ttgir": "e1e3f535d9ff88e2f5f75abb74f0f6eabbef1f40f71fa7fb0a833ec80f1221bb"
+      }
+    },
+    "M32_N128_w4:vec8:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N128_w4/bfloat16/max/host/fixed_vec8",
+      "files": {
+        "kernel.cubin": "1135944fa62712bc1cf9985b9c26ac61acff428b6bea6caeb781cc14b9c51f4d",
+        "kernel.glir": "3a9de71ab237ca6116647e765c75052de7e6ef3ee382896542a714d47d90cf99",
+        "kernel.llir": "e5145ff8b51cbb9c3b7523cffef585819ff54484994efa70b0727b9a3c6132d5",
+        "kernel.ptx": "ca63787fbe216c077663f57447c53eb1657966ff2854432f6c5c320be21f9029",
+        "kernel.resource.txt": "eb41883d567817f3cf85926db11d409ff80b433711134a952d7250ca91edcf4c",
+        "kernel.sass": "61dd9d38eba4bc59418844c701978a5f5ed5f7acf641b1f58055f04d0b71f7b6",
+        "kernel.ttgir": "b3910dcb56e063e57e07417d4665f01dc450306ed5ce141d214b190fec7e1ce9"
+      }
+    },
+    "M32_N128_w4:vec8:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec8/ML",
+      "files": {
+        "kernel.cubin": "07d0a9abc2344548753a1dda87d5f6cdc2ccd468d55dc17b3f9c42cc3f141fdd",
+        "kernel.glir": "33f7ceb0829421c20558146957f8a56afae101cd1f643c7706015325fb95cee9",
+        "kernel.llir": "1fcdcd8037f1c0a587deb8b979ab16b5e5e6cdc53e74a3c59f20e4f6f569e6f5",
+        "kernel.ptx": "7d15df602a5e60470614ff71fd7669dd144ed8a92cf46959f267126537f50f6d",
+        "kernel.resource.txt": "04be0381675ec9b36e4372483054dbdf7f04acd2b790a15fce8692b5911a5250",
+        "kernel.sass": "787c7fc60d6cadbc442c860d642e7629764a7be984587a12c25cb36afcfef737",
+        "kernel.ttgir": "03b823221d6e51a9e2862e76ba2533198cec24b4426262b2b20fba4f1a6ee8da"
+      }
+    },
+    "M32_N128_w4:vec8:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec8/MR",
+      "files": {
+        "kernel.cubin": "0cc65e5fab17100ba6b8ffcaf061b16cafca5acb41b3da49d9423baeaaf1d9fd",
+        "kernel.glir": "18ac252380abd9a789f7978440588baeeab058e9094303ee9220b9e9f5924210",
+        "kernel.llir": "d0400a842fb3ad0ae207d08436b54713b538abd6c9c52c33367b61364c9ecad1",
+        "kernel.ptx": "af1d7662bae1e5389f8b22b72a37786de26f52931c15b56d9baa3e4653cef52b",
+        "kernel.resource.txt": "4b682c7dd3823345b40b0f53b6775693f9628cdb4d08e2712b58aecbf899897c",
+        "kernel.sass": "0d4620503f95ef8577ce70107462bb5056b7cc12e124eb8a7020caa18013ab3f",
+        "kernel.ttgir": "1746ea99a08ea47a9f07c84edf8280165e6e0506e1c27ca6cbfcaea808419006"
+      }
+    },
+    "M32_N64_w8:vec1:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N64_w8/bfloat16/max/host/fixed_vec1",
+      "files": {
+        "kernel.cubin": "14e4f7597913440a4bd484152f808e35bb6afb6d586b2c2e2435ee4c40173495",
+        "kernel.glir": "c6d1f0db6017e834b2cef2bc93a34dcc8c701071a531a3a8fb56722f5b53d977",
+        "kernel.llir": "54a139330c6bb3acd93d21b429eadaa59f4ee5c1c984292046e89da08ad8359f",
+        "kernel.ptx": "9068525b9690f00f7e28fd84596c1052832e820eebbc8548cd39ef77ea221f17",
+        "kernel.resource.txt": "ede51f25c12a2044b694348706443cf34623ad77250f1a9d832f31bdcce2d4e0",
+        "kernel.sass": "444b462baaf2808280e7e3f9764368692779b22c9451cc160a15b339e1aeda7a",
+        "kernel.ttgir": "894c5b698487e293d2de06c64af8ad5bf105d373ac00c55c9500247bf572660a"
+      }
+    },
+    "M32_N64_w8:vec1:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec1/ML",
+      "files": {
+        "kernel.cubin": "8edc620b733da1f5228a47695f1e34c50840f02a73e4109024b350a678779b63",
+        "kernel.glir": "32291a1e08d82903a2dcccc9824fb351df68e8ce7051638193fde34c7dd96827",
+        "kernel.llir": "895fa585e3c9764a7c54737a187d5f3a25b1a6f08a0bd448d7aeb66091922177",
+        "kernel.ptx": "77ff028620f29ee61da3eef839cc8cc8672eb6895766385e4ba27f925b41e6b5",
+        "kernel.resource.txt": "379c9ae78edecd216e5ac0ca79ed6cb36dbaa4ce93e95bd52c5e4fd61af99697",
+        "kernel.sass": "f7c0acf0d5f416b28425d497541ec9ac5610bef1eeed73ac44e878ba43b82e18",
+        "kernel.ttgir": "a601db88fd68d8b3ab09287eea6e15a83bde7ef79adfe75250185e297ed49686"
+      }
+    },
+    "M32_N64_w8:vec1:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec1/MR",
+      "files": {
+        "kernel.cubin": "23192c62289863937ce86d4e9f756f00fc4c1bb14f9297f5b5a8b2825dc46d3b",
+        "kernel.glir": "950ec6a5dadb4f2d6c894365a1533bd760e95ad47ecd10f4aef3f09cfe58829e",
+        "kernel.llir": "4039e9cf38394c8bf11bb7be4607409d6d5c40f0500005e9af1a688daa34de06",
+        "kernel.ptx": "9df3c6e38a52f79f6aadab1fcd717e95c09baed18b51c2bd28e22ab55ccc4718",
+        "kernel.resource.txt": "379c9ae78edecd216e5ac0ca79ed6cb36dbaa4ce93e95bd52c5e4fd61af99697",
+        "kernel.sass": "ca07d33ff590cf28ed7bc00549f21dcc87cfcd311e8efa2ad8518b86ce19f1c9",
+        "kernel.ttgir": "ab371f5e24795f04d9bc75040f597d5d76cc95d5ad3b103a293c281b8228b971"
+      }
+    },
+    "M32_N64_w8:vec2:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N64_w8/bfloat16/max/host/fixed_vec2",
+      "files": {
+        "kernel.cubin": "a49bf6cbfb60ecfbc75b37b4fcc5c8b480f4a341aad3341ab26bb39b3120ac15",
+        "kernel.glir": "20e7bd1d6472d1516a57a49a9f51b75dd0d8f7a4d5b5adcdabc5446d75da5323",
+        "kernel.llir": "8ed6511ff20c70f239469524a1e2e33d7f935f87387d4ef44254ccb31ac88e99",
+        "kernel.ptx": "bb6ec53fbdcf9bb80decb96285c510e5dab395c275bd176653d73dbeaa7be71a",
+        "kernel.resource.txt": "0327bbe3b79aa49ff245ffef25c5d46c8c79eec35a608e143918958d83066297",
+        "kernel.sass": "eb2375a8d6cbfd0f0ff5558e567ec963fa7b77e1eb278aadc95ff4a1b1a7eb36",
+        "kernel.ttgir": "ab11877bd9e5556fbe17387a7b8f123ed089f5b92414d8715643524ec05f4145"
+      }
+    },
+    "M32_N64_w8:vec2:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec2/ML",
+      "files": {
+        "kernel.cubin": "f48958616737e97ead7a2f5f8bde3ab202c6ce83525993abf7213a921f204f52",
+        "kernel.glir": "f6898a7691b8f0e8987ce812b4b6da1a611dc98a7c773bd1faf4799b86fec9a0",
+        "kernel.llir": "b4e23f597a091c66a0d3ed9c8feafb42e958c835eab4d7bc2293363206d80545",
+        "kernel.ptx": "5011d2f46f07e54a26f12323721e7369fdc6a4bc29e39d45003dd2982d77e943",
+        "kernel.resource.txt": "1656960cda86ae2de9b0edd6aadad86f433b4525c07105124fc4807976eeeacf",
+        "kernel.sass": "7e4b19f73255dcd37f9e5704c80beed72cded9e7753a47b2db31e03b7db25e04",
+        "kernel.ttgir": "b2f873c923d5818cd550fed78904fac25ad9828700425adf4a90d540b29f54b5"
+      }
+    },
+    "M32_N64_w8:vec2:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec2/MR",
+      "files": {
+        "kernel.cubin": "0fbb04dd3c1cd2958b84084f7888285562b719ca6453eced1f925309de2064f8",
+        "kernel.glir": "e18c2fd538b6ad4ea9eeb12f889570ec5c31a015ae0f234ac3ff33a9d61cc796",
+        "kernel.llir": "a29e9a3087bfccbe94d2e5ed584587d7c5dc01165ce033f9af311ee0d60e1808",
+        "kernel.ptx": "fca6fb6b67241c5efc409cf0f2feeb5de1e9b695bca93d1b76bd5dc73494ccc5",
+        "kernel.resource.txt": "41768b880d07a5bb8d0395112cfdd639b3adc8d7c8e485ccb5d3bef03fd0ec2e",
+        "kernel.sass": "3cf2b011526df1cdd3ee5e4bea0fc0c9d43b4b40a5979e4e080a92dbed5ba960",
+        "kernel.ttgir": "619c31e033fc94d0024c13aa96970e7a8a3b80d1139218ecb804069c4bb01961"
+      }
+    },
+    "M32_N64_w8:vec4:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N64_w8/bfloat16/max/host/fixed_vec4",
+      "files": {
+        "kernel.cubin": "adec623b6ea86809884c97e62916a6a8a5af5f4db68bab41afb092fef3f7fa24",
+        "kernel.glir": "5daef557788099c76ec53e1ac380c44ed87ae7757ad03949a8ad07e665a68384",
+        "kernel.llir": "a637651b7d97de1fae87d55e2481eab35e93807115ff35a7e8f09b662f2eece6",
+        "kernel.ptx": "e13d78a368967fdc7c7536ec9445270b7b5ddd051051c2562d1835a141208fc9",
+        "kernel.resource.txt": "bdf5926a48abe3f1e48b3c95ddf681cd68b15a6295c6d90b486db19f9a748d07",
+        "kernel.sass": "f41a178d678f0534e7101d4fe558d64eba7343d986e4800efd5c1deb64dbb8d3",
+        "kernel.ttgir": "35d569ce579ffd4e01a31ab205cba50c0baddb7cb0afa8669010550891259bb0"
+      }
+    },
+    "M32_N64_w8:vec4:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec4/ML",
+      "files": {
+        "kernel.cubin": "6422a2521a4a91157130d5012f28443977c42edb18fee028981d359afbf66c45",
+        "kernel.glir": "8a93dda063f42e63d480395b7cfe770afe862a2b4ca55d2b8c4d6ce64aac5c7d",
+        "kernel.llir": "a15621b0f7f4fca7283d0b23ead94cf2b86a66f773b9db7726e2ee61229094ca",
+        "kernel.ptx": "f38a43e5e915dccef45a8834d7208f63357c300ed0fb2fe6554662be34eadd05",
+        "kernel.resource.txt": "379c9ae78edecd216e5ac0ca79ed6cb36dbaa4ce93e95bd52c5e4fd61af99697",
+        "kernel.sass": "99e480ae3e38e0cc119c9cc08882d44d89d57090ef25a1dce628dcc2e3408397",
+        "kernel.ttgir": "0da2666893d56b0e8fd9dd144adc4e223a276ab47ee0852860f70300bc1cfee8"
+      }
+    },
+    "M32_N64_w8:vec4:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec4/MR",
+      "files": {
+        "kernel.cubin": "ad8d15377b3511e2b4dd84480f03c4349b98956b3396a761701ab0b927dff3bc",
+        "kernel.glir": "1b5db6a2e4109f28dce1fe7bc3efd0a58c576e75cef9a6e5e84e6ad1239d4a00",
+        "kernel.llir": "c7b0b6e55e92d090683b0051dac2bbcd3b2da413658f83e0aa5c7fc23c3a8ea7",
+        "kernel.ptx": "e20caab1a52ef16263033f5be094c9b7c36098270c02b7e05fc503af6e87c21a",
+        "kernel.resource.txt": "379c9ae78edecd216e5ac0ca79ed6cb36dbaa4ce93e95bd52c5e4fd61af99697",
+        "kernel.sass": "0706365a850da5a8383a97d38e3420353c17657f01dc44329265de3d7574f55d",
+        "kernel.ttgir": "69212fb2fb63e4c0279ca254e1fee84de9ffa98025945eb32bbd0d774b0df9a1"
+      }
+    },
+    "M32_N64_w8:vec8:FULL": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_b/artifacts/attempt_4/export/M32_N64_w8/bfloat16/max/host/fixed_vec8",
+      "files": {
+        "kernel.cubin": "0d4e2d86b723e727f9e3f1e74c6e6713b80ed6fc0b61ec185c32c94b5584c7c6",
+        "kernel.glir": "81c8db22880c57156cf92fca0bb9749359d950a150067154460f1d2ff02a8bed",
+        "kernel.llir": "eecbca3a20bdf467a68d6cc4a0278a60dd325afe2cbac2aaa25e0144e1df6568",
+        "kernel.ptx": "04bef9828e06f110af24442152758ac91aad8b79232a950de585e26725adf324",
+        "kernel.resource.txt": "ee3bc26ce32190691bb65cd66a3b93ae6a507d7f99d3e27c5188849382691345",
+        "kernel.sass": "56fa2221decdd5dfac4f08c6f73893b9e15fcdfcadff74d2b82110c47c34f01f",
+        "kernel.ttgir": "686c4f7fc06b7adb478c742fb91b3a75d185c6ad018de6c191fbba82cbcc9b9e"
+      }
+    },
+    "M32_N64_w8:vec8:ML": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec8/ML",
+      "files": {
+        "kernel.cubin": "db86e396d401f25f7835a723f07806b5257f25deffc70cf0fca8aa286816244c",
+        "kernel.glir": "eb28a3f9526175208f374665734e7d058672592cab3e11218dfc3aab478ecbd9",
+        "kernel.llir": "9d7bab57b3ff3d490a7ace50c8d8595feb788c263f92bd80d5ec49cd87913d97",
+        "kernel.ptx": "f2d0213030492c021483e805e3e90331dfc5da57740fb1d1c2c428fb0edfd161",
+        "kernel.resource.txt": "f0d0ef14a293035abe60e6e54db2fb5816c74586a15ac3ea52b7cfe093ec454c",
+        "kernel.sass": "213ee9cc750833d69ee56bf21850f30cf0bb089a675929d36f16868d3bb8a498",
+        "kernel.ttgir": "ede7904d39a1773fee6780ece432d85947f330a63fff129a330fd2d3bf6041f4"
+      }
+    },
+    "M32_N64_w8:vec8:MR": {
+      "directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N64_w8/vec8/MR",
+      "files": {
+        "kernel.cubin": "c686aee8024cb669ad3320f13c532c11d62e5664a00e96c574844fe1ddf943cc",
+        "kernel.glir": "c84de143cc3d6cf816023d73a549da2e8d15eb5c60dad45fb2c4fafbe1e86645",
+        "kernel.llir": "8bb720664534ebf0da7b78ed7de4e3fd22bf72fea5ded9c446ef2c2964888cdb",
+        "kernel.ptx": "c9e3512f35a0bdb851fcde721771f1c7a4a4dfec05d430114c6b7e9cddf96696",
+        "kernel.resource.txt": "fde4cf6903d1091572e24389dd5fcd02e06c0ee11015b323060864d01e53aa2f",
+        "kernel.sass": "b2210d0c30f664ebcc57c58112ca2f1acbc51cbed88b7397bfc7f10c1b96daf6",
+        "kernel.ttgir": "38151225400233250247f45c6e57c5a05f49cdc2b55d41c4d24f10edaed05d13"
+      }
+    }
+  },
+  "reused_metadata": {
+    "M32_N128_w4:vec1:FULL": {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "cubin_SHA256": "49046c6d6f45ab61e28f2f2cdc9f2787e8c54342937a69ec7284359a450efee0",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "FULL",
+      "full_grid": 16384,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N128_w4:vec1:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec1",
+      "vec": 1
+    },
+    "M32_N128_w4:vec1:ML": {
+      "M": 32,
+      "N": 128,
+      "artifact_origin": {
+        "CUBIN_SHA256": "8cabb4b47a2d14cc0aa964e8bb4a3053f9f1851cb3fcd8f8253472019ec7f170",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N128_w4/vec1/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "8cabb4b47a2d14cc0aa964e8bb4a3053f9f1851cb3fcd8f8253472019ec7f170",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 16392,
+      "family": "ML",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec1:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 1
+    },
+    "M32_N128_w4:vec1:MR": {
+      "M": 32,
+      "N": 128,
+      "cubin_SHA256": "5fc3332ec869802e1c33d4692a382e8c275b036adeb63f375c59fc54de111b07",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "MR",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec1:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 1
+    },
+    "M32_N128_w4:vec2:FULL": {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "cubin_SHA256": "7d71942d44a33895d5d3049caa6a4b0321746c8267e8f09486093d9062a2b45e",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "FULL",
+      "full_grid": 16384,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N128_w4:vec2:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec2",
+      "vec": 2
+    },
+    "M32_N128_w4:vec2:ML": {
+      "M": 32,
+      "N": 128,
+      "artifact_origin": {
+        "CUBIN_SHA256": "d31f8c96c3330c0cf59221470f959589e6162ef7929080bb807147557559729d",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N128_w4/vec2/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "d31f8c96c3330c0cf59221470f959589e6162ef7929080bb807147557559729d",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 16392,
+      "family": "ML",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    "M32_N128_w4:vec2:MR": {
+      "M": 32,
+      "N": 128,
+      "cubin_SHA256": "68d14187360dba5e5a162b6ae5003ff6d9d83dcf263dc0bd57b0974ebaecf5da",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "MR",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    "M32_N128_w4:vec4:FULL": {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "cubin_SHA256": "c58a77aa6747bc01965c9c42d3e0fcafdb589389bfb0cacf725d0a8438b7396b",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "FULL",
+      "full_grid": 16384,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N128_w4:vec4:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec4",
+      "vec": 4
+    },
+    "M32_N128_w4:vec4:ML": {
+      "M": 32,
+      "N": 128,
+      "artifact_origin": {
+        "CUBIN_SHA256": "f62fd95c83d235bf870b291b3b397cc80731b424b4eefd67f9f0f521617cdbe2",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N128_w4/vec4/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "f62fd95c83d235bf870b291b3b397cc80731b424b4eefd67f9f0f521617cdbe2",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 16392,
+      "family": "ML",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec4:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 4
+    },
+    "M32_N128_w4:vec4:MR": {
+      "M": 32,
+      "N": 128,
+      "cubin_SHA256": "4c7a2e5ed4cf0af0dddd3b85e5b204203c183088e321d4746865303085ae5237",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "MR",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec4:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 4
+    },
+    "M32_N128_w4:vec8:FULL": {
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "cubin_SHA256": "1135944fa62712bc1cf9985b9c26ac61acff428b6bea6caeb781cc14b9c51f4d",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "FULL",
+      "full_grid": 16384,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 16384,
+      "num_warps": 4,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N128_w4:vec8:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec8",
+      "vec": 8
+    },
+    "M32_N128_w4:vec8:ML": {
+      "M": 32,
+      "N": 128,
+      "artifact_origin": {
+        "CUBIN_SHA256": "07d0a9abc2344548753a1dda87d5f6cdc2ccd468d55dc17b3f9c42cc3f141fdd",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N128_w4/vec8/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "07d0a9abc2344548753a1dda87d5f6cdc2ccd468d55dc17b3f9c42cc3f141fdd",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 16392,
+      "family": "ML",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 8
+    },
+    "M32_N128_w4:vec8:MR": {
+      "M": 32,
+      "N": 128,
+      "cubin_SHA256": "0cc65e5fab17100ba6b8ffcaf061b16cafca5acb41b3da49d9423baeaaf1d9fd",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "MR",
+      "full_grid": 16384,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 8
+    },
+    "M32_N64_w8:vec1:FULL": {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "cubin_SHA256": "14e4f7597913440a4bd484152f808e35bb6afb6d586b2c2e2435ee4c40173495",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "FULL",
+      "full_grid": 32768,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N64_w8:vec1:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec1",
+      "vec": 1
+    },
+    "M32_N64_w8:vec1:ML": {
+      "M": 32,
+      "N": 64,
+      "artifact_origin": {
+        "CUBIN_SHA256": "8edc620b733da1f5228a47695f1e34c50840f02a73e4109024b350a678779b63",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N64_w8/vec1/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "8edc620b733da1f5228a47695f1e34c50840f02a73e4109024b350a678779b63",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ML",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec1:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 1
+    },
+    "M32_N64_w8:vec1:MR": {
+      "M": 32,
+      "N": 64,
+      "cubin_SHA256": "23192c62289863937ce86d4e9f756f00fc4c1bb14f9297f5b5a8b2825dc46d3b",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "MR",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec1:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 1
+    },
+    "M32_N64_w8:vec2:FULL": {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "cubin_SHA256": "a49bf6cbfb60ecfbc75b37b4fcc5c8b480f4a341aad3341ab26bb39b3120ac15",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "FULL",
+      "full_grid": 32768,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N64_w8:vec2:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec2",
+      "vec": 2
+    },
+    "M32_N64_w8:vec2:ML": {
+      "M": 32,
+      "N": 64,
+      "artifact_origin": {
+        "CUBIN_SHA256": "f48958616737e97ead7a2f5f8bde3ab202c6ce83525993abf7213a921f204f52",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N64_w8/vec2/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "f48958616737e97ead7a2f5f8bde3ab202c6ce83525993abf7213a921f204f52",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ML",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    "M32_N64_w8:vec2:MR": {
+      "M": 32,
+      "N": 64,
+      "cubin_SHA256": "0fbb04dd3c1cd2958b84084f7888285562b719ca6453eced1f925309de2064f8",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "MR",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    "M32_N64_w8:vec4:FULL": {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "cubin_SHA256": "adec623b6ea86809884c97e62916a6a8a5af5f4db68bab41afb092fef3f7fa24",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "FULL",
+      "full_grid": 32768,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N64_w8:vec4:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec4",
+      "vec": 4
+    },
+    "M32_N64_w8:vec4:ML": {
+      "M": 32,
+      "N": 64,
+      "artifact_origin": {
+        "CUBIN_SHA256": "6422a2521a4a91157130d5012f28443977c42edb18fee028981d359afbf66c45",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N64_w8/vec4/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "6422a2521a4a91157130d5012f28443977c42edb18fee028981d359afbf66c45",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ML",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec4:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 4
+    },
+    "M32_N64_w8:vec4:MR": {
+      "M": 32,
+      "N": 64,
+      "cubin_SHA256": "ad8d15377b3511e2b4dd84480f03c4349b98956b3396a761701ab0b927dff3bc",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "MR",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          4
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec4:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 4
+    },
+    "M32_N64_w8:vec8:FULL": {
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "cubin_SHA256": "0d4e2d86b723e727f9e3f1e74c6e6713b80ed6fc0b61ec185c32c94b5584c7c6",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "FULL",
+      "full_grid": 32768,
+      "function_name": "explicit",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 32768,
+      "num_warps": 8,
+      "op": "max",
+      "path": "host",
+      "pipeline": "gluon",
+      "tag": "M32_N64_w8:vec8:FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec8",
+      "vec": 8
+    },
+    "M32_N64_w8:vec8:ML": {
+      "M": 32,
+      "N": 64,
+      "artifact_origin": {
+        "CUBIN_SHA256": "db86e396d401f25f7835a723f07806b5257f25deffc70cf0fca8aa286816244c",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N64_w8/vec8/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "db86e396d401f25f7835a723f07806b5257f25deffc70cf0fca8aa286816244c",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ML",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:ML",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 8
+    },
+    "M32_N64_w8:vec8:MR": {
+      "M": 32,
+      "N": 64,
+      "cubin_SHA256": "c686aee8024cb669ad3320f13c532c11d62e5664a00e96c574844fe1ddf943cc",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "MR",
+      "full_grid": 32768,
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:MR",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 8
+    }
+  },
+  "reused_programs": 24,
+  "revision": 4,
+  "scope": "Bounded overlap/HBM validation only; no C2/model search/PR",
+  "stage": "C1.6",
+  "stop_after": "C1.6 evidence and report; do not start C2",
+  "target": {
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ],
+    "gpu": "H100!:1"
+  },
+  "technical_revision_reason": "NCU tools image intentionally lacks Torch. Replace the profile child with the established pure CUDA Driver allocation/copy/eviction path. Preserve failed profile attempt 1; kernel sources, predictions, metrics and formal timing unchanged.",
+  "timing": {
+    "cache_modes": [
+      "warm",
+      "cold"
+    ],
+    "full_and_control_cells": 60,
+    "full_grid_divisors": [
+      4,
+      2,
+      1
+    ],
+    "graphs": false,
+    "micro_cells": 48,
+    "one_kernel_per_sample": true,
+    "outcome_based_repeats": false,
+    "samples_per_cell": 20,
+    "samples_per_visit": 5,
+    "samples_total": 6480,
+    "subprocess_JIT": false,
+    "visits": 4,
+    "warmups": 3,
+    "workers": 3
+  },
+  "upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/c1/common.py": "280bd4a1ae5f3a30ba900e0e4220973f1229fff2450f8eec634ec5a524a79ff4",
+    "experiments/tma_reduction_layout/phase11/c1/data.py": "ab91063c89267e4c6b9cb5f83d80f41607603971da6b5501534c3271ebe589c9",
+    "experiments/tma_reduction_layout/phase11/c1/driver.py": "f0846bbce1995576df0baf6a0dca22bfc3857cc008d57374611a2c94cd83ecf8",
+    "experiments/tma_reduction_layout/phase11/c15/common.py": "9f7b3fad3a38dc7576f4bae996f4250480444bfcb943134a2c1f4ea6ca2aa69d",
+    "experiments/tma_reduction_layout/phase11/c15/data.py": "b444514d1cad69fd0986cbe532f95375e2916c7fc10c753d5b0ac87dc862f02f",
+    "experiments/tma_reduction_layout/phase11/c16/common.py": "b5bd3b24aa8be6c1cc8fa4d83e02ea3d3db593fc63ef1aca485cac80931896ee",
+    "experiments/tma_reduction_layout/phase11/c16/kernels.py": "970136c86d6bf37121457bb96dc334c10c2ecf3a66d12325f8a70f667d97f5bc",
+    "experiments/tma_reduction_layout/phase11/c16/profile_one.py": "abb2452c8135178fb4f8b8fe128c5493db9b7705eda579aa94b89451b08cd47d",
+    "experiments/tma_reduction_layout/phase11/c16/run.py": "d5986980f5a4fad516aa2492db99a6d9b8e93bb00fc0030857f49d5ab46288bc",
+    "experiments/tma_reduction_layout/phase11/c16/runtime.py": "bc756185e33d6d48e894c712d65d006aadceab08aea718c2185344fd888ee473",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/launch.py": "b5574c3ae1733acd4f32015cf2b9c570eec4097481cf2ad885c0c6ce3c72cb54",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}
