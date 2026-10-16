@@ -9,7 +9,7 @@ SNAPSHOT=Path('/tmp/tma-phase11-c2'+BATCH+'-snapshot')
 app=modal.App('triton-phase11-c2'+BATCH+'-calibration')
 
 def image_for(identity):
-    env={'PYTHONPATH':'/opt/triton-src','TRITON_CACHE_DIR':'/cache/phase11-upstream20d9-kernel-cache'}
+    env={'PYTHONPATH':'/opt/triton-src','TRITON_CACHE_DIR':'/cache/phase11-upstream20d9-kernel-cache','TMA_C2_BATCH':BATCH}
     if identity==c.BASE_IMAGE:env['PATH']='/opt/phase9-cuda-tools/bin:/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin'
     return modal.Image.from_id(identity).env(env).add_local_dir(SNAPSHOT/'experiments','/opt/triton-src/experiments',copy=True,ignore=['**/__pycache__/**','**/*.pyc'])
 
@@ -28,7 +28,7 @@ def preflight(protocol,reused):
     from triton.experimental.gluon import language as gl
     from experiments.tma_reduction_layout.phase11.c2.kernels import micro,output_path,parameter
     c.verify_sources(protocol)
-    root=Path('/evidence')/('stage_c2'+BATCH)/'cpu_preflight'/modal.current_function_call_id()
+    root=Path('/evidence')/('stage_'+protocol['stage'].lower())/'cpu_preflight'/modal.current_function_call_id()
     root.mkdir(parents=True,exist_ok=False);c.extract(reused,root)
     result={'status':'FAILED','GPU_allocated':False,'call_id':modal.current_function_call_id(),
             'protocol_SHA256':c.sha(c.encode(protocol)),'metadata':{},'new_compiles':0}
@@ -82,7 +82,7 @@ def collect(protocol,metadata,payload,previous_checks):
     root=Path('/tmp')/modal.current_function_call_id();c.extract(payload,root)
     result=eligibility(protocol,metadata,root,previous_checks)
     result.update({'call_id':modal.current_function_call_id(),'protocol_SHA256':c.sha(c.encode(protocol)),'payload_SHA256':c.sha(payload)})
-    c.write_once(Path('/evidence')/('stage_c2'+BATCH)/'eligibility'/modal.current_function_call_id()/'raw.json',result)
+    c.write_once(Path('/evidence')/('stage_'+protocol['stage'].lower())/'eligibility'/modal.current_function_call_id()/'raw.json',result)
     volume.commit();return result
 
 
@@ -90,7 +90,7 @@ def collect(protocol,metadata,payload,previous_checks):
 def profiles(protocol,gate,payload,group_index):
     import subprocess,sys,traceback
     c.verify_sources(protocol)
-    root=Path('/evidence')/('stage_c2'+BATCH)/'profiles'/modal.current_function_call_id()
+    root=Path('/evidence')/('stage_'+protocol['stage'].lower())/'profiles'/modal.current_function_call_id()
     root.mkdir(parents=True,exist_ok=False);archives=root/'archives';c.extract(payload,archives)
     groups=gate['profile_groups'];group=groups[group_index]
     result={'status':'FAILED','call_id':modal.current_function_call_id(),'group':group_index,'records':[],
@@ -112,7 +112,7 @@ def profiles(protocol,gate,payload,group_index):
                 if not meta.get('previous_batch'):
                     for k in ks:
                         for repeat in range(reps):cells.append({'tag':tag,'K':k,'grid':1,'q':'natural','repeat':repeat})
-                if BATCH=='b':
+                if protocol['stage']=='C2b':
                     if mode=='hardware':
                         cells.append({'tag':tag,'K':256 if meta['family']!='MO' else 1,
                                       'grid':64*protocol['target']['SM_count'],'q':'natural','repeat':0})
@@ -149,7 +149,7 @@ def profiles(protocol,gate,payload,group_index):
 def timing(invocation,protocol,gate,payload):
     from experiments.tma_reduction_layout.phase11.c2.timing import execute
     result=execute(invocation,protocol,gate,payload,modal.current_function_call_id())
-    c.write_once(Path('/evidence')/('stage_c2'+BATCH)/'timing'/modal.current_function_call_id()/'raw.json',result)
+    c.write_once(Path('/evidence')/('stage_'+protocol['stage'].lower())/'timing'/modal.current_function_call_id()/'raw.json',result)
     volume.commit();return result
 
 
@@ -165,6 +165,9 @@ def main(action:str='preflight',attempt:int=1,invocation:int=1,group:int=0):
         if action=='collect':
             folder=c.out(BATCH)/'eligibility'/f'attempt_{attempt}';function=collect
             previous_checks=[]
+            if BATCH=='b':
+                prior_gate=c.read(c.out('a')/'artifact_gate.json')
+                previous_checks=[r for r in c.read(c.out('a')/'eligibility'/prior_gate['eligibility_attempt']/'raw.json')['checks'] if r['pass']]
             for old in sorted((c.out(BATCH)/'eligibility').glob('attempt_*/raw.json')):
                 for check in c.read(old)['checks']:
                     if check['pass'] and check['tag'] not in protocol.get('technical_recompile_tags',[]) and check not in previous_checks:previous_checks.append(check)

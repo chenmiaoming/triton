@@ -95,6 +95,7 @@ def artifact_gate(batch):
         seen=set(unique)
         for tag,meta in metadata.items():
             if not meta.get('previous_batch'):continue
+            if resources[tag]['attributes']['local_bytes']>0:continue
             if meta['cubin_SHA256'] in seen:continue
             if any(resources[tag]['reservations'][q].get('feasible') for q in ('1','2','4')):
                 old.append(tag);seen.add(meta['cubin_SHA256'])
@@ -104,7 +105,10 @@ def artifact_gate(batch):
           'eligibility_attempt':roots[0].name,'environment':raw['environment'],'aliases':aliases,
           'profile_groups':groups,'spill_boundaries':[t for t,r in resources.items() if r['attributes']['local_bytes']>0],
           'protocol_SHA256':c.sha(c.encode(protocol))}
-    c.write_once(c.out(batch)/'frozen_payload.zip',(c.out(batch)/'compiled_payload.zip').read_bytes())
+    payload=(c.out(batch)/'compiled_payload.zip').read_bytes()
+    target=c.out(batch)/'frozen_payload.zip'
+    if target.exists():assert target.read_bytes()==payload
+    else:c.write_once(target,payload)
     derived(c.out(batch)/'artifact_gate.json',gate)
     print('C2'+batch,'artifact gate OK',len(metadata),'programs;',len(groups),'NCU groups;',gate['spill_boundaries'],'spill')
 
@@ -160,6 +164,49 @@ def affine(a,b,k0=16,k1=256):
     return {'per_iteration':slope,'fixed':a-slope*k0,'at_K16':a,'at_K256':b}
 
 
+def validate_launch_order(folder,job,metadata):
+    rows=list(csv.reader(io.StringIO(c.read(folder/'import.json')['output'])))
+    head=rows[0]
+    imported=[dict(zip(head,row)) for row in rows[1:] if len(row)==len(head) and row[head.index('ID')].isdigit()]
+    assert len(imported)==len(job['cells'])
+    for index,(cell,row) in enumerate(zip(job['cells'],imported)):
+        meta=metadata[cell['tag']]
+        assert int(row['ID'])==index and row['Kernel Name']==meta['function_name']
+        assert [int(v) for v in re.findall(r'\d+',row['Grid Size'])]==[cell['grid'],1,1]
+        assert [int(v) for v in re.findall(r'\d+',row['Block Size'])]==[meta['num_warps']*32,1,1]
+        assert row['CC']=='9.0'
+
+
+def validate_source_opcodes(batch,meta,pcs):
+    origin='a' if meta.get('previous_batch') else batch
+    root=c.ROOT/c.read(c.out(origin)/'compile_gate.json')['artifact_directory']/meta['tag'].replace(':','/')
+    def opcode(instruction):
+        tokens=instruction.split();return tokens[1] if tokens[0].startswith('@') else tokens[0]
+    static={int(pc,16):opcode(inst) for pc,inst in re.findall(r'/\*([0-9a-fA-F]+)\*/\s+(.*?)\s*;', (root/'kernel.sass').read_text())}
+    assert static,meta['tag']
+    for pc,row in pcs.items():assert static[int(pc,16)]==opcode(row['instruction']),(meta['tag'],pc,row)
+
+
+def optimized_input_layout_audit(batch):
+    gate=c.read(c.out(batch)/'artifact_gate.json');passed=[]
+    for tag,meta in gate['metadata'].items():
+        if meta['family'] in ('TMA','MO'):continue
+        origin='a' if meta.get('previous_batch') else batch
+        folder=c.ROOT/c.read(c.out(origin)/'compile_gate.json')['artifact_directory']/tag.replace(':','/')
+        text=(folder/'kernel.ttgir').read_text();enc={}
+        names={'sizePerThread':'size_per_thread','threadsPerWarp':'threads_per_warp','warpsPerCTA':'warps_per_cta','order':'order'}
+        for alias,body in re.findall(r'(#\w+)\s*=\s*#ttg.blocked<\{(.*?)\}>',text):
+            enc[alias]={target:[int(v) for v in re.findall(r'\d+',re.search(name+r'\s*=\s*\[([^\]]*)\]',body)[1])] for name,target in names.items()}
+        token='ttg.local_load' if meta['family'] in ('ML','MR','MC') else 'tt.load'
+        lines=[line for line in text.splitlines() if token in line];aliases=[]
+        for line in lines:
+            aliases+=re.findall(r'tensor<1x'+str(meta['M'])+'x'+str(meta['N'])+r'x(?:bf16|!tt.ptr<bf16>),\s*(#\w+)>',line)
+        assert aliases and all(enc[alias]==meta['layout'] for alias in aliases),(tag,aliases)
+        passed.append(tag)
+    return {'status':'OK','programs':passed,'method':'BF16 input load encoding in optimized TTGIR equals requested register layout, all four encoding arrays',
+            'MO':'separate FP32 conversion fixture, diagnostic'}
+
+
 def counter_gate(batch):
     protocol=c.load_protocol(batch);gate=c.read(c.out(batch)/'artifact_gate.json')
     binaries={};qrows=[];reports=[];failures=[]
@@ -195,6 +242,7 @@ def counter_gate(batch):
             folder=root/mode
             if not (folder/'job.json').exists():continue
             job=c.read(folder/'job.json');collected=c.read(folder/'collect.json')
+            validate_launch_order(folder,job,gate['metadata'])
             line=next(l for l in collected['output'].splitlines() if l.startswith('PROFILE_BINDING '))
             binding=json.loads(line[len('PROFILE_BINDING '):])
             assert not binding['Triton_imported'] and binding['compile_calls']==0 and binding['driver_return_codes']==[0]
@@ -203,6 +251,7 @@ def counter_gate(batch):
             assert len(measured)==len(job['cells']),(index,mode,len(measured),len(job['cells']))
             for cell,record,values in zip(job['cells'],binding['records'],measured):
                 tag=cell['tag'];meta=gate['metadata'][tag]
+                if mode=='software':validate_source_opcodes(batch,meta,values)
                 assert record['tag']==tag and record['K']==cell['K'] and record['correctness']['pass']
                 assert record['binding']['CUBIN_SHA256']==record['binding']['loaded_CUBIN_SHA256']==meta['cubin_SHA256']
                 if cell['q']!='natural' or cell['grid']>1:qrows.append({**cell,mode:values});continue
@@ -262,10 +311,42 @@ def counter_gate(batch):
         passed=actual==expected
         qchecks.append({'tag':tag,'q':row['q'],'K':row['K'],'pass':passed,'actual':actual,'natural':expected})
         if not passed:failures.append({'tag':tag,'q':row['q'],'why':['q target opcode counts changed']})
+    occupancy_checks=[];q_wavefront_checks=[]
+    hardware_controls={(r['tag'],r['q']):r for r in qrows if 'hardware' in r}
+    for (tag,q),row in hardware_controls.items():
+        meta=gate['metadata'][tag];capacity=gate['resources'][tag]['reservations'][q]['capacity']
+        bound=100*capacity*meta['num_warps']/64
+        active=row['hardware']['sm__warps_active.avg.pct_of_peak_sustained_active']
+        passed=0<active<=bound+.25
+        occupancy_checks.append({'tag':tag,'q':q,'capacity_CTAs_per_SM':capacity,'warps_active_percent':active,
+                                 'capacity_warps_bound_percent':bound,'pass':passed})
+        if not passed:failures.append({'tag':tag,'q':q,'why':['Achieved occupancy outside capacity bound']})
+        if q=='natural':continue
+        natural=hardware_controls[tag,'natural']['hardware']
+        actual={n:row['hardware'][n] for n in protocol['profiles']['metrics'][:4]}
+        expected={n:natural[n] for n in protocol['profiles']['metrics'][:4]}
+        passed=actual==expected
+        arithmetic_checks={}
+        for op in ('ld','st'):
+            wf=f'l1tex__data_pipe_lsu_wavefronts_mem_shared_op_{op}.sum'
+            bc=f'l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_{op}.sum'
+            arithmetic_checks[op]=(actual[wf]-actual[bc])==(expected[wf]-expected[bc])
+        q_wavefront_checks.append({'tag':tag,'q':q,'raw_aggregate_invariant':passed,'actual':actual,'natural':expected,
+            'WF_minus_reported_BC_invariant':arithmetic_checks,
+            'WF_minus_BC_is_not_a_directly_collected_request_or_ideal_counter':True})
+        # Aggregate hardware bank counters include more than the static access
+        # pattern. Raw invariance was an extra diagnostic, not a preregistered
+        # requirement; preserve its rejection and every original measurement.
     value={'status':'OK' if not failures else 'FAILED','binaries':binaries,'q_hardware':qrows,'new_reports':reports,
            'q_dynamic_opcode_checks':qchecks,
            'reused_original_reports':protocol['reuse_original_reports'],'failures':failures,
            'NCU_duration_used_for_timing':False,'two_point_affine_scope':'K16 and K256; grouping all unrolled PCs by family, fixed setup separate'}
+    if batch=='b':
+        value['NCU_launch_order_and_frozen_SASS_opcodes_checked']=True
+        value['q_achieved_occupancy_checks']=occupancy_checks
+        value['q_wavefront_bank_conflict_invariance']=q_wavefront_checks
+        value['aggregate_bank_counter_scope_reference']='https://docs.nvidia.com/nsight-compute/ComputeTriage/#symptom-shared-memory-bank-conflicts-are-significant'
+        value['aggregate_counter_diagnostic_rejections']=sum(not r['raw_aggregate_invariant'] for r in q_wavefront_checks)
     derived(c.out(batch)/'counter_gate.json',value)
     print('C2'+batch,'counter gate',value['status'],'new reports',len(reports),'binaries',len(binaries))
     if failures:print(json.dumps(failures,indent=2))

@@ -1,0 +1,1619 @@
+{
+  "K": [
+    1,
+    16,
+    64,
+    256
+  ],
+  "analysis": {
+    "HBM": "Exact C1.6 TMA controls at original full grids, no cropped-cache claim of HBM",
+    "MC": "Distinct observable output each K; two fixed shared slots; K1 single TMA transfer",
+    "MO": "Input load is fixture work; conversion deletion makes standalone MO diagnostic",
+    "empirical_offset_26_6_used": false,
+    "normalization": "b(G)=a_grid+(G/SM)*D*s_tile; us per tile per SM; grid is measurement provenance only",
+    "parameter_fixture": "BF16 private updates and loop work remain part of measured combinations; no claim of naked opcode latency",
+    "q": "unused launch shared reservation, exact CUDA capacity; achieved occupancy from NCU separately",
+    "selector_features": [
+      "M",
+      "N",
+      "num_warps",
+      "dtype",
+      "layout"
+    ],
+    "steady_fit": "T(K)=a+bK on K16/64/256; K1 separate"
+  },
+  "anchors": {
+    "M32_N128_w4:control:TMA": {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "cubin_SHA256": "fc65adbc097697c74aa953ee11b46c9f25deca9e1f29fe7b73014994f612b400",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "TMA",
+      "full_grid": 16384,
+      "function_name": "transfer",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "num_warps": 4,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:control:TMA",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ]
+    },
+    "M32_N64_w8:control:TMA": {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "cubin_SHA256": "772a4daa6e0f9b2fcdc8b30d74011d7c7839f659ca8ef3a954c6ec5a7579e4e9",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "TMA",
+      "full_grid": 32768,
+      "function_name": "transfer",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "num_warps": 8,
+      "path": "host",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:control:TMA",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ]
+    }
+  },
+  "authorization": "User formally approved C2a full matrix and C2b parameter/residency probes; commit per batch, no C3 or PR",
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "cases": [
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 1,
+      "path": "direct",
+      "tag": "probe_P1:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 1,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 1,
+      "path": "direct",
+      "tag": "probe_P1:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 2,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_P2:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 2,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_P2:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 4,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          4,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 4,
+      "path": "direct",
+      "tag": "probe_P4:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 4,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          4,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 4,
+      "path": "direct",
+      "tag": "probe_P4:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 8,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          8,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_P8:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 8,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          8,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_P8:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 16,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          16,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 16,
+      "path": "direct",
+      "tag": "probe_P16:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 16,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          16,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 16,
+      "path": "direct",
+      "tag": "probe_P16:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          32,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 32,
+      "path": "direct",
+      "tag": "probe_P32:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          32,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 32,
+      "path": "direct",
+      "tag": "probe_P32:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 64,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          64,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 64,
+      "path": "direct",
+      "tag": "probe_P64:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 64,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "P",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          64,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 64,
+      "path": "direct",
+      "tag": "probe_P64:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 1,
+      "path": "direct",
+      "tag": "probe_U1:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 1,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 1,
+      "path": "direct",
+      "tag": "probe_U1:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 2,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_U2:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 2,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_U2:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 4,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 4,
+      "path": "direct",
+      "tag": "probe_U4:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 4,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 4,
+      "path": "direct",
+      "tag": "probe_U4:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 8,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_U8:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 8,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_U8:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 16,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          16,
+          2
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 16,
+      "path": "direct",
+      "tag": "probe_U16:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 16,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          16,
+          2
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 16,
+      "path": "direct",
+      "tag": "probe_U16:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 32,
+      "path": "direct",
+      "tag": "probe_U32:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "U",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 32,
+      "path": "direct",
+      "tag": "probe_U32:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 1,
+      "path": "direct",
+      "tag": "probe_W1:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 1,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 1,
+      "path": "direct",
+      "tag": "probe_W1:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 2,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          4
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_W2:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 2,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          4
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_W2:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 4,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 4,
+      "path": "direct",
+      "tag": "probe_W4:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 4,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          2
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 4,
+      "path": "direct",
+      "tag": "probe_W4:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 8,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_W8:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 8,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "W",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "num_warps": 8,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_W8:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 2,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "E",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_E2:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 2,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "E",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 2,
+      "path": "direct",
+      "tag": "probe_E2:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 8,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "E",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          8,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_E8:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 8,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "E",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          8,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 8,
+      "path": "direct",
+      "tag": "probe_E8:D2"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "E",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          32,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 32,
+      "path": "direct",
+      "tag": "probe_E32:D1"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 2,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "E",
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          32,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "num_warps": 4,
+      "parameter": 32,
+      "path": "direct",
+      "tag": "probe_E32:D2"
+    }
+  ],
+  "correctness": {
+    "complete_output_grid": 2,
+    "patterns": [
+      "quarter",
+      "random",
+      "boundary"
+    ]
+  },
+  "date": "2026-10-16",
+  "fit_K": [
+    16,
+    64,
+    256
+  ],
+  "logical_programs": 40,
+  "native_rebuild": false,
+  "new_programs": 40,
+  "parent_commit": "ed38f55fde8de86fecb25a69b268cdbf1a5dfc0a",
+  "profile": "chenmiaoming",
+  "profile_K": [
+    16,
+    256
+  ],
+  "profiles": {
+    "cache_control": "none",
+    "clock_control": "none",
+    "duration_not_used_for_timing": true,
+    "grid": 1,
+    "group_program_limit": 10,
+    "hardware_repeats": 3,
+    "metrics": [
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum",
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum",
+      "smsp__inst_executed.sum",
+      "sm__warps_active.avg.pct_of_peak_sustained_active"
+    ],
+    "q_hardware_repeats": 1,
+    "q_occupancy_grid_SM_multiplier": 64,
+    "q_target_instructions_must_match_natural": true,
+    "replay": "kernel",
+    "software_repeats": 1
+  },
+  "reuse_original_reports": 0,
+  "reused_C2a": {
+    "analysis.json": "0203190b0a772bcbb19d1d380368b71f99bc9888884e0f00926054497a52935b",
+    "artifact_gate.json": "300ea4b104310bb34803d4f0d4079f9754f19bd9533c0117ba504589d66bcc6a",
+    "counter_gate.json": "2c0d52a1d153a04e6c008d94b6e2830c9a61b15f8060a0b32baecf454b1b081a",
+    "eligibility/attempt_3/raw.json": "addb4379ad3e83b1cf966d765570d4f168eac3095df3bf6dec71fc8a98260a02",
+    "timing/invocation_1/raw.json": "53883267606fee0d92a581479087ba4b1ff4f7ccfbdf67180640386b11af327c",
+    "timing/invocation_2/raw.json": "6460e1b4688ad61da46376e7b1b48a70533f4519e1da12d2135f6adf524718a2",
+    "timing/invocation_3/raw.json": "b806ea4dd570465ac8fc9ade78cd9873f787492d659748d4dfd4264468b1975c",
+    "validation.json": "a379b4b07568dc01a9228b12b9abf7ac8b244f61c56193b5fc063ec71e5012b8"
+  },
+  "revision": 1,
+  "stage": "C2b",
+  "stop_after": "C2 calibration report, no C3/D/PR",
+  "target": {
+    "GPU": "H100!:1",
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ]
+  },
+  "timing": {
+    "graphs": true,
+    "grid_SM_multipliers": [
+      32,
+      64,
+      96
+    ],
+    "latency_grid": 1,
+    "order_seed": 20261016,
+    "outcome_based_repeats": false,
+    "q": [
+      "natural",
+      "1",
+      "2",
+      "4"
+    ],
+    "q_controls_previous_matrix": true,
+    "samples_per_cell": 20,
+    "samples_per_visit": 5,
+    "single_kernel_per_sample": true,
+    "visits": 4,
+    "warmups": 3,
+    "workers": 3
+  },
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/c1/common.py": "280bd4a1ae5f3a30ba900e0e4220973f1229fff2450f8eec634ec5a524a79ff4",
+    "experiments/tma_reduction_layout/phase11/c15/common.py": "9f7b3fad3a38dc7576f4bae996f4250480444bfcb943134a2c1f4ea6ca2aa69d",
+    "experiments/tma_reduction_layout/phase11/c16/common.py": "b5bd3b24aa8be6c1cc8fa4d83e02ea3d3db593fc63ef1aca485cac80931896ee",
+    "experiments/tma_reduction_layout/phase11/c2/common.py": "a0b9be864da23b5ecb29f261999081b78771ab93931ef0628f7808633bd2a4b8",
+    "experiments/tma_reduction_layout/phase11/c2/data.py": "bbcd6f9ee8c3dbbe205919019227e17d33b9ca1db7230df74d65823e4ba0668d",
+    "experiments/tma_reduction_layout/phase11/c2/driver.py": "676d26c64af9bbcc452e447460d8c1aa8d7572c05dd890dfe7600b7ba9ad0eb7",
+    "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+    "experiments/tma_reduction_layout/phase11/c2/profile_one.py": "281eb2f48a1126e7ad9f93c2c643d47ebc77081914e2407185e4aa8bc604f4b1",
+    "experiments/tma_reduction_layout/phase11/c2/run.py": "e3b081c863f61d95035f0690b652d6c061dfdf4528db0b1afcdd46a5cd72efb6",
+    "experiments/tma_reduction_layout/phase11/c2/timing.py": "6cf5bd94b730c7544bc649f6e03ce358da75da79d10d68ab7e19181f82506f3a",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/launch.py": "b5574c3ae1733acd4f32015cf2b9c570eec4097481cf2ad885c0c6ce3c72cb54",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}

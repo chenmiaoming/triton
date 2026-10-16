@@ -1,0 +1,141 @@
+; ModuleID = 'LLVMDialectModule'
+source_filename = "LLVMDialectModule"
+target datalayout = "e-p3:32:32-p4:32:32-p5:32:32-p6:32:32-p7:32:32-p101:32:32-i64:64-i128:128-i256:256-v16:16-v32:32-n16:32:64"
+
+; Function Attrs: nounwind
+define ptx_kernel void @parameter(ptr addrspace(1) %0, ptr addrspace(1) align 16 %1, i32 %2, ptr addrspace(1) nofree readnone captures(none) %3, ptr addrspace(1) nofree readnone captures(none) %4) local_unnamed_addr #0 !dbg !4 {
+  %6 = tail call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !dbg !12
+  %7 = tail call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !dbg !13
+  %8 = and i32 %7, 127, !dbg !13
+  %9 = shl i32 %6, 10, !dbg !14
+  %10 = and i32 %9, 67043328, !dbg !14
+  %11 = shl i32 %6, 7, !dbg !15
+  %12 = and i32 %11, 8064, !dbg !15
+  %13 = or disjoint i32 %12, %10, !dbg !14
+  %14 = or disjoint i32 %13, %8, !dbg !14
+  %15 = zext nneg i32 %14 to i64, !dbg !16
+  %16 = getelementptr [2 x i8], ptr addrspace(1) %0, i64 %15, !dbg !16
+  %17 = getelementptr i8, ptr addrspace(1) %16, i64 16384, !dbg !16
+  %18 = getelementptr i8, ptr addrspace(1) %16, i64 32768, !dbg !16
+  %19 = getelementptr i8, ptr addrspace(1) %16, i64 49152, !dbg !16
+  %20 = getelementptr i8, ptr addrspace(1) %16, i64 65536, !dbg !16
+  %21 = getelementptr i8, ptr addrspace(1) %16, i64 81920, !dbg !16
+  %22 = getelementptr i8, ptr addrspace(1) %16, i64 98304, !dbg !16
+  %23 = getelementptr i8, ptr addrspace(1) %16, i64 114688, !dbg !16
+  %24 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %16) #2, !dbg !17
+  %25 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %17) #2, !dbg !17
+  %26 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %18) #2, !dbg !17
+  %27 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %19) #2, !dbg !17
+  %28 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %20) #2, !dbg !17
+  %29 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %21) #2, !dbg !17
+  %30 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %22) #2, !dbg !17
+  %31 = tail call i16 asm sideeffect "mov.u16 $0, 0x0;\0A\09ld.global.b16 { $0 }, [ $1 + 0 ];", "=c,l"(ptr addrspace(1) %23) #2, !dbg !17
+  %32 = icmp sgt i32 %2, 0, !dbg !18
+  br i1 %32, label %.lr.ph.preheader, label %._crit_edge, !dbg !18
+
+.lr.ph.preheader:                                 ; preds = %5
+  %33 = insertelement <8 x i16> poison, i16 %24, i64 0, !dbg !17
+  %34 = insertelement <8 x i16> %33, i16 %25, i64 1, !dbg !17
+  %35 = insertelement <8 x i16> %34, i16 %26, i64 2, !dbg !17
+  %36 = insertelement <8 x i16> %35, i16 %27, i64 3, !dbg !17
+  %37 = insertelement <8 x i16> %36, i16 %28, i64 4, !dbg !17
+  %38 = insertelement <8 x i16> %37, i16 %29, i64 5, !dbg !17
+  %39 = insertelement <8 x i16> %38, i16 %30, i64 6, !dbg !17
+  %40 = insertelement <8 x i16> %39, i16 %31, i64 7, !dbg !17
+  %41 = bitcast <8 x i16> %40 to <8 x bfloat>, !dbg !17
+  br label %.lr.ph, !dbg !18
+
+.lr.ph:                                           ; preds = %.lr.ph.preheader, %.lr.ph
+  %42 = phi i32 [ %50, %.lr.ph ], [ 0, %.lr.ph.preheader ]
+  %43 = phi <8 x float> [ %49, %.lr.ph ], [ zeroinitializer, %.lr.ph.preheader ]
+  %44 = phi <8 x bfloat> [ %47, %.lr.ph ], [ %41, %.lr.ph.preheader ]
+  %45 = fcmp oge <8 x bfloat> %44, splat (bfloat 8.000000e+00), !dbg !19
+  %46 = select <8 x i1> %45, <8 x bfloat> splat (bfloat -1.600000e+01), <8 x bfloat> <bfloat 2.500000e-01, bfloat 1.750000e+00, bfloat 1.500000e+00, bfloat 1.250000e+00, bfloat 1.000000e+00, bfloat 7.500000e-01, bfloat 5.000000e-01, bfloat 2.500000e-01>, !dbg !22
+  %47 = fadd <8 x bfloat> %44, %46, !dbg !22
+  %48 = fpext <8 x bfloat> %47 to <8 x float>, !dbg !23
+  %49 = fadd <8 x float> %43, %48, !dbg !24
+  %50 = add nuw nsw i32 %42, 1, !dbg !18
+  %exitcond.not = icmp eq i32 %50, %2, !dbg !18
+  br i1 %exitcond.not, label %._crit_edge.loopexit, label %.lr.ph, !dbg !18
+
+._crit_edge.loopexit:                             ; preds = %.lr.ph
+  %51 = bitcast <8 x float> %49 to <8 x i32>, !dbg !25
+  br label %._crit_edge, !dbg !26
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %5
+  %52 = phi <8 x i32> [ zeroinitializer, %5 ], [ %51, %._crit_edge.loopexit ], !dbg !27
+  %53 = or disjoint i32 %9, %8, !dbg !26
+  %54 = or disjoint i32 %7, %9, !dbg !26
+  %55 = or i32 %54, 896, !dbg !26
+  %56 = sext i32 %53 to i64, !dbg !28
+  %57 = getelementptr [4 x i8], ptr addrspace(1) %1, i64 %56, !dbg !28
+  %58 = getelementptr i8, ptr addrspace(1) %57, i64 512, !dbg !28
+  %59 = getelementptr i8, ptr addrspace(1) %57, i64 1024, !dbg !28
+  %60 = getelementptr i8, ptr addrspace(1) %57, i64 1536, !dbg !28
+  %61 = getelementptr i8, ptr addrspace(1) %57, i64 2048, !dbg !28
+  %62 = getelementptr i8, ptr addrspace(1) %57, i64 2560, !dbg !28
+  %63 = getelementptr i8, ptr addrspace(1) %57, i64 3072, !dbg !28
+  %64 = sext i32 %55 to i64, !dbg !28
+  %65 = getelementptr [4 x i8], ptr addrspace(1) %1, i64 %64, !dbg !28
+  %66 = extractelement <8 x i32> %52, i64 0, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %66, ptr addrspace(1) %57) #2, !dbg !25
+  %67 = extractelement <8 x i32> %52, i64 1, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %67, ptr addrspace(1) %58) #2, !dbg !25
+  %68 = extractelement <8 x i32> %52, i64 2, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %68, ptr addrspace(1) %59) #2, !dbg !25
+  %69 = extractelement <8 x i32> %52, i64 3, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %69, ptr addrspace(1) %60) #2, !dbg !25
+  %70 = extractelement <8 x i32> %52, i64 4, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %70, ptr addrspace(1) %61) #2, !dbg !25
+  %71 = extractelement <8 x i32> %52, i64 5, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %71, ptr addrspace(1) %62) #2, !dbg !25
+  %72 = extractelement <8 x i32> %52, i64 6, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %72, ptr addrspace(1) %63) #2, !dbg !25
+  %73 = extractelement <8 x i32> %52, i64 7, !dbg !25
+  tail call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %73, ptr addrspace(1) %65) #2, !dbg !25
+  ret void, !dbg !29
+}
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 2147483647) i32 @llvm.nvvm.read.ptx.sreg.ctaid.x() #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 1024) i32 @llvm.nvvm.read.ptx.sreg.tid.x() #1
+
+attributes #0 = { nounwind "nvvm.reqntid"="128" }
+attributes #1 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #2 = { nounwind }
+
+!llvm.dbg.cu = !{!0}
+!llvm.module.flags = !{!2, !3}
+
+!0 = distinct !DICompileUnit(language: DW_LANG_C, file: !1, producer: "triton", isOptimized: true, runtimeVersion: 0, emissionKind: LineTablesOnly)
+!1 = !DIFile(filename: "kernels.py", directory: "/opt/triton-src/experiments/tma_reduction_layout/phase11/c2")
+!2 = !{i32 2, !"Debug Info Version", i32 3}
+!3 = !{i32 4, !"nvvm-reflect-ftz", i32 1}
+!4 = distinct !DISubprogram(name: "parameter", linkageName: "parameter", scope: !1, file: !1, line: 118, type: !5, scopeLine: 118, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !0)
+!5 = !DISubroutineType(cc: DW_CC_normal, types: !6)
+!6 = !{null, !7, !9, !11, !7, !7}
+!7 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !8, size: 64, dwarfAddressSpace: 1)
+!8 = !DIBasicType(name: "unknown_type", encoding: DW_ATE_signed)
+!9 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !10, size: 64, dwarfAddressSpace: 1)
+!10 = !DIBasicType(name: "float", size: 32, encoding: DW_ATE_float)
+!11 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!12 = !DILocation(line: 120, column: 9, scope: !4)
+!13 = !DILocation(line: 126, column: 10, scope: !4)
+!14 = !DILocation(line: 127, column: 12, scope: !4)
+!15 = !DILocation(line: 127, column: 23, scope: !4)
+!16 = !DILocation(line: 128, column: 20, scope: !4)
+!17 = !DILocation(line: 128, column: 12, scope: !4)
+!18 = !DILocation(line: 146, column: 5, scope: !4)
+!19 = !DILocation(line: 11, column: 22, scope: !20, inlinedAt: !21)
+!20 = distinct !DILexicalBlockFile(scope: !4, file: !1, discriminator: 0)
+!21 = !DILocation(line: 147, column: 16, scope: !20)
+!22 = !DILocation(line: 11, column: 13, scope: !20, inlinedAt: !21)
+!23 = !DILocation(line: 149, column: 23, scope: !4)
+!24 = !DILocation(line: 149, column: 18, scope: !4)
+!25 = !DILocation(line: 160, column: 9, scope: !4)
+!26 = !DILocation(line: 159, column: 17, scope: !4)
+!27 = !DILocation(line: 143, column: 10, scope: !4)
+!28 = !DILocation(line: 160, column: 18, scope: !4)
+!29 = !DILocation(line: 118, column: 1, scope: !4)

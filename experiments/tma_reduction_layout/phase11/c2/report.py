@@ -65,10 +65,29 @@ def analyze(batch):
                 'predictor_features':{key:meta[key] for key in protocol['analysis']['selector_features']}})
     if batch=='b':
         prior=c.read(c.out('a')/'analysis.json')
-        summaries=prior['services']+summaries;curves=prior['steady_K_curves']+curves;anchors=prior['HBM_anchors']
+        prior_uuids={w['invocation']:w['GPU_UUID'] for w in prior['workers']}
+        current_uuids={w['invocation']:w['GPU_UUID'] for w in workers}
+        summaries=[{**r,'cohort':'C2a','GPU_UUID':prior_uuids[r['invocation']]} for r in prior['services']]+[
+            {**r,'cohort':'C2b','GPU_UUID':current_uuids[r['invocation']]} for r in summaries]
+        curves=[{**r,'cohort':'C2a','GPU_UUID':prior_uuids[r['invocation']]} for r in prior['steady_K_curves']]+[
+            {**r,'cohort':'C2b','GPU_UUID':current_uuids[r['invocation']]} for r in curves]
+        anchors=prior['HBM_anchors']
     by=defaultdict(list)
     for row in summaries:by[row['tag'],row['q']].append(row['service_ns_per_tile_SM'])
     aggregate=[{'tag':tag,'q':q,'median_ns_per_tile_SM':st.median(v),'worker_min_ns':min(v),'worker_max_ns':max(v)} for (tag,q),v in sorted(by.items())]
+    grouped_curves=defaultdict(list)
+    for row in curves:
+        if row['grid']>1:grouped_curves[row['invocation'],row['tag'],row['q']].append(row)
+    setup=[]
+    for (invocation,tag,q),rows in sorted(grouped_curves.items()):
+        rows=sorted(rows,key=lambda r:r['grid']);assert len(rows)==3
+        xs=[r['grid']/132 for r in rows]
+        intercept=fit(xs,[r['steady']['intercept'] for r in rows])
+        single=fit(xs,[r['K1_us'] for r in rows]) if all(r['K1_us'] is not None for r in rows) else None
+        setup.append({'invocation':invocation,'tag':tag,'q':q,'setup_grid_fit':intercept,
+                      'setup_ns_per_CTA_SM':intercept['slope']*1000,
+                      'K1_grid_fit':single,'K1_ns_per_CTA_SM':single['slope']*1000 if single else None,
+                      'interpretation':'Measured fixture/setup service, including transfer and final output; not pure TMA latency. MC K1 uses one transfer, steady-K uses two.'})
     combos=[]
     for layout in sorted({m.get('layout_id') for m in gate['metadata'].values()}-{None}):
         for invocation in (1,2,3):
@@ -93,6 +112,13 @@ def analyze(batch):
            'fit_quality':{'max_steady_K_residual_percent':max(100*r['steady']['max_abs_residual']/max(r['steady']['ys']) for r in curves),
                           'max_grid_residual_percent':max(100*r['grid_fit']['max_abs_residual']/max(r['grid_fit']['ys']) for r in summaries)},
            'identifiability':'Subgraph combinations measured; fixture residual is retained. No claim of independently identified pure load/max/convert latencies.'}
+    if batch=='b':
+        value['setup_and_K1_services']=setup
+        value['reused_C2a_workers']=prior['workers']
+        value['q_to_reused_natural_comparisons_unpaired']=True
+        value['setup_interpretation_checks']={'negative_setup_fits_retained':sum(r['setup_ns_per_CTA_SM']<0 for r in setup),
+            'K1_max_grid_residual_percent':max(100*r['K1_grid_fit']['max_abs_residual']/max(r['K1_grid_fit']['ys']) for r in setup if r['K1_grid_fit']),
+            'not_identified_as_positive_primitive_latency':True}
     derived(c.out(batch)/'analysis.json',value)
     write_report(batch,protocol,gate,counter,value)
     return value
@@ -136,6 +162,37 @@ def write_report(batch,protocol,gate,counter,value):
             'The first CPU preflight rejected a nonconstant mbarrier byte argument. A uniform K branch with constant byte counts repaired the API use.',
             'Initial MR D1 for 32×64/vec8/within failed 12 checks, affecting columns 1 modulo 8. Its PTX packed step construction read an undefined half-register. The mathematically identical step was factored as (13*m)%7 before lowering. Only this one logical program was recompiled; the other 89 core binaries stayed fixed. The repaired binary passed all 12 checks; all 807 total checks pass. Failed binaries, exact mismatch values, source snapshots and the unsupported broadcast helper attempt remain archived.',
             '', '## Review artifacts', '', '[Core service figure](figures/core_services.png), [tidy service table](figures/services.csv), [full derived data](analysis.json), [dynamic counters](counter_gate.json).']
+    else:
+        lines += ['', '## Parameter probes and q residency controls', '',
+            'Unit convention: the service quantity is s = (1/D) d(dT/dK)/d(G/S), where S is the SM count. It is nanoseconds for one tile serviced on one SM. MO uses dT/d(G/S) because it is one-shot. Grid belongs to calibration provenance, not the selector feature schema.',
+            f'All 40 new logical probes passed 480 new complete-output checks; 807 C2a checks were reused. Two U1 binaries alias P1 exactly, leaving 38 new physical binaries. {len(counter["q_dynamic_opcode_checks"])} q interventions preserve every target opcode count; {len(counter["q_achieved_occupancy_checks"])} achieved-occupancy observations are within their CUDA capacity bounds. NCU launch IDs, function names, grid/block sizes and each measured source PC opcode were matched to the frozen SASS.',
+            'Core natural curves and TMA controls are reused from C2a. Their comparisons to C2b q curves are unpaired across cohorts. The new parameter probes have natural and q measurements in the same C2b workers. Cohort and GPU UUID are retained on every service/curve row.',
+            '', '| Probe | Natural D1 ns/tile/SM | Natural D2 ns/tile/SM (per stream) |', '|---|---:|---:|']
+        table={(r['tag'],r['q']):r['median_ns_per_tile_SM'] for r in value['aggregate']}
+        for family,values in [('P',[1,2,4,8,16,32,64]),('U',[1,2,4,8,16,32]),('W',[1,2,4,8]),('E',[2,8,32])]:
+            for parameter in values:
+                a,b=[table[f'probe_{family}{parameter}:D{d}','natural'] for d in (1,2)]
+                lines.append(f'| {family}{parameter} | {a:.3f} | {b:.3f} |')
+        lines += ['', '| D1 program | Natural ns | q1 ns | q2 ns | q4 ns |', '|---|---:|---:|---:|---:|']
+        for tag in ['probe_P1:D1','probe_P64:D1','probe_U32:D1','probe_W8:D1','probe_E32:D1',
+                    'M32_N64_w8:vec8:n_first:MC:D1','M32_N64_w8:vec8:within:MC:D1']:
+            numbers=[]
+            for q in ('natural','1','2','4'):
+                state=gate['resources'][tag]['reservations'][q]
+                numbers.append(f'{table[tag,q]:.3f}' if (tag,q) in table else 'alias natural' if state.get('alias_of') else 'infeasible')
+            lines.append('| '+tag+' | '+' | '.join(numbers)+' |')
+        lines += ['', '## Aggregate-counter diagnostic', '',
+            f'An extra, non-preregistered diagnostic assumed raw shared wavefront/bank-conflict counters would remain identical under q. This hypothesis failed in {counter["aggregate_counter_diagnostic_rejections"]} of {len(counter["q_wavefront_bank_conflict_invariance"])} contrasts. Every contrast preserves the arithmetic quantity wavefronts minus reported conflicts. This difference is not a separately collected request or ideal-wavefront metric.',
+            'The official [NVIDIA Compute Triage Guide](https://docs.nvidia.com/nsight-compute/ComputeTriage/#symptom-shared-memory-bank-conflicts-are-significant) explains that aggregate bank counters can include shared/L1 cross-client contention. Our observations are consistent with this scope; the experiment does not causally isolate all extra events. The largest relative raw-wavefront difference is about 8.57%, in a one-shot MO load case. No affected q point was deleted, normalized away, or rerun.',
+            'The initial failed extra check is archived in audits/aggregate_invariance_initial_gate.zip, with a counter-scope audit. The final gate follows the preregistered target-instruction invariance and measured occupancy requirements and retains all hardware-counter differences.',
+            '', '## Setup and composition identification', '',
+            'analysis.json additionally fits the steady-K intercept versus grid in per-CTA/per-SM units and fits K1 versus grid separately. These are measured fixture/setup combinations, including transfer and final-output work. MC K1 uses one transfer while steady K uses two. They are not universal TMA constants.',
+            f'The {len(value["setup_and_K1_services"])} setup fits include {value["setup_interpretation_checks"]["negative_setup_fits_retained"]} negative estimate, retained without clamping. K1 grid fits have up to {value["setup_interpretation_checks"]["K1_max_grid_residual_percent"]:.2f}% residual. These bounds prevent interpreting fitted intercepts as independently identified positive hardware latencies.',
+            'For 32×64/vec8 D1, the median MC K1 service is about 463.25 ns/tile/SM for N-first versus 363.50 ns for within, whereas steady-body service is 377.21 versus 227.86 ns. The steady-body improvement is therefore not the whole single-pass improvement. K1 is measured over the registered cropped grids, with the recorded cache/resource differences; it is not a new full-grid original-kernel benchmark.',
+            'The two retained local-memory boundaries belong to the ML D2 checksum fixture; they do not establish spilling in the corresponding original complete kernel.',
+            'This stage identifies effective p/u/w/e and residency-dependent subgraph costs and composition residuals. It does not uniquely separate every naked load/max/convert latency. In particular, one-shot MO preparation and repeated-MC output traffic differ. No residual is silently substituted for 26.6 us, and no static selector was trained or evaluated.',
+            '', '## Review artifacts', '', '[Parameter curves](figures/parameters.png), [all service curves](figures/services.csv), [full derived calibration](analysis.json), [counter and q evidence](counter_gate.json).',
+            '', 'Final offline checks: `.venv/bin/python -m experiments.tma_reduction_layout.phase11.c2.validate --batch a --committed` and the same command with `--batch b --committed`.']
     (c.out(batch)/'REPORT.md').write_text('\n'.join(lines)+'\n')
 
 

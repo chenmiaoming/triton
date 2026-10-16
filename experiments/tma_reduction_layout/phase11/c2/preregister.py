@@ -128,6 +128,11 @@ def main():
                 'programs':{m['tag']:m['reused_tag'] for m in cases if 'reused_tag' in m}})
         else:
             assert c.read(c.out('a')/'validation.json')['status']=='OK'
+            a_gate=c.read(c.out('a')/'artifact_gate.json')
+            evidence=['artifact_gate.json','counter_gate.json','analysis.json','validation.json',
+                      f'eligibility/{a_gate["eligibility_attempt"]}/raw.json']
+            evidence += [f'timing/invocation_{i}/raw.json' for i in (1,2,3)]
+            protocol['reused_C2a']={name:c.sha((c.out('a')/name).read_bytes()) for name in evidence}
         # Independently checked transfer controls are references, not new programs.
         anchors=c.read(c.base.OUT/'stage_c16/artifact_gate.json')['metadata']
         protocol['anchors']={}
