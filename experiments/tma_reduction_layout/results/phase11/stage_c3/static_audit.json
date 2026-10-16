@@ -1,0 +1,2017 @@
+{
+  "PTX_packed_choice_not_uniquely_identified_from_layout": true,
+  "aggregate_q_bank_conflicts_not_predicted_by_address_model": true,
+  "all_pass": true,
+  "max_instruction_prediction_is_interval": true,
+  "rows": [
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 24,
+        "shared": 9216
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 7,
+        "max.f32": 2
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec1:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            2
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 64.0,
+        "MR_BAR": 32,
+        "MR_MAX": 48,
+        "MR_SHFL": 16,
+        "MR_WF": 16.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 64,
+        "MR_BAR": 32,
+        "MR_SHFL": 16,
+        "MR_WF": 16
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 2,
+          "warp_load_instructions": 64,
+          "wavefronts": 64
+        },
+        "MR": {
+          "barrier_warp_instructions": 32,
+          "cross_thread_max_f32": 16,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            16,
+            56
+          ],
+          "local_max_scalar_equivalents": 56,
+          "scratch_upper_bytes": 1024,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 16,
+          "shuffle_warp_instructions": 16
+        },
+        "columns_per_thread": 1,
+        "e_vector": 1,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec1:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": false,
+          "warp_redistribution_possible": true
+        },
+        "p": 8,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            11,
+            66
+          ],
+          "shared_bytes_interval": [
+            4104,
+            6144
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 1,
+        "w": 4
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 22,
+        "shared": 8448
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 7,
+        "max.f32": 2
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec1:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            8
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 64.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 48.0,
+        "MR_SHFL": 16.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 64,
+        "MR_BAR": 0,
+        "MR_SHFL": 16,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 2,
+          "warp_load_instructions": 64,
+          "wavefronts": 64
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 16,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            16,
+            56
+          ],
+          "local_max_scalar_equivalents": 56,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 16
+        },
+        "columns_per_thread": 1,
+        "e_vector": 1,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec1:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": false
+        },
+        "p": 8,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            11,
+            66
+          ],
+          "shared_bytes_interval": [
+            4104,
+            5120
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 4,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 26,
+        "shared": 10240
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16x2": 3,
+        "max.f32": 6
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec2:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 32.0,
+        "MR_BAR": 32,
+        "MR_MAX": 64,
+        "MR_SHFL": 48,
+        "MR_WF": 32.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 32,
+        "MR_BAR": 32,
+        "MR_SHFL": 48,
+        "MR_WF": 32
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 32,
+          "vector_bytes_per_lane": 4,
+          "warp_load_instructions": 32,
+          "wavefronts": 32
+        },
+        "MR": {
+          "barrier_warp_instructions": 32,
+          "cross_thread_max_f32": 48,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            16,
+            48
+          ],
+          "local_max_scalar_equivalents": 48,
+          "scratch_upper_bytes": 2048,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 32,
+          "shuffle_warp_instructions": 48
+        },
+        "columns_per_thread": 2,
+        "e_vector": 2,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec2:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 4,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            11,
+            68
+          ],
+          "shared_bytes_interval": [
+            4104,
+            7168
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 1,
+        "w": 8
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 23,
+        "shared": 8448
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 6,
+        "max.f32": 6
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec2:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            8
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 32.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 72.0,
+        "MR_SHFL": 48.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 32,
+        "MR_BAR": 0,
+        "MR_SHFL": 48,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 32,
+          "vector_bytes_per_lane": 4,
+          "warp_load_instructions": 32,
+          "wavefronts": 32
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 48,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            16,
+            48
+          ],
+          "local_max_scalar_equivalents": 48,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 48
+        },
+        "columns_per_thread": 2,
+        "e_vector": 2,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec2:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 4,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            11,
+            68
+          ],
+          "shared_bytes_interval": [
+            4104,
+            5120
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 8,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 32,
+        "shared": 10240
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16x2": 2,
+        "max.f32": 16
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec4:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 32.0,
+        "MR_BAR": 32,
+        "MR_MAX": 144,
+        "MR_SHFL": 128,
+        "MR_WF": 64.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 32,
+        "MR_BAR": 32,
+        "MR_SHFL": 128,
+        "MR_WF": 64
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 32,
+          "vector_bytes_per_lane": 8,
+          "warp_load_instructions": 16,
+          "wavefronts": 32
+        },
+        "MR": {
+          "barrier_warp_instructions": 32,
+          "cross_thread_max_f32": 128,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            8,
+            32
+          ],
+          "local_max_scalar_equivalents": 32,
+          "scratch_upper_bytes": 2048,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 64,
+          "shuffle_warp_instructions": 128
+        },
+        "columns_per_thread": 4,
+        "e_vector": 4,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec4:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 2,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            12,
+            72
+          ],
+          "shared_bytes_interval": [
+            4104,
+            7168
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 2,
+        "w": 8
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 28,
+        "shared": 8448
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 4,
+        "max.f32": 16
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec4:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            16,
+            2
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            8
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 32.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 144.0,
+        "MR_SHFL": 128.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 32,
+        "MR_BAR": 0,
+        "MR_SHFL": 128,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 32,
+          "vector_bytes_per_lane": 8,
+          "warp_load_instructions": 16,
+          "wavefronts": 32
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 128,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            8,
+            32
+          ],
+          "local_max_scalar_equivalents": 32,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 128
+        },
+        "columns_per_thread": 4,
+        "e_vector": 4,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec4:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 2,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            12,
+            72
+          ],
+          "shared_bytes_interval": [
+            4104,
+            5120
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 16,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 32,
+        "shared": 9216
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.f32": 40
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec8:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            8,
+            1
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 32.0,
+        "MR_BAR": 64,
+        "MR_MAX": 320,
+        "MR_SHFL": 320,
+        "MR_WF": 128.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 32,
+        "MR_BAR": 64,
+        "MR_SHFL": 320,
+        "MR_WF": 128
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 32,
+          "vector_bytes_per_lane": 16,
+          "warp_load_instructions": 8,
+          "wavefronts": 32
+        },
+        "MR": {
+          "barrier_warp_instructions": 64,
+          "cross_thread_max_f32": 320,
+          "local_PTX_hypotheses": [],
+          "local_max_dynamic_interval": [
+            0,
+            0
+          ],
+          "local_max_scalar_equivalents": 0,
+          "scratch_upper_bytes": 2048,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 128,
+          "shuffle_warp_instructions": 320
+        },
+        "columns_per_thread": 8,
+        "e_vector": 8,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec8:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 1,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            14,
+            80
+          ],
+          "shared_bytes_interval": [
+            4104,
+            7168
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 4,
+        "w": 8
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 8,
+        "registers": 32,
+        "shared": 8448
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.f32": 40
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 64,
+        "W": 8,
+        "dtype": "bfloat16",
+        "id": "M32_N64_w8:vec8:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            32,
+            1
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            8
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 32.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 320.0,
+        "MR_SHFL": 320.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 32,
+        "MR_BAR": 0,
+        "MR_SHFL": 320,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 32,
+          "vector_bytes_per_lane": 16,
+          "warp_load_instructions": 8,
+          "wavefronts": 32
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 320,
+          "local_PTX_hypotheses": [],
+          "local_max_dynamic_interval": [
+            0,
+            0
+          ],
+          "local_max_scalar_equivalents": 0,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 320
+        },
+        "columns_per_thread": 8,
+        "e_vector": 8,
+        "elements_per_thread": 8,
+        "id": "M32_N64_w8:vec8:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 1,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            3,
+            8
+          ],
+          "registers_per_thread_interval": [
+            14,
+            80
+          ],
+          "shared_bytes_interval": [
+            4104,
+            5120
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 32,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 13,
+        "registers": 32,
+        "shared": 16392
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 31
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec1:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 128.0,
+        "MR_BAR": 0,
+        "MR_MAX": 64,
+        "MR_SHFL": 0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 128,
+        "MR_BAR": 0,
+        "MR_SHFL": 0,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 128,
+          "vector_bytes_per_lane": 2,
+          "warp_load_instructions": 128,
+          "wavefronts": 128
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 0,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            32,
+            124
+          ],
+          "local_max_scalar_equivalents": 124,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 0
+        },
+        "columns_per_thread": 1,
+        "e_vector": 1,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec1:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": false,
+          "warp_redistribution_possible": false
+        },
+        "p": 32,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            17,
+            114
+          ],
+          "shared_bytes_interval": [
+            8200,
+            9216
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 1,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 12,
+        "registers": 30,
+        "shared": 17408
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16x2": 15,
+        "max.f32": 2
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec2:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            2,
+            2
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 64.0,
+        "MR_BAR": 16,
+        "MR_MAX": 48,
+        "MR_SHFL": 8,
+        "MR_WF": 16.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 64,
+        "MR_BAR": 16,
+        "MR_SHFL": 8,
+        "MR_WF": 16
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 4,
+          "warp_load_instructions": 64,
+          "wavefronts": 64
+        },
+        "MR": {
+          "barrier_warp_instructions": 16,
+          "cross_thread_max_f32": 8,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            32,
+            120
+          ],
+          "local_max_scalar_equivalents": 120,
+          "scratch_upper_bytes": 1024,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 16,
+          "shuffle_warp_instructions": 8
+        },
+        "columns_per_thread": 2,
+        "e_vector": 2,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec2:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 16,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            17,
+            116
+          ],
+          "shared_bytes_interval": [
+            8200,
+            10240
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 1,
+        "w": 2
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 13,
+        "registers": 30,
+        "shared": 16392
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 30,
+        "max.f32": 2
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec2:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 64.0,
+        "ML_WF": 128.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 72.0,
+        "MR_SHFL": 8.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 64,
+        "ML_WF": 128,
+        "MR_BAR": 0,
+        "MR_SHFL": 8,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 64,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 4,
+          "warp_load_instructions": 64,
+          "wavefronts": 128
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 8,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            32,
+            120
+          ],
+          "local_max_scalar_equivalents": 120,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 8
+        },
+        "columns_per_thread": 2,
+        "e_vector": 2,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec2:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 16,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            17,
+            116
+          ],
+          "shared_bytes_interval": [
+            8200,
+            9216
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 2,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 12,
+        "registers": 32,
+        "shared": 18432
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16x2": 14,
+        "max.f32": 8
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec4:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 64.0,
+        "MR_BAR": 16,
+        "MR_MAX": 72,
+        "MR_SHFL": 32,
+        "MR_WF": 32.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 64,
+        "MR_BAR": 16,
+        "MR_SHFL": 32,
+        "MR_WF": 32
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 8,
+          "warp_load_instructions": 32,
+          "wavefronts": 64
+        },
+        "MR": {
+          "barrier_warp_instructions": 16,
+          "cross_thread_max_f32": 32,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            28,
+            112
+          ],
+          "local_max_scalar_equivalents": 112,
+          "scratch_upper_bytes": 2048,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 32,
+          "shuffle_warp_instructions": 32
+        },
+        "columns_per_thread": 4,
+        "e_vector": 4,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec4:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 8,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            18,
+            120
+          ],
+          "shared_bytes_interval": [
+            8200,
+            11264
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 1,
+        "w": 4
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 13,
+        "registers": 28,
+        "shared": 16896
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 28,
+        "max.f32": 8
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec4:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 64.0,
+        "ML_WF": 128.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 96.0,
+        "MR_SHFL": 32.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 64,
+        "ML_WF": 128,
+        "MR_BAR": 0,
+        "MR_SHFL": 32,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 64,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 8,
+          "warp_load_instructions": 32,
+          "wavefronts": 128
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 32,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            28,
+            112
+          ],
+          "local_max_scalar_equivalents": 112,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 32
+        },
+        "columns_per_thread": 4,
+        "e_vector": 4,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec4:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 8,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            18,
+            120
+          ],
+          "shared_bytes_interval": [
+            8200,
+            9216
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 4,
+        "w": 1
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 12,
+        "registers": 32,
+        "shared": 17408
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16x2": 12,
+        "max.f32": 24
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec8:n_first",
+        "placement": "n_first",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4,
+            1
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 0.0,
+        "ML_WF": 64.0,
+        "MR_BAR": 32,
+        "MR_MAX": 128,
+        "MR_SHFL": 96,
+        "MR_WF": 64.0
+      },
+      "predicted": {
+        "ML_BC": 0,
+        "ML_WF": 64,
+        "MR_BAR": 32,
+        "MR_SHFL": 96,
+        "MR_WF": 64
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 0,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 16,
+          "warp_load_instructions": 16,
+          "wavefronts": 64
+        },
+        "MR": {
+          "barrier_warp_instructions": 32,
+          "cross_thread_max_f32": 96,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            24,
+            96
+          ],
+          "local_max_scalar_equivalents": 96,
+          "scratch_upper_bytes": 2048,
+          "shared_conversion_rounds": 2,
+          "shared_load_wavefronts": 64,
+          "shuffle_warp_instructions": 96
+        },
+        "columns_per_thread": 8,
+        "e_vector": 8,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec8:n_first",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 4,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            20,
+            128
+          ],
+          "shared_bytes_interval": [
+            8200,
+            11264
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 2,
+        "w": 4
+      }
+    },
+    {
+      "MC_measured_resource_diagnostic_only": {
+        "capacity": 13,
+        "registers": 26,
+        "shared": 16896
+      },
+      "PTX_max_sites_diagnostic_only": {
+        "max.bf16": 24,
+        "max.f32": 24
+      },
+      "all_pass": true,
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "W": 4,
+        "dtype": "bfloat16",
+        "id": "M32_N128_w4:vec8:within",
+        "placement": "within",
+        "reduce_axis": 1,
+        "register_layout": {
+          "order": [
+            2,
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            1,
+            4
+          ]
+        },
+        "shared_layout": {
+          "element_bitwidth": 16,
+          "rank": 3,
+          "swizzle_byte_width": 128,
+          "transposed": false
+        }
+      },
+      "checks": {
+        "BF16_local_PTX_kind_interval": true,
+        "MC_register_interval": true,
+        "MC_two_buffer_shared_interval": true,
+        "ML_BC": true,
+        "ML_WF": true,
+        "MR_BAR": true,
+        "MR_MAX_interval": true,
+        "MR_SHFL": true,
+        "MR_WF": true,
+        "nontrivial_local_BF16_tree": true
+      },
+      "observed": {
+        "ML_BC": 64.0,
+        "ML_WF": 128.0,
+        "MR_BAR": 0.0,
+        "MR_MAX": 144.0,
+        "MR_SHFL": 96.0,
+        "MR_WF": 0.0
+      },
+      "predicted": {
+        "ML_BC": 64,
+        "ML_WF": 128,
+        "MR_BAR": 0,
+        "MR_SHFL": 96,
+        "MR_WF": 0
+      },
+      "static": {
+        "ML": {
+          "bank_conflicts": 64,
+          "ideal_wavefronts": 64,
+          "vector_bytes_per_lane": 16,
+          "warp_load_instructions": 16,
+          "wavefronts": 128
+        },
+        "MR": {
+          "barrier_warp_instructions": 0,
+          "cross_thread_max_f32": 96,
+          "local_PTX_hypotheses": [
+            "max.bf16",
+            "max.bf16x2"
+          ],
+          "local_max_dynamic_interval": [
+            24,
+            96
+          ],
+          "local_max_scalar_equivalents": 96,
+          "scratch_upper_bytes": 0,
+          "shared_conversion_rounds": 0,
+          "shared_load_wavefronts": 0,
+          "shuffle_warp_instructions": 96
+        },
+        "columns_per_thread": 8,
+        "e_vector": 8,
+        "elements_per_thread": 32,
+        "id": "M32_N128_w4:vec8:within",
+        "output": {
+          "fixed": "Blocked([1],[32],[W],[0])",
+          "native": "SliceLayout(axis=1,parent=register_layout)",
+          "requires_thread_redistribution": true,
+          "warp_redistribution_possible": true
+        },
+        "p": 4,
+        "resources": {
+          "assumption": "single buffer, nonpipelined; unknown RA increases uncertainty",
+          "definite_register_infeasible": false,
+          "q_interval": [
+            4,
+            16
+          ],
+          "registers_per_thread_interval": [
+            20,
+            128
+          ],
+          "shared_bytes_interval": [
+            8200,
+            9216
+          ],
+          "shared_legal": true,
+          "spill_possible": false,
+          "static_shape_legal": true
+        },
+        "u": 8,
+        "w": 1
+      }
+    }
+  ],
+  "source_reference_SHA256": {
+    "lib/Analysis/Utility.cpp": "7236225de9fc456492c82b82d9b683e240043b323d61da865bacffe57d409007",
+    "lib/Conversion/TritonGPUToLLVM/ReduceOpToLLVM.cpp": "674011445a3936c1d7b35b01e1508855b90e6be1267e42f10c3696ccfb4ee9d5",
+    "lib/Conversion/TritonGPUToLLVM/Utility.cpp": "b11ddb91f06bdde507cd8cac0387f752358f4bbc3cfdf667f17f6dcf1b5b0836",
+    "lib/Dialect/TritonGPU/IR/LinearLayoutConversions.cpp": "3bfff6c7f75de545558ff48a6f8ac5583eeba91594e2fcdad140b5d91b580238",
+    "lib/Dialect/TritonGPU/Transforms/Coalesce.cpp": "e941cab960ae44ab5ef4eddb71d083cb2a62ff161a810c1f60240a3b3e3fe520"
+  },
+  "source_reference_commit": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad"
+}
