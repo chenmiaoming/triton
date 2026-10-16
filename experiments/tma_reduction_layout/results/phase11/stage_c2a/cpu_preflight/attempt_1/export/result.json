@@ -1,0 +1,81 @@
+{
+  "GPU_allocated": false,
+  "call_id": "fc-01M51V056H5C4HCZJTN1CBBJZH",
+  "ccache_before": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/python/triton/experimental/gluon/language/_core.py\", line 101, in wrapper\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/language/nvidia/hopper/mbarrier.py\", line 31, in expect\n    _semantic.builder.create_mbarrier_expect(mbarrier.handle, bytes_per_cta, pred.handle, from_cta)\nTypeError: create_mbarrier_expect(): incompatible function arguments. The following argument types are supported:\n    1. create_mbarrier_expect(self, memDesc: triton._C.libtriton.ir.value, bytes: int, pred: triton._C.libtriton.ir.value, from_cta: int | None = None) -> None\n\nInvoked with types: triton._C.libtriton.gluon_ir.GluonOpBuilder, triton._C.libtriton.ir.value, triton.language.core.tensor, triton._C.libtriton.ir.value, NoneType\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/c2/run.py\", line 57, in preflight\n    compiled=triton.compile(src,target=GPUTarget('cuda',90,32),options={'num_warps':case['num_warps']})\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/compiler/compiler.py\", line 307, in compile\n    module = src.make_ir(target, options, codegen_fns, module_map, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/_runtime.py\", line 46, in make_ir\n    module = ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 13:8:\n          FAMILY:gl.constexpr,D:gl.constexpr,L:gl.constexpr,S:gl.constexpr):\n    pid=gl.program_id(0)\n    pm,pn=pid//(8192//BN),pid%(8192//BN)\n    bar=gl.allocate_shared_memory(gl.int64,[1],mbarrier.MBarrierLayout())\n    mbarrier.init(bar,count=1)\n    matrix:gl.constexpr=gl.SliceLayout(0,L)\n    rows=gl.arange(0,BM,layout=gl.SliceLayout(1,matrix))\n    cols=gl.arange(0,BN,layout=gl.SliceLayout(0,matrix))\n    if FAMILY=='ML' or FAMILY=='MC':\n        smem=gl.allocate_shared_memory(gl.bfloat16,[2,1,BM,BN],S)\n        tx=gl.where(K>1,2*desc.block_type.nbytes,desc.block_type.nbytes) if FAMILY=='MC' else 2*desc.block_type.nbytes\n        mbarrier.expect(bar,tx)\n        ^\ncreate_mbarrier_expect(): incompatible function arguments. The following argument types are supported:\n    1. create_mbarrier_expect(self, memDesc: triton._C.libtriton.ir.value, bytes: int, pred: triton._C.libtriton.ir.value, from_cta: int | None = None) -> None\n\nInvoked with types: triton._C.libtriton.gluon_ir.GluonOpBuilder, triton._C.libtriton.ir.value, triton.language.core.tensor, triton._C.libtriton.ir.value, NoneType\n",
+  "metadata": {
+    "M32_N128_w4:vec1:n_first:ML:D1": {
+      "ABI_kind": "descriptor_K",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "artifact_origin": {
+        "CUBIN_SHA256": "8cabb4b47a2d14cc0aa964e8bb4a3053f9f1851cb3fcd8f8253472019ec7f170",
+        "original_path": "experiments/tma_reduction_layout/results/phase11/stage_c1/artifacts/attempt_2/export/M32_N128_w4/vec1/ML",
+        "source_manifest_SHA256": "85eaaf22c7357669fd1ab0e86d3d92a1b3b8a1e4e61548d508d8495c14bf2ab2"
+      },
+      "cubin_SHA256": "8cabb4b47a2d14cc0aa964e8bb4a3053f9f1851cb3fcd8f8253472019ec7f170",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 16392,
+      "family": "ML",
+      "function_name": "micro",
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          1
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec1:n_first",
+      "num_warps": 4,
+      "path": "host",
+      "placement": "n_first",
+      "reused_directory": "experiments/tma_reduction_layout/results/phase11/stage_c15/artifacts/attempt_1/export/M32_N128_w4/vec1/ML",
+      "reused_tag": "M32_N128_w4:vec1:ML",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec1:n_first:ML:D1",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 1
+    }
+  },
+  "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+  "new_compiles": 0,
+  "protocol_SHA256": "983d43ffa63b61cecb3e1ad17db1aa04165a74571d45d6eb34956628d4ebdc37",
+  "status": "FAILED"
+}
