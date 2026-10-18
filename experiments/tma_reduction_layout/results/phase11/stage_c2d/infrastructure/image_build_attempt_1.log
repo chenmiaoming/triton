@@ -1,0 +1,93 @@
+Note that running a local entrypoint in detached mode only keeps the last triggered Modal function alive after the parent process has been killed or disconnected.
+✓ Initialized. View run at 
+https://modal.com/apps/chenmiaoming/main/ap-z088GMet6ByDt0W7GOasbq
+Building image im-XLBjuowFCI87CYCfRJflkV
+
+=> Step 0: FROM base
+Building image im-teanWzGiN3EdX3NBfhCa2N
+
+=> Step 1: COPY . /
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 411.68ms
+
+Built image im-XLBjuowFCI87CYCfRJflkV in 1.69s
+
+
+Saving image...
+Building image im-P1sTJTqld6iV2GYFaF3dOr
+
+=> Step 0: FROM base
+Image saved, took 1.82s
+
+Built image im-teanWzGiN3EdX3NBfhCa2N in 3.88s
+
+
+
+=> Step 1: RUN python -m pip install numpy==2.2.6
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPConnectionPool(host='pypi-mirror.modal.local', port=5555): Read timed out. (read timeout=30.0)")': /simple/numpy/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPConnectionPool(host='pypi-mirror.modal.local', port=5555): Read timed out. (read timeout=30.0)")': /simple/numpy/
+Collecting numpy==2.2.6
+  Downloading http://pypi-mirror.modal.local:5555/simple/numpy/numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.0/62.0 kB 213.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/numpy/numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.5/16.5 MB 292.2 MB/s eta 0:00:00
+Installing collected packages: numpy
+Successfully installed numpy-2.2.6
+
+[notice] A new release of pip is available: 23.3.2 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 1.93s
+
+Built image im-P1sTJTqld6iV2GYFaF3dOr in 68.35s
+
+
+✓ Created objects.
+├── ✓ Uploaded /tmp/tma-phase11-c2d-snapshot/experiments
+├── ✓ Created Function preflight.
+├── ✓ Created Function collect.
+├── ✓ Created Function timing.
+└── ✓ Created Function profiles.
+Stopping app - user stopped from CLI.
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/phase11/c2d/r │
+│ un.py:250 in main                                                            │
+│                                                                              │
+│   249 │   assert os.environ.get('MODAL_PROFILE') == 'chenmiaoming'           │
+│ ❱ 250 │   call = function.spawn(*args)                                       │
+│   251 │   c.write_once(folder/'dispatch.json', {'call_id': call.object_id, ' │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_obje │
+│ ct.py:45 in wrapped                                                          │
+│                                                                              │
+│    44 │   │   await self.hydrate()                                           │
+│ ❱  45 │   │   return await method(self, *args, **kwargs)                     │
+│    46                                                                        │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_func │
+│ tions.py:2227 in spawn                                                       │
+│                                                                              │
+│   2226 │   │   else:                                                         │
+│ ❱ 2227 │   │   │   invocation = await self._call_function_nowait(args, kwarg │
+│   2228                                                                       │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_func │
+│ tions.py:2013 in _call_function_nowait                                       │
+│                                                                              │
+│   2012 │   ) -> _Invocation:                                                 │
+│ ❱ 2013 │   │   return await _Invocation.create(                              │
+│   2014 │   │   │   self,                                                     │
+│                                                                              │
+│ /home/chenmiaoming/triton-exp/.venv/lib/python3.12/site-packages/modal/_func │
+│ tions.py:201 in create                                                       │
+│                                                                              │
+│    200 │   │   else:                                                         │
+│ ❱  201 │   │   │   response = await client._stub.FunctionMap(request)        │
+│    202                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ConflictError: The app is stopped or disabled
