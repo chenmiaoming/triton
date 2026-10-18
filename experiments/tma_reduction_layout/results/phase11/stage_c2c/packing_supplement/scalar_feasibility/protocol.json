@@ -1,0 +1,1361 @@
+{
+  "C32_method_binding_SHA256": "41f805a805d30e404f2120d4c6fa6eff705892c6f7fa577fe5531f74d2d1eded",
+  "D1_compiled": false,
+  "D1_timed": false,
+  "K": [
+    1,
+    2,
+    4,
+    16,
+    64,
+    256
+  ],
+  "analysis": {
+    "candidate_envelopes": [
+      "max(control, MC)",
+      "max(control, B_tile + MC)",
+      "nonnegative shared-feature full-service regression"
+    ],
+    "cross_validation": "Hold complete geometry out; include pairing within worker/q; never train on D1.",
+    "identification": "B_tile/transfer are separately reported only if matched controls and held-geometry tests support a common additive decomposition; otherwise retain a set/bound and declare nonidentification.",
+    "local_semantics": "All variants share BF16 state update, final-state observation and identical checksum consumer for each fixed (R,p,columns). Across p the intended local grouping changes; differences are net subgraph costs, not naked opcode latency.",
+    "old_26_6_offset_used": false,
+    "packed_contrast": "native vs exact positive scale before wide max, with corresponding fixture vs fixture_wide controls; inspect final lowering and retain extra-operation costs.",
+    "selector_inputs": [
+      "BM",
+      "BN",
+      "W",
+      "dtype",
+      "reduce_axis",
+      "register_layout",
+      "shared_layout"
+    ],
+    "transfer_scope": "Fresh-origin repeated TMA plus mandatory slot-reuse barrier; not pure hardware TMA latency. Full-footprint K1 controls measure small-BM behavior.",
+    "units": "ns/tile/SM from grid slope; global launch intercept kept separate"
+  },
+  "authorization": "User approved C2c composition/fixed-R supplementation and C3.2 model update; stop before D1 compilation/timing.",
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "calibration_geometries": [
+    [
+      8,
+      64,
+      8
+    ],
+    [
+      8,
+      128,
+      4
+    ],
+    [
+      8,
+      256,
+      4
+    ],
+    [
+      16,
+      64,
+      4
+    ],
+    [
+      16,
+      128,
+      4
+    ],
+    [
+      32,
+      64,
+      8
+    ],
+    [
+      32,
+      128,
+      4
+    ],
+    [
+      64,
+      64,
+      8
+    ]
+  ],
+  "cases": [
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 512,
+      "R": 4,
+      "columns": 2,
+      "compile_cache_key": "f727e2b9cdc2b75a5bfe6757d3fc1b7e2b2b67f872b440e064667d8d1cfb9111",
+      "cubin_SHA256": "a74fa6a84d39218fbb9086933a1d7c1e0066792d3037a36b78ee607dcbf8c75a",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          2
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        2
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R4_p2_c2/native",
+      "tag": "local_R4_p2_c2:native",
+      "tensordesc_meta": [],
+      "variant": "native"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 512,
+      "R": 4,
+      "columns": 2,
+      "compile_cache_key": "be079236aaacb9cf70372310d16351bdf0ae6d6dbad35bd7e17bda4da8a02776",
+      "cubin_SHA256": "ca2d4549c224de0ebbe1e1b2d6f40f714dc83d0ae94e6077d5c9b55daea00ac8",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          2
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        2
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R4_p2_c2/wide",
+      "tag": "local_R4_p2_c2:wide",
+      "tensordesc_meta": [],
+      "variant": "wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 512,
+      "R": 4,
+      "columns": 2,
+      "compile_cache_key": "7ae6f02da92f4ccfe2110dbb6abd721371038d01c3555fd4e83d71699dd8d700",
+      "cubin_SHA256": "2ef18eabd6283484b7f5b5943bf1e24a6cf1475900c9cd19453757e4d470f32e",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          2
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        2
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R4_p2_c2/fixture",
+      "tag": "local_R4_p2_c2:fixture",
+      "tensordesc_meta": [],
+      "variant": "fixture"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 512,
+      "R": 4,
+      "columns": 2,
+      "compile_cache_key": "0c400a4cda692037e0e12eef67d04d98ebe2ccebe1367e0a8b485d806d624268",
+      "cubin_SHA256": "f5d4d31f4c3b2ca07bbba24357e30af01767b7da8ab78f088aea464f0bdba4d9",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          2
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        2
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R4_p2_c2/fixture_wide",
+      "tag": "local_R4_p2_c2:fixture_wide",
+      "tensordesc_meta": [],
+      "variant": "fixture_wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 512,
+      "R": 4,
+      "columns": 2,
+      "dtype": "bfloat16",
+      "family": "LOCAL",
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          2
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        2
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "tag": "local_R4_p2_c2:scalar",
+      "variant": "scalar"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 1024,
+      "R": 8,
+      "columns": 4,
+      "compile_cache_key": "e931809fde6a5cbc4857e89134a4c25e781fc366a7456d5e79dcb6470c7595ad",
+      "cubin_SHA256": "ff930a07a975f5667fb927fa7b098cd676e407d79ebac633b37cd66fd399a1b4",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          4
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        4
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R8_p2_c4/native",
+      "tag": "local_R8_p2_c4:native",
+      "tensordesc_meta": [],
+      "variant": "native"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 1024,
+      "R": 8,
+      "columns": 4,
+      "compile_cache_key": "f858316c87876ff36fd150183c4dfe58c81b958e5f47abf57c8cfcc36a80ecbc",
+      "cubin_SHA256": "daa1f3401cc44f48f2973e0f7d10035634ef785bbe42771b4608b53514c2bdde",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          4
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        4
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R8_p2_c4/wide",
+      "tag": "local_R8_p2_c4:wide",
+      "tensordesc_meta": [],
+      "variant": "wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 1024,
+      "R": 8,
+      "columns": 4,
+      "compile_cache_key": "dca14baedb26b2ee46e2d86d6624fbfe4063dbdc7443486c04d578da0364365b",
+      "cubin_SHA256": "cf2b62243303f455b96be7aa443f37d48c2f31553abcc317e0a5cb63d1c0ebe4",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          4
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        4
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R8_p2_c4/fixture",
+      "tag": "local_R8_p2_c4:fixture",
+      "tensordesc_meta": [],
+      "variant": "fixture"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 1024,
+      "R": 8,
+      "columns": 4,
+      "compile_cache_key": "19f71c68521d6a84830d9bc09590623a9aa0f72062f1d2b5f18e92aba00145bd",
+      "cubin_SHA256": "6fa0bc90b33e09e1c82ae64fbf73ca88bce5d990ac676bdbfc080bc38d895047",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          4
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        4
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R8_p2_c4/fixture_wide",
+      "tag": "local_R8_p2_c4:fixture_wide",
+      "tensordesc_meta": [],
+      "variant": "fixture_wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 1024,
+      "R": 8,
+      "columns": 4,
+      "dtype": "bfloat16",
+      "family": "LOCAL",
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          4
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        4
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "tag": "local_R8_p2_c4:scalar",
+      "variant": "scalar"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 2048,
+      "R": 16,
+      "columns": 8,
+      "compile_cache_key": "e9787c321c366431b5532929d6bba58a68c53b97fa330c85e54b1474226237f0",
+      "cubin_SHA256": "3aa0f36d0b65c626a3362ad28cd4b269646f9e320227a2faa6321106e19aac2c",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          8
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        8
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R16_p2_c8/native",
+      "tag": "local_R16_p2_c8:native",
+      "tensordesc_meta": [],
+      "variant": "native"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 2048,
+      "R": 16,
+      "columns": 8,
+      "compile_cache_key": "9e0e994154b5dba99f107b9d83f7bec338ccff22342cf3709573a747e175b1ae",
+      "cubin_SHA256": "dc809ef6672ccbad3bc27d83f3fcc95c39c3cba0907b422617d584f78ea91217",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          8
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        8
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R16_p2_c8/wide",
+      "tag": "local_R16_p2_c8:wide",
+      "tensordesc_meta": [],
+      "variant": "wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 2048,
+      "R": 16,
+      "columns": 8,
+      "compile_cache_key": "94515ce78c097380f7547e818028f148388f4344e07ce30de931a33cee7d06ea",
+      "cubin_SHA256": "d4f8d5891cf2cca0868dbd6e5de53977c2d0963fd7a5243efa55741393c946f4",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          8
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        8
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R16_p2_c8/fixture",
+      "tag": "local_R16_p2_c8:fixture",
+      "tensordesc_meta": [],
+      "variant": "fixture"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 2048,
+      "R": 16,
+      "columns": 8,
+      "compile_cache_key": "84de91ed912aea4accb280ca99b919da66ab209bfe9b6ec1785efe7acb0a50e0",
+      "cubin_SHA256": "06b343f7c395387db9b76b6baa625d0950356181696a708dcfd90107413e1543",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          8
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        8
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R16_p2_c8/fixture_wide",
+      "tag": "local_R16_p2_c8:fixture_wide",
+      "tensordesc_meta": [],
+      "variant": "fixture_wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 2048,
+      "R": 16,
+      "columns": 8,
+      "dtype": "bfloat16",
+      "family": "LOCAL",
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          8
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        8
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "tag": "local_R16_p2_c8:scalar",
+      "variant": "scalar"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 4096,
+      "R": 32,
+      "columns": 16,
+      "compile_cache_key": "1da45307fb11074cb6113efed7d63858d7c281bf53f218e16494ebf02dd5e368",
+      "cubin_SHA256": "33b49819b25b867abc5d370ffcdc59081cb6390c951e7221562b7d2675259944",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          16
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        16
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R32_p2_c16/native",
+      "tag": "local_R32_p2_c16:native",
+      "tensordesc_meta": [],
+      "variant": "native"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 4096,
+      "R": 32,
+      "columns": 16,
+      "compile_cache_key": "cf781fa7fab929a042c608add2cbb6d6e605c2c1b1bbe85be35886c0f61560fc",
+      "cubin_SHA256": "7aa94d147fa0f722e3a43bdf2e5c8fc65d2ad7c7c20c98875e90f7d7de508453",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          16
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        16
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R32_p2_c16/wide",
+      "tag": "local_R32_p2_c16:wide",
+      "tensordesc_meta": [],
+      "variant": "wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 4096,
+      "R": 32,
+      "columns": 16,
+      "compile_cache_key": "f9e73c04d84fc591632532a60d41d640687fe1bf09828f5679c6fa36b60395f3",
+      "cubin_SHA256": "5d5228261ae38a8088ec2d1b25c44ea6bdc39b4904c77099e326f2fa7c4008f5",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          16
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        16
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R32_p2_c16/fixture",
+      "tag": "local_R32_p2_c16:fixture",
+      "tensordesc_meta": [],
+      "variant": "fixture"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 4096,
+      "R": 32,
+      "columns": 16,
+      "compile_cache_key": "90c1ef33fc014a700faa7ef1121078b3a5c87ebd32e2fea9a4ca98ed7f2b97fe",
+      "cubin_SHA256": "37d052a23bfc7ba61c80ade83e8e6eb3d8bfade68f531342b58322c77f2fec5b",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 0,
+      "family": "LOCAL",
+      "function_name": "fixed_local",
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          16
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        16
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2c/cpu_preflight/attempt_2/export/local_R32_p2_c16/fixture_wide",
+      "tag": "local_R32_p2_c16:fixture_wide",
+      "tensordesc_meta": [],
+      "variant": "fixture_wide"
+    },
+    {
+      "ABI_kind": "pointer_K",
+      "D": 1,
+      "M": 1,
+      "N": 4096,
+      "R": 32,
+      "columns": 16,
+      "dtype": "bfloat16",
+      "family": "LOCAL",
+      "input_kind": "bf16_matrix",
+      "kind": "local",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          2,
+          16
+        ],
+        "threads_per_warp": [
+          32,
+          1,
+          1
+        ],
+        "warps_per_cta": [
+          4,
+          1,
+          1
+        ]
+      },
+      "logical_axes": [
+        "owner_tensor",
+        "local_reduction",
+        "local_columns"
+      ],
+      "logical_shape": [
+        128,
+        2,
+        16
+      ],
+      "num_warps": 4,
+      "p": 2,
+      "path": "direct",
+      "tag": "local_R32_p2_c16:scalar",
+      "variant": "scalar"
+    }
+  ],
+  "correctness": {
+    "grid": 2,
+    "patterns": [
+      "quarter",
+      "random",
+      "boundary"
+    ]
+  },
+  "date": "2026-10-17",
+  "fit_K": [
+    16,
+    64,
+    256
+  ],
+  "main_measurements_repeated": "Only unchanged local contrast binaries rerun in the new matched cohort; required for a paired packing intervention.",
+  "main_protocol_SHA256": "a2ea1b5985184748ad20df150183f8ef134a3336a3123d1946827f6212db5c06",
+  "native_and_fixture_CUBIN_reused": 16,
+  "native_rebuilds": 0,
+  "new_scalar_CUBINs": 4,
+  "parent_commit": "1f6f1669b53768fdfb81f32c3e8e366a5ce2b33f",
+  "pinned_upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "previous_protocol_SHA256": "01f960118452c19170043eb8793d6f55dc30059d4b0f8548a785de982c4a5549",
+  "profile": "chenmiaoming",
+  "profiles": {
+    "duration_used_for_timing": false,
+    "group_limit": 20,
+    "hardware_K": 64,
+    "local_q": [
+      "natural",
+      "1",
+      "2",
+      "4"
+    ],
+    "metrics": [
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum",
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum",
+      "smsp__inst_executed.sum",
+      "sm__warps_active.avg.pct_of_peak_sustained_active",
+      "dram__bytes_read.sum",
+      "dram__bytes_write.sum",
+      "dram__throughput.avg.pct_of_peak_sustained_elapsed"
+    ],
+    "software_K": [
+      16,
+      64
+    ]
+  },
+  "reserved_D1": [
+    [
+      8,
+      64,
+      4
+    ],
+    [
+      8,
+      128,
+      8
+    ],
+    [
+      8,
+      512,
+      4
+    ],
+    [
+      8,
+      512,
+      8
+    ],
+    [
+      16,
+      64,
+      8
+    ],
+    [
+      16,
+      128,
+      2
+    ],
+    [
+      16,
+      256,
+      8
+    ],
+    [
+      32,
+      256,
+      2
+    ],
+    [
+      64,
+      128,
+      2
+    ],
+    [
+      64,
+      512,
+      4
+    ],
+    [
+      128,
+      64,
+      2
+    ]
+  ],
+  "resource_geometries": [
+    [
+      128,
+      256,
+      8
+    ],
+    [
+      128,
+      512,
+      8
+    ]
+  ],
+  "revision": 1,
+  "stage": "C2c_packing_supplement",
+  "supplement_reason": "Disentangle native BF16 packing from FP32 widening at a one-stage p=2 tree; preserve main evidence and use same-worker matched contrasts.",
+  "target": {
+    "GPU": "H100!:1",
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ]
+  },
+  "technical_reason": "Before any formal timing: retain partial samples and per-visit evidence checkpoints; reduce duplicate CUDA API logs. All kernel source and CUBINs unchanged.",
+  "timing": {
+    "composition_q": [
+      "natural",
+      "4"
+    ],
+    "full_footprint_control_K": [
+      1
+    ],
+    "grid_SM_multipliers": [
+      32,
+      64,
+      96
+    ],
+    "local_q": [
+      "natural",
+      "1",
+      "2",
+      "4"
+    ],
+    "order_seed": 20261017,
+    "outcome_based_repeats": false,
+    "samples_per_cell": 12,
+    "samples_per_visit": 4,
+    "single_kernel_graph": true,
+    "visits": 3,
+    "warmups": 2,
+    "workers": 3
+  },
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/c1/common.py": "280bd4a1ae5f3a30ba900e0e4220973f1229fff2450f8eec634ec5a524a79ff4",
+    "experiments/tma_reduction_layout/phase11/c15/common.py": "9f7b3fad3a38dc7576f4bae996f4250480444bfcb943134a2c1f4ea6ca2aa69d",
+    "experiments/tma_reduction_layout/phase11/c16/common.py": "b5bd3b24aa8be6c1cc8fa4d83e02ea3d3db593fc63ef1aca485cac80931896ee",
+    "experiments/tma_reduction_layout/phase11/c2/common.py": "a0b9be864da23b5ecb29f261999081b78771ab93931ef0628f7808633bd2a4b8",
+    "experiments/tma_reduction_layout/phase11/c2/data.py": "bbcd6f9ee8c3dbbe205919019227e17d33b9ca1db7230df74d65823e4ba0668d",
+    "experiments/tma_reduction_layout/phase11/c2/driver.py": "676d26c64af9bbcc452e447460d8c1aa8d7572c05dd890dfe7600b7ba9ad0eb7",
+    "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+    "experiments/tma_reduction_layout/phase11/c2c/common.py": "a77bac1cc1ba2469b08c765167cf7b954cebcee461113d9c2d26f6c3e882b24e",
+    "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64",
+    "experiments/tma_reduction_layout/phase11/c2c/packing_cpu.py": "951c465ae3ae18207b0b8f55e67642ee8d003360b38289afb41e003853d26ed2",
+    "experiments/tma_reduction_layout/phase11/c2c/packing_kernels.py": "31f70d0ab37c3339ba1f4d0d4193e4ed6a7e8d1eb84c16fd1a69437828189bef",
+    "experiments/tma_reduction_layout/phase11/c2c/packing_run.py": "887920b0fb8436ae7880605475efee591fdd52859d28fb8f5c623d322f5743b1",
+    "experiments/tma_reduction_layout/phase11/c2c/profile_one.py": "9b72580752c5966c503b9ad5d32f5e46717590846363bcdd288d63ac5ff3ecdf",
+    "experiments/tma_reduction_layout/phase11/c2c/run.py": "e005d96cdcff7e24b35697e11a98c3547c11fce8da1793732b13c4069408fe55",
+    "experiments/tma_reduction_layout/phase11/c2c/runtime.py": "4122e81a5683670bdfcfa864b3d5540e2171fbf9934d7a054bfba72a6eee30a2",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/launch.py": "b5574c3ae1733acd4f32015cf2b9c570eec4097481cf2ad885c0c6ce3c72cb54",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}

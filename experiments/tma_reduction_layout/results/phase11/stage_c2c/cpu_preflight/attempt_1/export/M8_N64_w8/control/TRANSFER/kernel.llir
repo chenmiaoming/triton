@@ -1,0 +1,141 @@
+; ModuleID = 'LLVMDialectModule'
+source_filename = "LLVMDialectModule"
+target datalayout = "e-p3:32:32-p4:32:32-p5:32:32-p6:32:32-p7:32:32-p101:32:32-i64:64-i128:128-i256:256-v16:16-v32:32-n16:32:64"
+
+@global_smem = external addrspace(3) global [0 x i8], align 16
+
+; Function Attrs: nounwind
+define ptx_kernel void @streaming(ptr byval([128 x i8]) align 64 "nvvm.grid_constant" %0, i32 %1, i32 %2, i32 %3, i64 %4, i64 %5, i64 %6, ptr addrspace(1) align 16 %7, i32 %8, ptr addrspace(1) nofree readnone captures(none) %9, ptr addrspace(1) nofree readnone captures(none) %10) local_unnamed_addr #0 !dbg !4 {
+  %12 = tail call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !dbg !14
+  %13 = icmp samesign ult i32 %12, 32, !dbg !14
+  %14 = tail call { i32, i1 } @llvm.nvvm.elect.sync(i32 -1), !dbg !14
+  %15 = extractvalue { i32, i1 } %14, 1, !dbg !14
+  %16 = and i1 %13, %15, !dbg !14
+  tail call void asm sideeffect "@$0 mbarrier.init.shared::cta.b64 [$1], 1;", "b,r"(i1 %16, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 1024)) #5, !dbg !14
+  %17 = icmp sgt i32 %8, 0, !dbg !15
+  br i1 %17, label %.lr.ph, label %._crit_edge, !dbg !15
+
+.lr.ph:                                           ; preds = %11
+  %18 = tail call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !dbg !16
+  %19 = lshr i32 %18, 7, !dbg !17
+  %20 = and i32 %12, 63, !dbg !18
+  %21 = and i32 %12, 255, !dbg !18
+  %22 = icmp eq i32 %21, 0
+  %23 = shl i32 %18, 6
+  %24 = and i32 %23, 8128
+  %25 = icmp samesign ult i32 %21, 32
+  %26 = getelementptr [2 x i8], ptr addrspace(3) @global_smem, i32 %20
+  %27 = mul i32 %8, %18
+  %28 = zext nneg i32 %20 to i64
+  %invariant.gep = getelementptr [4 x i8], ptr addrspace(1) %7, i64 %28, !dbg !15
+  %29 = and i32 %12, 192
+  %30 = icmp eq i32 %29, 0
+  %31 = zext nneg i32 %8 to i64, !dbg !15
+  %wide.trip.count = zext nneg i32 %8 to i64, !dbg !15
+  br label %32, !dbg !15
+
+32:                                               ; preds = %.lr.ph, %50
+  %indvars.iv = phi i64 [ 0, %.lr.ph ], [ %indvars.iv.next, %50 ]
+  %33 = trunc i64 %indvars.iv to i32, !dbg !19
+  %34 = add i32 %19, %33, !dbg !19
+  %35 = srem i32 %34, 1024, !dbg !19
+  %36 = shl nsw i32 %35, 3, !dbg !20
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !21
+  call void asm sideeffect "@$0 mbarrier.arrive.expect_tx.shared::cta.b64 _, [$1], 1024;", "b,r"(i1 %22, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 1024)) #5, !dbg !21
+  call void @llvm.nvvm.fence.proxy.async.shared_cta(), !dbg !22
+  %37 = call { i32, i1 } @llvm.nvvm.elect.sync(i32 -1), !dbg !22
+  %38 = extractvalue { i32, i1 } %37, 1, !dbg !22
+  %39 = and i1 %25, %38, !dbg !22
+  call void asm sideeffect "@$0 cp.async.bulk.tensor.3d.shared::cta.global.mbarrier::complete_tx::bytes [$1], [$2, {$3, $4, $5}], [$6];", "b,r,l,r,r,r,r"(i1 %39, ptr addrspace(3) @global_smem, ptr nonnull %0, i32 %24, i32 %36, i32 0, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 1024)) #5, !dbg !22
+  %40 = trunc nuw nsw i64 %indvars.iv to i32, !dbg !23
+  %41 = and i32 %40, 1, !dbg !23
+  call void asm sideeffect "\0A{\0A\09.reg .pred complete;\0A\09waitLoop:\0A\09mbarrier.try_wait.parity.shared::cta.b64 complete, [$0], $1;\0A\09@!complete bra.uni waitLoop;\0A}\0A", "r,r"(ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 1024), i32 %41) #5, !dbg !24
+  %42 = load bfloat, ptr addrspace(3) %26, align 2, !dbg !25
+  %43 = fpext bfloat %42 to float, !dbg !25
+  %44 = add i32 %27, %40, !dbg !26
+  %45 = shl i32 %44, 6, !dbg !27
+  %46 = sext i32 %45 to i64, !dbg !28
+  %gep = getelementptr [4 x i8], ptr addrspace(1) %invariant.gep, i64 %46, !dbg !28
+  %47 = bitcast float %43 to i32, !dbg !29
+  call void asm sideeffect "@$2 st.global.b32 [ $1 + 0 ], { $0 };", "r,l,b"(i32 %47, ptr addrspace(1) %gep, i1 %30) #5, !dbg !29
+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !30
+  %48 = icmp samesign ult i64 %indvars.iv.next, %31, !dbg !30
+  br i1 %48, label %49, label %50, !dbg !31
+
+49:                                               ; preds = %32
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !32
+  br label %50, !dbg !31
+
+50:                                               ; preds = %49, %32
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count, !dbg !15
+  br i1 %exitcond.not, label %._crit_edge, label %32, !dbg !15
+
+._crit_edge:                                      ; preds = %50, %11
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !33
+  %51 = call { i32, i1 } @llvm.nvvm.elect.sync(i32 -1), !dbg !33
+  %52 = extractvalue { i32, i1 } %51, 1, !dbg !33
+  %53 = and i1 %13, %52, !dbg !33
+  call void asm sideeffect "@$0 mbarrier.inval.shared::cta.b64 [$1];", "b,r"(i1 %53, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 1024)) #5, !dbg !33
+  ret void, !dbg !34
+}
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 2147483647) i32 @llvm.nvvm.read.ptx.sreg.ctaid.x() #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 1024) i32 @llvm.nvvm.read.ptx.sreg.tid.x() #1
+
+; Function Attrs: convergent mustprogress nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: readwrite)
+declare { i32, i1 } @llvm.nvvm.elect.sync(i32) #2
+
+; Function Attrs: convergent nocallback nounwind
+declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #3
+
+; Function Attrs: nocallback nounwind
+declare void @llvm.nvvm.fence.proxy.async.shared_cta() #4
+
+attributes #0 = { nounwind "nvvm.reqntid"="256" }
+attributes #1 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #2 = { convergent mustprogress nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: readwrite) }
+attributes #3 = { convergent nocallback nounwind }
+attributes #4 = { nocallback nounwind }
+attributes #5 = { nounwind }
+
+!llvm.dbg.cu = !{!0}
+!llvm.module.flags = !{!2, !3}
+
+!0 = distinct !DICompileUnit(language: DW_LANG_C, file: !1, producer: "triton", isOptimized: true, runtimeVersion: 0, emissionKind: LineTablesOnly)
+!1 = !DIFile(filename: "kernels.py", directory: "/opt/triton-src/experiments/tma_reduction_layout/phase11/c2c")
+!2 = !{i32 2, !"Debug Info Version", i32 3}
+!3 = !{i32 4, !"nvvm-reflect-ftz", i32 1}
+!4 = distinct !DISubprogram(name: "streaming", linkageName: "streaming", scope: !1, file: !1, line: 10, type: !5, scopeLine: 10, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !0)
+!5 = !DISubroutineType(cc: DW_CC_normal, types: !6)
+!6 = !{null, !7, !9, !9, !9, !10, !10, !10, !11, !9, !13, !13}
+!7 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !8, size: 64, dwarfAddressSpace: 0)
+!8 = !DIBasicType(name: "unknown_type", encoding: DW_ATE_signed)
+!9 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!10 = !DIBasicType(name: "int", size: 64, encoding: DW_ATE_signed)
+!11 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !12, size: 64, dwarfAddressSpace: 1)
+!12 = !DIBasicType(name: "float", size: 32, encoding: DW_ATE_float)
+!13 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !8, size: 64, dwarfAddressSpace: 1)
+!14 = !DILocation(line: 17, column: 5, scope: !4)
+!15 = !DILocation(line: 22, column: 5, scope: !4)
+!16 = !DILocation(line: 13, column: 11, scope: !4)
+!17 = !DILocation(line: 14, column: 14, scope: !4)
+!18 = !DILocation(line: 21, column: 12, scope: !4)
+!19 = !DILocation(line: 25, column: 16, scope: !4)
+!20 = !DILocation(line: 25, column: 15, scope: !4)
+!21 = !DILocation(line: 26, column: 9, scope: !4)
+!22 = !DILocation(line: 27, column: 9, scope: !4)
+!23 = !DILocation(line: 28, column: 34, scope: !4)
+!24 = !DILocation(line: 28, column: 9, scope: !4)
+!25 = !DILocation(line: 33, column: 17, scope: !4)
+!26 = !DILocation(line: 35, column: 25, scope: !4)
+!27 = !DILocation(line: 35, column: 24, scope: !4)
+!28 = !DILocation(line: 35, column: 18, scope: !4)
+!29 = !DILocation(line: 35, column: 9, scope: !4)
+!30 = !DILocation(line: 36, column: 12, scope: !4)
+!31 = !DILocation(line: 36, column: 9, scope: !4)
+!32 = !DILocation(line: 39, column: 13, scope: !4)
+!33 = !DILocation(line: 40, column: 5, scope: !4)
+!34 = !DILocation(line: 10, column: 1, scope: !4)
