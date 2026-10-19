@@ -1,0 +1,388 @@
+; ModuleID = 'LLVMDialectModule'
+source_filename = "LLVMDialectModule"
+target datalayout = "e-p3:32:32-p4:32:32-p5:32:32-p6:32:32-p7:32:32-p101:32:32-i64:64-i128:128-i256:256-v16:16-v32:32-n16:32:64"
+
+@global_smem = external addrspace(3) global [0 x i8], align 16
+
+; Function Attrs: nounwind
+define ptx_kernel void @one_pass(ptr byval([128 x i8]) align 64 "nvvm.grid_constant" %0, i32 %1, i32 %2, i32 %3, i64 %4, i64 %5, i64 %6, ptr addrspace(1) align 16 %7, ptr addrspace(1) nofree readnone captures(none) %8, ptr addrspace(1) nofree readnone captures(none) %9) local_unnamed_addr #0 !dbg !4 {
+  %11 = tail call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !dbg !14
+  %12 = and i32 %11, 2147483520, !dbg !15
+  %13 = tail call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !dbg !16
+  %14 = icmp samesign ult i32 %13, 32, !dbg !16
+  %15 = tail call { i32, i1 } @llvm.nvvm.elect.sync(i32 -1), !dbg !16
+  %16 = extractvalue { i32, i1 } %15, 1, !dbg !16
+  %17 = and i1 %14, %16, !dbg !16
+  tail call void asm sideeffect "@$0 mbarrier.init.shared::cta.b64 [$1], 1;", "b,r"(i1 %17, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 16384)) #7, !dbg !16
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !17
+  %18 = and i32 %13, 63, !dbg !17
+  %19 = icmp eq i32 %18, 0, !dbg !17
+  tail call void asm sideeffect "@$0 mbarrier.arrive.expect_tx.shared::cta.b64 _, [$1], 16384;", "b,r"(i1 %19, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 16384)) #7, !dbg !17
+  %20 = shl i32 %11, 6, !dbg !18
+  %21 = and i32 %20, 8128, !dbg !18
+  %22 = tail call { i32, i1 } @llvm.nvvm.elect.sync(i32 -1), !dbg !19
+  %23 = extractvalue { i32, i1 } %22, 1, !dbg !19
+  %24 = icmp samesign ult i32 %18, 32, !dbg !19
+  %25 = and i1 %24, %23, !dbg !19
+  call void asm sideeffect "@$0 cp.async.bulk.tensor.3d.shared::cta.global.mbarrier::complete_tx::bytes [$1], [$2, {$3, $4, $5}], [$6];", "b,r,l,r,r,r,r"(i1 %25, ptr addrspace(3) @global_smem, ptr nonnull %0, i32 %21, i32 %12, i32 0, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 16384)) #7, !dbg !19
+  call void asm sideeffect "\0A{\0A\09.reg .pred complete;\0A\09waitLoop:\0A\09mbarrier.try_wait.parity.shared::cta.b64 complete, [$0], $1;\0A\09@!complete bra.uni waitLoop;\0A}\0A", "r,r"(ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 16384), i32 0) #7, !dbg !20
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !21
+  %26 = call { i32, i1 } @llvm.nvvm.elect.sync(i32 -1), !dbg !21
+  %27 = extractvalue { i32, i1 } %26, 1, !dbg !21
+  %28 = and i1 %14, %27, !dbg !21
+  call void asm sideeffect "@$0 mbarrier.inval.shared::cta.b64 [$1];", "b,r"(i1 %28, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 16384)) #7, !dbg !21
+  %29 = and i32 %13, 24, !dbg !22
+  %30 = shl nuw nsw i32 %29, 5, !dbg !22
+  %31 = shl nuw nsw i32 %13, 4, !dbg !22
+  %32 = and i32 %31, 112, !dbg !22
+  %33 = shl nuw nsw i32 %29, 2, !dbg !22
+  %34 = and i32 %13, 32, !dbg !22
+  %35 = icmp eq i32 %34, 0, !dbg !22
+  %36 = select i1 %35, i32 0, i32 144, !dbg !22
+  %37 = or disjoint i32 %30, %32, !dbg !22
+  %38 = or disjoint i32 %36, %33, !dbg !22
+  %39 = xor i32 %38, %37, !dbg !22
+  %40 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %39, !dbg !22
+  %41 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) %40), !dbg !22
+  %42 = extractvalue { i32, i32, i32, i32 } %41, 0, !dbg !22
+  %43 = extractvalue { i32, i32, i32, i32 } %41, 1, !dbg !22
+  %44 = extractvalue { i32, i32, i32, i32 } %41, 2, !dbg !22
+  %45 = extractvalue { i32, i32, i32, i32 } %41, 3, !dbg !22
+  %46 = bitcast i32 %42 to <2 x bfloat>, !dbg !22
+  %47 = bitcast i32 %43 to <2 x bfloat>, !dbg !22
+  %48 = bitcast i32 %44 to <2 x bfloat>, !dbg !22
+  %49 = bitcast i32 %45 to <2 x bfloat>, !dbg !22
+  %50 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 1024, !dbg !22
+  %51 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %50), !dbg !22
+  %52 = extractvalue { i32, i32, i32, i32 } %51, 0, !dbg !22
+  %53 = extractvalue { i32, i32, i32, i32 } %51, 1, !dbg !22
+  %54 = extractvalue { i32, i32, i32, i32 } %51, 2, !dbg !22
+  %55 = extractvalue { i32, i32, i32, i32 } %51, 3, !dbg !22
+  %56 = bitcast i32 %52 to <2 x bfloat>, !dbg !22
+  %57 = bitcast i32 %53 to <2 x bfloat>, !dbg !22
+  %58 = bitcast i32 %54 to <2 x bfloat>, !dbg !22
+  %59 = bitcast i32 %55 to <2 x bfloat>, !dbg !22
+  %60 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 2048, !dbg !22
+  %61 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %60), !dbg !22
+  %62 = extractvalue { i32, i32, i32, i32 } %61, 0, !dbg !22
+  %63 = extractvalue { i32, i32, i32, i32 } %61, 1, !dbg !22
+  %64 = extractvalue { i32, i32, i32, i32 } %61, 2, !dbg !22
+  %65 = extractvalue { i32, i32, i32, i32 } %61, 3, !dbg !22
+  %66 = bitcast i32 %62 to <2 x bfloat>, !dbg !22
+  %67 = bitcast i32 %63 to <2 x bfloat>, !dbg !22
+  %68 = bitcast i32 %64 to <2 x bfloat>, !dbg !22
+  %69 = bitcast i32 %65 to <2 x bfloat>, !dbg !22
+  %70 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 3072, !dbg !22
+  %71 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %70), !dbg !22
+  %72 = extractvalue { i32, i32, i32, i32 } %71, 0, !dbg !22
+  %73 = extractvalue { i32, i32, i32, i32 } %71, 1, !dbg !22
+  %74 = extractvalue { i32, i32, i32, i32 } %71, 2, !dbg !22
+  %75 = extractvalue { i32, i32, i32, i32 } %71, 3, !dbg !22
+  %76 = bitcast i32 %72 to <2 x bfloat>, !dbg !22
+  %77 = bitcast i32 %73 to <2 x bfloat>, !dbg !22
+  %78 = bitcast i32 %74 to <2 x bfloat>, !dbg !22
+  %79 = bitcast i32 %75 to <2 x bfloat>, !dbg !22
+  %80 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 4096, !dbg !22
+  %81 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %80), !dbg !22
+  %82 = extractvalue { i32, i32, i32, i32 } %81, 0, !dbg !22
+  %83 = extractvalue { i32, i32, i32, i32 } %81, 1, !dbg !22
+  %84 = extractvalue { i32, i32, i32, i32 } %81, 2, !dbg !22
+  %85 = extractvalue { i32, i32, i32, i32 } %81, 3, !dbg !22
+  %86 = bitcast i32 %82 to <2 x bfloat>, !dbg !22
+  %87 = bitcast i32 %83 to <2 x bfloat>, !dbg !22
+  %88 = bitcast i32 %84 to <2 x bfloat>, !dbg !22
+  %89 = bitcast i32 %85 to <2 x bfloat>, !dbg !22
+  %90 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 5120, !dbg !22
+  %91 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %90), !dbg !22
+  %92 = extractvalue { i32, i32, i32, i32 } %91, 0, !dbg !22
+  %93 = extractvalue { i32, i32, i32, i32 } %91, 1, !dbg !22
+  %94 = extractvalue { i32, i32, i32, i32 } %91, 2, !dbg !22
+  %95 = extractvalue { i32, i32, i32, i32 } %91, 3, !dbg !22
+  %96 = bitcast i32 %92 to <2 x bfloat>, !dbg !22
+  %97 = bitcast i32 %93 to <2 x bfloat>, !dbg !22
+  %98 = bitcast i32 %94 to <2 x bfloat>, !dbg !22
+  %99 = bitcast i32 %95 to <2 x bfloat>, !dbg !22
+  %100 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 6144, !dbg !22
+  %101 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %100), !dbg !22
+  %102 = extractvalue { i32, i32, i32, i32 } %101, 0, !dbg !22
+  %103 = extractvalue { i32, i32, i32, i32 } %101, 1, !dbg !22
+  %104 = extractvalue { i32, i32, i32, i32 } %101, 2, !dbg !22
+  %105 = extractvalue { i32, i32, i32, i32 } %101, 3, !dbg !22
+  %106 = bitcast i32 %102 to <2 x bfloat>, !dbg !22
+  %107 = bitcast i32 %103 to <2 x bfloat>, !dbg !22
+  %108 = bitcast i32 %104 to <2 x bfloat>, !dbg !22
+  %109 = bitcast i32 %105 to <2 x bfloat>, !dbg !22
+  %110 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 7168, !dbg !22
+  %111 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %110), !dbg !22
+  %112 = extractvalue { i32, i32, i32, i32 } %111, 0, !dbg !22
+  %113 = extractvalue { i32, i32, i32, i32 } %111, 1, !dbg !22
+  %114 = extractvalue { i32, i32, i32, i32 } %111, 2, !dbg !22
+  %115 = extractvalue { i32, i32, i32, i32 } %111, 3, !dbg !22
+  %116 = bitcast i32 %112 to <2 x bfloat>, !dbg !22
+  %117 = bitcast i32 %113 to <2 x bfloat>, !dbg !22
+  %118 = bitcast i32 %114 to <2 x bfloat>, !dbg !22
+  %119 = bitcast i32 %115 to <2 x bfloat>, !dbg !22
+  %120 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 8192, !dbg !22
+  %121 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %120), !dbg !22
+  %122 = extractvalue { i32, i32, i32, i32 } %121, 0, !dbg !22
+  %123 = extractvalue { i32, i32, i32, i32 } %121, 1, !dbg !22
+  %124 = extractvalue { i32, i32, i32, i32 } %121, 2, !dbg !22
+  %125 = extractvalue { i32, i32, i32, i32 } %121, 3, !dbg !22
+  %126 = bitcast i32 %122 to <2 x bfloat>, !dbg !22
+  %127 = bitcast i32 %123 to <2 x bfloat>, !dbg !22
+  %128 = bitcast i32 %124 to <2 x bfloat>, !dbg !22
+  %129 = bitcast i32 %125 to <2 x bfloat>, !dbg !22
+  %130 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 9216, !dbg !22
+  %131 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %130), !dbg !22
+  %132 = extractvalue { i32, i32, i32, i32 } %131, 0, !dbg !22
+  %133 = extractvalue { i32, i32, i32, i32 } %131, 1, !dbg !22
+  %134 = extractvalue { i32, i32, i32, i32 } %131, 2, !dbg !22
+  %135 = extractvalue { i32, i32, i32, i32 } %131, 3, !dbg !22
+  %136 = bitcast i32 %132 to <2 x bfloat>, !dbg !22
+  %137 = bitcast i32 %133 to <2 x bfloat>, !dbg !22
+  %138 = bitcast i32 %134 to <2 x bfloat>, !dbg !22
+  %139 = bitcast i32 %135 to <2 x bfloat>, !dbg !22
+  %140 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 10240, !dbg !22
+  %141 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %140), !dbg !22
+  %142 = extractvalue { i32, i32, i32, i32 } %141, 0, !dbg !22
+  %143 = extractvalue { i32, i32, i32, i32 } %141, 1, !dbg !22
+  %144 = extractvalue { i32, i32, i32, i32 } %141, 2, !dbg !22
+  %145 = extractvalue { i32, i32, i32, i32 } %141, 3, !dbg !22
+  %146 = bitcast i32 %142 to <2 x bfloat>, !dbg !22
+  %147 = bitcast i32 %143 to <2 x bfloat>, !dbg !22
+  %148 = bitcast i32 %144 to <2 x bfloat>, !dbg !22
+  %149 = bitcast i32 %145 to <2 x bfloat>, !dbg !22
+  %150 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 11264, !dbg !22
+  %151 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %150), !dbg !22
+  %152 = extractvalue { i32, i32, i32, i32 } %151, 0, !dbg !22
+  %153 = extractvalue { i32, i32, i32, i32 } %151, 1, !dbg !22
+  %154 = extractvalue { i32, i32, i32, i32 } %151, 2, !dbg !22
+  %155 = extractvalue { i32, i32, i32, i32 } %151, 3, !dbg !22
+  %156 = bitcast i32 %152 to <2 x bfloat>, !dbg !22
+  %157 = bitcast i32 %153 to <2 x bfloat>, !dbg !22
+  %158 = bitcast i32 %154 to <2 x bfloat>, !dbg !22
+  %159 = bitcast i32 %155 to <2 x bfloat>, !dbg !22
+  %160 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 12288, !dbg !22
+  %161 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %160), !dbg !22
+  %162 = extractvalue { i32, i32, i32, i32 } %161, 0, !dbg !22
+  %163 = extractvalue { i32, i32, i32, i32 } %161, 1, !dbg !22
+  %164 = extractvalue { i32, i32, i32, i32 } %161, 2, !dbg !22
+  %165 = extractvalue { i32, i32, i32, i32 } %161, 3, !dbg !22
+  %166 = bitcast i32 %162 to <2 x bfloat>, !dbg !22
+  %167 = bitcast i32 %163 to <2 x bfloat>, !dbg !22
+  %168 = bitcast i32 %164 to <2 x bfloat>, !dbg !22
+  %169 = bitcast i32 %165 to <2 x bfloat>, !dbg !22
+  %170 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 13312, !dbg !22
+  %171 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %170), !dbg !22
+  %172 = extractvalue { i32, i32, i32, i32 } %171, 0, !dbg !22
+  %173 = extractvalue { i32, i32, i32, i32 } %171, 1, !dbg !22
+  %174 = extractvalue { i32, i32, i32, i32 } %171, 2, !dbg !22
+  %175 = extractvalue { i32, i32, i32, i32 } %171, 3, !dbg !22
+  %176 = bitcast i32 %172 to <2 x bfloat>, !dbg !22
+  %177 = bitcast i32 %173 to <2 x bfloat>, !dbg !22
+  %178 = bitcast i32 %174 to <2 x bfloat>, !dbg !22
+  %179 = bitcast i32 %175 to <2 x bfloat>, !dbg !22
+  %180 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 14336, !dbg !22
+  %181 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %180), !dbg !22
+  %182 = extractvalue { i32, i32, i32, i32 } %181, 0, !dbg !22
+  %183 = extractvalue { i32, i32, i32, i32 } %181, 1, !dbg !22
+  %184 = extractvalue { i32, i32, i32, i32 } %181, 2, !dbg !22
+  %185 = extractvalue { i32, i32, i32, i32 } %181, 3, !dbg !22
+  %186 = bitcast i32 %182 to <2 x bfloat>, !dbg !22
+  %187 = bitcast i32 %183 to <2 x bfloat>, !dbg !22
+  %188 = bitcast i32 %184 to <2 x bfloat>, !dbg !22
+  %189 = bitcast i32 %185 to <2 x bfloat>, !dbg !22
+  %190 = getelementptr inbounds nuw i8, ptr addrspace(3) %40, i32 15360, !dbg !22
+  %191 = call { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) nonnull %190), !dbg !22
+  %192 = extractvalue { i32, i32, i32, i32 } %191, 0, !dbg !22
+  %193 = extractvalue { i32, i32, i32, i32 } %191, 1, !dbg !22
+  %194 = extractvalue { i32, i32, i32, i32 } %191, 2, !dbg !22
+  %195 = extractvalue { i32, i32, i32, i32 } %191, 3, !dbg !22
+  %196 = bitcast i32 %192 to <2 x bfloat>, !dbg !22
+  %197 = bitcast i32 %193 to <2 x bfloat>, !dbg !22
+  %198 = bitcast i32 %194 to <2 x bfloat>, !dbg !22
+  %199 = bitcast i32 %195 to <2 x bfloat>, !dbg !22
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !23
+  %200 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %46, <2 x bfloat> %47), !dbg !28
+  %201 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %48, <2 x bfloat> %49), !dbg !28
+  %202 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %56, <2 x bfloat> %57), !dbg !28
+  %203 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %58, <2 x bfloat> %59), !dbg !28
+  %204 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %66, <2 x bfloat> %67), !dbg !28
+  %205 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %68, <2 x bfloat> %69), !dbg !28
+  %206 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %76, <2 x bfloat> %77), !dbg !28
+  %207 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %78, <2 x bfloat> %79), !dbg !28
+  %208 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %86, <2 x bfloat> %87), !dbg !28
+  %209 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %88, <2 x bfloat> %89), !dbg !28
+  %210 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %96, <2 x bfloat> %97), !dbg !28
+  %211 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %98, <2 x bfloat> %99), !dbg !28
+  %212 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %106, <2 x bfloat> %107), !dbg !28
+  %213 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %108, <2 x bfloat> %109), !dbg !28
+  %214 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %116, <2 x bfloat> %117), !dbg !28
+  %215 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %118, <2 x bfloat> %119), !dbg !28
+  %216 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %126, <2 x bfloat> %127), !dbg !28
+  %217 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %128, <2 x bfloat> %129), !dbg !28
+  %218 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %136, <2 x bfloat> %137), !dbg !28
+  %219 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %138, <2 x bfloat> %139), !dbg !28
+  %220 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %146, <2 x bfloat> %147), !dbg !28
+  %221 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %148, <2 x bfloat> %149), !dbg !28
+  %222 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %156, <2 x bfloat> %157), !dbg !28
+  %223 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %158, <2 x bfloat> %159), !dbg !28
+  %224 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %166, <2 x bfloat> %167), !dbg !28
+  %225 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %168, <2 x bfloat> %169), !dbg !28
+  %226 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %176, <2 x bfloat> %177), !dbg !28
+  %227 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %178, <2 x bfloat> %179), !dbg !28
+  %228 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %186, <2 x bfloat> %187), !dbg !28
+  %229 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %188, <2 x bfloat> %189), !dbg !28
+  %230 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %196, <2 x bfloat> %197), !dbg !28
+  %231 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %198, <2 x bfloat> %199), !dbg !28
+  %232 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %200, <2 x bfloat> %201), !dbg !28
+  %233 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %202, <2 x bfloat> %203), !dbg !28
+  %234 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %204, <2 x bfloat> %205), !dbg !28
+  %235 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %206, <2 x bfloat> %207), !dbg !28
+  %236 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %208, <2 x bfloat> %209), !dbg !28
+  %237 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %210, <2 x bfloat> %211), !dbg !28
+  %238 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %212, <2 x bfloat> %213), !dbg !28
+  %239 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %214, <2 x bfloat> %215), !dbg !28
+  %240 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %216, <2 x bfloat> %217), !dbg !28
+  %241 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %218, <2 x bfloat> %219), !dbg !28
+  %242 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %220, <2 x bfloat> %221), !dbg !28
+  %243 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %222, <2 x bfloat> %223), !dbg !28
+  %244 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %224, <2 x bfloat> %225), !dbg !28
+  %245 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %226, <2 x bfloat> %227), !dbg !28
+  %246 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %228, <2 x bfloat> %229), !dbg !28
+  %247 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %230, <2 x bfloat> %231), !dbg !28
+  %248 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %232, <2 x bfloat> %233), !dbg !28
+  %249 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %234, <2 x bfloat> %235), !dbg !28
+  %250 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %236, <2 x bfloat> %237), !dbg !28
+  %251 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %238, <2 x bfloat> %239), !dbg !28
+  %252 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %240, <2 x bfloat> %241), !dbg !28
+  %253 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %242, <2 x bfloat> %243), !dbg !28
+  %254 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %244, <2 x bfloat> %245), !dbg !28
+  %255 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %246, <2 x bfloat> %247), !dbg !28
+  %256 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %248, <2 x bfloat> %249), !dbg !28
+  %257 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %250, <2 x bfloat> %251), !dbg !28
+  %258 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %252, <2 x bfloat> %253), !dbg !28
+  %259 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %254, <2 x bfloat> %255), !dbg !28
+  %260 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %256, <2 x bfloat> %257), !dbg !28
+  %261 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %258, <2 x bfloat> %259), !dbg !28
+  %262 = call <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat> %260, <2 x bfloat> %261), !dbg !28
+  %263 = fpext <2 x bfloat> %262 to <2 x float>, !dbg !28
+  %264 = shl nuw nsw i32 %13, 3, !dbg !23
+  %265 = and i32 %264, 248, !dbg !23
+  %266 = select i1 %35, i32 0, i32 264, !dbg !23
+  %267 = xor i32 %266, %265, !dbg !23
+  %268 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %267, !dbg !23
+  store <2 x float> %263, ptr addrspace(3) %268, align 8, !dbg !23
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !23
+  %269 = and i32 %264, 240, !dbg !23
+  %270 = and i32 %13, 1, !dbg !23
+  %271 = icmp eq i32 %270, 0, !dbg !23
+  %272 = select i1 %271, i32 0, i32 264, !dbg !23
+  %273 = lshr exact i32 %34, 2, !dbg !23
+  %274 = or disjoint i32 %272, %269, !dbg !23
+  %275 = xor i32 %274, %273, !dbg !23
+  %276 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %275, !dbg !23
+  %277 = load <2 x i32>, ptr addrspace(3) %276, align 8, !dbg !23
+  %278 = bitcast <2 x i32> %277 to <2 x float>, !dbg !23
+  %279 = extractelement <2 x i32> %277, i64 0, !dbg !23
+  %280 = call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %279, i32 1, i32 31), !dbg !23
+  %281 = extractelement <2 x i32> %277, i64 1, !dbg !23
+  %282 = call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %281, i32 1, i32 31), !dbg !23
+  %283 = insertelement <2 x i32> poison, i32 %280, i64 0, !dbg !23
+  %284 = insertelement <2 x i32> %283, i32 %282, i64 1, !dbg !23
+  %285 = bitcast <2 x i32> %284 to <2 x float>, !dbg !23
+  %286 = call <2 x float> @llvm.maxnum.v2f32(<2 x float> %278, <2 x float> %285), !dbg !28
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !23
+  %287 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %269, !dbg !23
+  %288 = getelementptr inbounds nuw i8, ptr addrspace(3) %287, i32 %273, !dbg !23
+  store <2 x float> %286, ptr addrspace(3) %288, align 8, !dbg !23
+  call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !23
+  %289 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %265, !dbg !23
+  %290 = load i32, ptr addrspace(3) %289, align 8, !dbg !23
+  %291 = getelementptr inbounds nuw i8, ptr addrspace(3) %289, i32 4, !dbg !23
+  %292 = load i32, ptr addrspace(3) %291, align 4, !dbg !23
+  %293 = lshr i32 %13, 1, !dbg !29
+  %294 = and i32 %293, 31, !dbg !29
+  %295 = call i32 @llvm.nvvm.shfl.sync.idx.i32(i32 -1, i32 %290, i32 %294, i32 31), !dbg !29
+  %296 = call i32 @llvm.nvvm.shfl.sync.idx.i32(i32 -1, i32 %292, i32 %294, i32 31), !dbg !29
+  %.v = select i1 %271, i32 %295, i32 %296, !dbg !29
+  %297 = sext i32 %20 to i64, !dbg !30
+  %298 = getelementptr [4 x i8], ptr addrspace(1) %7, i64 %297, !dbg !30
+  %299 = zext nneg i32 %18 to i64, !dbg !30
+  %300 = getelementptr [4 x i8], ptr addrspace(1) %298, i64 %299, !dbg !30
+  call void asm sideeffect "st.global.b32 [ $1 + 0 ], { $0 };", "r,l"(i32 %.v, ptr addrspace(1) %300) #7, !dbg !31
+  ret void, !dbg !32
+}
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 2147483647) i32 @llvm.nvvm.read.ptx.sreg.ctaid.x() #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 1024) i32 @llvm.nvvm.read.ptx.sreg.tid.x() #1
+
+; Function Attrs: convergent mustprogress nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: readwrite)
+declare { i32, i1 } @llvm.nvvm.elect.sync(i32) #2
+
+; Function Attrs: convergent nocallback nounwind
+declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #3
+
+; Function Attrs: convergent nocallback nofree nounwind memory(argmem: read)
+declare { i32, i32, i32, i32 } @llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16.p3(ptr addrspace(3) readonly captures(none)) #4
+
+; Function Attrs: convergent nocallback nounwind memory(inaccessiblemem: readwrite)
+declare i32 @llvm.nvvm.shfl.sync.bfly.i32(i32, i32, i32, i32) #5
+
+; Function Attrs: convergent nocallback nounwind memory(inaccessiblemem: readwrite)
+declare i32 @llvm.nvvm.shfl.sync.idx.i32(i32, i32, i32, i32) #5
+
+; Function Attrs: nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare <2 x bfloat> @llvm.maxnum.v2bf16(<2 x bfloat>, <2 x bfloat>) #6
+
+; Function Attrs: nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare <2 x float> @llvm.maxnum.v2f32(<2 x float>, <2 x float>) #6
+
+attributes #0 = { nounwind "nvvm.reqntid"="64" }
+attributes #1 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #2 = { convergent mustprogress nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: readwrite) }
+attributes #3 = { convergent nocallback nounwind }
+attributes #4 = { convergent nocallback nofree nounwind memory(argmem: read) }
+attributes #5 = { convergent nocallback nounwind memory(inaccessiblemem: readwrite) }
+attributes #6 = { nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #7 = { nounwind }
+
+!llvm.dbg.cu = !{!0}
+!llvm.module.flags = !{!2, !3}
+
+!0 = distinct !DICompileUnit(language: DW_LANG_C, file: !1, producer: "triton", isOptimized: true, runtimeVersion: 0, emissionKind: LineTablesOnly)
+!1 = !DIFile(filename: "kernels.py", directory: "/opt/triton-src/experiments/tma_reduction_layout/phase11/c2c")
+!2 = !{i32 2, !"Debug Info Version", i32 3}
+!3 = !{i32 4, !"nvvm-reflect-ftz", i32 1}
+!4 = distinct !DISubprogram(name: "one_pass", linkageName: "one_pass", scope: !1, file: !1, line: 10, type: !5, scopeLine: 10, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !0)
+!5 = !DISubroutineType(cc: DW_CC_normal, types: !6)
+!6 = !{null, !7, !9, !9, !9, !10, !10, !10, !11, !13, !13}
+!7 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !8, size: 64, dwarfAddressSpace: 0)
+!8 = !DIBasicType(name: "unknown_type", encoding: DW_ATE_signed)
+!9 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!10 = !DIBasicType(name: "int", size: 64, encoding: DW_ATE_signed)
+!11 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !12, size: 64, dwarfAddressSpace: 1)
+!12 = !DIBasicType(name: "float", size: 32, encoding: DW_ATE_float)
+!13 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !8, size: 64, dwarfAddressSpace: 1)
+!14 = !DILocation(line: 12, column: 11, scope: !4)
+!15 = !DILocation(line: 18, column: 30, scope: !4)
+!16 = !DILocation(line: 16, column: 5, scope: !4)
+!17 = !DILocation(line: 17, column: 5, scope: !4)
+!18 = !DILocation(line: 18, column: 37, scope: !4)
+!19 = !DILocation(line: 18, column: 5, scope: !4)
+!20 = !DILocation(line: 19, column: 5, scope: !4)
+!21 = !DILocation(line: 20, column: 5, scope: !4)
+!22 = !DILocation(line: 22, column: 20, scope: !4)
+!23 = !DILocation(line: 216, column: 16, scope: !24, inlinedAt: !26)
+!24 = distinct !DILexicalBlockFile(scope: !4, file: !25, discriminator: 0)
+!25 = !DIFile(filename: "standard.py", directory: "/opt/triton-src/python/triton/language")
+!26 = !DILocation(line: 22, column: 13, scope: !27)
+!27 = distinct !DILexicalBlockFile(scope: !4, file: !1, discriminator: 0)
+!28 = !DILocation(line: 196, column: 12, scope: !24, inlinedAt: !23)
+!29 = !DILocation(line: 28, column: 14, scope: !4)
+!30 = !DILocation(line: 30, column: 14, scope: !4)
+!31 = !DILocation(line: 30, column: 5, scope: !4)
+!32 = !DILocation(line: 10, column: 1, scope: !4)
