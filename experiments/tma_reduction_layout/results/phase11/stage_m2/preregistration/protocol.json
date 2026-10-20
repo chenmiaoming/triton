@@ -1,0 +1,2452 @@
+{
+  "D1_new_blind_claim": false,
+  "authorization": "User approved GPU experiments and additional hypothesis-driven experiments; preserve evidence and stage commits/push; no PR.",
+  "baseline": {
+    "image": "im-qzTUZumWu2JXjWic8K82cZ",
+    "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+    "source": {
+      "lib/Dialect/TritonGPU/Transforms/OptimizeThreadLocality.cpp": "79349dc3dcdfaf07f3b4fa38cc9189906edad246804ee48bbedd8de5cee9f795",
+      "python/test/unit/cuda/test_tensor_descriptor_cuda.py": "84084ded09c5bc95b7b84e987fea85c198565a1fc98bfd12452ce5f4f53aca98",
+      "test/TritonGPU/optimize-locality.mlir": "8caa5334af13d58220155b9e76c0074376661d465b38f50d9375ebbbe0dfa97e"
+    }
+  },
+  "cases": [
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "compile_cache_key": "f939a9015af0204c4683c2d1fd764df8c73e5616a20e42e43c5afdf32cae4824",
+      "cubin_SHA256": "80b98f39b3f66dfb8d2670390c70108c075d6a39c9b2afb86955e5232db2e347",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_FULL",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          4
+        ]
+      },
+      "layout_id": "M16_N256_w8:vec2:n_first",
+      "layout_key": "M16_N256_w8:vec2:n_first",
+      "num_warps": 8,
+      "old_tag": "M16_N256_w8:vec2:n_first:ONE_FULL",
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_d1/cpu_preflight/attempt_1/export/M16_N256_w8/vec2/n_first/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:vec2:n_first:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            16,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          4
+        ]
+      },
+      "layout_id": "M16_N256_w8:vec2:n_first",
+      "layout_key": "M16_N256_w8:vec2:n_first",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:vec2:n_first:fixed:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          4
+        ]
+      },
+      "layout_id": "M16_N256_w8:vec2:n_first",
+      "layout_key": "M16_N256_w8:vec2:n_first",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:vec2:n_first:native:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "compile_cache_key": "b785eac3ed2673009ddc5e578daeb5ef464ce050ac2998ddc61a6d210357d93b",
+      "cubin_SHA256": "e937e2fb75360e4837ed50d51fff9ba653ca3a4c214af8ca225ec27b88355911",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_FULL",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M16_N256_w8:vec2:within",
+      "layout_key": "M16_N256_w8:vec2:within",
+      "num_warps": 8,
+      "old_tag": "M16_N256_w8:vec2:within:ONE_FULL",
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "placement": "within",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_d1/cpu_preflight/attempt_1/export/M16_N256_w8/vec2/within/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:vec2:within:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            16,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M16_N256_w8:vec2:within",
+      "layout_key": "M16_N256_w8:vec2:within",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:vec2:within:fixed:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M16_N256_w8:vec2:within",
+      "layout_key": "M16_N256_w8:vec2:within",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:vec2:within:native:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 16,
+      "N": 256,
+      "compile_cache_key": "2f48193ecf7e0cd7ff80cf7c06c0e70e74acd73446c4ab88712923d1af376e52",
+      "cubin_SHA256": "2ef341d4f24b256695760360a1567c9af535045fbb24c0e6d8dcdf3d5b72c11b",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_TRANSFER",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout_key": "M16_N256_w8:control",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "control",
+      "path": "host",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_d1/cpu_preflight/attempt_1/export/M16_N256_w8/control/ONE_TRANSFER",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M16_N256_w8:control:ONE_TRANSFER",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            16,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ]
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "cubin_SHA256": "a49bf6cbfb60ecfbc75b37b4fcc5c8b480f4a341aad3341ab26bb39b3120ac15",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "ONE_FULL",
+      "full_grid": 32768,
+      "function_name": "explicit",
+      "global_rows": 24576,
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 32768,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec2:n_first",
+      "layout_key": "M32_N64_w8:vec2:n_first",
+      "num_warps": 8,
+      "old_tag": "M32_N64_w8:vec2:n_first:ONE_FULL",
+      "one_pass": true,
+      "op": "max",
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "pipeline": "gluon",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N64_w8/vec2/n_first/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:n_first:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec2",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec2:n_first",
+      "layout_key": "M32_N64_w8:vec2:n_first",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:n_first:fixed:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec2:n_first",
+      "layout_key": "M32_N64_w8:vec2:n_first",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:n_first:native:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "compile_cache_key": "0d93f7d4d813529fc894c8dafde454758ae09348d17a3ed3498bcfd2a928a59a",
+      "cubin_SHA256": "014d9bb680af4b8bf448153d2b57e6e540ceaf0d3218788e7ec7bf02300a03bc",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "ONE_FULL",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec2:within",
+      "layout_key": "M32_N64_w8:vec2:within",
+      "num_warps": 8,
+      "old_tag": "M32_N64_w8:vec2:within:ONE_FULL",
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "placement": "within",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N64_w8/vec2/within/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:within:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec2:within",
+      "layout_key": "M32_N64_w8:vec2:within",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:within:fixed:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec2:within",
+      "layout_key": "M32_N64_w8:vec2:within",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec2:within:native:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              2
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              8,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N64_w8:bfloat16:max:host",
+      "cubin_SHA256": "0d4e2d86b723e727f9e3f1e74c6e6713b80ed6fc0b61ec185c32c94b5584c7c6",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "ONE_FULL",
+      "full_grid": 32768,
+      "function_name": "explicit",
+      "global_rows": 24576,
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 32768,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec8:n_first",
+      "layout_key": "M32_N64_w8:vec8:n_first",
+      "num_warps": 8,
+      "old_tag": "M32_N64_w8:vec8:n_first:ONE_FULL",
+      "one_pass": true,
+      "op": "max",
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "pipeline": "gluon",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N64_w8/vec8/n_first/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:n_first:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec8",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec8:n_first",
+      "layout_key": "M32_N64_w8:vec8:n_first",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:n_first:fixed:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          4,
+          8
+        ],
+        "warps_per_cta": [
+          1,
+          8,
+          1
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec8:n_first",
+      "layout_key": "M32_N64_w8:vec8:n_first",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:n_first:native:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "compile_cache_key": "a4a791a99d2bc13a084d1acb320d198a3fffaec92c638603d781ff63dbbaabfe",
+      "cubin_SHA256": "c0e81c9a52b3a7c3c59b2df1683807feb4b8c4dd152fead1f6a926ca4c11a8d3",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "ONE_FULL",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec8:within",
+      "layout_key": "M32_N64_w8:vec8:within",
+      "num_warps": 8,
+      "old_tag": "M32_N64_w8:vec8:within:ONE_FULL",
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "placement": "within",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N64_w8/vec8/within/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:within:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec8:within",
+      "layout_key": "M32_N64_w8:vec8:within",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:within:fixed:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          32,
+          1
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          8
+        ]
+      },
+      "layout_id": "M32_N64_w8:vec8:within",
+      "layout_key": "M32_N64_w8:vec8:within",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:vec8:within:native:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 64,
+      "cubin_SHA256": "772a4daa6e0f9b2fcdc8b30d74011d7c7839f659ca8ef3a954c6ec5a7579e4e9",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 4104,
+      "family": "ONE_TRANSFER",
+      "full_grid": 32768,
+      "function_name": "transfer",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout_id": "M32_N64_w8:vec1:n_first",
+      "layout_key": "M32_N64_w8:control",
+      "num_warps": 8,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "control",
+      "path": "host",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N64_w8/control/ONE_TRANSFER",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N64_w8:control:ONE_TRANSFER",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ]
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "cubin_SHA256": "7d71942d44a33895d5d3049caa6a4b0321746c8267e8f09486093d9062a2b45e",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_FULL",
+      "full_grid": 16384,
+      "function_name": "explicit",
+      "global_rows": 24576,
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 16384,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec2:n_first",
+      "layout_key": "M32_N128_w4:vec2:n_first",
+      "num_warps": 4,
+      "old_tag": "M32_N128_w4:vec2:n_first:ONE_FULL",
+      "one_pass": true,
+      "op": "max",
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "pipeline": "gluon",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N128_w4/vec2/n_first/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:n_first:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec2",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec2:n_first",
+      "layout_key": "M32_N128_w4:vec2:n_first",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:n_first:fixed:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          1,
+          32
+        ],
+        "warps_per_cta": [
+          1,
+          2,
+          2
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec2:n_first",
+      "layout_key": "M32_N128_w4:vec2:n_first",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:n_first:native:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "compile_cache_key": "2f6ad455747a8943fd2c1ea233cea3702c39758b9a837070fdc0ce62a34f3e7d",
+      "cubin_SHA256": "0372ea1ad46e6abd6cf9ac9ec72d86f52275620f47bc7c7040627c24c694882a",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_FULL",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec2:within",
+      "layout_key": "M32_N128_w4:vec2:within",
+      "num_warps": 4,
+      "old_tag": "M32_N128_w4:vec2:within:ONE_FULL",
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "placement": "within",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N128_w4/vec2/within/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:within:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec2:within",
+      "layout_key": "M32_N128_w4:vec2:within",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:within:fixed:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          2
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec2:within",
+      "layout_key": "M32_N128_w4:vec2:within",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec2:within:native:ONE_FULL",
+      "vec": 2
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "candidates": [
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1,
+              4
+            ]
+          },
+          "variant": "fixed_vec1"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              2,
+              2
+            ]
+          },
+          "variant": "fixed_vec2"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec4"
+        },
+        {
+          "layout": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4,
+              1
+            ]
+          },
+          "variant": "fixed_vec8"
+        }
+      ],
+      "case_id": "M32_N128_w4:bfloat16:max:host",
+      "cubin_SHA256": "1135944fa62712bc1cf9985b9c26ac61acff428b6bea6caeb781cc14b9c51f4d",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_FULL",
+      "full_grid": 16384,
+      "function_name": "explicit",
+      "global_rows": 24576,
+      "global_scratch_align": 1,
+      "global_scratch_size": 0,
+      "grid": 16384,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec8:n_first",
+      "layout_key": "M32_N128_w4:vec8:n_first",
+      "num_warps": 4,
+      "old_tag": "M32_N128_w4:vec8:n_first:ONE_FULL",
+      "one_pass": true,
+      "op": "max",
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "pipeline": "gluon",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N128_w4/vec8/n_first/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:n_first:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "variant": "fixed_vec8",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec8:n_first",
+      "layout_key": "M32_N128_w4:vec8:n_first",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:n_first:fixed:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          2,
+          16
+        ],
+        "warps_per_cta": [
+          1,
+          4,
+          1
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec8:n_first",
+      "layout_key": "M32_N128_w4:vec8:n_first",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "n_first",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:n_first:native:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "compile_cache_key": "da19109ac382ce3f8bb625df1624ce613265fbf17cc78a928e7174dc45fa14d7",
+      "cubin_SHA256": "fa8d1a1de6e818bb529539ca15805395e67ea39aad352eb449afeb530f9c6770",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_FULL",
+      "function_name": "one_pass",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec8:within",
+      "layout_key": "M32_N128_w4:vec8:within",
+      "num_warps": 4,
+      "old_tag": "M32_N128_w4:vec8:within:ONE_FULL",
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "legacy_fixed",
+      "path": "host",
+      "placement": "within",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N128_w4/vec8/within/ONE_FULL",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:within:legacy_fixed:ONE_FULL",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ],
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec8:within",
+      "layout_key": "M32_N128_w4:vec8:within",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "fixed",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:within:fixed:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "dtype": "bfloat16",
+      "family": "ONE_FULL",
+      "global_rows": 24576,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "size_per_thread": [
+          1,
+          1,
+          8
+        ],
+        "threads_per_warp": [
+          1,
+          8,
+          4
+        ],
+        "warps_per_cta": [
+          1,
+          1,
+          4
+        ]
+      },
+      "layout_id": "M32_N128_w4:vec8:within",
+      "layout_key": "M32_N128_w4:vec8:within",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "native",
+      "path": "host",
+      "placement": "within",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:vec8:within:native:ONE_FULL",
+      "vec": 8
+    },
+    {
+      "ABI_kind": "descriptor",
+      "D": 1,
+      "M": 32,
+      "N": 128,
+      "cubin_SHA256": "fc65adbc097697c74aa953ee11b46c9f25deca9e1f29fe7b73014994f612b400",
+      "dtype": "bfloat16",
+      "dynamic_smem_bytes": 8200,
+      "family": "ONE_TRANSFER",
+      "full_grid": 16384,
+      "function_name": "transfer",
+      "global_rows": 24576,
+      "global_scratch_size": 0,
+      "input_kind": "bf16_matrix",
+      "kind": "composition",
+      "layout_id": "M32_N128_w4:vec1:n_first",
+      "layout_key": "M32_N128_w4:control",
+      "num_warps": 4,
+      "one_pass": true,
+      "original_once": true,
+      "output_policy": "control",
+      "path": "host",
+      "placement": "n_first",
+      "reuse_source": "experiments/tma_reduction_layout/results/phase11/stage_c2d/cpu_preflight/attempt_2/export/M32_N128_w4/control/ONE_TRANSFER",
+      "shared_layout": {
+        "element_bitwidth": 16,
+        "rank": 3,
+        "swizzle_byte_width": 128,
+        "transposed": false
+      },
+      "tag": "M32_N128_w4:control:ONE_TRANSFER",
+      "tensordesc_meta": [
+        {
+          "block_size": [
+            1,
+            32,
+            64
+          ],
+          "elem_size": 2,
+          "elem_type": 10,
+          "fp4_padded": false,
+          "is_im2col": false,
+          "swizzle": 3
+        }
+      ]
+    }
+  ],
+  "causal_scope": "Output-policy interaction, not automatically an isolated MO latency. Inspect upstream and global-store changes.",
+  "compiler_reference_SHA256": {
+    "lib/Analysis/Utility.cpp": "7236225de9fc456492c82b82d9b683e240043b323d61da865bacffe57d409007",
+    "lib/Conversion/TritonGPUToLLVM/ConvertLayoutOpToLLVM.cpp": "8478a9df5dd8e71eefbc7fa445057938e899f555b8684a008258e64b81a25f43",
+    "lib/Dialect/TritonGPU/IR/LinearLayoutConversions.cpp": "3bfff6c7f75de545558ff48a6f8ac5583eeba91594e2fcdad140b5d91b580238",
+    "lib/Tools/LinearLayout.cpp": "ad9ceda1d7af9753610d6adaf2957a310a51fc4cd417a6ce4f63b374d3d264e0"
+  },
+  "correctness": {
+    "patterns": [
+      "quarter",
+      "random",
+      "boundary"
+    ]
+  },
+  "extension_pairs": [
+    [
+      32,
+      64,
+      8,
+      8
+    ],
+    [
+      32,
+      128,
+      4,
+      8
+    ],
+    [
+      16,
+      256,
+      8,
+      2
+    ]
+  ],
+  "frozen_at_UTC": "2026-10-20T07:08:40.438026+00:00",
+  "native_rebuilds": 0,
+  "pair_geometries_vectors": [
+    [
+      32,
+      64,
+      8,
+      2
+    ],
+    [
+      32,
+      128,
+      4,
+      2
+    ],
+    [
+      32,
+      64,
+      8,
+      8
+    ],
+    [
+      32,
+      128,
+      4,
+      8
+    ],
+    [
+      16,
+      256,
+      8,
+      2
+    ]
+  ],
+  "parent_commit": "272bc673fc447a4f08ae820bb87fb1eedb8c6b0f",
+  "pinned_upstream": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "plan_SHA256": "523a90629e575b19616c3ac34bc4aefed52dd1be11aa27a24e0835f65b54ab5a",
+  "primary_contrast": "(within_fixed-NF_fixed)-(within_native-NF_native), same worker and exact q",
+  "primary_endpoint": "FULL time-versus-grid/SM OLS slope at 128/256/384 MiB, ns/tile/SM",
+  "primary_pairs": [
+    [
+      32,
+      64,
+      8,
+      2
+    ],
+    [
+      32,
+      128,
+      4,
+      2
+    ]
+  ],
+  "prior_manifest_SHA256": "30c75e968521a95e0aa2b291dc5e08002407a76f020f7c3608cbda4ab51cd565",
+  "profile": "chenmiaoming",
+  "profiles": {
+    "MC_software_K": [
+      16,
+      64
+    ],
+    "duration_used_for_timing": false,
+    "group_limit": 12,
+    "metrics": [
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum",
+      "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum",
+      "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum",
+      "smsp__inst_executed.sum",
+      "sm__warps_active.avg.pct_of_peak_sustained_active",
+      "dram__bytes_read.sum",
+      "dram__bytes_write.sum",
+      "dram__throughput.avg.pct_of_peak_sustained_elapsed",
+      "l1tex__t_sectors_pipe_lsu_mem_global_op_st.sum"
+    ],
+    "q_conditions": [
+      "natural",
+      "1",
+      "4"
+    ]
+  },
+  "q_meaning": "driver occupancy capacity, not instantaneous residency",
+  "retry_policy": {
+    "budget_error": "stop; user switches/funds profile",
+    "max_infrastructure_attempts": 3,
+    "performance_based_retries": false
+  },
+  "revision": 1,
+  "selector_refit": false,
+  "source_bridge": "Original fixed CUBIN versus matched-source fixed; all source/code/resource differences retained.",
+  "stage": "M2",
+  "stop": "Finish M2/report/validator/commit/push; no automatic D2, model promotion or PR.",
+  "target": {
+    "CC": [
+      9,
+      0
+    ],
+    "GPU": "H100!",
+    "SM_count": 132
+  },
+  "timing": {
+    "MC_grid_SM_multipliers": [
+      32,
+      64,
+      96
+    ],
+    "full_grid_factors": [
+      1,
+      2,
+      3
+    ],
+    "order_seed": 20261020,
+    "outcome_based_repeats": false,
+    "q_conditions": [
+      "natural",
+      "1",
+      "2",
+      "4",
+      "8"
+    ],
+    "samples_per_cell": 12,
+    "samples_per_visit": 4,
+    "single_kernel_graph": true,
+    "visits": 3,
+    "warmups": 2,
+    "workers": 3
+  },
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/c1/common.py": "280bd4a1ae5f3a30ba900e0e4220973f1229fff2450f8eec634ec5a524a79ff4",
+    "experiments/tma_reduction_layout/phase11/c15/common.py": "9f7b3fad3a38dc7576f4bae996f4250480444bfcb943134a2c1f4ea6ca2aa69d",
+    "experiments/tma_reduction_layout/phase11/c16/common.py": "b5bd3b24aa8be6c1cc8fa4d83e02ea3d3db593fc63ef1aca485cac80931896ee",
+    "experiments/tma_reduction_layout/phase11/c2/common.py": "a0b9be864da23b5ecb29f261999081b78771ab93931ef0628f7808633bd2a4b8",
+    "experiments/tma_reduction_layout/phase11/c2/data.py": "bbcd6f9ee8c3dbbe205919019227e17d33b9ca1db7230df74d65823e4ba0668d",
+    "experiments/tma_reduction_layout/phase11/c2/driver.py": "676d26c64af9bbcc452e447460d8c1aa8d7572c05dd890dfe7600b7ba9ad0eb7",
+    "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+    "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64",
+    "experiments/tma_reduction_layout/phase11/c2d/common.py": "a3bf6d877f8fb1d8b0e921219843ddc2a168cae2a3f007670f2b98296ae6a9a6",
+    "experiments/tma_reduction_layout/phase11/c2d/driver.py": "10dc8d8e89c5d3eb05aa98645a503d1d8c8931e349c2b45f7ce2e3238b4400e9",
+    "experiments/tma_reduction_layout/phase11/c2d/profile_one.py": "2062efdf4c1847b837070cae44c05b73b1ed4c83bf65b706051cff6fcea58eb1",
+    "experiments/tma_reduction_layout/phase11/c2d/run.py": "94c8c60957792400ff865e8a9b1636e29d6e142013e833f64eb68d72f1f3ec5d",
+    "experiments/tma_reduction_layout/phase11/c2d/runtime.py": "8f134b15bf2fb8dc0017898b2276baf5c48a99ebb4956647140c9efc136db3b5",
+    "experiments/tma_reduction_layout/phase11/common.py": "2d40b0e98008fd03b931caba5605fc2a3c2527d30b49d2027f130da3c4808bf0",
+    "experiments/tma_reduction_layout/phase11/d1/common.py": "afa313c766b9976395c0d7ed18b0b78618844169a5bb4d2b7e02ef882a8d042b",
+    "experiments/tma_reduction_layout/phase11/d1/driver.py": "00f87b2971ad48a592acca13532e643bf2d8b858a8dee6c31b37d877a521845b",
+    "experiments/tma_reduction_layout/phase11/d1/profile_one.py": "1c01a8e7ed210cdc259880d2dae34b00850551c9615ac05aeb593c3c1b90b24b",
+    "experiments/tma_reduction_layout/phase11/d1/run.py": "c18c3a44b8ed0122acf4f3f07d679c0dc4e8731b05555a43b85fe49871e9e3a7",
+    "experiments/tma_reduction_layout/phase11/d1/runtime.py": "5c141cc90cd12325963982e9a0ae7b74644646c5598799a915ea838c59c5aeeb",
+    "experiments/tma_reduction_layout/phase11/launch.py": "b5574c3ae1733acd4f32015cf2b9c570eec4097481cf2ad885c0c6ce3c72cb54",
+    "experiments/tma_reduction_layout/phase11/m2/common.py": "98f3eda0eb76490183d3f2a429c55ebf6839b15dd573c8806a6bcd8354c8538b",
+    "experiments/tma_reduction_layout/phase11/m2/kernels.py": "ff7155ab02babf6fef0fb4d218691fb3fa8f3d2cf5cfe1ea13d12221b1bab709",
+    "experiments/tma_reduction_layout/phase11/m2/profile_one.py": "aefe1b4c63fd1a98a8e78a2d73e656b5b2f1dfdbcb152a2f519657938a3276f8",
+    "experiments/tma_reduction_layout/phase11/m2/run.py": "c7a335c8261c5aeeee71fd6ca9ac22cbcccd2abacab4dd9108717931e9f2b783",
+    "experiments/tma_reduction_layout/phase11/m2/runtime.py": "a675b0af61d38e1a9b7fc7f1c916803a0566b1ea4a14b44d9a25219a49bd06fc",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}
