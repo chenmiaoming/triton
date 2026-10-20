@@ -1,0 +1,1935 @@
+{
+  "GPU_authorized": true,
+  "cases": [
+    {
+      "BM": 32,
+      "BN": 128,
+      "M": 128,
+      "MODE": "dwdb",
+      "N": 4096,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C01",
+      "kernel": "column_reduce",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "a": "*fp32",
+        "aux": "*fp32",
+        "b": "*fp32",
+        "out": "*fp32",
+        "weights": "*fp32"
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "M": 64,
+      "N": 128,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C02",
+      "kernel": "weighted_pv",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "out": "*fp32",
+        "prob": "*fp32",
+        "values": "*bf16"
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "M": 32,
+      "N": 128,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C03",
+      "kernel": "column_quant",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "quantized": "*fp8e4nv",
+        "scale_out": "*fp32",
+        "x": "*bf16"
+      }
+    },
+    {
+      "BM": 16,
+      "BN": 128,
+      "M": 19,
+      "N": 128,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C04",
+      "kernel": "rms_backward",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "dx": "*bf16",
+        "dy": "*bf16",
+        "gamma": "*bf16",
+        "partial_dw": "*fp32",
+        "rstd": "*fp32",
+        "x": "*bf16"
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "M": 257,
+      "MODE": "bias",
+      "N": 1024,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C05",
+      "kernel": "column_reduce",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "a": "*bf16",
+        "aux": "*fp32",
+        "b": "*bf16",
+        "out": "*fp32",
+        "weights": "*fp32"
+      }
+    },
+    {
+      "BM": 16,
+      "BN": 128,
+      "M": 13,
+      "N": 128,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C06",
+      "kernel": "segment_merge",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 2048,
+            "max_elements_per_thread": 16,
+            "min_elements_per_thread": 16,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "maxima": "*fp32",
+        "out": "*fp32",
+        "partial": "*fp32",
+        "sums": "*fp32"
+      }
+    },
+    {
+      "BM": 8,
+      "BN": 128,
+      "M": 128,
+      "N": 128,
+      "STEPS": 4,
+      "W": 1,
+      "groups_for_correctness": 2,
+      "id": "C07",
+      "kernel": "recurrent_gdn",
+      "layouts": [
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 1024,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 32
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 1024,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 32
+          }
+        },
+        {
+          "aliases": [
+            "vec4:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 1024,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 32
+          }
+        },
+        {
+          "aliases": [
+            "vec8:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 1024,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 32
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "beta": "*fp32",
+        "gates": "*fp32",
+        "keys": "*bf16",
+        "out": "*bf16",
+        "queries": "*bf16",
+        "state": "*fp32",
+        "updated": "*fp32",
+        "values": "*bf16"
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "M": 193,
+      "MODE": "pool_mean",
+      "N": 768,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C08",
+      "kernel": "column_reduce",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "a": "*bf16",
+        "aux": "*fp32",
+        "b": "*bf16",
+        "out": "*fp32",
+        "weights": "*fp32"
+      }
+    },
+    {
+      "BM": 32,
+      "BN": 128,
+      "M": 193,
+      "MODE": "pool_max",
+      "N": 768,
+      "W": 4,
+      "groups_for_correctness": 2,
+      "id": "C08_max",
+      "kernel": "column_reduce",
+      "layouts": [
+        {
+          "aliases": [
+            "vec1:within"
+          ],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec1:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              2,
+              2
+            ]
+          },
+          "name": "vec2:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec2:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec4:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec4:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "name": "vec8:n_first",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        },
+        {
+          "aliases": [],
+          "layout": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "name": "vec8:within",
+          "ownership": {
+            "logical_elements": 4096,
+            "max_elements_per_thread": 32,
+            "min_elements_per_thread": 32,
+            "physical_threads": 128
+          }
+        }
+      ],
+      "parent": "C08",
+      "production_adapter_verified": false,
+      "scope": "semantic_fixture",
+      "signature": {
+        "a": "*bf16",
+        "aux": "*fp32",
+        "b": "*bf16",
+        "out": "*fp32",
+        "weights": "*fp32"
+      }
+    }
+  ],
+  "compiler_calls": 0,
+  "correctness": {
+    "BF16_atol": 0.0001,
+    "BF16_rtol": 0.008,
+    "FP32_atol": 2e-05,
+    "FP32_rtol": 0.0001,
+    "FP8": "exact codes",
+    "canary_bytes_each_side": 256,
+    "full_outputs": true,
+    "input_readback": true,
+    "patterns": [
+      "quarter",
+      "finite",
+      "masked"
+    ]
+  },
+  "expected_records": 78,
+  "expected_unique_binaries": 69,
+  "fixture_payload_source": "operator_survey_preparation/20261021/pinned_cpu_attempt_001",
+  "funded_profile": "chenmiaoming",
+  "native_rebuilds": 0,
+  "parent_commit": "f24e4c5ebc0ac8ef080d31d996f334c2d6de87bb",
+  "preparation_freeze_SHA256": "5c3fc03a4d5e5ccc177b1fc20b7248f79b331dd481e7acde85c524e6ef42aff5",
+  "scope": "nine semantic fixture specializations only, not production-library validation",
+  "stage": "operator_gpu_g1_fixture_correctness",
+  "timing_authorized_but_not_part_of_this_gate": true,
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/operator_gpu/common.py": "ce256c605c35afa55a2a6bc62eb6ca6a3bdb9986315d0d986ce189cd34511b9f",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/driver.py": "656632259024b2edbd8ad56820350097a844885bfc35fc1859f1cae66e824cb4",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/fixtures.py": "ad124fa1ff95307cbc4e6a085a1f282f460c786a0eadc8c0add51c1d0beeeb59",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/fixtures_run.py": "e6b0775eee648e117371d7485bf141d04e1ac01904da03d6c1cd6ca978386084",
+    "experiments/tma_reduction_layout/phase11/operator_survey/cases.py": "214025936b6550114364a7641eb5d8263da2e8e5c1d4c27e663a87f4c0b9793f",
+    "experiments/tma_reduction_layout/phase11/operator_survey/oracles.py": "68059dfd160a9d682fbd5a7137ae5079ae7dba20ece3899cc035f8d6356ff134",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}
