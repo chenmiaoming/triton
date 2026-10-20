@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "survey_date": "2026-10-20",
+  "status": "cpu_preparation_available",
+  "gpu_execution_started": false,
+  "benchmark_protocol_frozen": false,
+  "historical_artifacts_modified": false,
+  "preparation": {
+    "date": "2026-10-21",
+    "scope": "paired canonical semantic fixtures; not original production kernels",
+    "plan": "PLAN.md",
+    "semantic_case_count": 9,
+    "gpu_correctness_verified": false,
+    "production_adapters_verified": false,
+    "whole_graph_bridges_verified": false,
+    "C03_recipe": "FP32-scale dynamic per-column FP8 fixture; MXFP8 E8M0 adapter remains pending"
+  },
+  "original_five_ids": ["C01", "C02", "C03", "C04", "C05"],
+  "inference_screening_order": ["C06", "C02", "C08", "C07"],
+  "candidates": [
+    {
+      "id": "C01",
+      "name": "normalization_parameter_gradient_merge",
+      "origin": "original_five",
+      "workloads": ["training"],
+      "status": "accepted_candidate",
+      "backend_evidence": "Triton LayerNorm tutorial verified; RMSNorm final torch.sum backend requires capture",
+      "source_urls": [
+        "https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py",
+        "https://github.com/linkedin/Liger-Kernel/blob/main/src/liger_kernel/ops/rms_norm.py"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C02",
+      "name": "decode_attention_non_dot_pv",
+      "origin": "original_five",
+      "workloads": ["inference"],
+      "status": "accepted_candidate",
+      "backend_evidence": "SGLang Triton normal decode uses feature-axis QK and token-axis PV reductions",
+      "source_urls": [
+        "https://github.com/sgl-project/sglang/blob/main/python/sglang/kernels/ops/attention/decode_attention.py"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C03",
+      "name": "columnwise_fp8_mxfp8_quantization",
+      "origin": "original_five",
+      "workloads": ["recipe_dependent_training_or_inference"],
+      "status": "accepted_candidate",
+      "backend_evidence": "TorchAO to_mxfp8_dim1_kernel verified; model recipe applicability still required",
+      "source_urls": [
+        "https://github.com/pytorch/ao/blob/main/torchao/prototype/mx_formats/kernels.py"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C04",
+      "name": "fused_rmsnorm_backward_two_axes",
+      "origin": "original_five",
+      "workloads": ["training"],
+      "status": "accepted_candidate",
+      "backend_evidence": "Liger block backward verified; BLOCK_SIZE<=256 and n_rows>=32768 and not row_mode",
+      "source_urls": [
+        "https://github.com/linkedin/Liger-Kernel/blob/main/src/liger_kernel/ops/rms_norm.py"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C05",
+      "name": "linear_mlp_bias_gradient",
+      "origin": "original_five",
+      "workloads": ["training"],
+      "status": "accepted_candidate",
+      "backend_evidence": "Liger has optional bias torch.sum; actual Triton or Inductor lowering requires capture",
+      "source_urls": [
+        "https://github.com/linkedin/Liger-Kernel/blob/main/src/liger_kernel/ops/fused_linear_cross_entropy.py"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C06",
+      "name": "parallel_segmented_attention_merge",
+      "origin": "inference_followup",
+      "workloads": ["inference"],
+      "status": "source_verified_candidate",
+      "backend_evidence": "vLLM unified_attention reduce_segments is pointer load of [segment,head_dim] followed by axis=0 sum; reached only through use_3d",
+      "source_urls": [
+        "https://github.com/vllm-project/vllm/blob/main/vllm/v1/attention/ops/triton_unified_attention.py#L665",
+        "https://github.com/facebookresearch/xformers/blob/v0.0.29/xformers/ops/fmha/_triton/splitk_kernels.py#L730"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C07",
+      "name": "gated_deltanet_recurrent_state_update",
+      "origin": "inference_followup",
+      "workloads": ["inference"],
+      "status": "related_mechanism_candidate",
+      "backend_evidence": "FLA recurrent Triton kernel verified; actual layer uses V-first state and launcher uses one warp",
+      "source_urls": [
+        "https://github.com/fla-org/flash-linear-attention/blob/main/fla/ops/gated_delta_rule/fused_recurrent.py",
+        "https://github.com/fla-org/flash-linear-attention/blob/main/fla/layers/gated_deltanet.py"
+      ],
+      "performance_issue_demonstrated": false
+    },
+    {
+      "id": "C08",
+      "name": "sentence_embedding_token_pooling",
+      "origin": "inference_followup",
+      "workloads": ["inference"],
+      "status": "semantic_candidate_backend_pending",
+      "backend_evidence": "Sentence Transformers v3.4.1 has mean, weighted mean and max over tokens; not yet a captured Triton kernel; current vLLM MeanPool uses index_add_",
+      "source_urls": [
+        "https://github.com/UKPLab/sentence-transformers/blob/v3.4.1/sentence_transformers/models/Pooling.py",
+        "https://github.com/vllm-project/vllm/blob/main/vllm/model_executor/layers/pooler/seqwise/methods.py"
+      ],
+      "performance_issue_demonstrated": false
+    }
+  ],
+  "optional_controls": [
+    {
+      "name": "moe_expert_combine",
+      "reason": "TE Triton forward unpermute loops over experts with a vector accumulator; a vLLM wrapper calls _moe_C; no same reduction-distribution defect established",
+      "source_url": "https://github.com/NVIDIA/TransformerEngine/blob/main/transformer_engine/common/triton/permutation.py#L297"
+    },
+    {
+      "name": "mamba_selective_state_update",
+      "reason": "Under standard contiguous state, dstate is both contiguous and reduced; direction-aligned control",
+      "source_url": "https://github.com/state-spaces/mamba/blob/main/mamba_ssm/ops/triton/selective_state_update.py"
+    }
+  ]
+}
