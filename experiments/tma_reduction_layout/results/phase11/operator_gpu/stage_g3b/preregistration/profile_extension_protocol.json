@@ -1,0 +1,2670 @@
+{
+  "CPU_metric_check_reused": "same tools image, same gh100 target, stage_g3a ncu_cli_check.json",
+  "confirmatory_claim": false,
+  "frozen_at_UTC": "2026-10-21T08:41:55.609991+00:00",
+  "groups": [
+    {
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "N": 1024,
+        "P": 256,
+        "W": 4,
+        "family": "C01",
+        "id": "C01_p256_n1024",
+        "layouts": [
+          {
+            "aliases": [
+              "vec1:within"
+            ],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec1:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                2
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                2,
+                2
+              ]
+            },
+            "name": "vec2:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                2
+              ],
+              "threads_per_warp": [
+                2,
+                16
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec2:within"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                4
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "name": "vec4:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                4
+              ],
+              "threads_per_warp": [
+                4,
+                8
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec4:within"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                2,
+                16
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "name": "vec8:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                8,
+                4
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec8:within"
+          }
+        ],
+        "num_stages": 3,
+        "pipeline_M": [
+          128,
+          2048
+        ]
+      },
+      "records": [
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[2, 2], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "8071a204595b324e4ea2093bdb2a73bd6ee6092f93048875c2e4609e1be65de9",
+              "kernel.glir": "417272940d58b0523ee928bb4e3ff35b52db35cdc2aacc931525bdedf636937d",
+              "kernel.llir": "296458bb16902b4c8ef7853a679283777487f4f7849e64ba5789a0bc51f5c876",
+              "kernel.ptx": "0122fa001b0d7d5a5cfbb3db6788b7ec37e4ca19b6cb161dfc55754f19953d5b",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "72782f8faa896b110bf5b8d151f41ff791eca08405f2e7fc6fc66d4be31f418a",
+              "kernel.ttgir": "55294b85f31860b27477bbed4a9bd8e4dafc58887e95b928f0aa4983c27fda7e"
+            },
+            "artifact_directory": "artifacts/C01_p256_n1024_vec2_n_first",
+            "compile_key": "2236c884b42693744af6c4f718dbf7d12a86a4f3749d0a70cfe6cc144cffb65b",
+            "cubin_SHA256": "8071a204595b324e4ea2093bdb2a73bd6ee6092f93048875c2e4609e1be65de9",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p256_n1024",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  2
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  2,
+                  2
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p256_n1024:vec2:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "34ea5062e7fba8ac883bf8a6b030052e95ed7b9995f153ce4e260ea49d813d2d",
+              "kernel.glir": "f5c10a4e2300ab29186ec4ee1d18f007c8e3c86dbc50b0ed15a99ce84d179eb8",
+              "kernel.llir": "103c6ebe05490ed46950df9e1933a7ce5a0a84231a9a520744810d345600e635",
+              "kernel.ptx": "79fb97a82d8683bd658fd407192fbffa0ebbc26c1844146818822b8adfe0546b",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "82e8a3d16863477dd91ad758e8aaf5aee7c59fc494e6284d8aa3f7fa5fd55259",
+              "kernel.ttgir": "883bb7c029debe42767f4d6cc7b85569d9aae661ae5a26131af652e3ae2739bb"
+            },
+            "artifact_directory": "artifacts/C01_p256_n1024_vec4_n_first",
+            "compile_key": "91adf992e2213ab843057aef68674b3e5610a0485f4a7738ceebb2b4f1117a8c",
+            "cubin_SHA256": "34ea5062e7fba8ac883bf8a6b030052e95ed7b9995f153ce4e260ea49d813d2d",
+            "dynamic_smem_bytes": 2048,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p256_n1024",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  4
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  4,
+                  1
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p256_n1024:vec4:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "993879fca91ae6af9e205ffc87c20737ced972b2ca852b9ca3a4a85db47fa29b",
+              "kernel.glir": "5867326c1d55b34cdd2a14d5903a275c42c5ae2869c327aa9797b29fe1e36a8d",
+              "kernel.llir": "403e2314a298f105e09111e47f5dd228f25fbbf7f623dd7eb0e3222dec75df61",
+              "kernel.ptx": "b972a62db76614b83cd370542dcde990d83a217f667172614330f6bd01ecbfe6",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "84e1082fec3ec555158f4c1f4b55d6647298b4610928cee9a0f3f3981f12fe7f",
+              "kernel.ttgir": "587710228c77bb79f4d0612a6ed57be327b8cd3791b178449b1737e4e33da8c2"
+            },
+            "artifact_directory": "artifacts/C01_p256_n1024_vec4_within",
+            "compile_key": "eeb9881eca35807ce9aca4a81eaf704964bfa0045118d43ba764b5336c26c677",
+            "cubin_SHA256": "993879fca91ae6af9e205ffc87c20737ced972b2ca852b9ca3a4a85db47fa29b",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p256_n1024",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  4
+                ],
+                "threads_per_warp": [
+                  4,
+                  8
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p256_n1024:vec4:within"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "True",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "b11131e9b3df26a4d0d266b2769e9f850eea203db4eafb89a752ad5a4a585ae0",
+              "kernel.glir": "b57b1d1aa6f9d463ea7178bce47e333e635aa45a72d6f6a8113eebe9f5492e20",
+              "kernel.llir": "11a6e0bc5ed6b626bdeb3d1aab7549a1ebc104bf56c3fef264bf6496bd30ad32",
+              "kernel.ptx": "0d6cdc4ba7c80df0503ae036f495677e7bdb223c642a055060432d31eb4fdb97",
+              "kernel.resource.txt": "181f3194295704152078080ba6172976ed6df0e4c34882b5faba510c6b641b30",
+              "kernel.sass": "26cf8b85bd22a23760fd78704b4600d99983266f5de0e2bd99381fa27274c6d1",
+              "kernel.ttgir": "693e4409c5741f2c711d2879ec2ae69d8f1fe9d0d268b2757c9600cfadfbb2c4"
+            },
+            "artifact_directory": "artifacts/C01_p256_n1024_vec1_n_first_native",
+            "compile_key": "aa226a47014d19ea9900d62908e87d4b51c5efc08eaed194886f431ed585cc99",
+            "cubin_SHA256": "b11131e9b3df26a4d0d266b2769e9f850eea203db4eafb89a752ad5a4a585ae0",
+            "dynamic_smem_bytes": 0,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p256_n1024",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  1
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": true,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p256_n1024:vec1:n_first:native"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "N": 4096,
+        "P": 128,
+        "W": 4,
+        "family": "C01",
+        "id": "C01_p128_n4096",
+        "layouts": [
+          {
+            "aliases": [
+              "vec1:within"
+            ],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec1:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                2
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                2,
+                2
+              ]
+            },
+            "name": "vec2:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                2
+              ],
+              "threads_per_warp": [
+                2,
+                16
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec2:within"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                4
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "name": "vec4:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                4
+              ],
+              "threads_per_warp": [
+                4,
+                8
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec4:within"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                2,
+                16
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "name": "vec8:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                8,
+                4
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec8:within"
+          }
+        ],
+        "num_stages": 3,
+        "pipeline_M": [
+          128,
+          2048
+        ]
+      },
+      "records": [
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(6,)": "32",
+              "(7,)": "128"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "M": "i32",
+              "N": "i32"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "3f98fbf02e59a6d776a48e9b5488b7fa2dda059bcd0ed900b87ccb18a8d7484b",
+              "kernel.llir": "e791ba504293622b97778d2d5d755f8bad73484c0ff5cc010e1cd7c582043606",
+              "kernel.ptx": "efe4f5201bb09d45dedea06095c957530c0a9b24ca7411418ce177cbe45624cd",
+              "kernel.resource.txt": "509f001cfb5df540c21615bb9483dff071cc143e90f621913bff0a65e00769a0",
+              "kernel.sass": "583e2c163506f2274a4a72e40310e1ad470a897eb14aeb22b507388d9c5eb202",
+              "kernel.ttgir": "90b8a827d95c23faa6139b409e3e1e0fe8f9dff6900569cc674b37df2deefc97",
+              "kernel.ttir": "80e439311f08b0bce34bb2e1024f2b2bb3fc18ff8af6067bd9c323010c5f2750"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_upstream",
+            "compile_key": "da133d39f0ad0cb071da7cd83f36bcf0307662b6c75df407f1b1fe9c1599e13c",
+            "cubin_SHA256": "3f98fbf02e59a6d776a48e9b5488b7fa2dda059bcd0ed900b87ccb18a8d7484b",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "_layer_norm_bwd_dwdb",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:upstream"
+          }
+        },
+        {
+          "aliases": [
+            "C01_p128_n4096:vec8:n_first"
+          ],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[2, 16], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "6fb637103202b0ab6e28848a2a81b1a56bd13242c8140ca0fc52f1bcd2cba068",
+              "kernel.glir": "60888e5f58850bb192ac10205b7e68c8ae90004084d30f9081fe53b19ca3aca0",
+              "kernel.llir": "9ae9c058af81830f0dde7778425cd1d1531615e75a1a4753fd96a81930b146ae",
+              "kernel.ptx": "ce9673a0ea61e8efab5e5791dc120b5e2e511d6f0f5ed546f24e5404e94df9e9",
+              "kernel.resource.txt": "6efc32315a303d101a26d9f456e653c614e9b970f9baf791f3b0cfa6b49f6c38",
+              "kernel.sass": "fcd24b2a37ed8a232003cc326905739dbfff7cd7621564133dfedc524754148c",
+              "kernel.ttgir": "97096b7caa78b929599e79d9444385a5690851a01b857d73c85a9b623fc048e4"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_gluon_anchor",
+            "compile_key": "ece7fa8eef5f7d3fcb64ad338e45c38b1d9fe81d5d10cabbc8a6bedb406f6f45",
+            "cubin_SHA256": "6fb637103202b0ab6e28848a2a81b1a56bd13242c8140ca0fc52f1bcd2cba068",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  8
+                ],
+                "threads_per_warp": [
+                  2,
+                  16
+                ],
+                "warps_per_cta": [
+                  4,
+                  1
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:gluon_anchor"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "a73eaf63be33964c6e4edfb6b7382de6b9292d7f46efde257f3cffd038f4b28f",
+              "kernel.glir": "4dfe2e9d9b7eb1c056f0725f88c7f34a71a4ecc1f72773c24b2df53633faaaf1",
+              "kernel.llir": "4bb79c0575f05dae813956011ff052d2e629ce3a3890f1f2645860a6255c64ef",
+              "kernel.ptx": "c071393eedce4e3b9420735ee21fa7e99fe9454f0cd7dcdb466deeccee149461",
+              "kernel.resource.txt": "181f3194295704152078080ba6172976ed6df0e4c34882b5faba510c6b641b30",
+              "kernel.sass": "26cf8b85bd22a23760fd78704b4600d99983266f5de0e2bd99381fa27274c6d1",
+              "kernel.ttgir": "eb0230855d84f4800016e795e029b45de65057435245b294f87705d4ca4cf182"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec1_n_first",
+            "compile_key": "9b59abf75333a5503b15c01c1e8eb319679e055494982e3d58d6d2fa1275ffd1",
+            "cubin_SHA256": "a73eaf63be33964c6e4edfb6b7382de6b9292d7f46efde257f3cffd038f4b28f",
+            "dynamic_smem_bytes": 0,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  1
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec1:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[2, 2], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "8071a204595b324e4ea2093bdb2a73bd6ee6092f93048875c2e4609e1be65de9",
+              "kernel.glir": "417272940d58b0523ee928bb4e3ff35b52db35cdc2aacc931525bdedf636937d",
+              "kernel.llir": "296458bb16902b4c8ef7853a679283777487f4f7849e64ba5789a0bc51f5c876",
+              "kernel.ptx": "0122fa001b0d7d5a5cfbb3db6788b7ec37e4ca19b6cb161dfc55754f19953d5b",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "72782f8faa896b110bf5b8d151f41ff791eca08405f2e7fc6fc66d4be31f418a",
+              "kernel.ttgir": "55294b85f31860b27477bbed4a9bd8e4dafc58887e95b928f0aa4983c27fda7e"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec2_n_first",
+            "compile_key": "2236c884b42693744af6c4f718dbf7d12a86a4f3749d0a70cfe6cc144cffb65b",
+            "cubin_SHA256": "8071a204595b324e4ea2093bdb2a73bd6ee6092f93048875c2e4609e1be65de9",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  2
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  2,
+                  2
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec2:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[2, 16], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "5401f3668afa762d47ffe8c2e817b9e015495c62faa73dab3742f9d19a7dec77",
+              "kernel.glir": "4877f4ef19dc7a2b86c0bd96cfcd1da68495fe27fb66c4708a013bc3ff72715f",
+              "kernel.llir": "b364a7dd832794074d76331cb9500ec98f2c28565849f0816c6c1f94d1b15de6",
+              "kernel.ptx": "c769313bffc6eafb0759642f37d1f05574f47f4e6de7788236c011b89366641b",
+              "kernel.resource.txt": "181f3194295704152078080ba6172976ed6df0e4c34882b5faba510c6b641b30",
+              "kernel.sass": "be7d7ce4b164b85ceea60cc15bef28e898b111ebddc56b3f7ac1da3e0a713925",
+              "kernel.ttgir": "82469bf6523c5db3d2a5d147ea97bae31c45520185df5091312577458f81e674"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec2_within",
+            "compile_key": "df314e3ec8816a8d233e70e7f56affbfb4b0c5a3c7b178b98c565d0c82050629",
+            "cubin_SHA256": "5401f3668afa762d47ffe8c2e817b9e015495c62faa73dab3742f9d19a7dec77",
+            "dynamic_smem_bytes": 0,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  2
+                ],
+                "threads_per_warp": [
+                  2,
+                  16
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec2:within"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "34ea5062e7fba8ac883bf8a6b030052e95ed7b9995f153ce4e260ea49d813d2d",
+              "kernel.glir": "f5c10a4e2300ab29186ec4ee1d18f007c8e3c86dbc50b0ed15a99ce84d179eb8",
+              "kernel.llir": "103c6ebe05490ed46950df9e1933a7ce5a0a84231a9a520744810d345600e635",
+              "kernel.ptx": "79fb97a82d8683bd658fd407192fbffa0ebbc26c1844146818822b8adfe0546b",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "82e8a3d16863477dd91ad758e8aaf5aee7c59fc494e6284d8aa3f7fa5fd55259",
+              "kernel.ttgir": "883bb7c029debe42767f4d6cc7b85569d9aae661ae5a26131af652e3ae2739bb"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec4_n_first",
+            "compile_key": "91adf992e2213ab843057aef68674b3e5610a0485f4a7738ceebb2b4f1117a8c",
+            "cubin_SHA256": "34ea5062e7fba8ac883bf8a6b030052e95ed7b9995f153ce4e260ea49d813d2d",
+            "dynamic_smem_bytes": 2048,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  4
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  4,
+                  1
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec4:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "993879fca91ae6af9e205ffc87c20737ced972b2ca852b9ca3a4a85db47fa29b",
+              "kernel.glir": "5867326c1d55b34cdd2a14d5903a275c42c5ae2869c327aa9797b29fe1e36a8d",
+              "kernel.llir": "403e2314a298f105e09111e47f5dd228f25fbbf7f623dd7eb0e3222dec75df61",
+              "kernel.ptx": "b972a62db76614b83cd370542dcde990d83a217f667172614330f6bd01ecbfe6",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "84e1082fec3ec555158f4c1f4b55d6647298b4610928cee9a0f3f3981f12fe7f",
+              "kernel.ttgir": "587710228c77bb79f4d0612a6ed57be327b8cd3791b178449b1737e4e33da8c2"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec4_within",
+            "compile_key": "eeb9881eca35807ce9aca4a81eaf704964bfa0045118d43ba764b5336c26c677",
+            "cubin_SHA256": "993879fca91ae6af9e205ffc87c20737ced972b2ca852b9ca3a4a85db47fa29b",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  4
+                ],
+                "threads_per_warp": [
+                  4,
+                  8
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec4:within"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[8, 4], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "0806aba40d528b9177d52902ff1be6b71f3f336025240ee3d561fee3c43a42eb",
+              "kernel.glir": "62f34b95e36a3e9f6177a2b467b174452b80df8c88e368ae77a5a2fe40b51109",
+              "kernel.llir": "24f4c8b2c49be813a7793f71537d664a0b00a25be56c37348bf715eb1e8e40fe",
+              "kernel.ptx": "5fe8ea39bae8152d980ecab25343d8b4bad0e993e0955e687e3bfd33652940b0",
+              "kernel.resource.txt": "6efc32315a303d101a26d9f456e653c614e9b970f9baf791f3b0cfa6b49f6c38",
+              "kernel.sass": "b9bc8192e6689bbce2deb4595a9cd7bcb8513f88eb5a7a52a20ab3c38c06064e",
+              "kernel.ttgir": "73e628960b58fa56c6e393c6efafbdc1173e9bf3acacbb81ddff81fe4f0aa90a"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec8_within",
+            "compile_key": "16008181df1e68647841c2eb86e72b0d4bb581327f8f58db60f81385de9189f9",
+            "cubin_SHA256": "0806aba40d528b9177d52902ff1be6b71f3f336025240ee3d561fee3c43a42eb",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  8
+                ],
+                "threads_per_warp": [
+                  8,
+                  4
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec8:within"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "True",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "b11131e9b3df26a4d0d266b2769e9f850eea203db4eafb89a752ad5a4a585ae0",
+              "kernel.glir": "b57b1d1aa6f9d463ea7178bce47e333e635aa45a72d6f6a8113eebe9f5492e20",
+              "kernel.llir": "11a6e0bc5ed6b626bdeb3d1aab7549a1ebc104bf56c3fef264bf6496bd30ad32",
+              "kernel.ptx": "0d6cdc4ba7c80df0503ae036f495677e7bdb223c642a055060432d31eb4fdb97",
+              "kernel.resource.txt": "181f3194295704152078080ba6172976ed6df0e4c34882b5faba510c6b641b30",
+              "kernel.sass": "26cf8b85bd22a23760fd78704b4600d99983266f5de0e2bd99381fa27274c6d1",
+              "kernel.ttgir": "693e4409c5741f2c711d2879ec2ae69d8f1fe9d0d268b2757c9600cfadfbb2c4"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec1_n_first_native",
+            "compile_key": "aa226a47014d19ea9900d62908e87d4b51c5efc08eaed194886f431ed585cc99",
+            "cubin_SHA256": "b11131e9b3df26a4d0d266b2769e9f850eea203db4eafb89a752ad5a4a585ae0",
+            "dynamic_smem_bytes": 0,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  1
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": true,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec1:n_first:native"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "True",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[2, 16], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "2774cd40fed32b3b6616fabeda91850af78f8eafde90735e76b43b7a62e96ab8",
+              "kernel.glir": "38613ed675786f056fca6891037042351f6f5ac2266446acb2f31e8d1beea9bc",
+              "kernel.llir": "820291aaa51d58deb17f4ead3a6faf1146ce638920c6ed4465e37a92234f22e8",
+              "kernel.ptx": "dc7f50c49e05103b0d14e92dddfc2d8aa3e49314167e6623da096a40138ee42c",
+              "kernel.resource.txt": "6efc32315a303d101a26d9f456e653c614e9b970f9baf791f3b0cfa6b49f6c38",
+              "kernel.sass": "71e34d6096962469e9a7d8147c90d7878f7db68aa16861231e769cc885ef9186",
+              "kernel.ttgir": "817fbf6bf0261e68c52b81a0bacbdcfde5baec09c551b2d171809326945b6fd2"
+            },
+            "artifact_directory": "artifacts/C01_p128_n4096_vec8_n_first_native",
+            "compile_key": "e5e7617818de66bae72dce32e8c177dd60b4076cec8f2ba410cd4f1619069327",
+            "cubin_SHA256": "2774cd40fed32b3b6616fabeda91850af78f8eafde90735e76b43b7a62e96ab8",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p128_n4096",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  8
+                ],
+                "threads_per_warp": [
+                  2,
+                  16
+                ],
+                "warps_per_cta": [
+                  4,
+                  1
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": true,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p128_n4096:vec8:n_first:native"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "BM": 32,
+        "BN": 128,
+        "N": 8192,
+        "P": 96,
+        "W": 4,
+        "family": "C01",
+        "id": "C01_p96_n8192",
+        "layouts": [
+          {
+            "aliases": [
+              "vec1:within"
+            ],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec1:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                2
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                2,
+                2
+              ]
+            },
+            "name": "vec2:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                2
+              ],
+              "threads_per_warp": [
+                2,
+                16
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec2:within"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                4
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "name": "vec4:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                4
+              ],
+              "threads_per_warp": [
+                4,
+                8
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec4:within"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                2,
+                16
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "name": "vec8:n_first"
+          },
+          {
+            "aliases": [],
+            "layout": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                8,
+                4
+              ],
+              "warps_per_cta": [
+                1,
+                4
+              ]
+            },
+            "name": "vec8:within"
+          }
+        ],
+        "num_stages": 3,
+        "pipeline_M": [
+          128,
+          2048
+        ]
+      },
+      "records": [
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[2, 2], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "8071a204595b324e4ea2093bdb2a73bd6ee6092f93048875c2e4609e1be65de9",
+              "kernel.glir": "417272940d58b0523ee928bb4e3ff35b52db35cdc2aacc931525bdedf636937d",
+              "kernel.llir": "296458bb16902b4c8ef7853a679283777487f4f7849e64ba5789a0bc51f5c876",
+              "kernel.ptx": "0122fa001b0d7d5a5cfbb3db6788b7ec37e4ca19b6cb161dfc55754f19953d5b",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "72782f8faa896b110bf5b8d151f41ff791eca08405f2e7fc6fc66d4be31f418a",
+              "kernel.ttgir": "55294b85f31860b27477bbed4a9bd8e4dafc58887e95b928f0aa4983c27fda7e"
+            },
+            "artifact_directory": "artifacts/C01_p96_n8192_vec2_n_first",
+            "compile_key": "2236c884b42693744af6c4f718dbf7d12a86a4f3749d0a70cfe6cc144cffb65b",
+            "cubin_SHA256": "8071a204595b324e4ea2093bdb2a73bd6ee6092f93048875c2e4609e1be65de9",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p96_n8192",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  2
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  2,
+                  2
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p96_n8192:vec2:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "34ea5062e7fba8ac883bf8a6b030052e95ed7b9995f153ce4e260ea49d813d2d",
+              "kernel.glir": "f5c10a4e2300ab29186ec4ee1d18f007c8e3c86dbc50b0ed15a99ce84d179eb8",
+              "kernel.llir": "103c6ebe05490ed46950df9e1933a7ce5a0a84231a9a520744810d345600e635",
+              "kernel.ptx": "79fb97a82d8683bd658fd407192fbffa0ebbc26c1844146818822b8adfe0546b",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "82e8a3d16863477dd91ad758e8aaf5aee7c59fc494e6284d8aa3f7fa5fd55259",
+              "kernel.ttgir": "883bb7c029debe42767f4d6cc7b85569d9aae661ae5a26131af652e3ae2739bb"
+            },
+            "artifact_directory": "artifacts/C01_p96_n8192_vec4_n_first",
+            "compile_key": "91adf992e2213ab843057aef68674b3e5610a0485f4a7738ceebb2b4f1117a8c",
+            "cubin_SHA256": "34ea5062e7fba8ac883bf8a6b030052e95ed7b9995f153ce4e260ea49d813d2d",
+            "dynamic_smem_bytes": 2048,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p96_n8192",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  4
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  4,
+                  1
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p96_n8192:vec4:n_first"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "False",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "993879fca91ae6af9e205ffc87c20737ced972b2ca852b9ca3a4a85db47fa29b",
+              "kernel.glir": "5867326c1d55b34cdd2a14d5903a275c42c5ae2869c327aa9797b29fe1e36a8d",
+              "kernel.llir": "403e2314a298f105e09111e47f5dd228f25fbbf7f623dd7eb0e3222dec75df61",
+              "kernel.ptx": "b972a62db76614b83cd370542dcde990d83a217f667172614330f6bd01ecbfe6",
+              "kernel.resource.txt": "df3d81a6e2421d54fcbdc99143db36f8ca8e3e84834cb9b939ace9f7514be67a",
+              "kernel.sass": "84e1082fec3ec555158f4c1f4b55d6647298b4610928cee9a0f3f3981f12fe7f",
+              "kernel.ttgir": "587710228c77bb79f4d0612a6ed57be327b8cd3791b178449b1737e4e33da8c2"
+            },
+            "artifact_directory": "artifacts/C01_p96_n8192_vec4_within",
+            "compile_key": "eeb9881eca35807ce9aca4a81eaf704964bfa0045118d43ba764b5336c26c677",
+            "cubin_SHA256": "993879fca91ae6af9e205ffc87c20737ced972b2ca852b9ca3a4a85db47fa29b",
+            "dynamic_smem_bytes": 1024,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p96_n8192",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  4
+                ],
+                "threads_per_warp": [
+                  4,
+                  8
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": false,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p96_n8192:vec4:within"
+          }
+        },
+        {
+          "aliases": [],
+          "metadata": {
+            "JIT_attributes": {
+              "(0,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(1,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(2,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(3,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(4,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ],
+              "(5,)": [
+                [
+                  "tt.divisibility",
+                  16
+                ]
+              ]
+            },
+            "JIT_constants": {
+              "(10,)": "True",
+              "(6,)": "32",
+              "(7,)": "128",
+              "(8,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+              "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+            },
+            "JIT_signature": {
+              "BLOCK_SIZE_M": "constexpr",
+              "BLOCK_SIZE_N": "constexpr",
+              "DB": "*bf16",
+              "DW": "*bf16",
+              "FINAL_DB": "*bf16",
+              "FINAL_DW": "*bf16",
+              "L": "constexpr",
+              "LOUT": "constexpr",
+              "M": "i32",
+              "N": "i32",
+              "NATIVE_OUT": "constexpr"
+            },
+            "artifact_SHA256": {
+              "kernel.cubin": "b11131e9b3df26a4d0d266b2769e9f850eea203db4eafb89a752ad5a4a585ae0",
+              "kernel.glir": "b57b1d1aa6f9d463ea7178bce47e333e635aa45a72d6f6a8113eebe9f5492e20",
+              "kernel.llir": "11a6e0bc5ed6b626bdeb3d1aab7549a1ebc104bf56c3fef264bf6496bd30ad32",
+              "kernel.ptx": "0d6cdc4ba7c80df0503ae036f495677e7bdb223c642a055060432d31eb4fdb97",
+              "kernel.resource.txt": "181f3194295704152078080ba6172976ed6df0e4c34882b5faba510c6b641b30",
+              "kernel.sass": "26cf8b85bd22a23760fd78704b4600d99983266f5de0e2bd99381fa27274c6d1",
+              "kernel.ttgir": "693e4409c5741f2c711d2879ec2ae69d8f1fe9d0d268b2757c9600cfadfbb2c4"
+            },
+            "artifact_directory": "artifacts/C01_p96_n8192_vec1_n_first_native",
+            "compile_key": "aa226a47014d19ea9900d62908e87d4b51c5efc08eaed194886f431ed585cc99",
+            "cubin_SHA256": "b11131e9b3df26a4d0d266b2769e9f850eea203db4eafb89a752ad5a4a585ae0",
+            "dynamic_smem_bytes": 0,
+            "family": "C01",
+            "function_name": "merge",
+            "geometry": "C01_p96_n8192",
+            "global_scratch_size": 0,
+            "intervention_layout": {
+              "fields": {
+                "order": [
+                  1,
+                  0
+                ],
+                "size_per_thread": [
+                  1,
+                  1
+                ],
+                "threads_per_warp": [
+                  1,
+                  32
+                ],
+                "warps_per_cta": [
+                  1,
+                  4
+                ]
+              },
+              "kind": "blocked"
+            },
+            "native_output": true,
+            "num_warps": 4,
+            "role": "merge",
+            "runtime_argument_names": [
+              "DW",
+              "DB",
+              "FINAL_DW",
+              "FINAL_DB",
+              "M",
+              "N"
+            ],
+            "specialized_runtime_values": {},
+            "stage2": false,
+            "tag": "C01_p96_n8192:vec1:n_first:native"
+          }
+        }
+      ]
+    }
+  ],
+  "initial_timing_analysis_SHA256": "7a5e4eef902aa51dfae49c886abaa69ac8d753aedfa0f3f69ee3f80ba34e5b2e",
+  "metrics": [
+    "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum",
+    "l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum",
+    "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum",
+    "l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum",
+    "smsp__inst_executed.sum",
+    "dram__bytes_read.sum",
+    "dram__bytes_write.sum",
+    "dram__throughput.avg.pct_of_peak_sustained_elapsed",
+    "l1tex__t_sectors_pipe_lsu_mem_global_op_ld.sum",
+    "l1tex__t_sectors_pipe_lsu_mem_global_op_st.sum",
+    "smsp__warp_issue_stalled_barrier_per_warp_active.pct",
+    "smsp__warp_issue_stalled_short_scoreboard_per_warp_active.pct",
+    "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+    "smsp__warp_issue_stalled_mio_throttle_per_warp_active.pct",
+    "smsp__warp_issue_stalled_math_pipe_throttle_per_warp_active.pct",
+    "smsp__warp_issue_stalled_not_selected_per_warp_active.pct",
+    "smsp__issue_active.avg.pct_of_peak_sustained_active",
+    "smsp__warps_eligible.avg.per_cycle_active",
+    "smsp__warps_active.avg.per_cycle_active",
+    "sm__warps_active.avg.pct_of_peak_sustained_active",
+    "sm__throughput.avg.pct_of_peak_sustained_elapsed",
+    "lts__t_sector_hit_rate.pct",
+    "l1tex__t_requests_pipe_lsu_mem_global_op_ld.sum",
+    "l1tex__t_requests_pipe_lsu_mem_global_op_st.sum",
+    "l1tex__t_sectors_pipe_lsu_mem_local_op_ld.sum",
+    "l1tex__t_sectors_pipe_lsu_mem_local_op_st.sum"
+  ],
+  "modes": {
+    "software": {
+      "cache": "all",
+      "replay": "kernel"
+    },
+    "warm_application": {
+      "cache": "none",
+      "replay": "application"
+    }
+  },
+  "reason": "Complete NCU coverage rather than attribute vec2/vec4 gains from only vec1/vec8 counters.",
+  "selection": "All previously unprofiled unique merge candidates at all three geometries, including controls; zero new timing",
+  "selection_after_initial_timing": true,
+  "stage": "G3b_profiles_extension",
+  "training_protocol_SHA256": "d797370bfde43778c39a5d38194cd184942a2ad84b596e9aae6fb52218176f3f",
+  "worker_source_SHA256": {
+    "experiments/tma_reduction_layout/phase11/operator_gpu/PLAN.md": "84429202ca6e0f2470f2fd13b1103df950624827a2db413184f2c8a103f876a0",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/baseline_run.py": "5a3c387e6c54cf7bef887fb1655fe6fa9230ef949993d54c01af8814ad6304ca",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/bind_sources.py": "e61c8d0dcb09ab5276ae7cc965563e0b165b70f2a75eb98b1a43be6d60c46f61",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/common.py": "ce256c605c35afa55a2a6bc62eb6ca6a3bdb9986315d0d986ce189cd34511b9f",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/controlled_run.py": "f72a515610c55a0fca5233d4fd038e43c6b38a9b47eb3f562c7b43f74adf976f",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/cpu_baseline.py": "9c5e5f4f7c0dd9c59c34a521eb36ee041b46eeb46d2761ae5051a88b2d045c22",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/driver.py": "656632259024b2edbd8ad56820350097a844885bfc35fc1859f1cae66e824cb4",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/fixtures.py": "352777eba35e155c5bf3874f4dbf64161ae0469121dfebedd5246e33d5eded8b",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/fixtures_run.py": "2b6d489f76806a4463f62f5f056043cea27ec710d63b6109309f7863f763daa5",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_bind.py": "a281cfce60dd833d67de19647f639464bc5b51ce4a0f671ba21384950f9223b5",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_compile.py": "548a86b3a0191dce0cbff59e93f3f3895c9606395d47f37d521daa9d0a4ec8cf",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_gluon.py": "26c4119d9d462e41f9bb49a7364322458e6a2b416e0c11c288bc2da8b65f5020",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_prepare.py": "99685ef58a1ad4bb60e7f8a1627fe2b8e0b888d14f75a2bbaa4292df6d16a072",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_profile_extension_prepare.py": "c475bbacc6e6767d66c559bce247a4da3b8c70a5700cc88e413c0e0e27d7f23e",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_profile_extension_run.py": "feb436ff0cc498ff72772b513b813e57ff678b3d3797454e83a0fef85b5c4caf",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_profile_one.py": "143fa22deacc1414090f0cee7273d5c55d33aecbaf0827175ef6455301501f1c",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_profile_prepare.py": "701bdbf9f8fa03acb8d462f966a162a019e79ffb9e5a178034f0dc75b8243aa1",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_profiles.py": "e39e7e13ec21cd90f3dc9742dadca4aee0f2d7d6de1de3fd48cd212d7468f430",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_run.py": "1ad3f21700ce74447a7b1b5028dec5f9208c769da702194cfc9c607ad9e915ab",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_runtime.py": "2b8fae9b204c955b69953e241db620f967cc6f4a31caf7b61497666c3b07cd4a",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_triton.py": "27fbb6ceca5853caa35b4c5ba149f68b140ce56fecaf524e035e9d1668103e18",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/layout_parsing.py": "20fd63f6fda6692b2a02b0075dbca2bbd03e287f7333f58533d41c101dc0c456",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/make_controlled.py": "7113c89d980a1fb97544710ed49045b616339aa80bb9996c2ed31180a9d9e226",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/production_buffers.py": "54ec4f82bd362333a552fa2fc69fe7fd3a4bf4af2ac5d4b1f75357fee6185d69",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/production_cases.py": "2b6730d77776b754dae4986fa18221581bfd50a387227931cdee28132ce29008",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/production_compile.py": "a83f69ed191e12e9a9b3a730d3790f2a36ee3fea29b6e32da8c8fbe13c179eb2",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/production_data.py": "0aff8c12610b0dd6427be30b6ec558819b1205b4d0dc689397ff23649c0642b2",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/production_run.py": "a29247077c33e86532e290f6cd682571ca925ddb585c941e4bb8ec34bc4dcfa0",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/production_runtime.py": "39cd3961c0ee1e2439103e187f74d8618cab9b38616006f479edfb3bbefabb60",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_triton.py": "bfe2fea5aacf9d2991e63d06f96c40ec6c7d535d2755477a90462e96b32c8647",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/upstream/bindings.json": "8ee8dc24d65ab5ff2b3acb04e92a4e05844305b0ae9af5bf2f194221ab249afd",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/upstream/controlled_parity.json": "dd12e68a22c2970342fdeea6bd2346231faf4cb80b6651484b09e540544c7d9c",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/upstream/sglang.py.txt": "7a3b66ce3daabbb027efd860411cd9abe4b399b1f2cfc3ed5c6c01731eb9fa0a",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/upstream/vllm.py.txt": "c1cf2300c99f5dc1fb297d7e556620842ab53c64c5ecda4c6ba89fb8e16215da",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/upstream/vllm_helpers.py.txt": "ef697fa4fa19c2543d9001c1db6cf6e8c5da22dd36ec5c1bc29f6a9ac8a59da9",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/validate_g1.py": "215be5c7ffe5892ca78b13d37829fe533ba2ddb66b8622b7aaf4e0e72e650b36",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_triton.py": "dcbb7272ac4e46ba3f96e05e4c7b71baf46aa2c35f56fbde4afa8c7555b6e4e5",
+    "experiments/tma_reduction_layout/phase11/operator_survey/cases.py": "214025936b6550114364a7641eb5d8263da2e8e5c1d4c27e663a87f4c0b9793f",
+    "experiments/tma_reduction_layout/phase11/operator_survey/oracles.py": "68059dfd160a9d682fbd5a7137ae5079ae7dba20ece3899cc035f8d6356ff134",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  }
+}
