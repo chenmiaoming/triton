@@ -1,0 +1,1668 @@
+; ModuleID = 'LLVMDialectModule'
+source_filename = "LLVMDialectModule"
+target datalayout = "e-p3:32:32-p4:32:32-p5:32:32-p6:32:32-p7:32:32-p101:32:32-i64:64-i128:128-i256:256-v16:16-v32:32-n16:32:64"
+
+@global_smem = external addrspace(3) global [0 x i8], align 16
+@.str = private unnamed_addr constant [11 x i8] c"__CUDA_FTZ\00", align 1
+
+; Function Attrs: nounwind
+define ptx_kernel void @_fwd_kernel_stage1(ptr addrspace(1) align 16 %0, ptr addrspace(1) align 16 %1, ptr addrspace(1) align 16 %2, float %3, ptr addrspace(1) align 16 %4, ptr addrspace(1) align 16 %5, ptr addrspace(1) align 16 %6, ptr addrspace(1) align 16 %7, ptr addrspace(1) align 16 %8, i32 %9, i32 %10, i32 %11, i32 %12, i32 %13, i32 %14, i32 %15, i32 %16, i32 %17, i32 %18, i32 %19, i32 %20, i32 %21, ptr addrspace(1) nofree readnone captures(none) %22, ptr addrspace(1) nofree readnone captures(none) %23) local_unnamed_addr #0 !dbg !6 {
+  %25 = tail call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !dbg !15
+  %26 = tail call i32 @llvm.nvvm.read.ptx.sreg.ctaid.y(), !dbg !16
+  %27 = tail call i32 @llvm.nvvm.read.ptx.sreg.ctaid.z(), !dbg !17
+  %28 = zext nneg i32 %25 to i64, !dbg !18
+  %29 = tail call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !dbg !19
+  %30 = and i32 %29, 31, !dbg !19
+  %31 = lshr i32 %29, 5, !dbg !19
+  %32 = and i32 %29, 127, !dbg !19
+  %33 = and i32 %29, 63, !dbg !20
+  %34 = shl nuw nsw i32 %33, 1, !dbg !20
+  %35 = getelementptr [4 x i8], ptr addrspace(1) %4, i64 %28, !dbg !21
+  %36 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l"(ptr addrspace(1) %35) #10, !dbg !22
+  %37 = getelementptr i8, ptr addrspace(1) %35, i64 4, !dbg !23
+  %38 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l"(ptr addrspace(1) %37) #10, !dbg !24
+  %39 = sub i32 %38, %36, !dbg !24
+  %40 = getelementptr [4 x i8], ptr addrspace(1) %8, i64 %28, !dbg !25
+  %41 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l"(ptr addrspace(1) %40) #10, !dbg !26
+  %42 = add i32 %41, -1, !dbg !27
+  %43 = add i32 %42, %39, !dbg !32
+  %44 = sdiv i32 %43, %41, !dbg !33
+  %45 = add i32 %44, 31, !dbg !34
+  %46 = sdiv i32 %45, 32, !dbg !36
+  %47 = shl nsw i32 %46, 5, !dbg !37
+  %48 = mul i32 %47, %27, !dbg !38
+  %49 = add i32 %48, %47, !dbg !39
+  %50 = tail call i32 @llvm.smin.i32(i32 %49, i32 %39), !dbg !40
+  %51 = icmp sgt i32 %50, %48, !dbg !41
+  br i1 %51, label %52, label %1246, !dbg !42
+
+52:                                               ; preds = %24
+  %53 = sext i32 %9 to i64, !dbg !43
+  %54 = mul nsw i64 %53, %28, !dbg !43
+  %55 = mul i32 %10, %26, !dbg !44
+  %56 = sext i32 %55 to i64, !dbg !43
+  %57 = zext nneg i32 %32 to i64, !dbg !43
+  %58 = getelementptr [2 x i8], ptr addrspace(1) %0, i64 %54, !dbg !45
+  %59 = getelementptr [2 x i8], ptr addrspace(1) %58, i64 %56, !dbg !45
+  %60 = getelementptr [2 x i8], ptr addrspace(1) %59, i64 %57, !dbg !45
+  %61 = tail call i16 asm sideeffect "mov.u16 $0, $1;\0A\09@$3 ld.global.b16 { $0 }, [ $2 + 0 ];", "=c,c,l,b"(i16 0, ptr addrspace(1) %60, i1 true) #10, !dbg !46
+  %62 = lshr i32 %29, 4
+  %63 = and i32 %62, 7
+  %64 = or disjoint i32 %63, 32
+  %65 = or disjoint i32 %63, 40
+  %66 = or disjoint i32 %63, 48
+  %67 = or i32 %62, 56
+  %68 = sext i32 %36 to i64
+  %69 = getelementptr [4 x i8], ptr addrspace(1) %5, i64 %68
+  %70 = mul i32 %12, %26
+  %71 = shl nuw nsw i32 %31, 6
+  %72 = shl nuw nsw i32 %29, 3
+  %73 = or i32 %71, %72
+  %74 = and i32 %73, 240
+  %75 = and i32 %29, 1
+  %76 = icmp eq i32 %75, 0
+  %77 = select i1 %76, i32 0, i32 320
+  %78 = xor i32 %74, %77
+  %79 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %78
+  %80 = shl nuw nsw i32 %29, 4
+  %81 = and i32 %80, 240
+  %82 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %81
+  %83 = shl nuw nsw i32 %29, 2
+  %84 = and i32 %83, 124
+  %85 = and i32 %29, 96
+  %86 = lshr exact i32 %85, 5
+  %87 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %84
+  %88 = getelementptr inbounds nuw i8, ptr addrspace(3) %87, i32 %86
+  %89 = and i32 %29, 3
+  %90 = shl nuw nsw i32 %89, 5
+  %91 = lshr i32 %29, 2
+  %92 = and i32 %91, 3
+  %93 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %90
+  %94 = getelementptr inbounds nuw i8, ptr addrspace(3) %93, i32 %92
+  %95 = shl nuw nsw i32 %29, 1
+  %96 = and i32 %95, 60
+  %97 = select i1 %76, i32 0, i32 192
+  %98 = and i32 %62, 2
+  %99 = and i32 %29, 64
+  %100 = or disjoint i32 %97, %96
+  %101 = xor i32 %100, %99
+  %102 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %98
+  %103 = getelementptr inbounds nuw i8, ptr addrspace(3) %102, i32 %101
+  %104 = insertelement <1 x i16> poison, i16 %61, i64 0
+  %105 = shl nuw nsw i32 %89, 4
+  %106 = lshr i32 %29, 1
+  %107 = and i32 %106, 2
+  %108 = and i32 %72, 64
+  %109 = or disjoint i32 %107, %108
+  %110 = or disjoint i32 %109, %105
+  %111 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %110
+  %112 = getelementptr inbounds nuw i8, ptr addrspace(3) %111, i32 4
+  %113 = getelementptr inbounds nuw i8, ptr addrspace(3) %111, i32 8
+  %114 = getelementptr inbounds nuw i8, ptr addrspace(3) %111, i32 12
+  %115 = xor i32 %110, 192
+  %116 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %115
+  %117 = getelementptr inbounds nuw i8, ptr addrspace(3) %116, i32 4
+  %118 = getelementptr inbounds nuw i8, ptr addrspace(3) %116, i32 8
+  %119 = getelementptr inbounds nuw i8, ptr addrspace(3) %116, i32 12
+  %120 = lshr exact i32 %85, 1
+  %121 = and i32 %72, 128
+  %122 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %121
+  %123 = getelementptr inbounds nuw i8, ptr addrspace(3) %122, i32 %120
+  %124 = getelementptr inbounds nuw i8, ptr addrspace(3) %123, i32 64
+  %125 = shl nuw nsw i32 %99, 1
+  %126 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %125
+  %127 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 16
+  %128 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 32
+  %129 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 48
+  %130 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 64
+  %131 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 80
+  %132 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 96
+  %133 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 112
+  %134 = mul i32 %14, %26
+  %135 = add i32 %134, %34
+  %136 = lshr exact i32 %85, 3
+  %137 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %136
+  %138 = shl nuw nsw i32 %89, 2
+  %139 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %138
+  %140 = shl nuw nsw i32 %33, 3
+  %141 = icmp eq i32 %99, 0
+  %142 = select i1 %141, i32 0, i32 520
+  %143 = xor i32 %142, %140
+  %144 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %143
+  %145 = and i32 %72, 496
+  %146 = select i1 %76, i32 0, i32 520
+  %147 = lshr exact i32 %99, 3
+  %148 = or disjoint i32 %146, %145
+  %149 = xor i32 %148, %147
+  %150 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %149
+  %151 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %145
+  %152 = getelementptr inbounds nuw i8, ptr addrspace(3) %151, i32 %147
+  %153 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %140
+  %154 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 4
+  %155 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 8
+  %156 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 12
+  %157 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 20
+  %158 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 24
+  %159 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 28
+  %160 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 36
+  %161 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 40
+  %162 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 44
+  %163 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 52
+  %164 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 56
+  %165 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 60
+  %166 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 68
+  %167 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 72
+  %168 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 76
+  %169 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 84
+  %170 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 88
+  %171 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 92
+  %172 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 100
+  %173 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 104
+  %174 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 108
+  %175 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 116
+  %176 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 120
+  %177 = getelementptr inbounds nuw i8, ptr addrspace(3) %126, i32 124
+  %178 = getelementptr inbounds nuw i8, ptr addrspace(3) %153, i32 4
+  %179 = insertelement <32 x i32> poison, i32 %50, i64 0, !dbg !47
+  %180 = shufflevector <32 x i32> %179, <32 x i32> poison, <32 x i32> zeroinitializer, !dbg !47
+  %181 = insertelement <4 x i32> poison, i32 %50, i64 0, !dbg !48
+  %182 = shufflevector <4 x i32> %181, <4 x i32> poison, <4 x i32> zeroinitializer, !dbg !48
+  %183 = insertelement <4 x float> poison, float %3, i64 0, !dbg !49
+  %184 = shufflevector <4 x float> %183, <4 x float> poison, <4 x i32> zeroinitializer, !dbg !49
+  %185 = insertelement <4 x i32> poison, i32 %64, i64 1
+  %186 = insertelement <4 x i32> %185, i32 %65, i64 2
+  %187 = insertelement <4 x i32> %186, i32 %66, i64 3
+  br label %188, !dbg !50
+
+188:                                              ; preds = %52, %188
+  %189 = phi float [ 0.000000e+00, %52 ], [ %1114, %188 ]
+  %190 = phi float [ 0.000000e+00, %52 ], [ %1115, %188 ]
+  %191 = phi float [ 0.000000e+00, %52 ], [ %1137, %188 ]
+  %192 = phi float [ -inf, %52 ], [ %889, %188 ]
+  %193 = phi i32 [ %48, %52 ], [ %1138, %188 ]
+  %194 = or disjoint i32 %193, %63, !dbg !51
+  %195 = or disjoint i32 %194, 8, !dbg !51
+  %196 = or disjoint i32 %194, 16, !dbg !51
+  %197 = add i32 %193, %67, !dbg !51
+  %198 = icmp slt i32 %194, %50, !dbg !48
+  %199 = icmp slt i32 %195, %50, !dbg !48
+  %200 = icmp slt i32 %196, %50, !dbg !48
+  %201 = icmp slt i32 %197, %50, !dbg !48
+  %202 = sext i32 %194 to i64, !dbg !52
+  %203 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %202, !dbg !52
+  %204 = sext i32 %195 to i64, !dbg !52
+  %205 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %204, !dbg !52
+  %206 = sext i32 %196 to i64, !dbg !52
+  %207 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %206, !dbg !52
+  %208 = sext i32 %197 to i64, !dbg !52
+  %209 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %208, !dbg !52
+  %210 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %203, i1 %198) #10, !dbg !53
+  %211 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %205, i1 %199) #10, !dbg !53
+  %212 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %207, i1 %200) #10, !dbg !53
+  %213 = mul i32 %210, %11, !dbg !54
+  %214 = mul i32 %211, %11, !dbg !54
+  %215 = mul i32 %212, %11, !dbg !54
+  %216 = insertelement <4 x i32> poison, i32 %210, i64 0, !dbg !55
+  %217 = insertelement <4 x i32> %216, i32 %211, i64 1, !dbg !55
+  %218 = insertelement <4 x i32> %217, i32 %212, i64 2, !dbg !55
+  %219 = insertelement <4 x i32> poison, i32 %194, i64 0, !dbg !47
+  %220 = insertelement <4 x i32> %219, i32 %195, i64 1, !dbg !47
+  %221 = insertelement <4 x i32> %220, i32 %196, i64 2, !dbg !47
+  %222 = insertelement <4 x i32> <i32 24, i32 poison, i32 poison, i32 poison>, i32 %193, i64 1, !dbg !51
+  %223 = shufflevector <4 x i32> %222, <4 x i32> poison, <4 x i32> <i32 0, i32 1, i32 1, i32 1>, !dbg !51
+  %224 = insertelement <4 x i32> %187, i32 %194, i64 0, !dbg !51
+  %225 = or disjoint <4 x i32> %223, %224, !dbg !51
+  %226 = add <4 x i32> %223, %224, !dbg !51
+  %227 = shufflevector <4 x i32> %225, <4 x i32> %226, <4 x i32> <i32 0, i32 5, i32 6, i32 7>, !dbg !51
+  %228 = icmp slt <4 x i32> %227, %182, !dbg !48
+  %229 = extractelement <4 x i32> %225, i64 0, !dbg !52
+  %230 = sext i32 %229 to i64, !dbg !52
+  %231 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %230, !dbg !52
+  %232 = extractelement <4 x i32> %226, i64 1, !dbg !52
+  %233 = sext i32 %232 to i64, !dbg !52
+  %234 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %233, !dbg !52
+  %235 = extractelement <4 x i32> %226, i64 2, !dbg !52
+  %236 = sext i32 %235 to i64, !dbg !52
+  %237 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %236, !dbg !52
+  %238 = extractelement <4 x i32> %226, i64 3, !dbg !52
+  %239 = sext i32 %238 to i64, !dbg !52
+  %240 = getelementptr [4 x i8], ptr addrspace(1) %69, i64 %239, !dbg !52
+  %241 = extractelement <4 x i1> %228, i64 0, !dbg !56
+  %242 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %231, i1 %241) #10, !dbg !53
+  %243 = extractelement <4 x i1> %228, i64 1, !dbg !56
+  %244 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %234, i1 %243) #10, !dbg !53
+  %245 = extractelement <4 x i1> %228, i64 2, !dbg !56
+  %246 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %237, i1 %245) #10, !dbg !53
+  %247 = extractelement <4 x i1> %228, i64 3, !dbg !56
+  %248 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %240, i1 %247) #10, !dbg !53
+  %249 = tail call i32 asm sideeffect "mov.u32 $0, 0x0;\0A\09@$2 ld.global.b32 { $0 }, [ $1 + 0 ];", "=r,l,b"(ptr addrspace(1) %209, i1 %201) #10, !dbg !53
+  %250 = mul i32 %242, %11, !dbg !54
+  %251 = mul i32 %244, %11, !dbg !54
+  %252 = mul i32 %246, %11, !dbg !54
+  %253 = mul i32 %248, %11, !dbg !54
+  %254 = mul i32 %249, %11, !dbg !54
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !57
+  tail call void @llvm.nvvm.stmatrix.sync.aligned.m8n8.x1.b16.p3(ptr addrspace(3) %79, i32 %32), !dbg !57
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !57
+  %255 = load i32, ptr addrspace(3) %82, align 16, !dbg !57
+  %256 = add i32 %255, %70, !dbg !54
+  %257 = add i32 %256, %213, !dbg !54
+  %258 = add i32 %256, %214, !dbg !54
+  %259 = add i32 %256, %215, !dbg !54
+  %260 = add i32 %256, %250, !dbg !54
+  %261 = add i32 %256, %251, !dbg !54
+  %262 = add i32 %256, %252, !dbg !54
+  %263 = add i32 %256, %253, !dbg !54
+  %264 = add i32 %256, %254, !dbg !54
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !58
+  store <1 x i8> splat (i8 1), ptr addrspace(3) %88, align 1, !dbg !58
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !58
+  %265 = load i8, ptr addrspace(3) %94, align 1, !dbg !58
+  %266 = trunc nuw i8 %265 to i1, !dbg !58
+  %267 = and i1 %198, %266, !dbg !56
+  %268 = and i1 %199, %266, !dbg !56
+  %269 = and i1 %200, %266, !dbg !56
+  %270 = and i1 %241, %266, !dbg !56
+  %271 = and i1 %243, %266, !dbg !56
+  %272 = and i1 %245, %266, !dbg !56
+  %273 = and i1 %247, %266, !dbg !56
+  %274 = and i1 %201, %266, !dbg !56
+  %275 = sext i32 %257 to i64, !dbg !59
+  %276 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %275, !dbg !59
+  %277 = sext i32 %258 to i64, !dbg !59
+  %278 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %277, !dbg !59
+  %279 = sext i32 %259 to i64, !dbg !59
+  %280 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %279, !dbg !59
+  %281 = sext i32 %260 to i64, !dbg !59
+  %282 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %281, !dbg !59
+  %283 = sext i32 %261 to i64, !dbg !59
+  %284 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %283, !dbg !59
+  %285 = sext i32 %262 to i64, !dbg !59
+  %286 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %285, !dbg !59
+  %287 = sext i32 %263 to i64, !dbg !59
+  %288 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %287, !dbg !59
+  %289 = sext i32 %264 to i64, !dbg !59
+  %290 = getelementptr [2 x i8], ptr addrspace(1) %1, i64 %289, !dbg !59
+  %291 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %276, i1 %267) #10, !dbg !60
+  %292 = extractvalue { i32, i32, i32, i32 } %291, 0, !dbg !60
+  %293 = bitcast i32 %292 to <2 x bfloat>, !dbg !60
+  %294 = extractvalue { i32, i32, i32, i32 } %291, 1, !dbg !60
+  %295 = bitcast i32 %294 to <2 x bfloat>, !dbg !60
+  %296 = extractvalue { i32, i32, i32, i32 } %291, 2, !dbg !60
+  %297 = bitcast i32 %296 to <2 x bfloat>, !dbg !60
+  %298 = extractvalue { i32, i32, i32, i32 } %291, 3, !dbg !60
+  %299 = bitcast i32 %298 to <2 x bfloat>, !dbg !60
+  %300 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %278, i1 %268) #10, !dbg !60
+  %301 = extractvalue { i32, i32, i32, i32 } %300, 0, !dbg !60
+  %302 = bitcast i32 %301 to <2 x bfloat>, !dbg !60
+  %303 = extractvalue { i32, i32, i32, i32 } %300, 1, !dbg !60
+  %304 = bitcast i32 %303 to <2 x bfloat>, !dbg !60
+  %305 = extractvalue { i32, i32, i32, i32 } %300, 2, !dbg !60
+  %306 = bitcast i32 %305 to <2 x bfloat>, !dbg !60
+  %307 = extractvalue { i32, i32, i32, i32 } %300, 3, !dbg !60
+  %308 = bitcast i32 %307 to <2 x bfloat>, !dbg !60
+  %309 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %280, i1 %269) #10, !dbg !60
+  %310 = extractvalue { i32, i32, i32, i32 } %309, 0, !dbg !60
+  %311 = bitcast i32 %310 to <2 x bfloat>, !dbg !60
+  %312 = extractvalue { i32, i32, i32, i32 } %309, 1, !dbg !60
+  %313 = bitcast i32 %312 to <2 x bfloat>, !dbg !60
+  %314 = extractvalue { i32, i32, i32, i32 } %309, 2, !dbg !60
+  %315 = bitcast i32 %314 to <2 x bfloat>, !dbg !60
+  %316 = extractvalue { i32, i32, i32, i32 } %309, 3, !dbg !60
+  %317 = bitcast i32 %316 to <2 x bfloat>, !dbg !60
+  %318 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %282, i1 %270) #10, !dbg !60
+  %319 = extractvalue { i32, i32, i32, i32 } %318, 0, !dbg !60
+  %320 = bitcast i32 %319 to <2 x bfloat>, !dbg !60
+  %321 = extractvalue { i32, i32, i32, i32 } %318, 1, !dbg !60
+  %322 = bitcast i32 %321 to <2 x bfloat>, !dbg !60
+  %323 = extractvalue { i32, i32, i32, i32 } %318, 2, !dbg !60
+  %324 = bitcast i32 %323 to <2 x bfloat>, !dbg !60
+  %325 = extractvalue { i32, i32, i32, i32 } %318, 3, !dbg !60
+  %326 = bitcast i32 %325 to <2 x bfloat>, !dbg !60
+  %327 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %284, i1 %271) #10, !dbg !60
+  %328 = extractvalue { i32, i32, i32, i32 } %327, 0, !dbg !60
+  %329 = bitcast i32 %328 to <2 x bfloat>, !dbg !60
+  %330 = extractvalue { i32, i32, i32, i32 } %327, 1, !dbg !60
+  %331 = bitcast i32 %330 to <2 x bfloat>, !dbg !60
+  %332 = extractvalue { i32, i32, i32, i32 } %327, 2, !dbg !60
+  %333 = bitcast i32 %332 to <2 x bfloat>, !dbg !60
+  %334 = extractvalue { i32, i32, i32, i32 } %327, 3, !dbg !60
+  %335 = bitcast i32 %334 to <2 x bfloat>, !dbg !60
+  %336 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %286, i1 %272) #10, !dbg !60
+  %337 = extractvalue { i32, i32, i32, i32 } %336, 0, !dbg !60
+  %338 = bitcast i32 %337 to <2 x bfloat>, !dbg !60
+  %339 = extractvalue { i32, i32, i32, i32 } %336, 1, !dbg !60
+  %340 = bitcast i32 %339 to <2 x bfloat>, !dbg !60
+  %341 = extractvalue { i32, i32, i32, i32 } %336, 2, !dbg !60
+  %342 = bitcast i32 %341 to <2 x bfloat>, !dbg !60
+  %343 = extractvalue { i32, i32, i32, i32 } %336, 3, !dbg !60
+  %344 = bitcast i32 %343 to <2 x bfloat>, !dbg !60
+  %345 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %288, i1 %273) #10, !dbg !60
+  %346 = extractvalue { i32, i32, i32, i32 } %345, 0, !dbg !60
+  %347 = bitcast i32 %346 to <2 x bfloat>, !dbg !60
+  %348 = extractvalue { i32, i32, i32, i32 } %345, 1, !dbg !60
+  %349 = bitcast i32 %348 to <2 x bfloat>, !dbg !60
+  %350 = extractvalue { i32, i32, i32, i32 } %345, 2, !dbg !60
+  %351 = bitcast i32 %350 to <2 x bfloat>, !dbg !60
+  %352 = extractvalue { i32, i32, i32, i32 } %345, 3, !dbg !60
+  %353 = bitcast i32 %352 to <2 x bfloat>, !dbg !60
+  %354 = tail call { i32, i32, i32, i32 } asm sideeffect "@$9 ld.global.v4.b32 { $0, $1, $2, $3 }, [ $8 + 0 ];", "=r,=r,=r,=r,0,1,2,3,l,b"(i32 0, i32 0, i32 0, i32 0, ptr addrspace(1) %290, i1 %274) #10, !dbg !60
+  %355 = extractvalue { i32, i32, i32, i32 } %354, 0, !dbg !60
+  %356 = bitcast i32 %355 to <2 x bfloat>, !dbg !60
+  %357 = extractvalue { i32, i32, i32, i32 } %354, 1, !dbg !60
+  %358 = bitcast i32 %357 to <2 x bfloat>, !dbg !60
+  %359 = extractvalue { i32, i32, i32, i32 } %354, 2, !dbg !60
+  %360 = bitcast i32 %359 to <2 x bfloat>, !dbg !60
+  %361 = extractvalue { i32, i32, i32, i32 } %354, 3, !dbg !60
+  %362 = bitcast i32 %361 to <2 x bfloat>, !dbg !60
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !61
+  store <1 x i16> %104, ptr addrspace(3) %103, align 2, !dbg !61
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !61
+  %363 = load bfloat, ptr addrspace(3) %111, align 2, !dbg !61
+  %364 = load bfloat, ptr addrspace(3) %112, align 2, !dbg !61
+  %365 = load bfloat, ptr addrspace(3) %113, align 2, !dbg !61
+  %366 = load bfloat, ptr addrspace(3) %114, align 2, !dbg !61
+  %367 = load bfloat, ptr addrspace(3) %116, align 2, !dbg !61
+  %368 = load bfloat, ptr addrspace(3) %117, align 2, !dbg !61
+  %369 = load bfloat, ptr addrspace(3) %118, align 2, !dbg !61
+  %370 = load bfloat, ptr addrspace(3) %119, align 2, !dbg !61
+  %371 = shufflevector <2 x bfloat> %293, <2 x bfloat> %295, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %372 = shufflevector <2 x bfloat> %297, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %373 = shufflevector <8 x bfloat> %371, <8 x bfloat> %372, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %374 = shufflevector <2 x bfloat> %297, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %375 = shufflevector <8 x bfloat> %373, <8 x bfloat> %374, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %376 = shufflevector <2 x bfloat> %299, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %377 = shufflevector <8 x bfloat> %375, <8 x bfloat> %376, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %378 = insertelement <8 x bfloat> poison, bfloat %363, i64 0, !dbg !61
+  %379 = insertelement <8 x bfloat> %378, bfloat %367, i64 1, !dbg !61
+  %380 = insertelement <8 x bfloat> %379, bfloat %364, i64 2, !dbg !61
+  %381 = insertelement <8 x bfloat> %380, bfloat %368, i64 3, !dbg !61
+  %382 = insertelement <8 x bfloat> %381, bfloat %365, i64 4, !dbg !61
+  %383 = insertelement <8 x bfloat> %382, bfloat %369, i64 5, !dbg !61
+  %384 = insertelement <8 x bfloat> %383, bfloat %366, i64 6, !dbg !61
+  %385 = insertelement <8 x bfloat> %384, bfloat %370, i64 7, !dbg !61
+  %386 = fmul <8 x bfloat> %377, %385, !dbg !61
+  %387 = fpext <8 x bfloat> %386 to <8 x float>, !dbg !62
+  %388 = shufflevector <2 x bfloat> %302, <2 x bfloat> %304, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %389 = shufflevector <2 x bfloat> %306, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %390 = shufflevector <8 x bfloat> %388, <8 x bfloat> %389, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %391 = shufflevector <2 x bfloat> %306, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %392 = shufflevector <8 x bfloat> %390, <8 x bfloat> %391, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %393 = shufflevector <2 x bfloat> %308, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %394 = shufflevector <8 x bfloat> %392, <8 x bfloat> %393, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %395 = fmul <8 x bfloat> %394, %385, !dbg !61
+  %396 = fpext <8 x bfloat> %395 to <8 x float>, !dbg !62
+  %397 = shufflevector <2 x bfloat> %311, <2 x bfloat> %313, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %398 = shufflevector <2 x bfloat> %315, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %399 = shufflevector <8 x bfloat> %397, <8 x bfloat> %398, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %400 = shufflevector <2 x bfloat> %315, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %401 = shufflevector <8 x bfloat> %399, <8 x bfloat> %400, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %402 = shufflevector <2 x bfloat> %317, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %403 = shufflevector <8 x bfloat> %401, <8 x bfloat> %402, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %404 = fmul <8 x bfloat> %403, %385, !dbg !61
+  %405 = fpext <8 x bfloat> %404 to <8 x float>, !dbg !62
+  %406 = shufflevector <2 x bfloat> %320, <2 x bfloat> %322, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %407 = shufflevector <2 x bfloat> %324, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %408 = shufflevector <8 x bfloat> %406, <8 x bfloat> %407, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %409 = shufflevector <2 x bfloat> %324, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %410 = shufflevector <8 x bfloat> %408, <8 x bfloat> %409, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %411 = shufflevector <2 x bfloat> %326, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %412 = shufflevector <8 x bfloat> %410, <8 x bfloat> %411, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %413 = fmul <8 x bfloat> %412, %385, !dbg !61
+  %414 = fpext <8 x bfloat> %413 to <8 x float>, !dbg !62
+  %415 = shufflevector <2 x bfloat> %329, <2 x bfloat> %331, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %416 = shufflevector <2 x bfloat> %333, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %417 = shufflevector <8 x bfloat> %415, <8 x bfloat> %416, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %418 = shufflevector <2 x bfloat> %333, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %419 = shufflevector <8 x bfloat> %417, <8 x bfloat> %418, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %420 = shufflevector <2 x bfloat> %335, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %421 = shufflevector <8 x bfloat> %419, <8 x bfloat> %420, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %422 = fmul <8 x bfloat> %421, %385, !dbg !61
+  %423 = fpext <8 x bfloat> %422 to <8 x float>, !dbg !62
+  %424 = shufflevector <2 x bfloat> %338, <2 x bfloat> %340, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %425 = shufflevector <2 x bfloat> %342, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %426 = shufflevector <8 x bfloat> %424, <8 x bfloat> %425, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %427 = shufflevector <2 x bfloat> %342, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %428 = shufflevector <8 x bfloat> %426, <8 x bfloat> %427, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %429 = shufflevector <2 x bfloat> %344, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %430 = shufflevector <8 x bfloat> %428, <8 x bfloat> %429, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %431 = fmul <8 x bfloat> %430, %385, !dbg !61
+  %432 = fpext <8 x bfloat> %431 to <8 x float>, !dbg !62
+  %433 = shufflevector <2 x bfloat> %347, <2 x bfloat> %349, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %434 = shufflevector <2 x bfloat> %351, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %435 = shufflevector <8 x bfloat> %433, <8 x bfloat> %434, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %436 = shufflevector <2 x bfloat> %351, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %437 = shufflevector <8 x bfloat> %435, <8 x bfloat> %436, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %438 = shufflevector <2 x bfloat> %353, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %439 = shufflevector <8 x bfloat> %437, <8 x bfloat> %438, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %440 = fmul <8 x bfloat> %439, %385, !dbg !61
+  %441 = fpext <8 x bfloat> %440 to <8 x float>, !dbg !62
+  %442 = shufflevector <2 x bfloat> %356, <2 x bfloat> %358, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %443 = shufflevector <2 x bfloat> %360, <2 x bfloat> poison, <8 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %444 = shufflevector <8 x bfloat> %442, <8 x bfloat> %443, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %445 = shufflevector <2 x bfloat> %360, <2 x bfloat> poison, <8 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %446 = shufflevector <8 x bfloat> %444, <8 x bfloat> %445, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 9, i32 poison, i32 poison>, !dbg !61
+  %447 = shufflevector <2 x bfloat> %362, <2 x bfloat> poison, <8 x i32> <i32 0, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !61
+  %448 = shufflevector <8 x bfloat> %446, <8 x bfloat> %447, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 8, i32 9>, !dbg !61
+  %449 = fmul <8 x bfloat> %448, %385, !dbg !61
+  %450 = fpext <8 x bfloat> %449 to <8 x float>, !dbg !62
+  %shift = shufflevector <8 x float> %387, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop = fadd <8 x float> %shift, %387, !dbg !63
+  %shift50 = shufflevector <8 x float> %387, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop51 = fadd <8 x float> %shift50, %387, !dbg !63
+  %shift53 = shufflevector <8 x float> %387, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop54 = fadd <8 x float> %shift53, %387, !dbg !63
+  %shift56 = shufflevector <8 x float> %387, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop57 = fadd <8 x float> %shift56, %387, !dbg !63
+  %shift59 = shufflevector <8 x float> %foldExtExtBinop51, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop60 = fadd <8 x float> %foldExtExtBinop, %shift59, !dbg !63
+  %shift62 = shufflevector <8 x float> %foldExtExtBinop57, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop63 = fadd <8 x float> %foldExtExtBinop54, %shift62, !dbg !63
+  %shift65 = shufflevector <8 x float> %foldExtExtBinop63, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop66 = fadd <8 x float> %foldExtExtBinop60, %shift65, !dbg !63
+  %451 = extractelement <8 x float> %foldExtExtBinop66, i64 0, !dbg !63
+  %shift68 = shufflevector <8 x float> %396, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop69 = fadd <8 x float> %shift68, %396, !dbg !63
+  %shift71 = shufflevector <8 x float> %396, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop72 = fadd <8 x float> %shift71, %396, !dbg !63
+  %shift74 = shufflevector <8 x float> %396, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop75 = fadd <8 x float> %shift74, %396, !dbg !63
+  %shift77 = shufflevector <8 x float> %396, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop78 = fadd <8 x float> %shift77, %396, !dbg !63
+  %shift80 = shufflevector <8 x float> %foldExtExtBinop72, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop81 = fadd <8 x float> %foldExtExtBinop69, %shift80, !dbg !63
+  %shift83 = shufflevector <8 x float> %foldExtExtBinop78, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop84 = fadd <8 x float> %foldExtExtBinop75, %shift83, !dbg !63
+  %shift86 = shufflevector <8 x float> %foldExtExtBinop84, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop87 = fadd <8 x float> %foldExtExtBinop81, %shift86, !dbg !63
+  %452 = extractelement <8 x float> %foldExtExtBinop87, i64 0, !dbg !63
+  %shift89 = shufflevector <8 x float> %405, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop90 = fadd <8 x float> %shift89, %405, !dbg !63
+  %shift92 = shufflevector <8 x float> %405, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop93 = fadd <8 x float> %shift92, %405, !dbg !63
+  %shift95 = shufflevector <8 x float> %405, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop96 = fadd <8 x float> %shift95, %405, !dbg !63
+  %shift98 = shufflevector <8 x float> %405, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop99 = fadd <8 x float> %shift98, %405, !dbg !63
+  %shift101 = shufflevector <8 x float> %foldExtExtBinop93, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop102 = fadd <8 x float> %foldExtExtBinop90, %shift101, !dbg !63
+  %shift104 = shufflevector <8 x float> %foldExtExtBinop99, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop105 = fadd <8 x float> %foldExtExtBinop96, %shift104, !dbg !63
+  %shift107 = shufflevector <8 x float> %foldExtExtBinop105, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop108 = fadd <8 x float> %foldExtExtBinop102, %shift107, !dbg !63
+  %453 = extractelement <8 x float> %foldExtExtBinop108, i64 0, !dbg !63
+  %shift110 = shufflevector <8 x float> %414, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop111 = fadd <8 x float> %shift110, %414, !dbg !63
+  %shift113 = shufflevector <8 x float> %414, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop114 = fadd <8 x float> %shift113, %414, !dbg !63
+  %shift116 = shufflevector <8 x float> %414, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop117 = fadd <8 x float> %shift116, %414, !dbg !63
+  %shift119 = shufflevector <8 x float> %414, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop120 = fadd <8 x float> %shift119, %414, !dbg !63
+  %shift122 = shufflevector <8 x float> %foldExtExtBinop114, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop123 = fadd <8 x float> %foldExtExtBinop111, %shift122, !dbg !63
+  %shift125 = shufflevector <8 x float> %foldExtExtBinop120, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop126 = fadd <8 x float> %foldExtExtBinop117, %shift125, !dbg !63
+  %shift128 = shufflevector <8 x float> %foldExtExtBinop126, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop129 = fadd <8 x float> %foldExtExtBinop123, %shift128, !dbg !63
+  %454 = extractelement <8 x float> %foldExtExtBinop129, i64 0, !dbg !63
+  %shift131 = shufflevector <8 x float> %423, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop132 = fadd <8 x float> %shift131, %423, !dbg !63
+  %shift134 = shufflevector <8 x float> %423, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop135 = fadd <8 x float> %shift134, %423, !dbg !63
+  %shift137 = shufflevector <8 x float> %423, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop138 = fadd <8 x float> %shift137, %423, !dbg !63
+  %shift140 = shufflevector <8 x float> %423, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop141 = fadd <8 x float> %shift140, %423, !dbg !63
+  %shift143 = shufflevector <8 x float> %foldExtExtBinop135, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop144 = fadd <8 x float> %foldExtExtBinop132, %shift143, !dbg !63
+  %shift146 = shufflevector <8 x float> %foldExtExtBinop141, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop147 = fadd <8 x float> %foldExtExtBinop138, %shift146, !dbg !63
+  %shift149 = shufflevector <8 x float> %foldExtExtBinop147, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop150 = fadd <8 x float> %foldExtExtBinop144, %shift149, !dbg !63
+  %455 = extractelement <8 x float> %foldExtExtBinop150, i64 0, !dbg !63
+  %shift152 = shufflevector <8 x float> %432, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop153 = fadd <8 x float> %shift152, %432, !dbg !63
+  %shift155 = shufflevector <8 x float> %432, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop156 = fadd <8 x float> %shift155, %432, !dbg !63
+  %shift158 = shufflevector <8 x float> %432, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop159 = fadd <8 x float> %shift158, %432, !dbg !63
+  %shift161 = shufflevector <8 x float> %432, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop162 = fadd <8 x float> %shift161, %432, !dbg !63
+  %shift164 = shufflevector <8 x float> %foldExtExtBinop156, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop165 = fadd <8 x float> %foldExtExtBinop153, %shift164, !dbg !63
+  %shift167 = shufflevector <8 x float> %foldExtExtBinop162, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop168 = fadd <8 x float> %foldExtExtBinop159, %shift167, !dbg !63
+  %shift170 = shufflevector <8 x float> %foldExtExtBinop168, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop171 = fadd <8 x float> %foldExtExtBinop165, %shift170, !dbg !63
+  %456 = extractelement <8 x float> %foldExtExtBinop171, i64 0, !dbg !63
+  %shift173 = shufflevector <8 x float> %441, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop174 = fadd <8 x float> %shift173, %441, !dbg !63
+  %shift176 = shufflevector <8 x float> %441, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop177 = fadd <8 x float> %shift176, %441, !dbg !63
+  %shift179 = shufflevector <8 x float> %441, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop180 = fadd <8 x float> %shift179, %441, !dbg !63
+  %shift182 = shufflevector <8 x float> %441, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop183 = fadd <8 x float> %shift182, %441, !dbg !63
+  %shift185 = shufflevector <8 x float> %foldExtExtBinop177, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop186 = fadd <8 x float> %foldExtExtBinop174, %shift185, !dbg !63
+  %shift188 = shufflevector <8 x float> %foldExtExtBinop183, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop189 = fadd <8 x float> %foldExtExtBinop180, %shift188, !dbg !63
+  %shift191 = shufflevector <8 x float> %foldExtExtBinop189, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop192 = fadd <8 x float> %foldExtExtBinop186, %shift191, !dbg !63
+  %457 = extractelement <8 x float> %foldExtExtBinop192, i64 0, !dbg !63
+  %shift194 = shufflevector <8 x float> %450, <8 x float> poison, <8 x i32> <i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop195 = fadd <8 x float> %shift194, %450, !dbg !63
+  %shift197 = shufflevector <8 x float> %450, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop198 = fadd <8 x float> %shift197, %450, !dbg !63
+  %shift200 = shufflevector <8 x float> %450, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 5, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop201 = fadd <8 x float> %shift200, %450, !dbg !63
+  %shift203 = shufflevector <8 x float> %450, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 7, i32 poison>, !dbg !63
+  %foldExtExtBinop204 = fadd <8 x float> %shift203, %450, !dbg !63
+  %shift206 = shufflevector <8 x float> %foldExtExtBinop198, <8 x float> poison, <8 x i32> <i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop207 = fadd <8 x float> %foldExtExtBinop195, %shift206, !dbg !63
+  %shift209 = shufflevector <8 x float> %foldExtExtBinop204, <8 x float> poison, <8 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop210 = fadd <8 x float> %foldExtExtBinop201, %shift209, !dbg !63
+  %shift212 = shufflevector <8 x float> %foldExtExtBinop210, <8 x float> poison, <8 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !63
+  %foldExtExtBinop213 = fadd <8 x float> %foldExtExtBinop207, %shift212, !dbg !63
+  %458 = extractelement <8 x float> %foldExtExtBinop213, i64 0, !dbg !63
+  %459 = bitcast float %451 to i32, !dbg !64
+  %460 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %459, i32 8, i32 31), !dbg !64
+  %461 = bitcast i32 %460 to float, !dbg !64
+  %462 = fadd float %451, %461, !dbg !63
+  %463 = bitcast float %462 to i32, !dbg !64
+  %464 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %463, i32 4, i32 31), !dbg !64
+  %465 = bitcast i32 %464 to float, !dbg !64
+  %466 = fadd float %462, %465, !dbg !63
+  %467 = bitcast float %466 to i32, !dbg !64
+  %468 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %467, i32 2, i32 31), !dbg !64
+  %469 = bitcast i32 %468 to float, !dbg !64
+  %470 = fadd float %466, %469, !dbg !63
+  %471 = bitcast float %470 to i32, !dbg !64
+  %472 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %471, i32 1, i32 31), !dbg !64
+  %473 = bitcast i32 %472 to float, !dbg !64
+  %474 = fadd float %470, %473, !dbg !63
+  %475 = bitcast float %452 to i32, !dbg !64
+  %476 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %475, i32 8, i32 31), !dbg !64
+  %477 = bitcast i32 %476 to float, !dbg !64
+  %478 = fadd float %452, %477, !dbg !63
+  %479 = bitcast float %478 to i32, !dbg !64
+  %480 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %479, i32 4, i32 31), !dbg !64
+  %481 = bitcast i32 %480 to float, !dbg !64
+  %482 = fadd float %478, %481, !dbg !63
+  %483 = bitcast float %482 to i32, !dbg !64
+  %484 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %483, i32 2, i32 31), !dbg !64
+  %485 = bitcast i32 %484 to float, !dbg !64
+  %486 = fadd float %482, %485, !dbg !63
+  %487 = bitcast float %486 to i32, !dbg !64
+  %488 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %487, i32 1, i32 31), !dbg !64
+  %489 = bitcast i32 %488 to float, !dbg !64
+  %490 = fadd float %486, %489, !dbg !63
+  %491 = bitcast float %453 to i32, !dbg !64
+  %492 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %491, i32 8, i32 31), !dbg !64
+  %493 = bitcast i32 %492 to float, !dbg !64
+  %494 = fadd float %453, %493, !dbg !63
+  %495 = bitcast float %494 to i32, !dbg !64
+  %496 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %495, i32 4, i32 31), !dbg !64
+  %497 = bitcast i32 %496 to float, !dbg !64
+  %498 = fadd float %494, %497, !dbg !63
+  %499 = bitcast float %498 to i32, !dbg !64
+  %500 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %499, i32 2, i32 31), !dbg !64
+  %501 = bitcast i32 %500 to float, !dbg !64
+  %502 = fadd float %498, %501, !dbg !63
+  %503 = bitcast float %502 to i32, !dbg !64
+  %504 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %503, i32 1, i32 31), !dbg !64
+  %505 = bitcast i32 %504 to float, !dbg !64
+  %506 = fadd float %502, %505, !dbg !63
+  %507 = bitcast float %454 to i32, !dbg !64
+  %508 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %507, i32 8, i32 31), !dbg !64
+  %509 = bitcast i32 %508 to float, !dbg !64
+  %510 = fadd float %454, %509, !dbg !63
+  %511 = bitcast float %510 to i32, !dbg !64
+  %512 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %511, i32 4, i32 31), !dbg !64
+  %513 = bitcast i32 %512 to float, !dbg !64
+  %514 = fadd float %510, %513, !dbg !63
+  %515 = bitcast float %514 to i32, !dbg !64
+  %516 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %515, i32 2, i32 31), !dbg !64
+  %517 = bitcast i32 %516 to float, !dbg !64
+  %518 = fadd float %514, %517, !dbg !63
+  %519 = bitcast float %518 to i32, !dbg !64
+  %520 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %519, i32 1, i32 31), !dbg !64
+  %521 = bitcast float %455 to i32, !dbg !64
+  %522 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %521, i32 8, i32 31), !dbg !64
+  %523 = bitcast i32 %522 to float, !dbg !64
+  %524 = fadd float %455, %523, !dbg !63
+  %525 = bitcast float %524 to i32, !dbg !64
+  %526 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %525, i32 4, i32 31), !dbg !64
+  %527 = bitcast i32 %526 to float, !dbg !64
+  %528 = fadd float %524, %527, !dbg !63
+  %529 = bitcast float %528 to i32, !dbg !64
+  %530 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %529, i32 2, i32 31), !dbg !64
+  %531 = bitcast i32 %530 to float, !dbg !64
+  %532 = fadd float %528, %531, !dbg !63
+  %533 = bitcast float %532 to i32, !dbg !64
+  %534 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %533, i32 1, i32 31), !dbg !64
+  %535 = bitcast float %456 to i32, !dbg !64
+  %536 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %535, i32 8, i32 31), !dbg !64
+  %537 = bitcast i32 %536 to float, !dbg !64
+  %538 = fadd float %456, %537, !dbg !63
+  %539 = bitcast float %538 to i32, !dbg !64
+  %540 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %539, i32 4, i32 31), !dbg !64
+  %541 = bitcast i32 %540 to float, !dbg !64
+  %542 = fadd float %538, %541, !dbg !63
+  %543 = bitcast float %542 to i32, !dbg !64
+  %544 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %543, i32 2, i32 31), !dbg !64
+  %545 = bitcast i32 %544 to float, !dbg !64
+  %546 = fadd float %542, %545, !dbg !63
+  %547 = bitcast float %546 to i32, !dbg !64
+  %548 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %547, i32 1, i32 31), !dbg !64
+  %549 = bitcast float %457 to i32, !dbg !64
+  %550 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %549, i32 8, i32 31), !dbg !64
+  %551 = bitcast i32 %550 to float, !dbg !64
+  %552 = fadd float %457, %551, !dbg !63
+  %553 = bitcast float %552 to i32, !dbg !64
+  %554 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %553, i32 4, i32 31), !dbg !64
+  %555 = bitcast i32 %554 to float, !dbg !64
+  %556 = fadd float %552, %555, !dbg !63
+  %557 = bitcast float %556 to i32, !dbg !64
+  %558 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %557, i32 2, i32 31), !dbg !64
+  %559 = bitcast i32 %558 to float, !dbg !64
+  %560 = fadd float %556, %559, !dbg !63
+  %561 = bitcast float %560 to i32, !dbg !64
+  %562 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %561, i32 1, i32 31), !dbg !64
+  %563 = insertelement <4 x i32> poison, i32 %520, i64 0, !dbg !64
+  %564 = insertelement <4 x i32> %563, i32 %534, i64 1, !dbg !64
+  %565 = insertelement <4 x i32> %564, i32 %548, i64 2, !dbg !64
+  %566 = insertelement <4 x i32> %565, i32 %562, i64 3, !dbg !64
+  %567 = bitcast <4 x i32> %566 to <4 x float>, !dbg !64
+  %568 = insertelement <4 x float> poison, float %518, i64 0, !dbg !63
+  %569 = insertelement <4 x float> %568, float %532, i64 1, !dbg !63
+  %570 = insertelement <4 x float> %569, float %546, i64 2, !dbg !63
+  %571 = insertelement <4 x float> %570, float %560, i64 3, !dbg !63
+  %572 = fadd <4 x float> %571, %567, !dbg !63
+  %573 = bitcast float %458 to i32, !dbg !64
+  %574 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %573, i32 8, i32 31), !dbg !64
+  %575 = bitcast i32 %574 to float, !dbg !64
+  %576 = fadd float %458, %575, !dbg !63
+  %577 = bitcast float %576 to i32, !dbg !64
+  %578 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %577, i32 4, i32 31), !dbg !64
+  %579 = bitcast i32 %578 to float, !dbg !64
+  %580 = fadd float %576, %579, !dbg !63
+  %581 = bitcast float %580 to i32, !dbg !64
+  %582 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %581, i32 2, i32 31), !dbg !64
+  %583 = bitcast i32 %582 to float, !dbg !64
+  %584 = fadd float %580, %583, !dbg !63
+  %585 = bitcast float %584 to i32, !dbg !64
+  %586 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %585, i32 1, i32 31), !dbg !64
+  %587 = bitcast i32 %586 to float, !dbg !64
+  %588 = fadd float %584, %587, !dbg !63
+  %589 = fmul float %3, %474, !dbg !49
+  %590 = fmul float %3, %490, !dbg !49
+  %591 = fmul float %3, %506, !dbg !49
+  %592 = fmul <4 x float> %184, %572, !dbg !49
+  %593 = fmul float %3, %588, !dbg !49
+  %594 = select i1 %198, float %589, float -inf, !dbg !66
+  %595 = select i1 %199, float %590, float -inf, !dbg !66
+  %596 = select i1 %200, float %591, float -inf, !dbg !66
+  %597 = select <4 x i1> %228, <4 x float> %592, <4 x float> splat (float -inf), !dbg !66
+  %598 = select i1 %201, float %593, float -inf, !dbg !66
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !55
+  %599 = insertelement <4 x i32> %218, i32 %242, i64 3, !dbg !55
+  store <4 x i32> %599, ptr addrspace(3) %123, align 16, !dbg !55
+  %600 = insertelement <4 x i32> poison, i32 %244, i64 0, !dbg !55
+  %601 = insertelement <4 x i32> %600, i32 %246, i64 1, !dbg !55
+  %602 = insertelement <4 x i32> %601, i32 %248, i64 2, !dbg !55
+  %603 = insertelement <4 x i32> %602, i32 %249, i64 3, !dbg !55
+  store <4 x i32> %603, ptr addrspace(3) %124, align 16, !dbg !55
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !55
+  %604 = load i32, ptr addrspace(3) %126, align 16, !dbg !55
+  %605 = load i32, ptr addrspace(3) %154, align 4, !dbg !55
+  %606 = load i32, ptr addrspace(3) %155, align 8, !dbg !55
+  %607 = load i32, ptr addrspace(3) %156, align 4, !dbg !55
+  %608 = load i32, ptr addrspace(3) %127, align 16, !dbg !55
+  %609 = load i32, ptr addrspace(3) %157, align 4, !dbg !55
+  %610 = load i32, ptr addrspace(3) %158, align 8, !dbg !55
+  %611 = load i32, ptr addrspace(3) %159, align 4, !dbg !55
+  %612 = load i32, ptr addrspace(3) %128, align 16, !dbg !55
+  %613 = load i32, ptr addrspace(3) %160, align 4, !dbg !55
+  %614 = load i32, ptr addrspace(3) %161, align 8, !dbg !55
+  %615 = load i32, ptr addrspace(3) %162, align 4, !dbg !55
+  %616 = load i32, ptr addrspace(3) %129, align 16, !dbg !55
+  %617 = load i32, ptr addrspace(3) %163, align 4, !dbg !55
+  %618 = load i32, ptr addrspace(3) %164, align 8, !dbg !55
+  %619 = load i32, ptr addrspace(3) %165, align 4, !dbg !55
+  %620 = load i32, ptr addrspace(3) %130, align 16, !dbg !55
+  %621 = load i32, ptr addrspace(3) %166, align 4, !dbg !55
+  %622 = load i32, ptr addrspace(3) %167, align 8, !dbg !55
+  %623 = load i32, ptr addrspace(3) %168, align 4, !dbg !55
+  %624 = load i32, ptr addrspace(3) %131, align 16, !dbg !55
+  %625 = load i32, ptr addrspace(3) %169, align 4, !dbg !55
+  %626 = load i32, ptr addrspace(3) %170, align 8, !dbg !55
+  %627 = load i32, ptr addrspace(3) %171, align 4, !dbg !55
+  %628 = load i32, ptr addrspace(3) %132, align 16, !dbg !55
+  %629 = load i32, ptr addrspace(3) %172, align 4, !dbg !55
+  %630 = load i32, ptr addrspace(3) %173, align 8, !dbg !55
+  %631 = load i32, ptr addrspace(3) %174, align 4, !dbg !55
+  %632 = load i32, ptr addrspace(3) %133, align 16, !dbg !55
+  %633 = load i32, ptr addrspace(3) %175, align 4, !dbg !55
+  %634 = load i32, ptr addrspace(3) %176, align 8, !dbg !55
+  %635 = load i32, ptr addrspace(3) %177, align 4, !dbg !55
+  %636 = mul i32 %604, %13, !dbg !55
+  %637 = mul i32 %608, %13, !dbg !55
+  %638 = mul i32 %612, %13, !dbg !55
+  %639 = mul i32 %616, %13, !dbg !55
+  %640 = mul i32 %605, %13, !dbg !55
+  %641 = mul i32 %609, %13, !dbg !55
+  %642 = mul i32 %613, %13, !dbg !55
+  %643 = mul i32 %617, %13, !dbg !55
+  %644 = mul i32 %606, %13, !dbg !55
+  %645 = mul i32 %610, %13, !dbg !55
+  %646 = mul i32 %614, %13, !dbg !55
+  %647 = mul i32 %618, %13, !dbg !55
+  %648 = mul i32 %607, %13, !dbg !55
+  %649 = mul i32 %611, %13, !dbg !55
+  %650 = mul i32 %615, %13, !dbg !55
+  %651 = mul i32 %619, %13, !dbg !55
+  %652 = mul i32 %620, %13, !dbg !55
+  %653 = mul i32 %624, %13, !dbg !55
+  %654 = mul i32 %628, %13, !dbg !55
+  %655 = mul i32 %632, %13, !dbg !55
+  %656 = mul i32 %621, %13, !dbg !55
+  %657 = mul i32 %625, %13, !dbg !55
+  %658 = mul i32 %629, %13, !dbg !55
+  %659 = mul i32 %633, %13, !dbg !55
+  %660 = mul i32 %622, %13, !dbg !55
+  %661 = mul i32 %626, %13, !dbg !55
+  %662 = mul i32 %630, %13, !dbg !55
+  %663 = mul i32 %634, %13, !dbg !55
+  %664 = mul i32 %623, %13, !dbg !55
+  %665 = mul i32 %627, %13, !dbg !55
+  %666 = mul i32 %631, %13, !dbg !55
+  %667 = mul i32 %635, %13, !dbg !55
+  %668 = add i32 %135, %636, !dbg !55
+  %669 = add i32 %135, %637, !dbg !55
+  %670 = add i32 %135, %638, !dbg !55
+  %671 = add i32 %135, %639, !dbg !55
+  %672 = add i32 %135, %640, !dbg !55
+  %673 = add i32 %135, %641, !dbg !55
+  %674 = add i32 %135, %642, !dbg !55
+  %675 = add i32 %135, %643, !dbg !55
+  %676 = add i32 %135, %644, !dbg !55
+  %677 = add i32 %135, %645, !dbg !55
+  %678 = add i32 %135, %646, !dbg !55
+  %679 = add i32 %135, %647, !dbg !55
+  %680 = add i32 %135, %648, !dbg !55
+  %681 = add i32 %135, %649, !dbg !55
+  %682 = add i32 %135, %650, !dbg !55
+  %683 = add i32 %135, %651, !dbg !55
+  %684 = add i32 %135, %652, !dbg !55
+  %685 = add i32 %135, %653, !dbg !55
+  %686 = add i32 %135, %654, !dbg !55
+  %687 = add i32 %135, %655, !dbg !55
+  %688 = add i32 %135, %656, !dbg !55
+  %689 = add i32 %135, %657, !dbg !55
+  %690 = add i32 %135, %658, !dbg !55
+  %691 = add i32 %135, %659, !dbg !55
+  %692 = add i32 %135, %660, !dbg !55
+  %693 = add i32 %135, %661, !dbg !55
+  %694 = add i32 %135, %662, !dbg !55
+  %695 = add i32 %135, %663, !dbg !55
+  %696 = add i32 %135, %664, !dbg !55
+  %697 = add i32 %135, %665, !dbg !55
+  %698 = add i32 %135, %666, !dbg !55
+  %699 = add i32 %135, %667, !dbg !55
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !47
+  %700 = shufflevector <4 x i32> %221, <4 x i32> %225, <4 x i32> <i32 0, i32 1, i32 2, i32 4>, !dbg !47
+  store <4 x i32> %700, ptr addrspace(3) %123, align 16, !dbg !47
+  %701 = shufflevector <4 x i32> %226, <4 x i32> poison, <4 x i32> <i32 1, i32 2, i32 3, i32 poison>, !dbg !47
+  %702 = insertelement <4 x i32> %701, i32 %197, i64 3, !dbg !47
+  store <4 x i32> %702, ptr addrspace(3) %124, align 16, !dbg !47
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !47
+  %703 = load <32 x i32>, ptr addrspace(3) %126, align 16, !dbg !47
+  %704 = icmp slt <32 x i32> %703, %180, !dbg !47
+  %705 = sext i32 %668 to i64, !dbg !67
+  %706 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %705, !dbg !67
+  %707 = sext i32 %669 to i64, !dbg !67
+  %708 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %707, !dbg !67
+  %709 = sext i32 %670 to i64, !dbg !67
+  %710 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %709, !dbg !67
+  %711 = sext i32 %671 to i64, !dbg !67
+  %712 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %711, !dbg !67
+  %713 = sext i32 %672 to i64, !dbg !67
+  %714 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %713, !dbg !67
+  %715 = sext i32 %673 to i64, !dbg !67
+  %716 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %715, !dbg !67
+  %717 = sext i32 %674 to i64, !dbg !67
+  %718 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %717, !dbg !67
+  %719 = sext i32 %675 to i64, !dbg !67
+  %720 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %719, !dbg !67
+  %721 = sext i32 %676 to i64, !dbg !67
+  %722 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %721, !dbg !67
+  %723 = sext i32 %677 to i64, !dbg !67
+  %724 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %723, !dbg !67
+  %725 = sext i32 %678 to i64, !dbg !67
+  %726 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %725, !dbg !67
+  %727 = sext i32 %679 to i64, !dbg !67
+  %728 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %727, !dbg !67
+  %729 = sext i32 %680 to i64, !dbg !67
+  %730 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %729, !dbg !67
+  %731 = sext i32 %681 to i64, !dbg !67
+  %732 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %731, !dbg !67
+  %733 = sext i32 %682 to i64, !dbg !67
+  %734 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %733, !dbg !67
+  %735 = sext i32 %683 to i64, !dbg !67
+  %736 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %735, !dbg !67
+  %737 = sext i32 %684 to i64, !dbg !67
+  %738 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %737, !dbg !67
+  %739 = sext i32 %685 to i64, !dbg !67
+  %740 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %739, !dbg !67
+  %741 = sext i32 %686 to i64, !dbg !67
+  %742 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %741, !dbg !67
+  %743 = sext i32 %687 to i64, !dbg !67
+  %744 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %743, !dbg !67
+  %745 = sext i32 %688 to i64, !dbg !67
+  %746 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %745, !dbg !67
+  %747 = sext i32 %689 to i64, !dbg !67
+  %748 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %747, !dbg !67
+  %749 = sext i32 %690 to i64, !dbg !67
+  %750 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %749, !dbg !67
+  %751 = sext i32 %691 to i64, !dbg !67
+  %752 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %751, !dbg !67
+  %753 = sext i32 %692 to i64, !dbg !67
+  %754 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %753, !dbg !67
+  %755 = sext i32 %693 to i64, !dbg !67
+  %756 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %755, !dbg !67
+  %757 = sext i32 %694 to i64, !dbg !67
+  %758 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %757, !dbg !67
+  %759 = sext i32 %695 to i64, !dbg !67
+  %760 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %759, !dbg !67
+  %761 = sext i32 %696 to i64, !dbg !67
+  %762 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %761, !dbg !67
+  %763 = sext i32 %697 to i64, !dbg !67
+  %764 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %763, !dbg !67
+  %765 = sext i32 %698 to i64, !dbg !67
+  %766 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %765, !dbg !67
+  %767 = sext i32 %699 to i64, !dbg !67
+  %768 = getelementptr [2 x i8], ptr addrspace(1) %2, i64 %767, !dbg !67
+  %769 = extractelement <32 x i1> %704, i64 0, !dbg !68
+  %770 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %706, i1 %769) #10, !dbg !68
+  %771 = bitcast i32 %770 to <2 x bfloat>, !dbg !68
+  %772 = extractelement <32 x i1> %704, i64 4, !dbg !68
+  %773 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %708, i1 %772) #10, !dbg !68
+  %774 = bitcast i32 %773 to <2 x bfloat>, !dbg !68
+  %775 = extractelement <32 x i1> %704, i64 8, !dbg !68
+  %776 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %710, i1 %775) #10, !dbg !68
+  %777 = bitcast i32 %776 to <2 x bfloat>, !dbg !68
+  %778 = extractelement <32 x i1> %704, i64 12, !dbg !68
+  %779 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %712, i1 %778) #10, !dbg !68
+  %780 = bitcast i32 %779 to <2 x bfloat>, !dbg !68
+  %781 = extractelement <32 x i1> %704, i64 1, !dbg !68
+  %782 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %714, i1 %781) #10, !dbg !68
+  %783 = bitcast i32 %782 to <2 x bfloat>, !dbg !68
+  %784 = extractelement <32 x i1> %704, i64 5, !dbg !68
+  %785 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %716, i1 %784) #10, !dbg !68
+  %786 = bitcast i32 %785 to <2 x bfloat>, !dbg !68
+  %787 = extractelement <32 x i1> %704, i64 9, !dbg !68
+  %788 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %718, i1 %787) #10, !dbg !68
+  %789 = bitcast i32 %788 to <2 x bfloat>, !dbg !68
+  %790 = extractelement <32 x i1> %704, i64 13, !dbg !68
+  %791 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %720, i1 %790) #10, !dbg !68
+  %792 = bitcast i32 %791 to <2 x bfloat>, !dbg !68
+  %793 = extractelement <32 x i1> %704, i64 2, !dbg !68
+  %794 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %722, i1 %793) #10, !dbg !68
+  %795 = bitcast i32 %794 to <2 x bfloat>, !dbg !68
+  %796 = extractelement <32 x i1> %704, i64 6, !dbg !68
+  %797 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %724, i1 %796) #10, !dbg !68
+  %798 = bitcast i32 %797 to <2 x bfloat>, !dbg !68
+  %799 = extractelement <32 x i1> %704, i64 10, !dbg !68
+  %800 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %726, i1 %799) #10, !dbg !68
+  %801 = bitcast i32 %800 to <2 x bfloat>, !dbg !68
+  %802 = extractelement <32 x i1> %704, i64 14, !dbg !68
+  %803 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %728, i1 %802) #10, !dbg !68
+  %804 = bitcast i32 %803 to <2 x bfloat>, !dbg !68
+  %805 = extractelement <32 x i1> %704, i64 3, !dbg !68
+  %806 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %730, i1 %805) #10, !dbg !68
+  %807 = bitcast i32 %806 to <2 x bfloat>, !dbg !68
+  %808 = extractelement <32 x i1> %704, i64 7, !dbg !68
+  %809 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %732, i1 %808) #10, !dbg !68
+  %810 = bitcast i32 %809 to <2 x bfloat>, !dbg !68
+  %811 = extractelement <32 x i1> %704, i64 11, !dbg !68
+  %812 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %734, i1 %811) #10, !dbg !68
+  %813 = bitcast i32 %812 to <2 x bfloat>, !dbg !68
+  %814 = extractelement <32 x i1> %704, i64 15, !dbg !68
+  %815 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %736, i1 %814) #10, !dbg !68
+  %816 = bitcast i32 %815 to <2 x bfloat>, !dbg !68
+  %817 = extractelement <32 x i1> %704, i64 16, !dbg !68
+  %818 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %738, i1 %817) #10, !dbg !68
+  %819 = bitcast i32 %818 to <2 x bfloat>, !dbg !68
+  %820 = extractelement <32 x i1> %704, i64 20, !dbg !68
+  %821 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %740, i1 %820) #10, !dbg !68
+  %822 = bitcast i32 %821 to <2 x bfloat>, !dbg !68
+  %823 = extractelement <32 x i1> %704, i64 24, !dbg !68
+  %824 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %742, i1 %823) #10, !dbg !68
+  %825 = bitcast i32 %824 to <2 x bfloat>, !dbg !68
+  %826 = extractelement <32 x i1> %704, i64 28, !dbg !68
+  %827 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %744, i1 %826) #10, !dbg !68
+  %828 = bitcast i32 %827 to <2 x bfloat>, !dbg !68
+  %829 = extractelement <32 x i1> %704, i64 17, !dbg !68
+  %830 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %746, i1 %829) #10, !dbg !68
+  %831 = bitcast i32 %830 to <2 x bfloat>, !dbg !68
+  %832 = extractelement <32 x i1> %704, i64 21, !dbg !68
+  %833 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %748, i1 %832) #10, !dbg !68
+  %834 = bitcast i32 %833 to <2 x bfloat>, !dbg !68
+  %835 = extractelement <32 x i1> %704, i64 25, !dbg !68
+  %836 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %750, i1 %835) #10, !dbg !68
+  %837 = bitcast i32 %836 to <2 x bfloat>, !dbg !68
+  %838 = extractelement <32 x i1> %704, i64 29, !dbg !68
+  %839 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %752, i1 %838) #10, !dbg !68
+  %840 = bitcast i32 %839 to <2 x bfloat>, !dbg !68
+  %841 = extractelement <32 x i1> %704, i64 18, !dbg !68
+  %842 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %754, i1 %841) #10, !dbg !68
+  %843 = bitcast i32 %842 to <2 x bfloat>, !dbg !68
+  %844 = extractelement <32 x i1> %704, i64 22, !dbg !68
+  %845 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %756, i1 %844) #10, !dbg !68
+  %846 = bitcast i32 %845 to <2 x bfloat>, !dbg !68
+  %847 = extractelement <32 x i1> %704, i64 26, !dbg !68
+  %848 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %758, i1 %847) #10, !dbg !68
+  %849 = bitcast i32 %848 to <2 x bfloat>, !dbg !68
+  %850 = extractelement <32 x i1> %704, i64 30, !dbg !68
+  %851 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %760, i1 %850) #10, !dbg !68
+  %852 = bitcast i32 %851 to <2 x bfloat>, !dbg !68
+  %853 = extractelement <32 x i1> %704, i64 19, !dbg !68
+  %854 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %762, i1 %853) #10, !dbg !68
+  %855 = bitcast i32 %854 to <2 x bfloat>, !dbg !68
+  %856 = extractelement <32 x i1> %704, i64 23, !dbg !68
+  %857 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %764, i1 %856) #10, !dbg !68
+  %858 = bitcast i32 %857 to <2 x bfloat>, !dbg !68
+  %859 = extractelement <32 x i1> %704, i64 27, !dbg !68
+  %860 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %766, i1 %859) #10, !dbg !68
+  %861 = bitcast i32 %860 to <2 x bfloat>, !dbg !68
+  %862 = extractelement <32 x i1> %704, i64 31, !dbg !68
+  %863 = tail call i32 asm sideeffect "mov.u32 $0, $1;\0A\09@$3 ld.global.b32 { $0 }, [ $2 + 0 ];", "=r,r,l,b"(i32 0, ptr addrspace(1) %768, i1 %862) #10, !dbg !68
+  %864 = bitcast i32 %863 to <2 x bfloat>, !dbg !68
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !69
+  %865 = tail call float @llvm.maxnum.f32(float %594, float %595), !dbg !71
+  %866 = extractelement <4 x float> %597, i64 0, !dbg !71
+  %867 = tail call float @llvm.maxnum.f32(float %596, float %866), !dbg !71
+  %868 = extractelement <4 x float> %597, i64 1, !dbg !71
+  %869 = extractelement <4 x float> %597, i64 2, !dbg !71
+  %870 = tail call float @llvm.maxnum.f32(float %868, float %869), !dbg !71
+  %871 = extractelement <4 x float> %597, i64 3, !dbg !71
+  %872 = tail call float @llvm.maxnum.f32(float %871, float %598), !dbg !71
+  %873 = tail call float @llvm.maxnum.f32(float %865, float %867), !dbg !71
+  %874 = tail call float @llvm.maxnum.f32(float %870, float %872), !dbg !71
+  %875 = tail call float @llvm.maxnum.f32(float %873, float %874), !dbg !71
+  %876 = bitcast float %875 to i32, !dbg !69
+  %877 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %876, i32 16, i32 31), !dbg !69
+  %878 = bitcast i32 %877 to float, !dbg !69
+  %879 = tail call float @llvm.maxnum.f32(float %875, float %878), !dbg !71
+  store float %879, ptr addrspace(3) %137, align 4, !dbg !69
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !69
+  %880 = load i32, ptr addrspace(3) %139, align 4, !dbg !69
+  %881 = bitcast i32 %880 to float, !dbg !69
+  %882 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %880, i32 2, i32 31), !dbg !69
+  %883 = bitcast i32 %882 to float, !dbg !69
+  %884 = tail call float @llvm.maxnum.f32(float %881, float %883), !dbg !71
+  %885 = bitcast float %884 to i32, !dbg !69
+  %886 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %885, i32 1, i32 31), !dbg !69
+  %887 = bitcast i32 %886 to float, !dbg !69
+  %888 = tail call float @llvm.maxnum.f32(float %884, float %887), !dbg !71
+  %889 = tail call float @llvm.maxnum.f32(float %888, float %192), !dbg !72
+  %890 = insertelement <8 x float> poison, float %192, i64 0, !dbg !73
+  %891 = insertelement <8 x float> %890, float %594, i64 1, !dbg !73
+  %892 = insertelement <8 x float> %891, float %595, i64 2, !dbg !73
+  %893 = insertelement <8 x float> %892, float %596, i64 3, !dbg !73
+  %894 = shufflevector <4 x float> %597, <4 x float> poison, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !73
+  %895 = shufflevector <8 x float> %893, <8 x float> %894, <8 x i32> <i32 0, i32 1, i32 2, i32 3, i32 8, i32 9, i32 10, i32 11>, !dbg !73
+  %896 = insertelement <8 x float> poison, float %889, i64 0, !dbg !73
+  %897 = shufflevector <8 x float> %896, <8 x float> poison, <8 x i32> zeroinitializer, !dbg !73
+  %898 = fsub <8 x float> %895, %897, !dbg !73
+  %899 = fmul <8 x float> %898, splat (float f0x3FB8AA3B), !dbg !74
+  %900 = extractelement <8 x float> %899, i64 0, !dbg !74
+  %901 = tail call float @llvm.nvvm.ex2.approx.f32(float %900), !dbg !74
+  %902 = fsub float %598, %889, !dbg !75
+  %903 = extractelement <8 x float> %899, i64 1, !dbg !76
+  %904 = tail call float @llvm.nvvm.ex2.approx.f32(float %903), !dbg !76
+  %905 = extractelement <8 x float> %899, i64 2, !dbg !76
+  %906 = tail call float @llvm.nvvm.ex2.approx.f32(float %905), !dbg !76
+  %907 = extractelement <8 x float> %899, i64 3, !dbg !76
+  %908 = tail call float @llvm.nvvm.ex2.approx.f32(float %907), !dbg !76
+  %909 = extractelement <8 x float> %899, i64 4, !dbg !76
+  %910 = tail call float @llvm.nvvm.ex2.approx.f32(float %909), !dbg !76
+  %911 = extractelement <8 x float> %899, i64 5, !dbg !76
+  %912 = tail call float @llvm.nvvm.ex2.approx.f32(float %911), !dbg !76
+  %913 = extractelement <8 x float> %899, i64 6, !dbg !76
+  %914 = tail call float @llvm.nvvm.ex2.approx.f32(float %913), !dbg !76
+  %915 = extractelement <8 x float> %899, i64 7, !dbg !76
+  %916 = tail call float @llvm.nvvm.ex2.approx.f32(float %915), !dbg !76
+  %917 = fmul float %902, f0x3FB8AA3B, !dbg !76
+  %918 = tail call float @llvm.nvvm.ex2.approx.f32(float %917), !dbg !76
+  %919 = fmul float %189, %901, !dbg !77
+  %920 = fmul float %190, %901, !dbg !77
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !78
+  %921 = insertelement <4 x float> poison, float %904, i64 0, !dbg !78
+  %922 = insertelement <4 x float> %921, float %906, i64 1, !dbg !78
+  %923 = insertelement <4 x float> %922, float %908, i64 2, !dbg !78
+  %924 = insertelement <4 x float> %923, float %910, i64 3, !dbg !78
+  store <4 x float> %924, ptr addrspace(3) %123, align 16, !dbg !78
+  %925 = insertelement <4 x float> poison, float %912, i64 0, !dbg !78
+  %926 = insertelement <4 x float> %925, float %914, i64 1, !dbg !78
+  %927 = insertelement <4 x float> %926, float %916, i64 2, !dbg !78
+  %928 = insertelement <4 x float> %927, float %918, i64 3, !dbg !78
+  store <4 x float> %928, ptr addrspace(3) %124, align 16, !dbg !78
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !78
+  %929 = load <32 x float>, ptr addrspace(3) %126, align 16, !dbg !78
+  %930 = shufflevector <2 x bfloat> %771, <2 x bfloat> %783, <32 x i32> <i32 1, i32 3, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %931 = shufflevector <2 x bfloat> %795, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %932 = shufflevector <32 x bfloat> %930, <32 x bfloat> %931, <32 x i32> <i32 0, i32 1, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %933 = shufflevector <2 x bfloat> %807, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %934 = shufflevector <32 x bfloat> %932, <32 x bfloat> %933, <32 x i32> <i32 0, i32 1, i32 2, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %935 = shufflevector <2 x bfloat> %774, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %936 = shufflevector <32 x bfloat> %934, <32 x bfloat> %935, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %937 = shufflevector <2 x bfloat> %786, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %938 = shufflevector <32 x bfloat> %936, <32 x bfloat> %937, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %939 = shufflevector <2 x bfloat> %798, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %940 = shufflevector <32 x bfloat> %938, <32 x bfloat> %939, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %941 = shufflevector <2 x bfloat> %810, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %942 = shufflevector <32 x bfloat> %940, <32 x bfloat> %941, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %943 = shufflevector <2 x bfloat> %777, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %944 = shufflevector <32 x bfloat> %942, <32 x bfloat> %943, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %945 = shufflevector <2 x bfloat> %789, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %946 = shufflevector <32 x bfloat> %944, <32 x bfloat> %945, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %947 = shufflevector <2 x bfloat> %801, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %948 = shufflevector <32 x bfloat> %946, <32 x bfloat> %947, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %949 = shufflevector <2 x bfloat> %813, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %950 = shufflevector <32 x bfloat> %948, <32 x bfloat> %949, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %951 = shufflevector <2 x bfloat> %780, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %952 = shufflevector <32 x bfloat> %950, <32 x bfloat> %951, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %953 = shufflevector <2 x bfloat> %792, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %954 = shufflevector <32 x bfloat> %952, <32 x bfloat> %953, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %955 = shufflevector <2 x bfloat> %804, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %956 = shufflevector <32 x bfloat> %954, <32 x bfloat> %955, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %957 = shufflevector <2 x bfloat> %816, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %958 = shufflevector <32 x bfloat> %956, <32 x bfloat> %957, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %959 = shufflevector <2 x bfloat> %819, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %960 = shufflevector <32 x bfloat> %958, <32 x bfloat> %959, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %961 = shufflevector <2 x bfloat> %831, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %962 = shufflevector <32 x bfloat> %960, <32 x bfloat> %961, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %963 = shufflevector <2 x bfloat> %843, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %964 = shufflevector <32 x bfloat> %962, <32 x bfloat> %963, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %965 = shufflevector <2 x bfloat> %855, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %966 = shufflevector <32 x bfloat> %964, <32 x bfloat> %965, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %967 = shufflevector <2 x bfloat> %822, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %968 = shufflevector <32 x bfloat> %966, <32 x bfloat> %967, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %969 = shufflevector <2 x bfloat> %834, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %970 = shufflevector <32 x bfloat> %968, <32 x bfloat> %969, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %971 = shufflevector <2 x bfloat> %846, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %972 = shufflevector <32 x bfloat> %970, <32 x bfloat> %971, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %973 = shufflevector <2 x bfloat> %858, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %974 = shufflevector <32 x bfloat> %972, <32 x bfloat> %973, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %975 = shufflevector <2 x bfloat> %825, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %976 = shufflevector <32 x bfloat> %974, <32 x bfloat> %975, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %977 = shufflevector <2 x bfloat> %837, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %978 = shufflevector <32 x bfloat> %976, <32 x bfloat> %977, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %979 = shufflevector <2 x bfloat> %849, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %980 = shufflevector <32 x bfloat> %978, <32 x bfloat> %979, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 33, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %981 = shufflevector <2 x bfloat> %861, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %982 = shufflevector <32 x bfloat> %980, <32 x bfloat> %981, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 33, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %983 = shufflevector <2 x bfloat> %828, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %984 = shufflevector <32 x bfloat> %982, <32 x bfloat> %983, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 33, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %985 = shufflevector <2 x bfloat> %840, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %986 = shufflevector <32 x bfloat> %984, <32 x bfloat> %985, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 33, i32 poison, i32 poison>, !dbg !78
+  %987 = shufflevector <2 x bfloat> %852, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %988 = shufflevector <32 x bfloat> %986, <32 x bfloat> %987, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 33, i32 poison>, !dbg !78
+  %989 = shufflevector <2 x bfloat> %864, <2 x bfloat> poison, <32 x i32> <i32 poison, i32 1, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %990 = shufflevector <32 x bfloat> %988, <32 x bfloat> %989, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 33>, !dbg !78
+  %991 = fpext <32 x bfloat> %990 to <32 x float>, !dbg !78
+  %992 = shufflevector <2 x bfloat> %771, <2 x bfloat> %783, <32 x i32> <i32 0, i32 2, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %993 = shufflevector <2 x bfloat> %795, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %994 = shufflevector <32 x bfloat> %992, <32 x bfloat> %993, <32 x i32> <i32 0, i32 1, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %995 = shufflevector <2 x bfloat> %807, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %996 = shufflevector <32 x bfloat> %994, <32 x bfloat> %995, <32 x i32> <i32 0, i32 1, i32 2, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %997 = shufflevector <2 x bfloat> %774, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %998 = shufflevector <32 x bfloat> %996, <32 x bfloat> %997, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %999 = shufflevector <2 x bfloat> %786, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1000 = shufflevector <32 x bfloat> %998, <32 x bfloat> %999, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1001 = shufflevector <2 x bfloat> %798, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1002 = shufflevector <32 x bfloat> %1000, <32 x bfloat> %1001, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1003 = shufflevector <2 x bfloat> %810, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1004 = shufflevector <32 x bfloat> %1002, <32 x bfloat> %1003, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1005 = shufflevector <2 x bfloat> %777, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1006 = shufflevector <32 x bfloat> %1004, <32 x bfloat> %1005, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1007 = shufflevector <2 x bfloat> %789, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1008 = shufflevector <32 x bfloat> %1006, <32 x bfloat> %1007, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1009 = shufflevector <2 x bfloat> %801, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1010 = shufflevector <32 x bfloat> %1008, <32 x bfloat> %1009, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1011 = shufflevector <2 x bfloat> %813, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1012 = shufflevector <32 x bfloat> %1010, <32 x bfloat> %1011, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1013 = shufflevector <2 x bfloat> %780, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1014 = shufflevector <32 x bfloat> %1012, <32 x bfloat> %1013, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1015 = shufflevector <2 x bfloat> %792, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1016 = shufflevector <32 x bfloat> %1014, <32 x bfloat> %1015, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1017 = shufflevector <2 x bfloat> %804, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1018 = shufflevector <32 x bfloat> %1016, <32 x bfloat> %1017, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1019 = shufflevector <2 x bfloat> %816, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1020 = shufflevector <32 x bfloat> %1018, <32 x bfloat> %1019, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1021 = shufflevector <2 x bfloat> %819, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1022 = shufflevector <32 x bfloat> %1020, <32 x bfloat> %1021, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1023 = shufflevector <2 x bfloat> %831, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1024 = shufflevector <32 x bfloat> %1022, <32 x bfloat> %1023, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1025 = shufflevector <2 x bfloat> %843, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1026 = shufflevector <32 x bfloat> %1024, <32 x bfloat> %1025, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1027 = shufflevector <2 x bfloat> %855, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1028 = shufflevector <32 x bfloat> %1026, <32 x bfloat> %1027, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1029 = shufflevector <2 x bfloat> %822, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1030 = shufflevector <32 x bfloat> %1028, <32 x bfloat> %1029, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1031 = shufflevector <2 x bfloat> %834, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1032 = shufflevector <32 x bfloat> %1030, <32 x bfloat> %1031, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1033 = shufflevector <2 x bfloat> %846, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1034 = shufflevector <32 x bfloat> %1032, <32 x bfloat> %1033, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1035 = shufflevector <2 x bfloat> %858, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1036 = shufflevector <32 x bfloat> %1034, <32 x bfloat> %1035, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1037 = shufflevector <2 x bfloat> %825, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1038 = shufflevector <32 x bfloat> %1036, <32 x bfloat> %1037, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1039 = shufflevector <2 x bfloat> %837, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1040 = shufflevector <32 x bfloat> %1038, <32 x bfloat> %1039, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1041 = shufflevector <2 x bfloat> %849, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1042 = shufflevector <32 x bfloat> %1040, <32 x bfloat> %1041, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 32, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1043 = shufflevector <2 x bfloat> %861, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1044 = shufflevector <32 x bfloat> %1042, <32 x bfloat> %1043, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 32, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1045 = shufflevector <2 x bfloat> %828, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1046 = shufflevector <32 x bfloat> %1044, <32 x bfloat> %1045, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 32, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1047 = shufflevector <2 x bfloat> %840, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1048 = shufflevector <32 x bfloat> %1046, <32 x bfloat> %1047, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 32, i32 poison, i32 poison>, !dbg !78
+  %1049 = shufflevector <2 x bfloat> %852, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1050 = shufflevector <32 x bfloat> %1048, <32 x bfloat> %1049, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 32, i32 poison>, !dbg !78
+  %1051 = shufflevector <2 x bfloat> %864, <2 x bfloat> poison, <32 x i32> <i32 0, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !78
+  %1052 = shufflevector <32 x bfloat> %1050, <32 x bfloat> %1051, <32 x i32> <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 32>, !dbg !78
+  %1053 = fpext <32 x bfloat> %1052 to <32 x float>, !dbg !78
+  %1054 = fmul <32 x float> %929, %1053, !dbg !78
+  %1055 = fmul <32 x float> %929, %991, !dbg !78
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !79
+  %shift215 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop216 = fadd <32 x float> %1054, %shift215, !dbg !81
+  %shift218 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 14, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop219 = fadd <32 x float> %1054, %shift218, !dbg !81
+  %shift221 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 7, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop222 = fadd <32 x float> %1054, %shift221, !dbg !81
+  %shift224 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 15, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop225 = fadd <32 x float> %1054, %shift224, !dbg !81
+  %shift227 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 20, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop228 = fadd <32 x float> %1054, %shift227, !dbg !81
+  %shift230 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 28, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop231 = fadd <32 x float> %1054, %shift230, !dbg !81
+  %shift233 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 21, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop234 = fadd <32 x float> %1054, %shift233, !dbg !81
+  %shift236 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 29, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop237 = fadd <32 x float> %1054, %shift236, !dbg !81
+  %shift239 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 22, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop240 = fadd <32 x float> %1054, %shift239, !dbg !81
+  %shift242 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 30, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop243 = fadd <32 x float> %1054, %shift242, !dbg !81
+  %shift245 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 23, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop246 = fadd <32 x float> %1054, %shift245, !dbg !81
+  %shift248 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 31, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop249 = fadd <32 x float> %1054, %shift248, !dbg !81
+  %shift251 = shufflevector <32 x float> %foldExtExtBinop231, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 24, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop252 = fadd <32 x float> %foldExtExtBinop228, %shift251, !dbg !81
+  %shift254 = shufflevector <32 x float> %foldExtExtBinop237, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 25, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop255 = fadd <32 x float> %foldExtExtBinop234, %shift254, !dbg !81
+  %shift257 = shufflevector <32 x float> %foldExtExtBinop243, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 26, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop258 = fadd <32 x float> %foldExtExtBinop240, %shift257, !dbg !81
+  %shift260 = shufflevector <32 x float> %foldExtExtBinop249, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 27, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop261 = fadd <32 x float> %foldExtExtBinop246, %shift260, !dbg !81
+  %1056 = shufflevector <32 x float> %1054, <32 x float> %foldExtExtBinop216, <4 x i32> <i32 8, i32 1, i32 34, i32 poison>, !dbg !81
+  %1057 = shufflevector <32 x float> %foldExtExtBinop252, <32 x float> poison, <4 x i32> <i32 16, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %1058 = shufflevector <4 x float> %1056, <4 x float> %1057, <4 x i32> <i32 0, i32 1, i32 2, i32 4>, !dbg !81
+  %1059 = shufflevector <32 x float> %1054, <32 x float> poison, <4 x i32> <i32 poison, i32 5, i32 poison, i32 poison>, !dbg !81
+  %1060 = insertelement <4 x float> %1059, float -0.000000e+00, i64 0, !dbg !81
+  %1061 = shufflevector <32 x float> %foldExtExtBinop219, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 10, i32 poison>, !dbg !81
+  %1062 = shufflevector <4 x float> %1060, <4 x float> %1061, <4 x i32> <i32 0, i32 1, i32 6, i32 poison>, !dbg !81
+  %1063 = shufflevector <32 x float> %foldExtExtBinop255, <32 x float> poison, <4 x i32> <i32 poison, i32 17, i32 poison, i32 poison>, !dbg !81
+  %1064 = shufflevector <4 x float> %1062, <4 x float> %1063, <4 x i32> <i32 0, i32 1, i32 2, i32 5>, !dbg !81
+  %1065 = fadd <4 x float> %1058, %1064, !dbg !81
+  %1066 = shufflevector <32 x float> %1054, <32 x float> %foldExtExtBinop222, <4 x i32> <i32 12, i32 13, i32 35, i32 poison>, !dbg !81
+  %1067 = shufflevector <32 x float> %foldExtExtBinop258, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 18, i32 poison>, !dbg !81
+  %1068 = shufflevector <4 x float> %1066, <4 x float> %1067, <4 x i32> <i32 0, i32 1, i32 2, i32 6>, !dbg !81
+  %1069 = shufflevector <32 x float> %1054, <32 x float> poison, <4 x i32> <i32 poison, i32 9, i32 poison, i32 poison>, !dbg !81
+  %1070 = insertelement <4 x float> %1069, float -0.000000e+00, i64 0, !dbg !81
+  %1071 = shufflevector <32 x float> %foldExtExtBinop225, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 poison, i32 11>, !dbg !81
+  %1072 = shufflevector <4 x float> %1070, <4 x float> %1071, <4 x i32> <i32 0, i32 1, i32 7, i32 poison>, !dbg !81
+  %1073 = shufflevector <32 x float> %foldExtExtBinop261, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 poison, i32 19>, !dbg !81
+  %1074 = shufflevector <4 x float> %1072, <4 x float> %1073, <4 x i32> <i32 0, i32 1, i32 2, i32 7>, !dbg !81
+  %1075 = fadd <4 x float> %1068, %1074, !dbg !81
+  %1076 = fadd <4 x float> %1065, %1075, !dbg !81
+  %shift263 = shufflevector <32 x float> %1054, <32 x float> poison, <32 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop264 = fadd <32 x float> %1054, %shift263, !dbg !81
+  %op.rdx48 = extractelement <32 x float> %foldExtExtBinop264, i64 0, !dbg !81
+  %1077 = tail call float @llvm.vector.reduce.fadd.v4f32(float %op.rdx48, <4 x float> %1076), !dbg !81
+  %shift266 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 6, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop267 = fadd <32 x float> %1055, %shift266, !dbg !81
+  %shift269 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 14, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop270 = fadd <32 x float> %1055, %shift269, !dbg !81
+  %shift272 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 7, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop273 = fadd <32 x float> %1055, %shift272, !dbg !81
+  %shift275 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 15, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop276 = fadd <32 x float> %1055, %shift275, !dbg !81
+  %shift278 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 20, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop279 = fadd <32 x float> %1055, %shift278, !dbg !81
+  %shift281 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 28, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop282 = fadd <32 x float> %1055, %shift281, !dbg !81
+  %shift284 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 21, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop285 = fadd <32 x float> %1055, %shift284, !dbg !81
+  %shift287 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 29, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop288 = fadd <32 x float> %1055, %shift287, !dbg !81
+  %shift290 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 22, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop291 = fadd <32 x float> %1055, %shift290, !dbg !81
+  %shift293 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 30, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop294 = fadd <32 x float> %1055, %shift293, !dbg !81
+  %shift296 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 23, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop297 = fadd <32 x float> %1055, %shift296, !dbg !81
+  %shift299 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 31, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop300 = fadd <32 x float> %1055, %shift299, !dbg !81
+  %shift302 = shufflevector <32 x float> %foldExtExtBinop282, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 24, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop303 = fadd <32 x float> %foldExtExtBinop279, %shift302, !dbg !81
+  %shift305 = shufflevector <32 x float> %foldExtExtBinop288, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 25, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop306 = fadd <32 x float> %foldExtExtBinop285, %shift305, !dbg !81
+  %shift308 = shufflevector <32 x float> %foldExtExtBinop294, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 26, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop309 = fadd <32 x float> %foldExtExtBinop291, %shift308, !dbg !81
+  %shift311 = shufflevector <32 x float> %foldExtExtBinop300, <32 x float> poison, <32 x i32> <i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 27, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop312 = fadd <32 x float> %foldExtExtBinop297, %shift311, !dbg !81
+  %1078 = shufflevector <32 x float> %1055, <32 x float> %foldExtExtBinop267, <4 x i32> <i32 8, i32 1, i32 34, i32 poison>, !dbg !81
+  %1079 = shufflevector <32 x float> %foldExtExtBinop303, <32 x float> poison, <4 x i32> <i32 16, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %1080 = shufflevector <4 x float> %1078, <4 x float> %1079, <4 x i32> <i32 0, i32 1, i32 2, i32 4>, !dbg !81
+  %1081 = shufflevector <32 x float> %1055, <32 x float> poison, <4 x i32> <i32 poison, i32 5, i32 poison, i32 poison>, !dbg !81
+  %1082 = insertelement <4 x float> %1081, float -0.000000e+00, i64 0, !dbg !81
+  %1083 = shufflevector <32 x float> %foldExtExtBinop270, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 10, i32 poison>, !dbg !81
+  %1084 = shufflevector <4 x float> %1082, <4 x float> %1083, <4 x i32> <i32 0, i32 1, i32 6, i32 poison>, !dbg !81
+  %1085 = shufflevector <32 x float> %foldExtExtBinop306, <32 x float> poison, <4 x i32> <i32 poison, i32 17, i32 poison, i32 poison>, !dbg !81
+  %1086 = shufflevector <4 x float> %1084, <4 x float> %1085, <4 x i32> <i32 0, i32 1, i32 2, i32 5>, !dbg !81
+  %1087 = fadd <4 x float> %1080, %1086, !dbg !81
+  %1088 = shufflevector <32 x float> %1055, <32 x float> %foldExtExtBinop273, <4 x i32> <i32 12, i32 13, i32 35, i32 poison>, !dbg !81
+  %1089 = shufflevector <32 x float> %foldExtExtBinop309, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 18, i32 poison>, !dbg !81
+  %1090 = shufflevector <4 x float> %1088, <4 x float> %1089, <4 x i32> <i32 0, i32 1, i32 2, i32 6>, !dbg !81
+  %1091 = shufflevector <32 x float> %1055, <32 x float> poison, <4 x i32> <i32 poison, i32 9, i32 poison, i32 poison>, !dbg !81
+  %1092 = insertelement <4 x float> %1091, float -0.000000e+00, i64 0, !dbg !81
+  %1093 = shufflevector <32 x float> %foldExtExtBinop276, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 poison, i32 11>, !dbg !81
+  %1094 = shufflevector <4 x float> %1092, <4 x float> %1093, <4 x i32> <i32 0, i32 1, i32 7, i32 poison>, !dbg !81
+  %1095 = shufflevector <32 x float> %foldExtExtBinop312, <32 x float> poison, <4 x i32> <i32 poison, i32 poison, i32 poison, i32 19>, !dbg !81
+  %1096 = shufflevector <4 x float> %1094, <4 x float> %1095, <4 x i32> <i32 0, i32 1, i32 2, i32 7>, !dbg !81
+  %1097 = fadd <4 x float> %1090, %1096, !dbg !81
+  %1098 = fadd <4 x float> %1087, %1097, !dbg !81
+  %shift314 = shufflevector <32 x float> %1055, <32 x float> poison, <32 x i32> <i32 4, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison, i32 poison>, !dbg !81
+  %foldExtExtBinop315 = fadd <32 x float> %1055, %shift314, !dbg !81
+  %op.rdx = extractelement <32 x float> %foldExtExtBinop315, i64 0, !dbg !81
+  %1099 = tail call float @llvm.vector.reduce.fadd.v4f32(float %op.rdx, <4 x float> %1098), !dbg !81
+  %1100 = insertelement <2 x float> poison, float %1077, i64 0, !dbg !79
+  %1101 = insertelement <2 x float> %1100, float %1099, i64 1, !dbg !79
+  store <2 x float> %1101, ptr addrspace(3) %144, align 8, !dbg !79
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !79
+  %1102 = load <2 x i32>, ptr addrspace(3) %150, align 8, !dbg !79
+  %1103 = bitcast <2 x i32> %1102 to <2 x float>, !dbg !79
+  %1104 = extractelement <2 x i32> %1102, i64 0, !dbg !79
+  %1105 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %1104, i32 1, i32 31), !dbg !79
+  %1106 = extractelement <2 x i32> %1102, i64 1, !dbg !79
+  %1107 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %1106, i32 1, i32 31), !dbg !79
+  %1108 = insertelement <2 x i32> poison, i32 %1105, i64 0, !dbg !79
+  %1109 = insertelement <2 x i32> %1108, i32 %1107, i64 1, !dbg !79
+  %1110 = bitcast <2 x i32> %1109 to <2 x float>, !dbg !79
+  %1111 = fadd <2 x float> %1103, %1110, !dbg !81
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !79
+  store <2 x float> %1111, ptr addrspace(3) %152, align 8, !dbg !79
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !79
+  %1112 = load float, ptr addrspace(3) %153, align 8, !dbg !79
+  %1113 = load float, ptr addrspace(3) %178, align 4, !dbg !79
+  %1114 = fadd float %919, %1112, !dbg !82
+  %1115 = fadd float %920, %1113, !dbg !82
+  %1116 = fmul float %191, %901, !dbg !83
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !84
+  %1117 = fadd float %904, %906, !dbg !86
+  %1118 = fadd float %908, %910, !dbg !86
+  %1119 = fadd float %912, %914, !dbg !86
+  %1120 = fadd float %916, %918, !dbg !86
+  %1121 = fadd float %1117, %1118, !dbg !86
+  %1122 = fadd float %1119, %1120, !dbg !86
+  %1123 = fadd float %1121, %1122, !dbg !86
+  %1124 = bitcast float %1123 to i32, !dbg !84
+  %1125 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %1124, i32 16, i32 31), !dbg !84
+  %1126 = bitcast i32 %1125 to float, !dbg !84
+  %1127 = fadd float %1123, %1126, !dbg !86
+  store float %1127, ptr addrspace(3) %137, align 4, !dbg !84
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !84
+  %1128 = load i32, ptr addrspace(3) %139, align 4, !dbg !84
+  %1129 = bitcast i32 %1128 to float, !dbg !84
+  %1130 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %1128, i32 2, i32 31), !dbg !84
+  %1131 = bitcast i32 %1130 to float, !dbg !84
+  %1132 = fadd float %1129, %1131, !dbg !86
+  %1133 = bitcast float %1132 to i32, !dbg !84
+  %1134 = tail call i32 @llvm.nvvm.shfl.sync.bfly.i32(i32 -1, i32 %1133, i32 1, i32 31), !dbg !84
+  %1135 = bitcast i32 %1134 to float, !dbg !84
+  %1136 = fadd float %1132, %1135, !dbg !86
+  %1137 = fadd float %1116, %1136, !dbg !83
+  %1138 = add i32 %193, 64, !dbg !50
+  %1139 = icmp slt i32 %1138, %50, !dbg !50
+  br i1 %1139, label %188, label %1140, !dbg !50
+
+1140:                                             ; preds = %188
+  %1141 = sext i32 %19 to i64, !dbg !87
+  %1142 = mul nsw i64 %1141, %28, !dbg !87
+  %1143 = mul i32 %20, %26, !dbg !88
+  %1144 = sext i32 %1143 to i64, !dbg !87
+  %1145 = add nsw i64 %1142, %1144, !dbg !87
+  %1146 = mul i32 %21, %27, !dbg !89
+  %1147 = sext i32 %1146 to i64, !dbg !87
+  %1148 = add nsw i64 %1145, %1147, !dbg !87
+  %1149 = zext nneg i32 %34 to i64, !dbg !87
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !90
+  %1150 = and i32 %72, 120, !dbg !90
+  %1151 = lshr i32 %29, 3, !dbg !90
+  %1152 = and i32 %1151, 2, !dbg !90
+  %1153 = and i32 %29, 32, !dbg !90
+  %1154 = lshr exact i32 %1153, 5, !dbg !90
+  %1155 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1150, !dbg !90
+  %1156 = getelementptr inbounds nuw i8, ptr addrspace(3) %1155, i32 %1152, !dbg !90
+  %1157 = getelementptr inbounds nuw i8, ptr addrspace(3) %1156, i32 %1154, !dbg !90
+  store <1 x i8> splat (i8 1), ptr addrspace(3) %1157, align 1, !dbg !90
+  %1158 = getelementptr inbounds nuw i8, ptr addrspace(3) %1157, i32 4, !dbg !90
+  store <1 x i8> splat (i8 1), ptr addrspace(3) %1158, align 1, !dbg !90
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !90
+  %1159 = lshr exact i32 %1153, 4, !dbg !90
+  %1160 = lshr i32 %29, 6, !dbg !90
+  %1161 = and i32 %1160, 1, !dbg !90
+  %1162 = getelementptr inbounds nuw i8, ptr addrspace(3) %87, i32 %1159, !dbg !90
+  %1163 = getelementptr inbounds nuw i8, ptr addrspace(3) %1162, i32 %1161, !dbg !90
+  %1164 = load i8, ptr addrspace(3) %1163, align 1, !dbg !90
+  %1165 = trunc nuw i8 %1164 to i1, !dbg !90
+  %1166 = getelementptr [4 x i8], ptr addrspace(1) %6, i64 %1148, !dbg !91
+  %1167 = getelementptr [4 x i8], ptr addrspace(1) %1166, i64 %1149, !dbg !91
+  %1168 = getelementptr i8, ptr addrspace(1) %1167, i64 4, !dbg !91
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !92
+  %1169 = ptrtoint ptr addrspace(1) %1167 to i64, !dbg !92
+  %1170 = ptrtoint ptr addrspace(1) %1168 to i64, !dbg !92
+  %1171 = insertelement <1 x i64> poison, i64 %1169, i64 0, !dbg !92
+  store <1 x i64> %1171, ptr addrspace(3) %153, align 8, !dbg !92
+  %1172 = xor i32 %140, 576, !dbg !92
+  %1173 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1172, !dbg !92
+  %1174 = insertelement <1 x i64> poison, i64 %1170, i64 0, !dbg !92
+  store <1 x i64> %1174, ptr addrspace(3) %1173, align 8, !dbg !92
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !92
+  %1175 = and i32 %29, 126, !dbg !92
+  %1176 = shl nuw nsw i32 %1175, 2, !dbg !92
+  %1177 = select i1 %76, i32 0, i32 576, !dbg !92
+  %1178 = xor i32 %1177, %1176, !dbg !92
+  %1179 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1178, !dbg !92
+  %1180 = load i64, ptr addrspace(3) %1179, align 8, !dbg !92
+  %1181 = inttoptr i64 %1180 to ptr addrspace(1), !dbg !92
+  %1182 = tail call float @llvm.nvvm.div.full(float %1114, float %1137), !dbg !93
+  %1183 = tail call float @llvm.nvvm.div.full(float %1115, float %1137), !dbg !93
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !94
+  %1184 = shl nuw nsw i32 %33, 2, !dbg !94
+  %1185 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1184, !dbg !94
+  store float %1182, ptr addrspace(3) %1185, align 4, !dbg !94
+  %1186 = xor i32 %1184, 320, !dbg !94
+  %1187 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1186, !dbg !94
+  store float %1183, ptr addrspace(3) %1187, align 4, !dbg !94
+  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !94
+  %1188 = shl nuw nsw i32 %1175, 1, !dbg !94
+  %1189 = xor i32 %77, %1188, !dbg !94
+  %1190 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1189, !dbg !94
+  %1191 = load i32, ptr addrspace(3) %1190, align 4, !dbg !94
+  tail call void asm sideeffect "@$2 st.global.b32 [ $1 + 0 ], { $0 };", "r,l,b"(i32 %1191, ptr addrspace(1) %1181, i1 %1165) #10, !dbg !95
+  %1192 = sdiv i64 %1148, 128, !dbg !96
+  %1193 = getelementptr [4 x i8], ptr addrspace(1) %7, i64 %1192, !dbg !97
+  %1194 = fcmp olt float %1137, f0x00800000, !dbg !98
+  %1195 = fmul float %1137, f0x4B000000, !dbg !98
+  %.02.i = select i1 %1194, float %1195, float %1137, !dbg !98
+  %i.i.0.i = select i1 %1194, float -2.300000e+01, float 0.000000e+00, !dbg !98
+  %1196 = bitcast float %.02.i to i32, !dbg !98
+  %1197 = add i32 %1196, -1059760811, !dbg !98
+  %1198 = and i32 %1197, -8388608, !dbg !98
+  %1199 = sub i32 %1196, %1198, !dbg !98
+  %1200 = bitcast i32 %1199 to float, !dbg !98
+  %1201 = sitofp i32 %1198 to float, !dbg !98
+  %1202 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not.i = icmp eq i32 %1202, 0, !dbg !98
+  %1203 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %1201, float f0x34000000, float %i.i.0.i) #10, !dbg !98
+  %1204 = tail call float @llvm.nvvm.fma.rn.f(float %1201, float f0x34000000, float %i.i.0.i) #10, !dbg !98
+  %.08.i = select i1 %.not.i, float %1204, float %1203, !dbg !98
+  %1205 = fadd float %1200, -1.000000e+00, !dbg !98
+  %1206 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not1.i = icmp eq i32 %1206, 0, !dbg !98
+  %1207 = tail call float @llvm.nvvm.fma.rn.ftz.f(float f0xBE055027, float %1205, float f0x3E1039F6) #10, !dbg !98
+  %1208 = tail call float @llvm.nvvm.fma.rn.f(float f0xBE055027, float %1205, float f0x3E1039F6) #10, !dbg !98
+  %.010.i = select i1 %.not1.i, float %1208, float %1207, !dbg !98
+  %1209 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not2.i = icmp eq i32 %1209, 0, !dbg !98
+  %1210 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.010.i, float %1205, float f0xBDF8CDCC) #10, !dbg !98
+  %1211 = tail call float @llvm.nvvm.fma.rn.f(float %.010.i, float %1205, float f0xBDF8CDCC) #10, !dbg !98
+  %.011.i = select i1 %.not2.i, float %1211, float %1210, !dbg !98
+  %1212 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not3.i = icmp eq i32 %1212, 0, !dbg !98
+  %1213 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.011.i, float %1205, float f0x3E0F2955) #10, !dbg !98
+  %1214 = tail call float @llvm.nvvm.fma.rn.f(float %.011.i, float %1205, float f0x3E0F2955) #10, !dbg !98
+  %.012.i = select i1 %.not3.i, float %1214, float %1213, !dbg !98
+  %1215 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not4.i = icmp eq i32 %1215, 0, !dbg !98
+  %1216 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.012.i, float %1205, float f0xBE2AD8B9) #10, !dbg !98
+  %1217 = tail call float @llvm.nvvm.fma.rn.f(float %.012.i, float %1205, float f0xBE2AD8B9) #10, !dbg !98
+  %.09.i = select i1 %.not4.i, float %1217, float %1216, !dbg !98
+  %1218 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not5.i = icmp eq i32 %1218, 0, !dbg !98
+  %1219 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.09.i, float %1205, float 2.001230e-01) #10, !dbg !98
+  %1220 = tail call float @llvm.nvvm.fma.rn.f(float %.09.i, float %1205, float 2.001230e-01) #10, !dbg !98
+  %.05.i = select i1 %.not5.i, float %1220, float %1219, !dbg !98
+  %1221 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not6.i = icmp eq i32 %1221, 0, !dbg !98
+  %1222 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.05.i, float %1205, float f0xBE7FFF22) #10, !dbg !98
+  %1223 = tail call float @llvm.nvvm.fma.rn.f(float %.05.i, float %1205, float f0xBE7FFF22) #10, !dbg !98
+  %.01.i = select i1 %.not6.i, float %1223, float %1222, !dbg !98
+  %1224 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not7.i = icmp eq i32 %1224, 0, !dbg !98
+  %1225 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.01.i, float %1205, float f0x3EAAAA78) #10, !dbg !98
+  %1226 = tail call float @llvm.nvvm.fma.rn.f(float %.01.i, float %1205, float f0x3EAAAA78) #10, !dbg !98
+  %.0.i = select i1 %.not7.i, float %1226, float %1225, !dbg !98
+  %1227 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not8.i = icmp eq i32 %1227, 0, !dbg !98
+  %1228 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.0.i, float %1205, float -5.000000e-01) #10, !dbg !98
+  %1229 = tail call float @llvm.nvvm.fma.rn.f(float %.0.i, float %1205, float -5.000000e-01) #10, !dbg !98
+  %.07.i = select i1 %.not8.i, float %1229, float %1228, !dbg !98
+  %1230 = fmul float %1205, %.07.i, !dbg !98
+  %1231 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not9.i = icmp eq i32 %1231, 0, !dbg !98
+  %1232 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %1230, float %1205, float %1205) #10, !dbg !98
+  %1233 = tail call float @llvm.nvvm.fma.rn.f(float %1230, float %1205, float %1205) #10, !dbg !98
+  %.06.i = select i1 %.not9.i, float %1233, float %1232, !dbg !98
+  %1234 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not10.i = icmp eq i32 %1234, 0, !dbg !98
+  %1235 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.08.i, float f0x3F317218, float %.06.i) #10, !dbg !98
+  %1236 = tail call float @llvm.nvvm.fma.rn.f(float %.08.i, float f0x3F317218, float %.06.i) #10, !dbg !98
+  %.04.i = select i1 %.not10.i, float %1236, float %1235, !dbg !98
+  %1237 = icmp ugt i32 %1196, 2139095039, !dbg !98
+  br i1 %1237, label %__nv_fmaf_rn.exit.i.i, label %__nv_logf.exit, !dbg !98
+
+__nv_fmaf_rn.exit.i.i:                            ; preds = %1140
+  %1238 = tail call i32 @__nvvm_reflect(ptr nonnull @.str) #10, !dbg !98
+  %.not11.i = icmp eq i32 %1238, 0, !dbg !98
+  %1239 = tail call float @llvm.nvvm.fma.rn.ftz.f(float %.02.i, float +inf, float +inf) #10, !dbg !98
+  %1240 = tail call float @llvm.nvvm.fma.rn.f(float %.02.i, float +inf, float +inf) #10, !dbg !98
+  %.03.i = select i1 %.not11.i, float %1240, float %1239, !dbg !98
+  br label %__nv_logf.exit, !dbg !98
+
+__nv_logf.exit:                                   ; preds = %1140, %__nv_fmaf_rn.exit.i.i
+  %r.i.0.i = phi float [ %.03.i, %__nv_fmaf_rn.exit.i.i ], [ %.04.i, %1140 ], !dbg !98
+  %1241 = fcmp oeq float %.02.i, 0.000000e+00, !dbg !98
+  %r.i.1.i = select i1 %1241, float -inf, float %r.i.0.i, !dbg !98
+  %1242 = fadd float %889, %r.i.1.i, !dbg !99
+  %1243 = or i32 %30, %31, !dbg !100
+  %1244 = icmp eq i32 %1243, 0, !dbg !100
+  %1245 = bitcast float %1242 to i32, !dbg !100
+  tail call void asm sideeffect "@$2 st.global.b32 [ $1 + 0 ], { $0 };", "r,l,b"(i32 %1245, ptr addrspace(1) %1193, i1 %1244) #10, !dbg !100
+  br label %1246, !dbg !42
+
+1246:                                             ; preds = %__nv_logf.exit, %24
+  ret void, !dbg !101
+}
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 2147483647) i32 @llvm.nvvm.read.ptx.sreg.ctaid.x() #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 65535) i32 @llvm.nvvm.read.ptx.sreg.ctaid.y() #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 65535) i32 @llvm.nvvm.read.ptx.sreg.ctaid.z() #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare noundef range(i32 0, 1024) i32 @llvm.nvvm.read.ptx.sreg.tid.x() #1
+
+; Function Attrs: mustprogress nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.smin.i32(i32, i32) #2
+
+; Function Attrs: convergent nocallback nounwind
+declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #3
+
+; Function Attrs: mustprogress nocallback nocreateundeforpoison nofree nosync nounwind willreturn memory(none)
+declare float @llvm.nvvm.div.full(float, float) #4
+
+; Function Attrs: convergent nocallback nounwind memory(argmem: write)
+declare void @llvm.nvvm.stmatrix.sync.aligned.m8n8.x1.b16.p3(ptr addrspace(3) writeonly captures(none), i32) #5
+
+; Function Attrs: convergent nocallback nounwind memory(inaccessiblemem: readwrite)
+declare i32 @llvm.nvvm.shfl.sync.bfly.i32(i32, i32, i32, i32) #6
+
+; Function Attrs: mustprogress nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare float @llvm.maxnum.f32(float, float) #2
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(none)
+declare float @llvm.nvvm.ex2.approx.f32(float) #7
+
+declare i32 @__nvvm_reflect(ptr) local_unnamed_addr #8
+
+; Function Attrs: mustprogress nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare float @llvm.nvvm.fma.rn.ftz.f(float, float, float) #2
+
+; Function Attrs: mustprogress nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare float @llvm.nvvm.fma.rn.f(float, float, float) #2
+
+; Function Attrs: nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none)
+declare float @llvm.vector.reduce.fadd.v4f32(float, <4 x float>) #9
+
+attributes #0 = { nounwind "nvvm.reqntid"="128" }
+attributes #1 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #2 = { mustprogress nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #3 = { convergent nocallback nounwind }
+attributes #4 = { mustprogress nocallback nocreateundeforpoison nofree nosync nounwind willreturn memory(none) }
+attributes #5 = { convergent nocallback nounwind memory(argmem: write) }
+attributes #6 = { convergent nocallback nounwind memory(inaccessiblemem: readwrite) }
+attributes #7 = { mustprogress nocallback nofree nosync nounwind willreturn memory(none) }
+attributes #8 = { "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #9 = { nocallback nocreateundeforpoison nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #10 = { nounwind }
+
+!llvm.dbg.cu = !{!0}
+!llvm.module.flags = !{!2, !3}
+!llvm.ident = !{!4}
+!nvvmir.version = !{!5}
+
+!0 = distinct !DICompileUnit(language: DW_LANG_C, file: !1, producer: "triton", isOptimized: true, runtimeVersion: 0, emissionKind: LineTablesOnly)
+!1 = !DIFile(filename: "sglang_controlled.py", directory: "/opt/triton-src/experiments/tma_reduction_layout/phase11/operator_gpu")
+!2 = !{i32 2, !"Debug Info Version", i32 3}
+!3 = !{i32 4, !"nvvm-reflect-ftz", i32 1}
+!4 = !{!"clang version 3.8.0 (tags/RELEASE_380/final)"}
+!5 = !{i32 2, i32 0}
+!6 = distinct !DISubprogram(name: "_fwd_kernel_stage1", linkageName: "_fwd_kernel_stage1", scope: !1, file: !1, line: 13, type: !7, scopeLine: 13, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !0)
+!7 = !DISubroutineType(cc: DW_CC_normal, types: !8)
+!8 = !{null, !9, !9, !9, !11, !12, !12, !14, !14, !12, !13, !13, !13, !13, !13, !13, !13, !13, !13, !13, !13, !13, !13, !9, !9}
+!9 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !10, size: 64, dwarfAddressSpace: 1)
+!10 = !DIBasicType(name: "unknown_type", encoding: DW_ATE_signed)
+!11 = !DIBasicType(name: "float", size: 32, encoding: DW_ATE_float)
+!12 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !13, size: 64, dwarfAddressSpace: 1)
+!13 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!14 = !DIDerivedType(tag: DW_TAG_pointer_type, name: "pointer", baseType: !11, size: 64, dwarfAddressSpace: 1)
+!15 = !DILocation(line: 14, column: 17, scope: !6)
+!16 = !DILocation(line: 15, column: 16, scope: !6)
+!17 = !DILocation(line: 16, column: 19, scope: !6)
+!18 = !DILocation(line: 20, column: 17, scope: !6)
+!19 = !DILocation(line: 22, column: 14, scope: !6)
+!20 = !DILocation(line: 23, column: 15, scope: !6)
+!21 = !DILocation(line: 26, column: 38, scope: !6)
+!22 = !DILocation(line: 26, column: 30, scope: !6)
+!23 = !DILocation(line: 27, column: 33, scope: !6)
+!24 = !DILocation(line: 27, column: 25, scope: !6)
+!25 = !DILocation(line: 28, column: 25, scope: !6)
+!26 = !DILocation(line: 28, column: 17, scope: !6)
+!27 = !DILocation(line: 43, column: 18, scope: !28, inlinedAt: !30)
+!28 = distinct !DILexicalBlockFile(scope: !6, file: !29, discriminator: 0)
+!29 = !DIFile(filename: "standard.py", directory: "/opt/triton-src/python/triton/language")
+!30 = !DILocation(line: 35, column: 32, scope: !31)
+!31 = distinct !DILexicalBlockFile(scope: !6, file: !1, discriminator: 0)
+!32 = !DILocation(line: 43, column: 13, scope: !28, inlinedAt: !30)
+!33 = !DILocation(line: 43, column: 12, scope: !28, inlinedAt: !30)
+!34 = !DILocation(line: 43, column: 13, scope: !28, inlinedAt: !35)
+!35 = !DILocation(line: 35, column: 24, scope: !31)
+!36 = !DILocation(line: 43, column: 12, scope: !28, inlinedAt: !35)
+!37 = !DILocation(line: 35, column: 24, scope: !6)
+!38 = !DILocation(line: 36, column: 22, scope: !6)
+!39 = !DILocation(line: 37, column: 31, scope: !6)
+!40 = !DILocation(line: 37, column: 20, scope: !6)
+!41 = !DILocation(line: 41, column: 8, scope: !6)
+!42 = !DILocation(line: 41, column: 5, scope: !6)
+!43 = !DILocation(line: 34, column: 13, scope: !6)
+!44 = !DILocation(line: 34, column: 38, scope: !6)
+!45 = !DILocation(line: 42, column: 21, scope: !6)
+!46 = !DILocation(line: 42, column: 13, scope: !6)
+!47 = !DILocation(line: 66, column: 54, scope: !6)
+!48 = !DILocation(line: 45, column: 81, scope: !6)
+!49 = !DILocation(line: 54, column: 13, scope: !6)
+!50 = !DILocation(line: 43, column: 9, scope: !6)
+!51 = !DILocation(line: 44, column: 22, scope: !6)
+!52 = !DILocation(line: 45, column: 30, scope: !6)
+!53 = !DILocation(line: 45, column: 22, scope: !6)
+!54 = !DILocation(line: 47, column: 30, scope: !6)
+!55 = !DILocation(line: 63, column: 30, scope: !6)
+!56 = !DILocation(line: 52, column: 53, scope: !6)
+!57 = !DILocation(line: 47, column: 95, scope: !6)
+!58 = !DILocation(line: 52, column: 88, scope: !6)
+!59 = !DILocation(line: 52, column: 25, scope: !6)
+!60 = !DILocation(line: 52, column: 17, scope: !6)
+!61 = !DILocation(line: 53, column: 26, scope: !6)
+!62 = !DILocation(line: 53, column: 25, scope: !6)
+!63 = !DILocation(line: 287, column: 12, scope: !28, inlinedAt: !64)
+!64 = !DILocation(line: 314, column: 12, scope: !28, inlinedAt: !65)
+!65 = !DILocation(line: 53, column: 18, scope: !31)
+!66 = !DILocation(line: 61, column: 18, scope: !6)
+!67 = !DILocation(line: 66, column: 25, scope: !6)
+!68 = !DILocation(line: 66, column: 17, scope: !6)
+!69 = !DILocation(line: 216, column: 16, scope: !28, inlinedAt: !70)
+!70 = !DILocation(line: 67, column: 34, scope: !31)
+!71 = !DILocation(line: 196, column: 12, scope: !28, inlinedAt: !69)
+!72 = !DILocation(line: 67, column: 23, scope: !6)
+!73 = !DILocation(line: 68, column: 31, scope: !6)
+!74 = !DILocation(line: 68, column: 24, scope: !6)
+!75 = !DILocation(line: 69, column: 24, scope: !6)
+!76 = !DILocation(line: 69, column: 17, scope: !6)
+!77 = !DILocation(line: 70, column: 13, scope: !6)
+!78 = !DILocation(line: 71, column: 27, scope: !6)
+!79 = !DILocation(line: 314, column: 12, scope: !28, inlinedAt: !80)
+!80 = !DILocation(line: 71, column: 20, scope: !31)
+!81 = !DILocation(line: 287, column: 12, scope: !28, inlinedAt: !79)
+!82 = !DILocation(line: 71, column: 13, scope: !6)
+!83 = !DILocation(line: 72, column: 21, scope: !6)
+!84 = !DILocation(line: 314, column: 12, scope: !28, inlinedAt: !85)
+!85 = !DILocation(line: 72, column: 40, scope: !31)
+!86 = !DILocation(line: 287, column: 12, scope: !28, inlinedAt: !84)
+!87 = !DILocation(line: 74, column: 22, scope: !6)
+!88 = !DILocation(line: 74, column: 50, scope: !6)
+!89 = !DILocation(line: 74, column: 77, scope: !6)
+!90 = !DILocation(line: 75, column: 108, scope: !6)
+!91 = !DILocation(line: 75, column: 36, scope: !6)
+!92 = !DILocation(line: 75, column: 18, scope: !6)
+!93 = !DILocation(line: 75, column: 83, scope: !6)
+!94 = !DILocation(line: 75, column: 65, scope: !6)
+!95 = !DILocation(line: 75, column: 9, scope: !6)
+!96 = !DILocation(line: 76, column: 24, scope: !6)
+!97 = !DILocation(line: 77, column: 18, scope: !6)
+!98 = !DILocation(line: 77, column: 50, scope: !6)
+!99 = !DILocation(line: 77, column: 42, scope: !6)
+!100 = !DILocation(line: 77, column: 9, scope: !6)
+!101 = !DILocation(line: 13, column: 1, scope: !6)

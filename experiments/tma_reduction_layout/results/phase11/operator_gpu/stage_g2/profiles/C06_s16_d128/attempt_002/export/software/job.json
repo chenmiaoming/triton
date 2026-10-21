@@ -1,0 +1,968 @@
+{
+  "case": {
+    "BM": 16,
+    "BN": 128,
+    "H": 32,
+    "W": 4,
+    "family": "C06",
+    "id": "C06_s16_d128",
+    "layouts": [
+      {
+        "aliases": [
+          "vec1:within"
+        ],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec1:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            2,
+            2
+          ]
+        },
+        "name": "vec2:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec2:within"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "name": "vec4:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec4:within"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "name": "vec8:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec8:within"
+      }
+    ],
+    "num_stages": 3,
+    "segments": 16
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(9,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(11,)": "32",
+        "(12,)": "128",
+        "(13,)": "128",
+        "(15,)": "16",
+        "(16,)": "16",
+        "(17,)": "False",
+        "(18,)": "-448.0",
+        "(19,)": "448.0",
+        "(6,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_Q": "constexpr",
+        "FP8_MAX": "constexpr",
+        "FP8_MIN": "constexpr",
+        "HEAD_SIZE": "constexpr",
+        "HEAD_SIZE_PADDED": "constexpr",
+        "NUM_SEGMENTS_PER_SEQ": "constexpr",
+        "TILE_SIZE": "constexpr",
+        "USE_FP8": "constexpr",
+        "block_table_stride": "i64",
+        "num_query_heads": "constexpr",
+        "num_seqs": "i32",
+        "out_scale_inv": "fp32",
+        "output_ptr": "*bf16",
+        "output_stride_0": "i64",
+        "output_stride_1": "i64",
+        "query_start_len_ptr": "*i32",
+        "segm_expsum_ptr": "*fp32",
+        "segm_max_ptr": "*fp32",
+        "segm_output_ptr": "*fp32",
+        "seq_lens_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "2e66a908bca3afd59cfa28f1546d1cca1987b27fb18dfcfa466d56f9a4a9fd24",
+        "kernel.llir": "624390c074eca29df1c7fb9e05a8abaa0dcc40a7e03f7eac581d041f1aa923de",
+        "kernel.ptx": "e7dfe0219a90c145c4769ffc1a84ba98d44bcf7413d0d486270656ad1b24a1de",
+        "kernel.resource.txt": "963937387d633bf834f453700c2d514e7ca8e8a9bce563455514a2ea1829abee",
+        "kernel.sass": "2649d89c88b907e26495f450a5be00171b46381afb47f1b37837afd6b72a856f",
+        "kernel.ttgir": "e7fd2915779b7e7f621fdbaac3bd34c6b51b13e56ec63ae302bf0e311975df6e",
+        "kernel.ttir": "6e63db5957614e73c595bc38836f9040995b70d331dc8484f6bbf6ef11e323b6"
+      },
+      "artifact_directory": "artifacts/C06_s16_d128_upstream",
+      "compile_key": "173790c334e0d0d264edc1da5440b5f3638bb9b988adb52932088cf67569d723",
+      "cubin_SHA256": "2e66a908bca3afd59cfa28f1546d1cca1987b27fb18dfcfa466d56f9a4a9fd24",
+      "dynamic_smem_bytes": 2048,
+      "family": "C06",
+      "function_name": "reduce_segments",
+      "geometry": "C06_s16_d128",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "runtime_argument_names": [
+        "output_ptr",
+        "segm_output_ptr",
+        "segm_max_ptr",
+        "segm_expsum_ptr",
+        "seq_lens_ptr",
+        "num_seqs",
+        "out_scale_inv",
+        "output_stride_0",
+        "output_stride_1",
+        "block_table_stride",
+        "query_start_len_ptr"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "C06_s16_d128:upstream"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(20,)": [],
+        "(21,)": [],
+        "(22,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(9,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(11,)": "32",
+        "(12,)": "128",
+        "(13,)": "128",
+        "(15,)": "16",
+        "(16,)": "16",
+        "(17,)": "False",
+        "(18,)": "-448.0",
+        "(19,)": "448.0",
+        "(20,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(21,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(22,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(6,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_Q": "constexpr",
+        "FP8_MAX": "constexpr",
+        "FP8_MIN": "constexpr",
+        "HEAD_SIZE": "constexpr",
+        "HEAD_SIZE_PADDED": "constexpr",
+        "L": "constexpr",
+        "LOUT": "constexpr",
+        "LSTAT": "constexpr",
+        "NUM_SEGMENTS_PER_SEQ": "constexpr",
+        "TILE_SIZE": "constexpr",
+        "USE_FP8": "constexpr",
+        "block_table_stride": "i64",
+        "num_query_heads": "constexpr",
+        "num_seqs": "i32",
+        "out_scale_inv": "fp32",
+        "output_ptr": "*bf16",
+        "output_stride_0": "i64",
+        "output_stride_1": "i64",
+        "query_start_len_ptr": "*i32",
+        "segm_expsum_ptr": "*fp32",
+        "segm_max_ptr": "*fp32",
+        "segm_output_ptr": "*fp32",
+        "seq_lens_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "476a65e1d973a623df60b8ec9d13c095305cfddbbae81564e3a7d7725ae1ac01",
+        "kernel.glir": "240368af35e021826cb8695ed68924e35e63c0a62519320dcc6a0d4255934a33",
+        "kernel.llir": "eafddc24d41dbfe516e75f0d254239b1b7532e26fcf7e192f2ed29ee874446e2",
+        "kernel.ptx": "8e8eb6000d073a48df41ea8e2ef8c1138964c3169c87faab0b6333437e50c09d",
+        "kernel.resource.txt": "963937387d633bf834f453700c2d514e7ca8e8a9bce563455514a2ea1829abee",
+        "kernel.sass": "cf3b866b39a41e974ec9d0a4e5796d17ee1eceb0e7c04bee16bfbd12ee9d7008",
+        "kernel.ttgir": "f67de9042ef93c5ef017e05a04be82b001b5cf0b22c8c25d1a0056998f631c70"
+      },
+      "artifact_directory": "artifacts/C06_s16_d128_gluon_anchor",
+      "compile_key": "2ac1f037f4bf8947a0f5bf4ad77fdeab946175be0b35962661f3a6fd363122da",
+      "cubin_SHA256": "476a65e1d973a623df60b8ec9d13c095305cfddbbae81564e3a7d7725ae1ac01",
+      "dynamic_smem_bytes": 2048,
+      "family": "C06",
+      "function_name": "reduce_segments",
+      "geometry": "C06_s16_d128",
+      "global_scratch_size": 0,
+      "intervention_layout": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "num_warps": 4,
+      "runtime_argument_names": [
+        "output_ptr",
+        "segm_output_ptr",
+        "segm_max_ptr",
+        "segm_expsum_ptr",
+        "seq_lens_ptr",
+        "num_seqs",
+        "out_scale_inv",
+        "output_stride_0",
+        "output_stride_1",
+        "block_table_stride",
+        "query_start_len_ptr"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "C06_s16_d128:gluon_anchor"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(20,)": [],
+        "(21,)": [],
+        "(22,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(9,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(11,)": "32",
+        "(12,)": "128",
+        "(13,)": "128",
+        "(15,)": "16",
+        "(16,)": "16",
+        "(17,)": "False",
+        "(18,)": "-448.0",
+        "(19,)": "448.0",
+        "(20,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(21,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(22,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(6,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_Q": "constexpr",
+        "FP8_MAX": "constexpr",
+        "FP8_MIN": "constexpr",
+        "HEAD_SIZE": "constexpr",
+        "HEAD_SIZE_PADDED": "constexpr",
+        "L": "constexpr",
+        "LOUT": "constexpr",
+        "LSTAT": "constexpr",
+        "NUM_SEGMENTS_PER_SEQ": "constexpr",
+        "TILE_SIZE": "constexpr",
+        "USE_FP8": "constexpr",
+        "block_table_stride": "i64",
+        "num_query_heads": "constexpr",
+        "num_seqs": "i32",
+        "out_scale_inv": "fp32",
+        "output_ptr": "*bf16",
+        "output_stride_0": "i64",
+        "output_stride_1": "i64",
+        "query_start_len_ptr": "*i32",
+        "segm_expsum_ptr": "*fp32",
+        "segm_max_ptr": "*fp32",
+        "segm_output_ptr": "*fp32",
+        "seq_lens_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "f5ca2c847bf17db27bd9e1edf83f4334fc6dca1500a0a100aabe9537a6670421",
+        "kernel.glir": "494205624a2107324daf559dfeca152bc6c9fca8646bb215fc3dbd5c4b27017b",
+        "kernel.llir": "5049e78bf626d4a41d5f8852cd5bec768e577f097998f8313a0738ae68a18254",
+        "kernel.ptx": "885c8fe2fea3cab8291bec14aa3ae9cd9fc617385649ad6ff59145c2a26ba8b3",
+        "kernel.resource.txt": "963937387d633bf834f453700c2d514e7ca8e8a9bce563455514a2ea1829abee",
+        "kernel.sass": "91b286a0fd0a2e157422d4130874d1f520aa9d06ba8adc60a4bf2f66a1b964d6",
+        "kernel.ttgir": "117ed96c91d33771a149d77aa33d5056b16e8fc9bd5e0ae89117b6656a5f6279"
+      },
+      "artifact_directory": "artifacts/C06_s16_d128_vec1_n_first",
+      "compile_key": "8d83b252f6da9e05a1ce817fdde1c26f50aa0c85c03d2a27473d2e3f44540357",
+      "cubin_SHA256": "f5ca2c847bf17db27bd9e1edf83f4334fc6dca1500a0a100aabe9537a6670421",
+      "dynamic_smem_bytes": 64,
+      "family": "C06",
+      "function_name": "reduce_segments",
+      "geometry": "C06_s16_d128",
+      "global_scratch_size": 0,
+      "intervention_layout": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "kind": "blocked"
+      },
+      "num_warps": 4,
+      "runtime_argument_names": [
+        "output_ptr",
+        "segm_output_ptr",
+        "segm_max_ptr",
+        "segm_expsum_ptr",
+        "seq_lens_ptr",
+        "num_seqs",
+        "out_scale_inv",
+        "output_stride_0",
+        "output_stride_1",
+        "block_table_stride",
+        "query_start_len_ptr"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "C06_s16_d128:vec1:n_first"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(20,)": [],
+        "(21,)": [],
+        "(22,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(9,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(11,)": "32",
+        "(12,)": "128",
+        "(13,)": "128",
+        "(15,)": "16",
+        "(16,)": "16",
+        "(17,)": "False",
+        "(18,)": "-448.0",
+        "(19,)": "448.0",
+        "(20,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[2, 16], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(21,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(22,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(6,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_Q": "constexpr",
+        "FP8_MAX": "constexpr",
+        "FP8_MIN": "constexpr",
+        "HEAD_SIZE": "constexpr",
+        "HEAD_SIZE_PADDED": "constexpr",
+        "L": "constexpr",
+        "LOUT": "constexpr",
+        "LSTAT": "constexpr",
+        "NUM_SEGMENTS_PER_SEQ": "constexpr",
+        "TILE_SIZE": "constexpr",
+        "USE_FP8": "constexpr",
+        "block_table_stride": "i64",
+        "num_query_heads": "constexpr",
+        "num_seqs": "i32",
+        "out_scale_inv": "fp32",
+        "output_ptr": "*bf16",
+        "output_stride_0": "i64",
+        "output_stride_1": "i64",
+        "query_start_len_ptr": "*i32",
+        "segm_expsum_ptr": "*fp32",
+        "segm_max_ptr": "*fp32",
+        "segm_output_ptr": "*fp32",
+        "seq_lens_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e143cd2bfb63d67210ec496a56552497c33d572840445b64d77c75f92888a9a0",
+        "kernel.glir": "986229d42fe55dc8dfc24721ac8c3ae30f632bcccb1961fa25f52ebfdd7930f2",
+        "kernel.llir": "a1b7e50d4429742cf6c0e0cf7521f43c2f6d2c403e0aa8e47407b7400e88a3de",
+        "kernel.ptx": "8e6ff25b70e6debe68f295ec8964a6eb8e2f9e06a134dd16c40128e29558f18b",
+        "kernel.resource.txt": "963937387d633bf834f453700c2d514e7ca8e8a9bce563455514a2ea1829abee",
+        "kernel.sass": "5af770caa46627b8cde0f484d12ed8e1e840e02c03a7145bca9c2488e7b37667",
+        "kernel.ttgir": "260fe13a76e9a05781094ec1f4efab3db5a88019b147b482a50c4d1f453a5be2"
+      },
+      "artifact_directory": "artifacts/C06_s16_d128_vec2_within",
+      "compile_key": "756f9ca826972b86046f01667f2704ebf2b8a91c8a8ae4551d1f1dfd35ba6255",
+      "cubin_SHA256": "e143cd2bfb63d67210ec496a56552497c33d572840445b64d77c75f92888a9a0",
+      "dynamic_smem_bytes": 64,
+      "family": "C06",
+      "function_name": "reduce_segments",
+      "geometry": "C06_s16_d128",
+      "global_scratch_size": 0,
+      "intervention_layout": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "kind": "blocked"
+      },
+      "num_warps": 4,
+      "runtime_argument_names": [
+        "output_ptr",
+        "segm_output_ptr",
+        "segm_max_ptr",
+        "segm_expsum_ptr",
+        "seq_lens_ptr",
+        "num_seqs",
+        "out_scale_inv",
+        "output_stride_0",
+        "output_stride_1",
+        "block_table_stride",
+        "query_start_len_ptr"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "C06_s16_d128:vec2:within"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(20,)": [],
+        "(21,)": [],
+        "(22,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(9,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(11,)": "32",
+        "(12,)": "128",
+        "(13,)": "128",
+        "(15,)": "16",
+        "(16,)": "16",
+        "(17,)": "False",
+        "(18,)": "-448.0",
+        "(19,)": "448.0",
+        "(20,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[8, 4], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(21,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(22,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(6,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_Q": "constexpr",
+        "FP8_MAX": "constexpr",
+        "FP8_MIN": "constexpr",
+        "HEAD_SIZE": "constexpr",
+        "HEAD_SIZE_PADDED": "constexpr",
+        "L": "constexpr",
+        "LOUT": "constexpr",
+        "LSTAT": "constexpr",
+        "NUM_SEGMENTS_PER_SEQ": "constexpr",
+        "TILE_SIZE": "constexpr",
+        "USE_FP8": "constexpr",
+        "block_table_stride": "i64",
+        "num_query_heads": "constexpr",
+        "num_seqs": "i32",
+        "out_scale_inv": "fp32",
+        "output_ptr": "*bf16",
+        "output_stride_0": "i64",
+        "output_stride_1": "i64",
+        "query_start_len_ptr": "*i32",
+        "segm_expsum_ptr": "*fp32",
+        "segm_max_ptr": "*fp32",
+        "segm_output_ptr": "*fp32",
+        "seq_lens_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "eba8b26694cd516637eb0ec02290723097847994a55b943f1da81ca8c02ee72e",
+        "kernel.glir": "4fe8116080f86510f4ae4e11eb90f74f95ca6f629ac62a8ca610ac8f38c5aec6",
+        "kernel.llir": "85716a926fc832b89c470d6d42c6438ada06373355e79b73f1b25ea525670ade",
+        "kernel.ptx": "0124db7358cc94bcd752c2fae29322aed606b79d3c1217ad82febfe050b03ea9",
+        "kernel.resource.txt": "963937387d633bf834f453700c2d514e7ca8e8a9bce563455514a2ea1829abee",
+        "kernel.sass": "d6cee5c940dff5fefcdc2015c7cab9e01bedcbef34e472567836027bb95e3a67",
+        "kernel.ttgir": "27f87a083866a7c1196355bd4f8830f869ffd83f8925de5601cd892f3e51cd1c"
+      },
+      "artifact_directory": "artifacts/C06_s16_d128_vec8_within",
+      "compile_key": "a70e03eb55048f5123a040500df7a1023a1e0a35ded39ae472b51e4b42d1551a",
+      "cubin_SHA256": "eba8b26694cd516637eb0ec02290723097847994a55b943f1da81ca8c02ee72e",
+      "dynamic_smem_bytes": 1024,
+      "family": "C06",
+      "function_name": "reduce_segments",
+      "geometry": "C06_s16_d128",
+      "global_scratch_size": 0,
+      "intervention_layout": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "kind": "blocked"
+      },
+      "num_warps": 4,
+      "runtime_argument_names": [
+        "output_ptr",
+        "segm_output_ptr",
+        "segm_max_ptr",
+        "segm_expsum_ptr",
+        "seq_lens_ptr",
+        "num_seqs",
+        "out_scale_inv",
+        "output_stride_0",
+        "output_stride_1",
+        "block_table_stride",
+        "query_start_len_ptr"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "C06_s16_d128:vec8:within"
+    }
+  ],
+  "mode": "software"
+}
