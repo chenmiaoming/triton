@@ -1,0 +1,317 @@
+{
+  "case": {
+    "BM": 32,
+    "BN": 256,
+    "H": 32,
+    "W": 4,
+    "family": "C06",
+    "id": "C06_s32_d256",
+    "layouts": [
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec1:n_first"
+      },
+      {
+        "aliases": [
+          "vec2:within"
+        ],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec2:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            2,
+            2
+          ]
+        },
+        "name": "vec4:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec4:within"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "name": "vec8:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec8:within"
+      }
+    ],
+    "num_stages": 3,
+    "segments": 32
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(20,)": [],
+        "(21,)": [],
+        "(22,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(9,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(11,)": "32",
+        "(12,)": "256",
+        "(13,)": "256",
+        "(15,)": "16",
+        "(16,)": "32",
+        "(17,)": "False",
+        "(18,)": "-448.0",
+        "(19,)": "448.0",
+        "(20,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[2, 16], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(21,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(22,)": "BlockedLayout(size_per_thread=[2], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(6,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_Q": "constexpr",
+        "FP8_MAX": "constexpr",
+        "FP8_MIN": "constexpr",
+        "HEAD_SIZE": "constexpr",
+        "HEAD_SIZE_PADDED": "constexpr",
+        "L": "constexpr",
+        "LOUT": "constexpr",
+        "LSTAT": "constexpr",
+        "NUM_SEGMENTS_PER_SEQ": "constexpr",
+        "TILE_SIZE": "constexpr",
+        "USE_FP8": "constexpr",
+        "block_table_stride": "i64",
+        "num_query_heads": "constexpr",
+        "num_seqs": "i32",
+        "out_scale_inv": "fp32",
+        "output_ptr": "*bf16",
+        "output_stride_0": "i64",
+        "output_stride_1": "i64",
+        "query_start_len_ptr": "*i32",
+        "segm_expsum_ptr": "*fp32",
+        "segm_max_ptr": "*fp32",
+        "segm_output_ptr": "*fp32",
+        "seq_lens_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "a9c9c6ad7329042b14f3bf10420b44de8df047ea32d04bbb189a29fc1c807eb7",
+        "kernel.glir": "ae1cc6d2a78cfe2fae6339eab21654849cac3daf58b82e1a0045cf9a95a9806e",
+        "kernel.llir": "8864542c0e8139507522a61ccd06386a8bfc2601721af00343e6d1d42d5ae93d",
+        "kernel.ptx": "92308a7a0635446f0552e59b25db348c429a92d8346364a6c749b1865dfe072d",
+        "kernel.resource.txt": "f0c85f14a9734fe524f5f906b3a3bcde7400a319bca86a5ba9ead62aae99377d",
+        "kernel.sass": "d4e7d0357a96299902604a5ef9a5d8f95c183514579c41bda49c7d607984de84",
+        "kernel.ttgir": "50e8cd9e6756bf7dd331d54d4a1113254ccf18666e7bc128a3b3e606fa23818b"
+      },
+      "artifact_directory": "artifacts/C06_s32_d256_vec4_within",
+      "compile_key": "6e65f8b1744e9459137ac0e08532652210720ec5d080fb14d72d7a0f9e58bdec",
+      "cubin_SHA256": "a9c9c6ad7329042b14f3bf10420b44de8df047ea32d04bbb189a29fc1c807eb7",
+      "dynamic_smem_bytes": 128,
+      "family": "C06",
+      "function_name": "reduce_segments",
+      "geometry": "C06_s32_d256",
+      "global_scratch_size": 0,
+      "intervention_layout": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "kind": "blocked"
+      },
+      "num_warps": 4,
+      "runtime_argument_names": [
+        "output_ptr",
+        "segm_output_ptr",
+        "segm_max_ptr",
+        "segm_expsum_ptr",
+        "seq_lens_ptr",
+        "num_seqs",
+        "out_scale_inv",
+        "output_stride_0",
+        "output_stride_1",
+        "block_table_stride",
+        "query_start_len_ptr"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "C06_s32_d256:vec4:within"
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}
