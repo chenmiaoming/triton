@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "ncu",
+    "--replay-mode",
+    "kernel",
+    "--cache-control",
+    "all",
+    "--clock-control",
+    "none",
+    "--profile-from-start",
+    "off",
+    "--section",
+    "InstructionStats",
+    "--export",
+    "/evidence/operator_gpu/g4a/profiles-fc-01M5FEYKT4B9PRPQSPZSGXSQBC/C02_n64_d128_qk_only/software/report",
+    "/usr/local/bin/python",
+    "-m",
+    "experiments.tma_reduction_layout.phase11.operator_gpu.g4_profile_one",
+    "--root",
+    "/tmp/g4-profile-artifacts-fc-01M5FEYKT4B9PRPQSPZSGXSQBC",
+    "--job",
+    "/evidence/operator_gpu/g4a/profiles-fc-01M5FEYKT4B9PRPQSPZSGXSQBC/C02_n64_d128_qk_only/software/job.json"
+  ],
+  "output": "==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.\n==PROF== Connected to process 1270 (/usr/local/bin/python3)\n==PROF== Profiling \"_fwd_kernel_stage1\" - 0: 0%....50%....100% - 3 passes\nPROFILE_BINDING {\"mode\": \"software\", \"environment\": {\"gpu_uuid\": \"GPU-2855b840-c5ff-7136-9209-7720dc8e9cb5\", \"driver_API_version\": 13030, \"device_limits\": {\"max_threads_per_sm\": 2048, \"max_threads_per_block\": 1024, \"max_registers_per_block\": 65536, \"max_registers_per_sm\": 65536, \"max_shared_memory_per_sm\": 233472, \"warp_size\": 32, \"max_shared_memory_per_block_optin\": 232448}, \"checked_cuda_calls\": [{\"api\": \"cuInit\", \"return_code\": 0}, {\"api\": \"cuDeviceGet\", \"return_code\": 0}, {\"api\": \"cuCtxCreate_v2\", \"return_code\": 0}, {\"api\": \"cuStreamCreate\", \"return_code\": 0}, {\"api\": \"cuDeviceGetName\", \"return_code\": 0}, {\"api\": \"cuDeviceGetUuid_v2\", \"return_code\": 0}, {\"api\": \"cuDriverGetVersion\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}, {\"api\": \"cuDeviceGetAttribute\", \"return_code\": 0}], \"name\": \"NVIDIA H100 80GB HBM3\", \"cc\": [9, 0], \"SM_count\": 132}, \"Triton_imported\": false, \"compile_calls\": 0, \"driver_return_codes\": [0], \"records\": [{\"tag\": \"C02_n64_d128:qk_only\", \"grid\": [1, 1, 1], \"correctness\": {\"pass\": true, \"details\": [{\"name\": \"Q\", \"pass\": true, \"input_unchanged\": true, \"canary_pass\": true}, {\"name\": \"K_Buffer\", \"pass\": true, \"input_unchanged\": true, \"canary_pass\": true}, {\"name\": \"V_Buffer\", \"pass\": true, \"input_unchanged\": true, \"canary_pass\": true}, {\"name\": \"kv_indptr\", \"pass\": true, \"input_unchanged\": true, \"canary_pass\": true}, {\"name\": \"kv_indices\", \"pass\": true, \"input_unchanged\": true, \"canary_pass\": true}, {\"name\": \"num_kv_splits\", \"pass\": true, \"input_unchanged\": true, \"canary_pass\": true}, {\"name\": \"Att_Out\", \"pass\": true, \"canary_pass\": true, \"inactive_output_untouched\": true, \"complete_elements\": 131072, \"active_elements\": 128, \"rtol\": 0.0002, \"atol\": 2e-05, \"max_abs_error\": 1.437180267805857e-09, \"actual_SHA256\": \"4f66d628da3bfa39efb8b8e5c0b3df1a2c7ec425fe27817d355d1261dc6e64bd\", \"reference_SHA256\": \"aff81a2d67b4efba7484b69444348b9dadfb398284a42e1399926e33020b407c\"}, {\"name\": \"Att_Lse\", \"pass\": true, \"canary_pass\": true, \"inactive_output_untouched\": true, \"complete_elements\": 1024, \"active_elements\": 1, \"rtol\": 0.0002, \"atol\": 2e-05, \"max_abs_error\": 2.3546839234001027e-07, \"actual_SHA256\": \"98f1f90ce89fafaf06684cd7020f167320e0a9908424b1a7f456c40d967ccce6\", \"reference_SHA256\": \"e8465d78eb83c198c9909b496d1ce21460543607fe7daa347319845f4256abdc\"}]}, \"binding\": {\"tag\": \"C02_n64_d128:qk_only\", \"cubin_SHA256\": \"cc1807151a1665e0eef585a833f06971fbd3b50d13075d5dbf94903d055d21be\", \"loaded_SHA256\": \"cc1807151a1665e0eef585a833f06971fbd3b50d13075d5dbf94903d055d21be\", \"ABI\": [\"u64\", \"u64\", \"u64\", \"f32\", \"u64\", \"u64\", \"u64\", \"u64\", \"u64\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u32\", \"u64\", \"u64\"], \"attributes\": {\"n_regs\": 105, \"static_smem_bytes\": 0, \"local_bytes\": 0, \"occupancy_capacity_q\": 4}, \"guards\": 9, \"direct_launches\": 9, \"graph_launches\": 0}}]}\n==PROF== Disconnected from process 1270\n==PROF== Report: /evidence/operator_gpu/g4a/profiles-fc-01M5FEYKT4B9PRPQSPZSGXSQBC/C02_n64_d128_qk_only/software/report.ncu-rep\n",
+  "returncode": 0
+}
