@@ -1,0 +1,338 @@
+	.target	sm_90a
+
+	.elftype	@"ET_EXEC"
+
+
+//--------------------- .text.dense_output        --------------------------
+	.section	.text.dense_output,"ax",@progbits
+	.align	128
+        .global         dense_output
+        .type           dense_output,@function
+        .size           dense_output,(.L_x_3 - dense_output)
+        .other          dense_output,@"STO_CUDA_ENTRY STV_DEFAULT"
+dense_output:
+.text.dense_output:
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 8
+        /*0000*/                   LDC R1, c[0x0][0x28] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0010*/                   S2R R24, SR_TID.X ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 10
+        /*0020*/                   LDC.64 R2, c[0x0][0x198] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0030*/                   ELECT P1, URZ, PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0040*/                   ELECT P0, URZ, PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0050*/                   UMOV UR8, 0x400 ;
+        /*0060*/                   UMOV UR5, 0x1 ;
+        /*0070*/                   S2UR UR4, SR_CgaCtaId ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 10
+        /*0080*/                   S2UR UR6, SR_CTAID.X ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 15
+        /*0090*/                   LOP3.LUT P2, R0, R24.reuse, 0xff, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*00a0*/                   ULEA UR8, UR4, UR8, 0x18 ;
+        /*00b0*/                   ISETP.LT.U32.AND P1, PT, R24, 0x20, P1 ;
+        /*00c0*/                   ISETP.LT.U32.AND P0, PT, R0, 0x20, P0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*00d0*/                   USHF.R.U32.HI UR11, URZ, 0x2, UR6 ;
+        /*00e0*/                   USHF.L.U32 UR10, UR6, 0x6, URZ ;
+        /*00f0*/                   ULOP3.LUT UR11, UR11, 0x1fffffe0, URZ, 0xc0, !UPT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0100*/                   VOTEU.ANY UP0, P1 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0110*/                   ULOP3.LUT UR10, UR10, 0x1fc0, URZ, 0xc0, !UPT ;
+        /*0120*/               @P0 IADD3 R0, P3, R2, 0x30, RZ ;
+        /*0130*/                   VOTEU.ANY UP1, P0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0140*/                   @UP0 UIADD3 UR4, -UR5, 0x100000, URZ ;
+        /*0150*/                   @UP0 USHF.L.U32 UR5, UR4, 0xb, URZ ;
+        /*0160*/                   @UP0 USHF.L.U32 UR4, UR4, 0x1, URZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0170*/               @P0 R2UR UR7, R0 ;
+        /*0180*/               @P0 IMAD.X R2, RZ, RZ, R3, P3 ;
+        /*0190*/                   SHF.L.U32 R0, RZ, 0x1f, RZ ;
+        /*01a0*/                   @UP1 UMOV UR12, URZ ;
+        /*01b0*/               @P0 R2UR UR9, R2 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*01c0*/                   @UP0 SYNCS.EXCH.64 URZ, [UR8+0x1000], UR4 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*01d0*/                   IMAD.U32 R2, RZ, RZ, UR7 ;
+        /*01e0*/               @P0 R2UR UR14, R2 ;
+        /*01f0*/                   IMAD.U32 R3, RZ, RZ, UR9 ;
+        /*0200*/                   @UP1 UIADD3 UR9, UR8, 0x1000, URZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 15
+        /*0210*/              @!P2 IMAD.MOV.U32 R2, RZ, RZ, 0x1000 ;
+        /*0220*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0230*/               @P0 R2UR UR15, R3 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 15
+        /*0240*/              @!P2 SYNCS.ARRIVE.TRANS64 RZ, [UR8+0x1000], R2 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0250*/                   @UP1 UTMALDG.3D [UR8], [UR14] ;
+        /*0260*/                   SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [UR8+0x1000], R0 ;
+        /*0270*/              @!P0 BRA `(.L_x_0) ;
+.L_x_1:
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 18
+        /*0280*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0290*/                   ELECT P0, URZ, PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*02a0*/                   IMAD.SHL.U32 R0, R24.reuse, 0x10, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*02b0*/                   LOP3.LUT R15, R24.reuse, 0x7, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*02c0*/                   IMAD.SHL.U32 R3, R24.reuse, 0x2, RZ ;
+        /*02d0*/                   ISETP.LT.U32.AND P0, PT, R24, 0x20, P0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*02e0*/                   USHF.L.U32 UR4, UR6, 0xb, URZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*02f0*/                   LOP3.LUT R0, R0, 0xff0, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0300*/                   IMAD.SHL.U32 R27, R15.reuse, 0x10, RZ ;
+        /*0310*/                   LEA R15, R15, UR8, 0x7 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*0320*/                   LOP3.LUT R0, R0, 0x70, R3, 0x78, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 18
+        /*0330*/               @P0 SYNCS.CCTL.IV [UR8+0x1000] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*0340*/                   LDS.128 R8, [R0+UR8] ;
+        /*0350*/                   PRMT R6, R8.reuse, 0x7632, R6 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0360*/                   IMAD.U32 R25, R8, 0x10000, RZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*0370*/                   PRMT R4, R9.reuse, 0x7632, R4 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0380*/                   IMAD.U32 R7, R9, 0x10000, RZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*0390*/                   PRMT R0, R11.reuse, 0x7632, R0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*03a0*/                   IMAD.U32 R6, R6, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*03b0*/                   SHFL.BFLY PT, R20, R25, 0x10, 0x1f ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*03c0*/                   IMAD.U32 R4, R4, 0x10000, RZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*03d0*/                   PRMT R2, R10.reuse, 0x7632, R2 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*03e0*/                   IMAD.U32 R3, R11, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*03f0*/                   SHFL.BFLY PT, R22, R7, 0x10, 0x1f ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0400*/                   IMAD.U32 R5, R10, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0410*/                   LOP3.LUT R10, R24, 0xe0, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0420*/                   IMAD.U32 R2, R2, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0430*/                   SHFL.BFLY PT, R21, R6, 0x10, 0x1f ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0440*/                   IMAD.U32 R0, R0, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0450*/                   SHF.R.U32.HI R26, RZ, 0x1, R10 ;
+        /*0460*/                   IMAD R29, R10, 0x4, R27 ;
+        /*0470*/                   SHFL.BFLY PT, R23, R4, 0x10, 0x1f ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 37
+        /*0480*/                   IMAD.SHL.U32 R24, R24, 0x8, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0490*/                   LOP3.LUT R28, R27, R26, RZ, 0x3c, !PT ;
+        /*04a0*/                   SHFL.BFLY PT, R8, R5, 0x10, 0x1f ;
+        /*04b0*/                   LOP3.LUT R29, R29, R26, RZ, 0x3c, !PT ;
+        /*04c0*/                   IMAD.IADD R28, R28, 0x1, R15 ;
+        /*04d0*/                   SHFL.BFLY PT, R18, R3, 0x10, 0x1f ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 37
+        /*04e0*/                   LOP3.LUT R24, R24, 0x7f8, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*04f0*/                   FMNMX R20, R25, R20, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0500*/                   SHFL.BFLY PT, R17, R2, 0x10, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0510*/                   FMNMX R22, R7, R22, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0520*/                   SHFL.BFLY PT, R11, R20, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0530*/                   FMNMX R21, R6, R21, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0540*/                   SHFL.BFLY PT, R13, R22, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0550*/                   FMNMX R23, R4, R23, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0560*/                   SHFL.BFLY PT, R14, R21, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0570*/                   FMNMX R19, R5, R8, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0580*/                   SHFL.BFLY PT, R12, R23, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0590*/                   FMNMX R18, R3, R18, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*05a0*/                   SHFL.BFLY PT, R9, R0, 0x10, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*05b0*/                   FMNMX R17, R2, R17, !PT ;
+        /*05c0*/                   FMNMX R20, R20, R11, !PT ;
+        /*05d0*/                   FMNMX R22, R22, R13, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*05e0*/                   SHFL.BFLY PT, R13, R17, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*05f0*/                   FMNMX R21, R21, R14, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0600*/                   SHFL.BFLY PT, R14, R18, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0610*/                   FMNMX R23, R23, R12, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0620*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0630*/                   FMNMX R16, R0, R9, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0640*/                   SHFL.BFLY PT, R12, R19, 0x8, 0x1f ;
+        /*0650*/                   SHFL.BFLY PT, R15, R16, 0x8, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0660*/                   FMNMX R13, R17, R13, !PT ;
+        /*0670*/                   FMNMX R14, R18, R14, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0680*/                   STS.128 [R29+UR8], R20 ;
+        /*0690*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*06a0*/                   FMNMX R12, R19, R12, !PT ;
+        /*06b0*/                   FMNMX R15, R16, R15, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*06c0*/                   LDS.128 R8, [R28] ;
+        /*06d0*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*06e0*/                   STS.128 [R29+UR8], R12 ;
+        /*06f0*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0700*/                   SHFL.BFLY PT, R21, R8, 0x4, 0x1f ;
+        /*0710*/                   SHFL.BFLY PT, R12, R9, 0x4, 0x1f ;
+        /*0720*/                   SHFL.BFLY PT, R13, R10, 0x4, 0x1f ;
+        /*0730*/                   LDS.128 R16, [R28] ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0740*/                   FMNMX R20, R8, R21, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0750*/                   SHFL.BFLY PT, R8, R11, 0x4, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0760*/                   FMNMX R12, R9, R12, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0770*/                   SHFL.BFLY PT, R15, R20, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0780*/                   FMNMX R13, R10, R13, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0790*/                   SHFL.BFLY PT, R9, R12, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*07a0*/                   FMNMX R8, R11, R8, !PT ;
+        /*07b0*/                   FMNMX R15, R20, R15, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*07c0*/                   SHFL.BFLY PT, R28, R16, 0x4, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*07d0*/                   FMNMX R9, R12, R9, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*07e0*/                   SHFL.BFLY PT, R23, R17, 0x4, 0x1f ;
+        /*07f0*/                   SHFL.BFLY PT, R22, R19, 0x4, 0x1f ;
+        /*0800*/                   SHFL.BFLY PT, R21, R18, 0x4, 0x1f ;
+        /*0810*/                   SHFL.BFLY PT, R20, R15, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0820*/                   FMNMX R10, R16, R28, !PT ;
+        /*0830*/                   FMNMX R11, R17, R23, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0840*/                   SHFL.BFLY PT, R17, R8, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0850*/                   FMNMX R16, R19, R22, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0860*/                   SHFL.BFLY PT, R22, R13, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0870*/                   FMNMX R14, R18, R21, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0880*/                   SHFL.BFLY PT, R18, R11, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0890*/                   FMNMX R20, R15, R20, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*08a0*/                   SHFL.BFLY PT, R19, R10, 0x2, 0x1f ;
+        /*08b0*/                   SHFL.BFLY PT, R21, R16, 0x2, 0x1f ;
+        /*08c0*/                   SHFL.BFLY PT, R23, R14, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*08d0*/                   FMNMX R17, R8, R17, !PT ;
+        /*08e0*/                   FMNMX R12, R13, R22, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*08f0*/                   SHFL.BFLY PT, R22, R9, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0900*/                   FMNMX R8, R11, R18, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0910*/                   SHFL.BFLY PT, R13, R12, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0920*/                   FMNMX R19, R10, R19, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0930*/                   SHFL.BFLY PT, R18, R17, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0940*/                   FMNMX R11, R16, R21, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0950*/                   SHFL.BFLY PT, R16, R19, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0960*/                   FMNMX R10, R14, R23, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0970*/                   SHFL.BFLY PT, R29, R8, 0x1, 0x1f ;
+        /*0980*/                   SHFL.BFLY PT, R15, R10, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0990*/                   FMNMX R21, R9, R22, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*09a0*/                   SHFL.BFLY PT, R14, R11, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*09b0*/                   FMNMX R22, R12, R13, !PT ;
+        /*09c0*/                   FMNMX R23, R17, R18, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*09d0*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*09e0*/                   FMNMX R16, R19, R16, !PT ;
+        /*09f0*/                   FMNMX R17, R8, R29, !PT ;
+        /*0a00*/                   FMNMX R18, R10, R15, !PT ;
+        /*0a10*/                   FMNMX R19, R11, R14, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0a20*/                   STS.128 [R26+UR8], R20 ;
+        /*0a30*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0a40*/                   LDS.128 R8, [R27+UR8] ;
+        /*0a50*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0a60*/                   STS.128 [R26+UR8], R16 ;
+        /*0a70*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 28
+        /*0a80*/                   FADD R9, R6, -R9 ;
+        /*0a90*/                   FADD R10, R7, -R10 ;
+        /*0aa0*/                   FADD R8, R25, -R8 ;
+        /*0ab0*/                   FADD R11, R4, -R11 ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0ac0*/                   LDS.128 R12, [R27+UR8] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*0ad0*/                   ULDC.64 UR8, c[0x0][0x2e8] ;
+        /*0ae0*/                   ULEA UR6, UP0, UR6, UR8, 0xd ;
+        /*0af0*/                   ULEA.HI.X.SX32 UR4, UR4, UR9, 0x2, UP0 ;
+        /*0b00*/                   LEA R6, P0, R24, UR6, 0x2 ;
+        /*0b10*/                   LEA.HI.X R7, R24, UR4, RZ, 0x2, P0 ;
+        /*0b20*/                   ULDC.64 UR4, c[0x0][0x208] ;
+        /*0b30*/                   STG.E.128 desc[UR4][R6.64], R8 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 28
+        /*0b40*/                   FADD R12, R5, -R12 ;
+        /*0b50*/                   FADD R13, R2, -R13 ;
+        /*0b60*/                   FADD R14, R3, -R14 ;
+        /*0b70*/                   FADD R15, R0, -R15 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*0b80*/                   STG.E.128 desc[UR4][R6.64+0x10], R12 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 8
+        /*0b90*/                   EXIT ;
+.L_x_0:
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 21
+        /*0ba0*/                   SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [UR8+0x1000], R0 ;
+        /*0bb0*/              @!P0 BRA `(.L_x_0) ;
+        /*0bc0*/                   BRA `(.L_x_1) ;
+.L_x_2:
+        /*0bd0*/                   BRA `(.L_x_2);
+        /*0be0*/                   NOP;
+        /*0bf0*/                   NOP;
+        /*0c00*/                   NOP;
+        /*0c10*/                   NOP;
+        /*0c20*/                   NOP;
+        /*0c30*/                   NOP;
+        /*0c40*/                   NOP;
+        /*0c50*/                   NOP;
+        /*0c60*/                   NOP;
+        /*0c70*/                   NOP;
+.L_x_3:
+
+
+//--------------------- SYMBOLS --------------------------
+
+	.type		.nv.reservedSmem.offset0,@object
+	.size		.nv.reservedSmem.offset0,0x4

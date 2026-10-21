@@ -1,0 +1,223 @@
+	.target	sm_90a
+
+	.elftype	@"ET_EXEC"
+
+
+//--------------------- .text.dense_output        --------------------------
+	.section	.text.dense_output,"ax",@progbits
+	.align	128
+        .global         dense_output
+        .type           dense_output,@function
+        .size           dense_output,(.L_x_3 - dense_output)
+        .other          dense_output,@"STO_CUDA_ENTRY STV_DEFAULT"
+dense_output:
+.text.dense_output:
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 8
+        /*0000*/                   LDC R1, c[0x0][0x28] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0010*/                   S2R R0, SR_TID.X ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 10
+        /*0020*/                   LDC.64 R2, c[0x0][0x198] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0030*/                   ELECT P1, URZ, PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0040*/                   ELECT P0, URZ, PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0050*/                   UMOV UR8, 0x400 ;
+        /*0060*/                   UMOV UR5, 0x1 ;
+        /*0070*/                   S2UR UR4, SR_CgaCtaId ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 10
+        /*0080*/                   S2UR UR6, SR_CTAID.X ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 15
+        /*0090*/                   LOP3.LUT P2, R13, R0.reuse, 0xff, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*00a0*/                   ULEA UR8, UR4, UR8, 0x18 ;
+        /*00b0*/                   ISETP.LT.U32.AND P1, PT, R0, 0x20, P1 ;
+        /*00c0*/                   ISETP.LT.U32.AND P0, PT, R13, 0x20, P0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*00d0*/                   USHF.R.U32.HI UR11, URZ, 0x2, UR6 ;
+        /*00e0*/                   USHF.L.U32 UR10, UR6, 0x6, URZ ;
+        /*00f0*/                   ULOP3.LUT UR11, UR11, 0x1fffffe0, URZ, 0xc0, !UPT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0100*/                   VOTEU.ANY UP0, P1 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0110*/                   ULOP3.LUT UR10, UR10, 0x1fc0, URZ, 0xc0, !UPT ;
+        /*0120*/               @P0 IADD3 R4, P3, R2, 0x30, RZ ;
+        /*0130*/                   VOTEU.ANY UP1, P0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*0140*/                   @UP0 UIADD3 UR4, -UR5, 0x100000, URZ ;
+        /*0150*/                   @UP0 USHF.L.U32 UR5, UR4, 0xb, URZ ;
+        /*0160*/                   @UP0 USHF.L.U32 UR4, UR4, 0x1, URZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0170*/               @P0 R2UR UR7, R4 ;
+        /*0180*/               @P0 IMAD.X R2, RZ, RZ, R3, P3 ;
+        /*0190*/                   @UP1 UMOV UR12, URZ ;
+        /*01a0*/               @P0 R2UR UR9, R2 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 14
+        /*01b0*/                   @UP0 SYNCS.EXCH.64 URZ, [UR8+0x1000], UR4 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*01c0*/                   IMAD.U32 R2, RZ, RZ, UR7 ;
+        /*01d0*/               @P0 R2UR UR14, R2 ;
+        /*01e0*/                   IMAD.U32 R3, RZ, RZ, UR9 ;
+        /*01f0*/                   @UP1 UIADD3 UR9, UR8, 0x1000, URZ ;
+        /*0200*/                   SHF.L.U32 R2, RZ, 0x1f, RZ ;
+        /*0210*/               @P0 R2UR UR15, R3 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 15
+        /*0220*/              @!P2 IMAD.MOV.U32 R3, RZ, RZ, 0x1000 ;
+        /*0230*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0240*/              @!P2 SYNCS.ARRIVE.TRANS64 RZ, [UR8+0x1000], R3 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 16
+        /*0250*/                   @UP1 UTMALDG.3D [UR8], [UR14] ;
+        /*0260*/                   SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [UR8+0x1000], R2 ;
+        /*0270*/              @!P0 BRA `(.L_x_0) ;
+.L_x_1:
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 18
+        /*0280*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0290*/                   ELECT P0, URZ, PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*02a0*/                   LOP3.LUT R6, R0.reuse, 0xc0, RZ, 0xc0, !PT ;
+        /*02b0*/                   IMAD.SHL.U32 R2, R13, 0x2, RZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*02c0*/                   USHF.L.U32 UR4, UR6, 0xb, URZ ;
+        /*02d0*/                   ISETP.LT.U32.AND P0, PT, R0.reuse, 0x20, P0 ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*02e0*/                   IMAD.SHL.U32 R16, R0, 0x100, RZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*02f0*/                   SHF.R.U32.HI R3, RZ, 0x2, R6 ;
+        /*0300*/                   LOP3.LUT R9, R2, R3, RZ, 0x3c, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0310*/                   LOP3.LUT R16, R16, 0x300, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*0320*/                   LOP3.LUT R11, R9, 0x40, RZ, 0x3c, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 18
+        /*0330*/               @P0 SYNCS.CCTL.IV [UR8+0x1000] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 19
+        /*0340*/                   LDS.U16 R2, [R9+UR8] ;
+        /*0350*/                   LDS.U16 R3, [R9+UR8+0x400] ;
+        /*0360*/                   LDS.U16 R7, [R11+UR8+0x200] ;
+        /*0370*/                   LDS.U16 R8, [R11+UR8+0x600] ;
+        /*0380*/                   LDS.U16 R10, [R11+UR8+0xa00] ;
+        /*0390*/                   LDS.U16 R4, [R9+UR8+0x800] ;
+        /*03a0*/                   LDS.U16 R5, [R9+UR8+0xc00] ;
+        /*03b0*/                   LDS.U16 R12, [R11+UR8+0xe00] ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*03c0*/                   IMAD.SHL.U32 R11, R0, 0x4, RZ ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*03d0*/                   IMAD.U32 R2, R2, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*03e0*/                   LOP3.LUT R18, R11, 0xf0, RZ, 0xc0, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*03f0*/                   IMAD.U32 R3, R3, 0x10000, RZ ;
+        /*0400*/                   IMAD.U32 R7, R7, 0x10000, RZ ;
+        /*0410*/                   IMAD.U32 R8, R8, 0x10000, RZ ;
+        /*0420*/                   IMAD.U32 R9, R10, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0430*/                   FMNMX R15, R3, R8, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0440*/                   IMAD.U32 R4, R4, 0x10000, RZ ;
+        /*0450*/                   IMAD.U32 R5, R5, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0460*/                   FMNMX R14, R4, R9, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 20
+        /*0470*/                   IMAD.U32 R10, R12, 0x10000, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0480*/                   FMNMX R12, R2, R7, !PT ;
+        /*0490*/                   FMNMX R17, R5, R10, !PT ;
+        /*04a0*/                   FMNMX R12, R12, R15, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*04b0*/                   SHF.R.U32.HI R15, RZ, 0x4, R6 ;
+        /*04c0*/                   IMAD.SHL.U32 R6, R13, 0x4, RZ ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*04d0*/                   FMNMX R17, R14, R17, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*04e0*/                   LOP3.LUT R19, R15, 0xfc, R11, 0x78, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*04f0*/                   FMNMX R12, R12, R17, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*0500*/                   LOP3.LUT R17, R6, R15, RZ, 0x3c, !PT ;
+        /*0510*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0520*/                   IADD3 R16, R19, UR8, R16 ;
+        /*0530*/                   IADD3 R15, R15, UR8, R18 ;
+        /*0540*/                   LOP3.LUT R11, R11, 0xfc, RZ, 0xc0, !PT ;
+        /*0550*/                   STS [R17+UR8], R12 ;
+        /*0560*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0570*/                   LDS R16, [R16] ;
+        /*0580*/                   SHFL.BFLY PT, R19, R16, 0x2, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*0590*/                   FMNMX R19, R16, R19, !PT ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 37
+        /*05a0*/                   VIADD R16, R0, 0x300 ;
+        /*05b0*/                   VIADD R0, R0, 0x700 ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*05c0*/                   SHFL.BFLY PT, R14, R19, 0x1, 0x1f ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 196
+        /*05d0*/                   FMNMX R14, R19, R14, !PT ;
+	//## File "/opt/triton-src/python/triton/language/standard.py", line 216
+        /*05e0*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*05f0*/                   STS [R15], R14 ;
+        /*0600*/                   BAR.SYNC.DEFER_BLOCKING 0x0 ;
+        /*0610*/                   LDS R11, [R11+UR8] ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*0620*/                   ULDC.64 UR8, c[0x0][0x2e8] ;
+        /*0630*/                   ULEA UR6, UP0, UR6, UR8, 0xd ;
+        /*0640*/                   ULEA.HI.X.SX32 UR4, UR4, UR9, 0x2, UP0 ;
+        /*0650*/                   IADD3 R12, P0, R6, UR6, RZ ;
+        /*0660*/                   ULDC.64 UR8, c[0x0][0x208] ;
+        /*0670*/                   LEA R6, P1, R16, UR6, 0x2 ;
+        /*0680*/                   LEA.HI.X R13, R13, UR4, RZ, 0x2, P0 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 28
+        /*0690*/                   FADD R15, R2, -R11.reuse ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*06a0*/                   LEA R2, P0, R0, UR6, 0x2 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 28
+        /*06b0*/                   FADD R17, R7, -R11.reuse ;
+        /*06c0*/                   FADD R19, R3, -R11.reuse ;
+        /*06d0*/                   FADD R21, R8, -R11.reuse ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*06e0*/                   LEA.HI.X R7, R16, UR4, RZ, 0x2, P1 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 28
+        /*06f0*/                   FADD R23, R4, -R11.reuse ;
+        /*0700*/                   FADD R9, R9, -R11.reuse ;
+        /*0710*/                   FADD R5, R5, -R11.reuse ;
+        /*0720*/                   FADD R11, R10, -R11 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 38
+        /*0730*/                   LEA.HI.X R3, R0, UR4, RZ, 0x2, P0 ;
+        /*0740*/                   STG.E desc[UR8][R12.64], R15 ;
+        /*0750*/                   STG.E desc[UR8][R12.64+0x400], R17 ;
+        /*0760*/                   STG.E desc[UR8][R12.64+0x800], R19 ;
+        /*0770*/                   STG.E desc[UR8][R6.64], R21 ;
+        /*0780*/                   STG.E desc[UR8][R12.64+0x1000], R23 ;
+        /*0790*/                   STG.E desc[UR8][R12.64+0x1400], R9 ;
+        /*07a0*/                   STG.E desc[UR8][R12.64+0x1800], R5 ;
+        /*07b0*/                   STG.E desc[UR8][R2.64], R11 ;
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 8
+        /*07c0*/                   EXIT ;
+.L_x_0:
+	//## File "/opt/triton-src/experiments/tma_reduction_layout/phase11/m4/kernels.py", line 21
+        /*07d0*/                   SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [UR8+0x1000], R2 ;
+        /*07e0*/              @!P0 BRA `(.L_x_0) ;
+        /*07f0*/                   BRA `(.L_x_1) ;
+.L_x_2:
+        /*0800*/                   BRA `(.L_x_2);
+        /*0810*/                   NOP;
+        /*0820*/                   NOP;
+        /*0830*/                   NOP;
+        /*0840*/                   NOP;
+        /*0850*/                   NOP;
+        /*0860*/                   NOP;
+        /*0870*/                   NOP;
+        /*0880*/                   NOP;
+        /*0890*/                   NOP;
+        /*08a0*/                   NOP;
+        /*08b0*/                   NOP;
+        /*08c0*/                   NOP;
+        /*08d0*/                   NOP;
+        /*08e0*/                   NOP;
+        /*08f0*/                   NOP;
+.L_x_3:
+
+
+//--------------------- SYMBOLS --------------------------
+
+	.type		.nv.reservedSmem.offset0,@object
+	.size		.nv.reservedSmem.offset0,0x4
