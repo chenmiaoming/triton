@@ -1,0 +1,320 @@
+{
+  "case": {
+    "BM": 128,
+    "BN": 4,
+    "W": 4,
+    "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+    "cols": 8192,
+    "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+    "family": "N01",
+    "followup_role": "footprint",
+    "id": "N01_m4096_n8192",
+    "rows": 4096,
+    "selected_variant": "coordinated_fully_coalesced",
+    "source_function": "triton_scale_swizzle",
+    "stages": 3
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "DistributedLinearLayout(reg_bases=[[1], [2]], lane_bases=[[128], [256], [4], [8], [16]], warp_bases=[[32], [64]], block_bases=[], shape=[512])",
+        "(5,)": "1",
+        "(7,)": "128",
+        "(8,)": "4",
+        "(9,)": "DistributedLinearLayout(reg_bases=[[0, 1], [0, 2]], lane_bases=[[32, 0], [64, 0], [1, 0], [2, 0], [4, 0]], warp_bases=[[8, 0], [16, 0]], block_bases=[], shape=[128, 4])"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "LINPUT": "constexpr",
+        "LOUT": "constexpr",
+        "input_col_stride": "constexpr",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "f5db05c8af4e9ebd0647bd8c822420e18daea1b153bef0e727f73f4b1e50b57e",
+        "kernel.glir": "ecde6936a5404b4b804ae8ef1dd0b4334ebc85b2d8319cb496585f09195cd62d",
+        "kernel.llir": "aa3c40ea541ef250d43dddb265f332f537430d3d94e954151553708927222354",
+        "kernel.ptx": "0b4addc0c2cfce65f853aa33b182aa12146e8ab2093347204546f731694923c4",
+        "kernel.resource.txt": "a9349186aa09d3d63dce46583e78b49802317a00f0ef1e4d3ecd72560ad04ddc",
+        "kernel.sass": "38007e9e1cabcc3b6265f2c2794ddfe85e816ebed8c5601b948613f56a77bd96",
+        "kernel.ttgir": "c58f84dbc0718e702f91fd49ca44035febbc6f704a51cab4422abc3a6621923e"
+      },
+      "artifact_directory": "artifacts/N01_m4096_n8192_GL_coordinated_fully_coalesced",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+        "family": "N01",
+        "followup_role": "footprint",
+        "id": "N01_m4096_n8192",
+        "rows": 4096,
+        "selected_variant": "coordinated_fully_coalesced",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "choice": {
+        "name": "coordinated_fully_coalesced",
+        "plan_override": {
+          "input": {
+            "fields": {
+              "block_bases": [],
+              "lane_bases": [
+                [
+                  32,
+                  0
+                ],
+                [
+                  64,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ]
+              ],
+              "reg_bases": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ]
+              ],
+              "shape": [
+                128,
+                4
+              ],
+              "warp_bases": [
+                [
+                  8,
+                  0
+                ],
+                [
+                  16,
+                  0
+                ]
+              ]
+            },
+            "kind": "linear"
+          },
+          "output": {
+            "fields": {
+              "block_bases": [],
+              "lane_bases": [
+                [
+                  128
+                ],
+                [
+                  256
+                ],
+                [
+                  4
+                ],
+                [
+                  8
+                ],
+                [
+                  16
+                ]
+              ],
+              "reg_bases": [
+                [
+                  1
+                ],
+                [
+                  2
+                ]
+              ],
+              "shape": [
+                512
+              ],
+              "warp_bases": [
+                [
+                  32
+                ],
+                [
+                  64
+                ]
+              ]
+            },
+            "kind": "linear"
+          }
+        }
+      },
+      "compile_key": "26bfd65c6ac5a23339b485300a3f40ed8ca32bacd96e7994a0c0ebade584f64d",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "f5db05c8af4e9ebd0647bd8c822420e18daea1b153bef0e727f73f4b1e50b57e",
+      "dynamic_smem_bytes": 0,
+      "effective_layout_audit": {
+        "conversions": [
+          "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #linear1> -> tensor<512xi8, #linear1>"
+        ],
+        "encoding_definitions": [
+          "#linear = #ttg.linear<{register = [[0, 1], [0, 2]], lane = [[32, 0], [64, 0], [1, 0], [2, 0], [4, 0]], warp = [[8, 0], [16, 0]], block = []}>",
+          "#linear1 = #ttg.linear<{register = [[1], [2]], lane = [[128], [256], [4], [8], [16]], warp = [[32], [64]], block = []}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales = tt.load %input_pointer_18, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #linear>"
+        ],
+        "requested_layout_constants": {
+          "LINPUT": "DistributedLinearLayout(reg_bases=[[0, 1], [0, 2]], lane_bases=[[32, 0], [64, 0], [1, 0], [2, 0], [4, 0]], warp_bases=[[8, 0], [16, 0]], block_bases=[], shape=[128, 4])",
+          "LOUT": "DistributedLinearLayout(reg_bases=[[1], [2]], lane_bases=[[128], [256], [4], [8], [16]], warp_bases=[[32], [64]], block_bases=[], shape=[512])"
+        },
+        "reshapes_and_pairs": [
+          "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #linear> -> tensor<512xi8, #linear1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %output_pointer_27, %0 : tensor<512x!tt.ptr<i8>, #linear1>"
+        ],
+        "ttgir_SHA256": "c58f84dbc0718e702f91fd49ca44035febbc6f704a51cab4422abc3a6621923e"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+        },
+        "grid": [
+          32,
+          2048,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+          "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_m4096_n8192",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 12,
+        "SAMPLER": 0,
+        "SHARED": 0,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {
+        "input_col_stride": 1
+      },
+      "stage2": false,
+      "tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced",
+      "timing_eligible": true,
+      "variant": "GL_coordinated_fully_coalesced"
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}

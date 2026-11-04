@@ -1,0 +1,218 @@
+{
+  "case": {
+    "BM": 128,
+    "BN": 4,
+    "W": 4,
+    "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+    "cols": 8192,
+    "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+    "family": "N01",
+    "followup_role": "footprint",
+    "id": "N01_m4096_n8192",
+    "rows": 4096,
+    "selected_variant": "coordinated_fully_coalesced",
+    "source_function": "triton_scale_swizzle",
+    "stages": 3
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[4], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(5,)": "1",
+        "(7,)": "128",
+        "(8,)": "4",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[32, 1], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "LINPUT": "constexpr",
+        "LOUT": "constexpr",
+        "input_col_stride": "constexpr",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e613cc6d66c50d7f98f457770f2720c716d8e81af64cb29d1318c3bf14ef8476",
+        "kernel.glir": "1a9a578bc9bf73cdee551bccf5f8ea51374055b604f1dcd822602899f387ea82",
+        "kernel.llir": "9fa89f7836e4e386c02d5b3f18d179a06555f47cbcaaa566dff1b3a7901628f7",
+        "kernel.ptx": "e089157c75a658ea8957f27e19cc1217c9fb022589eb58e4efbfaa35c5c99bc9",
+        "kernel.resource.txt": "65ce8883154fee766b2356e52e7a219bb0745209546221ab3a84583c652faabd",
+        "kernel.sass": "d85a6739210636ad1c31623721149a151c05ead8f55d0fb0d094cb253d7114d1",
+        "kernel.ttgir": "e0fa846faaada5e4524157a7c1469b1d139b4960bbcff07c663b6824d6cfbfd9"
+      },
+      "artifact_directory": "artifacts/N01_m4096_n8192_G0",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+        "family": "N01",
+        "followup_role": "footprint",
+        "id": "N01_m4096_n8192",
+        "rows": 4096,
+        "selected_variant": "coordinated_fully_coalesced",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "compile_key": "6482ae9352776fd5b2a77c0ede8719d08ab99a22cb13a809790abb36c344ad6b",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "e613cc6d66c50d7f98f457770f2720c716d8e81af64cb29d1318c3bf14ef8476",
+      "dynamic_smem_bytes": 0,
+      "effective_layout_audit": {
+        "conversions": [
+          "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked1> -> tensor<512xi8, #blocked1>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales = tt.load %input_pointer_18, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #blocked>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %output_pointer_27, %0 : tensor<512x!tt.ptr<i8>, #blocked1>"
+        ],
+        "ttgir_SHA256": "e0fa846faaada5e4524157a7c1469b1d139b4960bbcff07c663b6824d6cfbfd9"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+        },
+        "grid": [
+          32,
+          2048,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+          "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_m4096_n8192",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 14,
+        "SAMPLER": 0,
+        "SHARED": 0,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {
+        "input_col_stride": 1
+      },
+      "stage2": false,
+      "tag": "N01_m4096_n8192:G0",
+      "timing_eligible": true,
+      "variant": "G0"
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}

@@ -1,0 +1,4600 @@
+{
+  "CUDA_device_UUID": "c7931d32-040a-4a5f-88b5-13a9297a09a9",
+  "GPU": "NVIDIA H100 80GB HBM3",
+  "GPU_allocated": true,
+  "backend_SHA256": "c9b5b6aa3910ebd52b958b693c483c7e8c9abc2ad430dd7ef35a328067684145",
+  "cases": [
+    {
+      "BM": 128,
+      "BN": 4,
+      "W": 4,
+      "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+      "cols": 8192,
+      "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+      "family": "N01",
+      "followup_role": "footprint",
+      "id": "N01_m4096_n8192",
+      "rows": 4096,
+      "selected_variant": "coordinated_fully_coalesced",
+      "source_function": "triton_scale_swizzle",
+      "stages": 3
+    },
+    {
+      "BM": 32,
+      "BN": 32,
+      "W": 4,
+      "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+      "cols": 8192,
+      "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+      "family": "N02",
+      "followup_role": "footprint",
+      "group_size": 128,
+      "id": "N02_k8192_p1024_g128",
+      "packed_cols": 1024,
+      "rows": 8192,
+      "selected_variant": "packed_compute_vec1",
+      "source_function": "awq_dequantize_kernel",
+      "stages": 3
+    },
+    {
+      "BM": 128,
+      "BN": 4,
+      "W": 4,
+      "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+      "col_stride": 2,
+      "cols": 7,
+      "evidence_scope": "Padded tail and injective positive-stride correctness stress; no performance claim.",
+      "family": "N01",
+      "followup_role": "correctness_only",
+      "id": "N01_tail_stride_m131_n7",
+      "row_stride": 19,
+      "rows": 131,
+      "selected_variant": "all_eight_N01",
+      "source_function": "triton_scale_swizzle",
+      "stages": 3
+    }
+  ],
+  "ccache_after": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "ccache_before": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "checks": [
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "finite",
+      "tag": "N01_m4096_n8192:U",
+      "variant": "U"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "finite",
+      "tag": "N01_m4096_n8192:G0",
+      "variant": "G0"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "finite",
+      "tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced",
+      "variant": "GL_coordinated_fully_coalesced"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "5bf25a026bfea9f4e32297cd7ef5cf9641317dec77132bd328f9f0db8bfdcf1b",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "5bf25a026bfea9f4e32297cd7ef5cf9641317dec77132bd328f9f0db8bfdcf1b",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "structured",
+      "tag": "N01_m4096_n8192:U",
+      "variant": "U"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "5bf25a026bfea9f4e32297cd7ef5cf9641317dec77132bd328f9f0db8bfdcf1b",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "5bf25a026bfea9f4e32297cd7ef5cf9641317dec77132bd328f9f0db8bfdcf1b",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "structured",
+      "tag": "N01_m4096_n8192:G0",
+      "variant": "G0"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "5bf25a026bfea9f4e32297cd7ef5cf9641317dec77132bd328f9f0db8bfdcf1b",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "5bf25a026bfea9f4e32297cd7ef5cf9641317dec77132bd328f9f0db8bfdcf1b",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "structured",
+      "tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced",
+      "variant": "GL_coordinated_fully_coalesced"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "62a3399b72cb14cfcf424f5c9ca2134ec8e086fb57133fddee559b64fa3b2d6d",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "62a3399b72cb14cfcf424f5c9ca2134ec8e086fb57133fddee559b64fa3b2d6d",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "edge",
+      "tag": "N01_m4096_n8192:U",
+      "variant": "U"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "62a3399b72cb14cfcf424f5c9ca2134ec8e086fb57133fddee559b64fa3b2d6d",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "62a3399b72cb14cfcf424f5c9ca2134ec8e086fb57133fddee559b64fa3b2d6d",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "edge",
+      "tag": "N01_m4096_n8192:G0",
+      "variant": "G0"
+    },
+    {
+      "case": "N01_m4096_n8192",
+      "details": [
+        {
+          "actual_SHA256": "62a3399b72cb14cfcf424f5c9ca2134ec8e086fb57133fddee559b64fa3b2d6d",
+          "bitwise_equal": true,
+          "elements": 33554432,
+          "expected_SHA256": "62a3399b72cb14cfcf424f5c9ca2134ec8e086fb57133fddee559b64fa3b2d6d",
+          "name": "output_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        }
+      ],
+      "guards": [
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "edge",
+      "tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced",
+      "variant": "GL_coordinated_fully_coalesced"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "finite",
+      "tag": "N02_k8192_p1024_g128:U",
+      "variant": "U"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "finite",
+      "tag": "N02_k8192_p1024_g128:G0",
+      "variant": "G0"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "finite",
+      "tag": "N02_k8192_p1024_g128:GL_packed_compute_vec1",
+      "variant": "GL_packed_compute_vec1"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "d83f69dfd128fc523bebcee0b913a48f56be3fb27f47c54756534c0d2f2c641d",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "d83f69dfd128fc523bebcee0b913a48f56be3fb27f47c54756534c0d2f2c641d",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "structured",
+      "tag": "N02_k8192_p1024_g128:U",
+      "variant": "U"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "d83f69dfd128fc523bebcee0b913a48f56be3fb27f47c54756534c0d2f2c641d",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "d83f69dfd128fc523bebcee0b913a48f56be3fb27f47c54756534c0d2f2c641d",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "structured",
+      "tag": "N02_k8192_p1024_g128:G0",
+      "variant": "G0"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "d83f69dfd128fc523bebcee0b913a48f56be3fb27f47c54756534c0d2f2c641d",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "d83f69dfd128fc523bebcee0b913a48f56be3fb27f47c54756534c0d2f2c641d",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "structured",
+      "tag": "N02_k8192_p1024_g128:GL_packed_compute_vec1",
+      "variant": "GL_packed_compute_vec1"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "af9ba6b5a62ab34f6ec6a398041a59c291d5aca6e04b95aad276d6a1654034ca",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "af9ba6b5a62ab34f6ec6a398041a59c291d5aca6e04b95aad276d6a1654034ca",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "edge",
+      "tag": "N02_k8192_p1024_g128:U",
+      "variant": "U"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "af9ba6b5a62ab34f6ec6a398041a59c291d5aca6e04b95aad276d6a1654034ca",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "af9ba6b5a62ab34f6ec6a398041a59c291d5aca6e04b95aad276d6a1654034ca",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "edge",
+      "tag": "N02_k8192_p1024_g128:G0",
+      "variant": "G0"
+    },
+    {
+      "case": "N02_k8192_p1024_g128",
+      "details": [
+        {
+          "actual_SHA256": "af9ba6b5a62ab34f6ec6a398041a59c291d5aca6e04b95aad276d6a1654034ca",
+          "bitwise_equal": true,
+          "elements": 67108864,
+          "expected_SHA256": "af9ba6b5a62ab34f6ec6a398041a59c291d5aca6e04b95aad276d6a1654034ca",
+          "name": "result_ptr",
+          "pass_": true
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 0
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 1
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 2
+        },
+        {
+          "pass_": true,
+          "readonly_and_inactive_unchanged": true,
+          "storage": 3
+        }
+      ],
+      "guards": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "pattern": "edge",
+      "tag": "N02_k8192_p1024_g128:GL_packed_compute_vec1",
+      "variant": "GL_packed_compute_vec1"
+    }
+  ],
+  "compiler_intervention": false,
+  "compiler_version": "3.9.0",
+  "counts": {
+    "cases": 3,
+    "full_correctness_checks": 18,
+    "passing_checks": 18,
+    "programs": 8
+  },
+  "formal_timing": false,
+  "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+  "native_rebuilds": 0,
+  "phase": "N5_footprint_and_tail_binding",
+  "plans": {
+    "N01_m4096_n8192": {
+      "family": "N01",
+      "input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            32,
+            1
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              32,
+              1
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              0
+            ],
+            "size_per_thread": [
+              4
+            ],
+            "threads_per_warp": [
+              32
+            ],
+            "warps_per_cta": [
+              4
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "output": {
+        "fields": {
+          "order": [
+            0
+          ],
+          "size_per_thread": [
+            4
+          ],
+          "threads_per_warp": [
+            32
+          ],
+          "warps_per_cta": [
+            4
+          ]
+        },
+        "kind": "blocked"
+      }
+    },
+    "N01_tail_stride_m131_n7": {
+      "family": "N01",
+      "input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              32,
+              1
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              1
+            ],
+            "threads_per_warp": [
+              8,
+              4
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked2": {
+          "fields": {
+            "order": [
+              0
+            ],
+            "size_per_thread": [
+              4
+            ],
+            "threads_per_warp": [
+              32
+            ],
+            "warps_per_cta": [
+              4
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked3": {
+          "fields": {
+            "order": [
+              0
+            ],
+            "size_per_thread": [
+              1
+            ],
+            "threads_per_warp": [
+              32
+            ],
+            "warps_per_cta": [
+              4
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "output": {
+        "fields": {
+          "order": [
+            0
+          ],
+          "size_per_thread": [
+            4
+          ],
+          "threads_per_warp": [
+            32
+          ],
+          "warps_per_cta": [
+            4
+          ]
+        },
+        "kind": "blocked"
+      }
+    },
+    "N02_k8192_p1024_g128": {
+      "conversions": [
+        "    %iweights_90 = ttg.convert_layout %scales_89 : tensor<1x256xf16, #blocked2> -> tensor<1x256xf16, #blocked4> loc(#loc119)",
+        "    %iweights_94 = ttg.convert_layout %iweights_93 : tensor<32x256xf16, #blocked1> -> tensor<32x256xf16, #blocked4> loc(#loc119)"
+      ],
+      "expanded": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            32
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "family": "N02",
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              32
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked2": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              2
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              1,
+              4
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked3": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              4,
+              8
+            ],
+            "threads_per_warp": [
+              32,
+              1
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked4": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked5": {
+          "fields": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4,
+              2
+            ],
+            "threads_per_warp": [
+              4,
+              8,
+              1
+            ],
+            "warps_per_cta": [
+              4,
+              1,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked6": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked7": {
+          "fields": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8,
+              2
+            ],
+            "threads_per_warp": [
+              4,
+              8,
+              1
+            ],
+            "warps_per_cta": [
+              4,
+              1,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked8": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              16
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              4,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked9": {
+          "fields": {
+            "order": [
+              2,
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              16,
+              2
+            ],
+            "threads_per_warp": [
+              4,
+              8,
+              1
+            ],
+            "warps_per_cta": [
+              4,
+              1,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "loads": [
+        "    %iweights_51 = tt.load %iweights_50, %masks_29, %cst_2 : tensor<32x32x!tt.ptr<i32>, #blocked> loc(#loc87)",
+        "    %zeros_75 = tt.load %zeros_74, %zero_masks_73, %cst : tensor<1x32x!tt.ptr<i32>, #blocked> loc(#loc108)",
+        "    %scales_89 = tt.load %scales_88, %scale_masks_87, %cst_1 : tensor<1x256x!tt.ptr<f16>, #blocked2> loc(#loc118)"
+      ],
+      "output": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "qweight": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "scales": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "kind": "blocked"
+      },
+      "stores": [
+        "    tt.store %1, %iweights_95, %result_masks_49 : tensor<32x256x!tt.ptr<f16>, #blocked4> loc(#loc59)"
+      ],
+      "zeros": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      }
+    }
+  },
+  "programs": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(5,)": "1",
+        "(7,)": "128",
+        "(8,)": "4"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "input_col_stride": "constexpr",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "b4034f25d7aa8888c05eaac8b0aabd0f9683d8025dcd794bfff907b8231b3895",
+        "kernel.llir": "cb80824fcac96f8eb153a8db53363115489e62367b8918de6d291675596129d5",
+        "kernel.ptx": "67024917d76bf1ffccf864947c09b93877d16731e723c3c1338c7c940d10db80",
+        "kernel.resource.txt": "65ce8883154fee766b2356e52e7a219bb0745209546221ab3a84583c652faabd",
+        "kernel.sass": "d85a6739210636ad1c31623721149a151c05ead8f55d0fb0d094cb253d7114d1",
+        "kernel.ttgir": "9b11dd95f201ca263db6aa438fd601c9c8ab580f7a3868a14ed912c2e5fd56a0",
+        "kernel.ttir": "0389cc4d16ab39c101bbef88c5982eaad14e4b8e81051b1893ad585e4b2f06bd"
+      },
+      "artifact_directory": "artifacts/N01_m4096_n8192_U",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+        "family": "N01",
+        "followup_role": "footprint",
+        "id": "N01_m4096_n8192",
+        "rows": 4096,
+        "selected_variant": "coordinated_fully_coalesced",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "compile_key": "82c1149f5d6e6e11bdb8c40e780128e990ba2d4bb0ab6bbaf8da377253d40cd8",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "b4034f25d7aa8888c05eaac8b0aabd0f9683d8025dcd794bfff907b8231b3895",
+      "dynamic_smem_bytes": 0,
+      "effective_layout_audit": {
+        "conversions": [],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales_19 = tt.load %input_scales_18, %mask_12, %cst_2 : tensor<128x4x!tt.ptr<i8>, #blocked>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%dest_indices_flat = tt.reshape %dest_indices_24 : tensor<128x4xi32, #blocked> -> tensor<512xi32, #blocked1>",
+          "%scales_flat = tt.reshape %input_scales_19 : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %2, %scales_flat : tensor<512x!tt.ptr<i8>, #blocked1>"
+        ],
+        "ttgir_SHA256": "9b11dd95f201ca263db6aa438fd601c9c8ab580f7a3868a14ed912c2e5fd56a0"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+        },
+        "grid": [
+          32,
+          2048,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+          "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_m4096_n8192",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 14,
+        "SAMPLER": 0,
+        "SHARED": 0,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {
+        "input_col_stride": 1
+      },
+      "stage2": false,
+      "tag": "N01_m4096_n8192:U",
+      "timing_eligible": true,
+      "variant": "U"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[4], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(5,)": "1",
+        "(7,)": "128",
+        "(8,)": "4",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[32, 1], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "LINPUT": "constexpr",
+        "LOUT": "constexpr",
+        "input_col_stride": "constexpr",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e613cc6d66c50d7f98f457770f2720c716d8e81af64cb29d1318c3bf14ef8476",
+        "kernel.glir": "1a9a578bc9bf73cdee551bccf5f8ea51374055b604f1dcd822602899f387ea82",
+        "kernel.llir": "9fa89f7836e4e386c02d5b3f18d179a06555f47cbcaaa566dff1b3a7901628f7",
+        "kernel.ptx": "e089157c75a658ea8957f27e19cc1217c9fb022589eb58e4efbfaa35c5c99bc9",
+        "kernel.resource.txt": "65ce8883154fee766b2356e52e7a219bb0745209546221ab3a84583c652faabd",
+        "kernel.sass": "d85a6739210636ad1c31623721149a151c05ead8f55d0fb0d094cb253d7114d1",
+        "kernel.ttgir": "e0fa846faaada5e4524157a7c1469b1d139b4960bbcff07c663b6824d6cfbfd9"
+      },
+      "artifact_directory": "artifacts/N01_m4096_n8192_G0",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+        "family": "N01",
+        "followup_role": "footprint",
+        "id": "N01_m4096_n8192",
+        "rows": 4096,
+        "selected_variant": "coordinated_fully_coalesced",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "compile_key": "6482ae9352776fd5b2a77c0ede8719d08ab99a22cb13a809790abb36c344ad6b",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "e613cc6d66c50d7f98f457770f2720c716d8e81af64cb29d1318c3bf14ef8476",
+      "dynamic_smem_bytes": 0,
+      "effective_layout_audit": {
+        "conversions": [
+          "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked1> -> tensor<512xi8, #blocked1>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales = tt.load %input_pointer_18, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #blocked>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %output_pointer_27, %0 : tensor<512x!tt.ptr<i8>, #blocked1>"
+        ],
+        "ttgir_SHA256": "e0fa846faaada5e4524157a7c1469b1d139b4960bbcff07c663b6824d6cfbfd9"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+        },
+        "grid": [
+          32,
+          2048,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+          "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_m4096_n8192",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 14,
+        "SAMPLER": 0,
+        "SHARED": 0,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {
+        "input_col_stride": 1
+      },
+      "stage2": false,
+      "tag": "N01_m4096_n8192:G0",
+      "timing_eligible": true,
+      "variant": "G0"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "DistributedLinearLayout(reg_bases=[[1], [2]], lane_bases=[[128], [256], [4], [8], [16]], warp_bases=[[32], [64]], block_bases=[], shape=[512])",
+        "(5,)": "1",
+        "(7,)": "128",
+        "(8,)": "4",
+        "(9,)": "DistributedLinearLayout(reg_bases=[[0, 1], [0, 2]], lane_bases=[[32, 0], [64, 0], [1, 0], [2, 0], [4, 0]], warp_bases=[[8, 0], [16, 0]], block_bases=[], shape=[128, 4])"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "LINPUT": "constexpr",
+        "LOUT": "constexpr",
+        "input_col_stride": "constexpr",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "f5db05c8af4e9ebd0647bd8c822420e18daea1b153bef0e727f73f4b1e50b57e",
+        "kernel.glir": "ecde6936a5404b4b804ae8ef1dd0b4334ebc85b2d8319cb496585f09195cd62d",
+        "kernel.llir": "aa3c40ea541ef250d43dddb265f332f537430d3d94e954151553708927222354",
+        "kernel.ptx": "0b4addc0c2cfce65f853aa33b182aa12146e8ab2093347204546f731694923c4",
+        "kernel.resource.txt": "a9349186aa09d3d63dce46583e78b49802317a00f0ef1e4d3ecd72560ad04ddc",
+        "kernel.sass": "38007e9e1cabcc3b6265f2c2794ddfe85e816ebed8c5601b948613f56a77bd96",
+        "kernel.ttgir": "c58f84dbc0718e702f91fd49ca44035febbc6f704a51cab4422abc3a6621923e"
+      },
+      "artifact_directory": "artifacts/N01_m4096_n8192_GL_coordinated_fully_coalesced",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+        "family": "N01",
+        "followup_role": "footprint",
+        "id": "N01_m4096_n8192",
+        "rows": 4096,
+        "selected_variant": "coordinated_fully_coalesced",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "choice": {
+        "name": "coordinated_fully_coalesced",
+        "plan_override": {
+          "input": {
+            "fields": {
+              "block_bases": [],
+              "lane_bases": [
+                [
+                  32,
+                  0
+                ],
+                [
+                  64,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ]
+              ],
+              "reg_bases": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ]
+              ],
+              "shape": [
+                128,
+                4
+              ],
+              "warp_bases": [
+                [
+                  8,
+                  0
+                ],
+                [
+                  16,
+                  0
+                ]
+              ]
+            },
+            "kind": "linear"
+          },
+          "output": {
+            "fields": {
+              "block_bases": [],
+              "lane_bases": [
+                [
+                  128
+                ],
+                [
+                  256
+                ],
+                [
+                  4
+                ],
+                [
+                  8
+                ],
+                [
+                  16
+                ]
+              ],
+              "reg_bases": [
+                [
+                  1
+                ],
+                [
+                  2
+                ]
+              ],
+              "shape": [
+                512
+              ],
+              "warp_bases": [
+                [
+                  32
+                ],
+                [
+                  64
+                ]
+              ]
+            },
+            "kind": "linear"
+          }
+        }
+      },
+      "compile_key": "26bfd65c6ac5a23339b485300a3f40ed8ca32bacd96e7994a0c0ebade584f64d",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "f5db05c8af4e9ebd0647bd8c822420e18daea1b153bef0e727f73f4b1e50b57e",
+      "dynamic_smem_bytes": 0,
+      "effective_layout_audit": {
+        "conversions": [
+          "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #linear1> -> tensor<512xi8, #linear1>"
+        ],
+        "encoding_definitions": [
+          "#linear = #ttg.linear<{register = [[0, 1], [0, 2]], lane = [[32, 0], [64, 0], [1, 0], [2, 0], [4, 0]], warp = [[8, 0], [16, 0]], block = []}>",
+          "#linear1 = #ttg.linear<{register = [[1], [2]], lane = [[128], [256], [4], [8], [16]], warp = [[32], [64]], block = []}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales = tt.load %input_pointer_18, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #linear>"
+        ],
+        "requested_layout_constants": {
+          "LINPUT": "DistributedLinearLayout(reg_bases=[[0, 1], [0, 2]], lane_bases=[[32, 0], [64, 0], [1, 0], [2, 0], [4, 0]], warp_bases=[[8, 0], [16, 0]], block_bases=[], shape=[128, 4])",
+          "LOUT": "DistributedLinearLayout(reg_bases=[[1], [2]], lane_bases=[[128], [256], [4], [8], [16]], warp_bases=[[32], [64]], block_bases=[], shape=[512])"
+        },
+        "reshapes_and_pairs": [
+          "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #linear> -> tensor<512xi8, #linear1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %output_pointer_27, %0 : tensor<512x!tt.ptr<i8>, #linear1>"
+        ],
+        "ttgir_SHA256": "c58f84dbc0718e702f91fd49ca44035febbc6f704a51cab4422abc3a6621923e"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+        },
+        "grid": [
+          32,
+          2048,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+          "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              4096,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_m4096_n8192",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 12,
+        "SAMPLER": 0,
+        "SHARED": 0,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {
+        "input_col_stride": 1
+      },
+      "stage2": false,
+      "tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced",
+      "timing_eligible": true,
+      "variant": "GL_coordinated_fully_coalesced"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(7,)": "32",
+        "(8,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "kernel.llir": "8f5a9ee501940442fd9517f79badbea7affeb16e2ba7fbfc3451935968def123",
+        "kernel.ptx": "ae18a95fe4b1c75bae5ad1af5277571566445debdf0338727dce9e0d8ee66823",
+        "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+        "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+        "kernel.ttgir": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e",
+        "kernel.ttir": "eb4bd5439dbe0af9c7a1800a1a08498349faf7ca9cddd53539208f31ddd61e53"
+      },
+      "artifact_directory": "artifacts/N02_k8192_p1024_g128_U",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+        "family": "N02",
+        "followup_role": "footprint",
+        "group_size": 128,
+        "id": "N02_k8192_p1024_g128",
+        "packed_cols": 1024,
+        "rows": 8192,
+        "selected_variant": "packed_compute_vec1",
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "compile_key": "d966654ae804e0e3642cfa99fb3369044130b2dbf5193995f1b3e43e85d3a1b9",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+      "dynamic_smem_bytes": 2048,
+      "effective_layout_audit": {
+        "conversions": [
+          "%iweights_90 = ttg.convert_layout %scales_89 : tensor<1x256xf16, #blocked2> -> tensor<1x256xf16, #blocked4>",
+          "%iweights_94 = ttg.convert_layout %iweights_93 : tensor<32x256xf16, #blocked1> -> tensor<32x256xf16, #blocked4>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [1, 32], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked2 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [1, 4], order = [1, 0]}>",
+          "#blocked3 = #ttg.blocked<{sizePerThread = [4, 8], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked4 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked5 = #ttg.blocked<{sizePerThread = [1, 4, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked6 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked7 = #ttg.blocked<{sizePerThread = [1, 8, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked8 = #ttg.blocked<{sizePerThread = [1, 16], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked9 = #ttg.blocked<{sizePerThread = [1, 16, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#linear = #ttg.linear<{register = [[0, 1], [1, 0], [2, 0]], lane = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], warp = [[0, 0], [0, 0]], block = []}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%iweights_51 = tt.load %iweights_50, %masks_29, %cst_2 : tensor<32x32x!tt.ptr<i32>, #blocked>",
+          "%zeros_75 = tt.load %zeros_74, %zero_masks_73, %cst : tensor<1x32x!tt.ptr<i32>, #blocked>",
+          "%scales_89 = tt.load %scales_88, %scale_masks_87, %cst_1 : tensor<1x256x!tt.ptr<f16>, #blocked2>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%c = tt.join %iweights_51, %iweights_51 : tensor<32x32xi32, #blocked> -> tensor<32x32x2xi32, #blocked5>",
+          "%iweights_52 = tt.reshape %c : tensor<32x32x2xi32, #blocked5> -> tensor<32x64xi32, #blocked6>",
+          "%c_53 = tt.join %iweights_52, %iweights_52 : tensor<32x64xi32, #blocked6> -> tensor<32x64x2xi32, #blocked7>",
+          "%iweights_54 = tt.reshape %c_53 : tensor<32x64x2xi32, #blocked7> -> tensor<32x128xi32, #blocked8>",
+          "%c_55 = tt.join %iweights_54, %iweights_54 : tensor<32x128xi32, #blocked8> -> tensor<32x128x2xi32, #blocked9>",
+          "%iweights_56 = tt.reshape %c_55 : tensor<32x128x2xi32, #blocked9> -> tensor<32x256xi32, #blocked1>",
+          "%reverse_awq_order_tensor_64 = tt.reshape %reverse_awq_order_tensor_63 : tensor<4x2xi32, #linear> -> tensor<8xi32, #ttg.slice<{dim = 0, parent = #blocked3}>>",
+          "%shifts_67 = tt.reshape %shifts_66 : tensor<1024x8xi32, #blocked3> -> tensor<32x256xi32, #blocked1>",
+          "%c_76 = tt.join %zeros_75, %zeros_75 : tensor<1x32xi32, #blocked> -> tensor<1x32x2xi32, #blocked5>",
+          "%zeros_77 = tt.reshape %c_76 : tensor<1x32x2xi32, #blocked5> -> tensor<1x64xi32, #blocked6>",
+          "%c_78 = tt.join %zeros_77, %zeros_77 : tensor<1x64xi32, #blocked6> -> tensor<1x64x2xi32, #blocked7>",
+          "%zeros_79 = tt.reshape %c_78 : tensor<1x64x2xi32, #blocked7> -> tensor<1x128xi32, #blocked8>",
+          "%c_80 = tt.join %zeros_79, %zeros_79 : tensor<1x128xi32, #blocked8> -> tensor<1x128x2xi32, #blocked9>",
+          "%zeros_81 = tt.reshape %c_80 : tensor<1x128x2xi32, #blocked9> -> tensor<1x256xi32, #blocked1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %1, %iweights_95, %result_masks_49 : tensor<32x256x!tt.ptr<f16>, #blocked4>"
+        ],
+        "ttgir_SHA256": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e"
+      },
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+        },
+        "grid": [
+          32,
+          256,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+          "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+          "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+          "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              8192,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              8192,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              64,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              64,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k8192_p1024_g128",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 72,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k8192_p1024_g128:U",
+      "timing_eligible": true,
+      "variant": "U"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(11,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(12,)": "BlockedLayout(size_per_thread=[1, 32], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(13,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(7,)": "32",
+        "(8,)": "32",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "LEXP": "constexpr",
+        "LOUT": "constexpr",
+        "LQ": "constexpr",
+        "LS": "constexpr",
+        "LZ": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "089b7ea53147f648c543d41ba809c187f4fb1d4f7b6b5af9c0ce71d08e92e642",
+        "kernel.glir": "17d4151f24e27d83a5c9fde1f32feb6d810c7c055f33a8d1d64dcc3a15dc32e4",
+        "kernel.llir": "e4c4dac53208825aa5a454f0444420fe7d9df34ac86528ced50c25a5dc2ff355",
+        "kernel.ptx": "f74ca1bbea6a65d57599faf1d90ccda7014a61804703dbb9b9ab336fea69c306",
+        "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+        "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+        "kernel.ttgir": "a4341ede82824e58bb90871ba582e6702634af2d3efdf69dd99b646345a02cce"
+      },
+      "artifact_directory": "artifacts/N02_k8192_p1024_g128_G0",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+        "family": "N02",
+        "followup_role": "footprint",
+        "group_size": 128,
+        "id": "N02_k8192_p1024_g128",
+        "packed_cols": 1024,
+        "rows": 8192,
+        "selected_variant": "packed_compute_vec1",
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "compile_key": "be9d69f54bdcbf369b67f618582737cfe1b17c276d2da66ec4882045cb3cf98e",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "089b7ea53147f648c543d41ba809c187f4fb1d4f7b6b5af9c0ce71d08e92e642",
+      "dynamic_smem_bytes": 2048,
+      "effective_layout_audit": {
+        "conversions": [
+          "%iweights_24 = ttg.convert_layout %iweights_23 : tensor<32x256xi32, #blocked2> -> tensor<32x256xi32, #blocked2>",
+          "%zeros_51 = ttg.convert_layout %zeros_50 : tensor<32x256xi32, #blocked2> -> tensor<32x256xi32, #blocked2>",
+          "%scales_59 = ttg.convert_layout %scales_58 : tensor<1x256xf16, #blocked3> -> tensor<1x256xf16, #blocked4>",
+          "%difference_61 = ttg.convert_layout %difference : tensor<32x256xf16, #blocked2> -> tensor<32x256xf16, #blocked4>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [4, 8], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked2 = #ttg.blocked<{sizePerThread = [1, 32], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked3 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [1, 4], order = [1, 0]}>",
+          "#blocked4 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked5 = #ttg.blocked<{sizePerThread = [1, 4, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked6 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked7 = #ttg.blocked<{sizePerThread = [1, 8, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked8 = #ttg.blocked<{sizePerThread = [1, 16], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked9 = #ttg.blocked<{sizePerThread = [1, 16, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#linear = #ttg.linear<{register = [[0, 1], [1, 0], [2, 0]], lane = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], warp = [[0, 0], [0, 0]], block = []}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%iweights_18 = tt.load %iweights_17, %masks_11, %cst : tensor<32x32x!tt.ptr<i32>, #blocked>",
+          "%zeros_43 = tt.load %zeros_42, %zero_masks_41, %cst_3 : tensor<1x32x!tt.ptr<i32>, #blocked>",
+          "%scales_58 = tt.load %scales_57, %scale_masks_56, %cst_4 : tensor<1x256x!tt.ptr<f16>, #blocked3>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%joined = tt.join %iweights_18, %iweights_18 : tensor<32x32xi32, #blocked> -> tensor<32x32x2xi32, #blocked5>",
+          "%iweights_19 = tt.reshape %joined : tensor<32x32x2xi32, #blocked5> -> tensor<32x64xi32, #blocked6>",
+          "%joined_20 = tt.join %iweights_19, %iweights_19 : tensor<32x64xi32, #blocked6> -> tensor<32x64x2xi32, #blocked7>",
+          "%iweights_21 = tt.reshape %joined_20 : tensor<32x64x2xi32, #blocked7> -> tensor<32x128xi32, #blocked8>",
+          "%joined_22 = tt.join %iweights_21, %iweights_21 : tensor<32x128xi32, #blocked8> -> tensor<32x128x2xi32, #blocked9>",
+          "%iweights_23 = tt.reshape %joined_22 : tensor<32x128x2xi32, #blocked9> -> tensor<32x256xi32, #blocked2>",
+          "%reverse_awq_order_tensor_32 = tt.reshape %reverse_awq_order_tensor_31 : tensor<4x2xi32, #linear> -> tensor<8xi32, #ttg.slice<{dim = 0, parent = #blocked1}>>",
+          "%shifts_35 = tt.reshape %shifts_34 : tensor<1024x8xi32, #blocked1> -> tensor<32x256xi32, #blocked2>",
+          "%joined_44 = tt.join %zeros_43, %zeros_43 : tensor<1x32xi32, #blocked> -> tensor<1x32x2xi32, #blocked5>",
+          "%zeros_45 = tt.reshape %joined_44 : tensor<1x32x2xi32, #blocked5> -> tensor<1x64xi32, #blocked6>",
+          "%joined_46 = tt.join %zeros_45, %zeros_45 : tensor<1x64xi32, #blocked6> -> tensor<1x64x2xi32, #blocked7>",
+          "%zeros_47 = tt.reshape %joined_46 : tensor<1x64x2xi32, #blocked7> -> tensor<1x128xi32, #blocked8>",
+          "%joined_48 = tt.join %zeros_47, %zeros_47 : tensor<1x128xi32, #blocked8> -> tensor<1x128x2xi32, #blocked9>",
+          "%zeros_49 = tt.reshape %joined_48 : tensor<1x128x2xi32, #blocked9> -> tensor<1x256xi32, #blocked2>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %1, %iweights_62, %result_masks_16 : tensor<32x256x!tt.ptr<f16>, #blocked4>"
+        ],
+        "ttgir_SHA256": "a4341ede82824e58bb90871ba582e6702634af2d3efdf69dd99b646345a02cce"
+      },
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+        },
+        "grid": [
+          32,
+          256,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+          "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+          "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+          "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              8192,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              8192,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              64,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              64,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k8192_p1024_g128",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 72,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k8192_p1024_g128:G0",
+      "timing_eligible": true,
+      "variant": "G0"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(11,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(12,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(13,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(7,)": "32",
+        "(8,)": "32",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "LEXP": "constexpr",
+        "LOUT": "constexpr",
+        "LQ": "constexpr",
+        "LS": "constexpr",
+        "LZ": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "3535b0db7aa29e5e2022e8a76cca615eb707c51a230675e40ecd16d53a338582",
+        "kernel.glir": "4b5befe08490d25e91908196d1d4ad1a721a124e0b97cb5d8ed7f1df371c4f74",
+        "kernel.llir": "37069730bbc0c7bab69dac295ad35015b435a857b1ae44aedc35a3ae068bca25",
+        "kernel.ptx": "4a017690eb82645356054fe25ba8f4c755cde7a8d7b5ccaf824a9d08f5b407d0",
+        "kernel.resource.txt": "9f3e9b85fcf1a019010216f972a79356ec897bd3bc0c97c9bc3ae4670d894b6d",
+        "kernel.sass": "8637b76a4f36638d55ee9861b2963e0d7911f42f509f9352c466f659b6ed52ad",
+        "kernel.ttgir": "12666f2686bc38568b73665f496eb8b036b5e50ce125ad1fdcb8b10f4233927b"
+      },
+      "artifact_directory": "artifacts/N02_k8192_p1024_g128_GL_packed_compute_vec1",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+        "family": "N02",
+        "followup_role": "footprint",
+        "group_size": 128,
+        "id": "N02_k8192_p1024_g128",
+        "packed_cols": 1024,
+        "rows": 8192,
+        "selected_variant": "packed_compute_vec1",
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "choice": {
+        "name": "packed_compute_vec1",
+        "plan_override": {
+          "expanded": {
+            "fields": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "kind": "blocked"
+          },
+          "qweight": {
+            "fields": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "kind": "blocked"
+          },
+          "zeros": {
+            "fields": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "kind": "blocked"
+          }
+        }
+      },
+      "compile_key": "bb8d822a44e5a5608c7fddbaf191a43633e1dd541084d4f9803de89d71027e35",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "3535b0db7aa29e5e2022e8a76cca615eb707c51a230675e40ecd16d53a338582",
+      "dynamic_smem_bytes": 512,
+      "effective_layout_audit": {
+        "conversions": [
+          "%iweights_24 = ttg.convert_layout %iweights_23 : tensor<32x256xi32, #blocked2> -> tensor<32x256xi32, #blocked2>",
+          "%zeros_51 = ttg.convert_layout %zeros_50 : tensor<32x256xi32, #blocked2> -> tensor<32x256xi32, #blocked2>",
+          "%scales_59 = ttg.convert_layout %scales_58 : tensor<1x256xf16, #blocked3> -> tensor<1x256xf16, #blocked2>",
+          "%difference_61 = ttg.convert_layout %difference : tensor<32x256xf16, #blocked2> -> tensor<32x256xf16, #blocked2>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 1], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked2 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked3 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [1, 4], order = [1, 0]}>",
+          "#blocked4 = #ttg.blocked<{sizePerThread = [1, 1, 2], threadsPerWarp = [1, 32, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked5 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked6 = #ttg.blocked<{sizePerThread = [1, 2, 2], threadsPerWarp = [1, 32, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked7 = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked8 = #ttg.blocked<{sizePerThread = [1, 4, 2], threadsPerWarp = [1, 32, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#linear = #ttg.linear<{register = [[0, 1], [1, 0], [2, 0]], lane = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], warp = [[0, 0], [0, 0]], block = []}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%iweights_18 = tt.load %iweights_17, %masks_11, %cst : tensor<32x32x!tt.ptr<i32>, #blocked>",
+          "%zeros_43 = tt.load %zeros_42, %zero_masks_41, %cst_3 : tensor<1x32x!tt.ptr<i32>, #blocked>",
+          "%scales_58 = tt.load %scales_57, %scale_masks_56, %cst_4 : tensor<1x256x!tt.ptr<f16>, #blocked3>"
+        ],
+        "requested_layout_constants": {
+          "LEXP": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+          "LOUT": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+          "LQ": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+          "LS": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+          "LZ": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+        },
+        "reshapes_and_pairs": [
+          "%joined = tt.join %iweights_18, %iweights_18 : tensor<32x32xi32, #blocked> -> tensor<32x32x2xi32, #blocked4>",
+          "%iweights_19 = tt.reshape %joined : tensor<32x32x2xi32, #blocked4> -> tensor<32x64xi32, #blocked5>",
+          "%joined_20 = tt.join %iweights_19, %iweights_19 : tensor<32x64xi32, #blocked5> -> tensor<32x64x2xi32, #blocked6>",
+          "%iweights_21 = tt.reshape %joined_20 : tensor<32x64x2xi32, #blocked6> -> tensor<32x128xi32, #blocked7>",
+          "%joined_22 = tt.join %iweights_21, %iweights_21 : tensor<32x128xi32, #blocked7> -> tensor<32x128x2xi32, #blocked8>",
+          "%iweights_23 = tt.reshape %joined_22 : tensor<32x128x2xi32, #blocked8> -> tensor<32x256xi32, #blocked2>",
+          "%reverse_awq_order_tensor_32 = tt.reshape %reverse_awq_order_tensor_31 : tensor<4x2xi32, #linear> -> tensor<8xi32, #ttg.slice<{dim = 0, parent = #blocked1}>>",
+          "%shifts_35 = tt.reshape %shifts_34 : tensor<1024x8xi32, #blocked1> -> tensor<32x256xi32, #blocked2>",
+          "%joined_44 = tt.join %zeros_43, %zeros_43 : tensor<1x32xi32, #blocked> -> tensor<1x32x2xi32, #blocked4>",
+          "%zeros_45 = tt.reshape %joined_44 : tensor<1x32x2xi32, #blocked4> -> tensor<1x64xi32, #blocked5>",
+          "%joined_46 = tt.join %zeros_45, %zeros_45 : tensor<1x64xi32, #blocked5> -> tensor<1x64x2xi32, #blocked6>",
+          "%zeros_47 = tt.reshape %joined_46 : tensor<1x64x2xi32, #blocked6> -> tensor<1x128xi32, #blocked7>",
+          "%joined_48 = tt.join %zeros_47, %zeros_47 : tensor<1x128xi32, #blocked7> -> tensor<1x128x2xi32, #blocked8>",
+          "%zeros_49 = tt.reshape %joined_48 : tensor<1x128x2xi32, #blocked8> -> tensor<1x256xi32, #blocked2>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %1, %iweights_62, %result_masks_16 : tensor<32x256x!tt.ptr<f16>, #blocked2>"
+        ],
+        "ttgir_SHA256": "12666f2686bc38568b73665f496eb8b036b5e50ce125ad1fdcb8b10f4233927b"
+      },
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+        },
+        "grid": [
+          32,
+          256,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+          "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+          "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+          "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              8192,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              8192,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              64,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              64,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k8192_p1024_g128",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 40,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k8192_p1024_g128:GL_packed_compute_vec1",
+      "timing_eligible": true,
+      "variant": "GL_packed_compute_vec1"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [],
+        "(2,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(7,)": "128",
+        "(8,)": "4"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "input_col_stride": "i32",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e2505ab66ad6e5800fa46b3def363442d646e7db92572efd7265b44fc4f0d358",
+        "kernel.llir": "52d1d9da2d3d9ac374a3fa5a731afc47b7b1ddabc3ec3f352ad077cfbf823b96",
+        "kernel.ptx": "6a28624a4eb8fce6aef4301f9f001bbaafa650b8aa925eb8553e1c1973021ad0",
+        "kernel.resource.txt": "73c497b4b89f5b536cf5f928b50ce3fa6b74a1082142203122096ae565fe4559",
+        "kernel.sass": "a18f3733832bd4bc7fe512b2e048cd71ce40c755edd9e4e9a6e8aaf97846fc56",
+        "kernel.ttgir": "d47593548e6fab896c370cae0ea2c1b9b88a46868e971494b6da9656621e3afa",
+        "kernel.ttir": "59c9bac8b5a96d5e60c89b46a79fa26d4bac6c008ee2898350ec26449ab93c03"
+      },
+      "artifact_directory": "artifacts/N01_tail_stride_m131_n7_U",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "col_stride": 2,
+        "cols": 7,
+        "evidence_scope": "Padded tail and injective positive-stride correctness stress; no performance claim.",
+        "family": "N01",
+        "followup_role": "correctness_only",
+        "id": "N01_tail_stride_m131_n7",
+        "row_stride": 19,
+        "rows": 131,
+        "selected_variant": "all_eight_N01",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "compile_key": "e57f2a8d6c3e97d027edfedd09b73664fbcc615d6c210f434b8cad6a71892381",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "e2505ab66ad6e5800fa46b3def363442d646e7db92572efd7265b44fc4f0d358",
+      "dynamic_smem_bytes": 512,
+      "effective_layout_audit": {
+        "conversions": [
+          "%3 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked3> -> tensor<512xi8, #blocked2>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [1, 1], threadsPerWarp = [8, 4], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked2 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>",
+          "#blocked3 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales_25 = tt.load %input_scales_24, %mask_16, %cst_2 : tensor<128x4x!tt.ptr<i8>, #blocked1>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%dest_indices_flat = tt.reshape %dest_indices_30 : tensor<128x4xi32, #blocked> -> tensor<512xi32, #blocked2>",
+          "%scales_flat = tt.reshape %input_scales_25 : tensor<128x4xi8, #blocked1> -> tensor<512xi8, #blocked3>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %2, %3 : tensor<512x!tt.ptr<i8>, #blocked2>"
+        ],
+        "ttgir_SHA256": "d47593548e6fab896c370cae0ea2c1b9b88a46868e971494b6da9656621e3afa"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "62a8a2445f65061d34bf18198fe75771137b4e50e20116867a099b30ad73970f"
+        },
+        "grid": [
+          2,
+          2,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "f77674134f3ec65b2abe9a326f654f9bfbc060d53931795d043e2661ae200b7a",
+          "0ca3bfdeda1ef5036bfa5dad078a9f15724e79cf296bd4388cf786bfaf4195d0"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              256,
+              8
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              131,
+              7
+            ],
+            "storage_offset": 0,
+            "stride": [
+              19,
+              2
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_tail_stride_m131_n7",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 17,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "input_col_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N01_tail_stride_m131_n7:U",
+      "timing_eligible": false,
+      "variant": "U"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [],
+        "(10,)": [],
+        "(2,)": [],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [],
+        "(5,)": [],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[4], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+        "(7,)": "128",
+        "(8,)": "4",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[8, 4], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_COLS": "constexpr",
+        "BLOCK_ROWS": "constexpr",
+        "LINPUT": "constexpr",
+        "LOUT": "constexpr",
+        "input_col_stride": "i32",
+        "input_row_stride": "i32",
+        "output_block_stride": "i32",
+        "output_ptr": "*u8",
+        "scale_cols": "i32",
+        "scale_ptr": "*u8",
+        "scale_rows": "i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "422eaefdf4d4f189176b1dfda663e1ef9231a5be7423a8c645c79cbacb477265",
+        "kernel.glir": "0b14c5d3b950b0f0dc7a40a908392a718452a543785fa49b7b199fc2dd73ed09",
+        "kernel.llir": "f7556a8eb4e680d126c89c8a3cf167941304694a2bff66f21cbb7dc6be8f14fb",
+        "kernel.ptx": "668c507792d868c838493a014bc6d587321c72a5cf0c86c7e6b790315519bef0",
+        "kernel.resource.txt": "73c497b4b89f5b536cf5f928b50ce3fa6b74a1082142203122096ae565fe4559",
+        "kernel.sass": "a18f3733832bd4bc7fe512b2e048cd71ce40c755edd9e4e9a6e8aaf97846fc56",
+        "kernel.ttgir": "1cd9d726befefe819cca723cdb318c46c4c5705d397b3c0e4692197ed0ad0eec"
+      },
+      "artifact_directory": "artifacts/N01_tail_stride_m131_n7_G0",
+      "case": {
+        "BM": 128,
+        "BN": 4,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "col_stride": 2,
+        "cols": 7,
+        "evidence_scope": "Padded tail and injective positive-stride correctness stress; no performance claim.",
+        "family": "N01",
+        "followup_role": "correctness_only",
+        "id": "N01_tail_stride_m131_n7",
+        "row_stride": 19,
+        "rows": 131,
+        "selected_variant": "all_eight_N01",
+        "source_function": "triton_scale_swizzle",
+        "stages": 3
+      },
+      "compile_key": "849f22e8ea97b8600e20a46aa04488d4e07e7edc893a98cc15951b47a1aa21b7",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "422eaefdf4d4f189176b1dfda663e1ef9231a5be7423a8c645c79cbacb477265",
+      "dynamic_smem_bytes": 512,
+      "effective_layout_audit": {
+        "conversions": [
+          "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked2> -> tensor<512xi8, #blocked1>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 1], threadsPerWarp = [8, 4], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>",
+          "#blocked2 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%input_scales = tt.load %input_pointer_20, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #blocked>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked2>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %output_pointer_29, %0 : tensor<512x!tt.ptr<i8>, #blocked1>"
+        ],
+        "ttgir_SHA256": "1cd9d726befefe819cca723cdb318c46c4c5705d397b3c0e4692197ed0ad0eec"
+      },
+      "family": "N01",
+      "fixture": {
+        "expected_SHA256": {
+          "output_ptr": "62a8a2445f65061d34bf18198fe75771137b4e50e20116867a099b30ad73970f"
+        },
+        "grid": [
+          2,
+          2,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "f77674134f3ec65b2abe9a326f654f9bfbc060d53931795d043e2661ae200b7a",
+          "0ca3bfdeda1ef5036bfa5dad078a9f15724e79cf296bd4388cf786bfaf4195d0"
+        ],
+        "inplace": [],
+        "outputs": [
+          "output_ptr"
+        ],
+        "views": {
+          "output_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 1,
+            "shape": [
+              256,
+              8
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8,
+              1
+            ]
+          },
+          "scale_ptr": {
+            "dtype": "uint8",
+            "element_size": 1,
+            "group": 0,
+            "shape": [
+              131,
+              7
+            ],
+            "storage_offset": 0,
+            "stride": [
+              19,
+              2
+            ]
+          }
+        }
+      },
+      "function_name": "triton_scale_swizzle",
+      "geometry": "N01_tail_stride_m131_n7",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 17,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "scale_ptr",
+        "scale_rows",
+        "scale_cols",
+        "output_ptr",
+        "input_row_stride",
+        "input_col_stride",
+        "output_block_stride"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N01_tail_stride_m131_n7:G0",
+      "timing_eligible": false,
+      "variant": "G0"
+    }
+  ],
+  "protocol_SHA256": "7e58b25ce220ec77efb996ce0f2310219409befdfea19c2fe816db21562ee03d",
+  "records": [
+    {
+      "ABI_and_launch_equal": true,
+      "allocated_sections_equal": true,
+      "case": "N01_m4096_n8192",
+      "checks": [
+        {
+          "pass_": true,
+          "pattern": "finite",
+          "variant": "U"
+        },
+        {
+          "pass_": true,
+          "pattern": "finite",
+          "variant": "G0"
+        },
+        {
+          "pass_": true,
+          "pattern": "finite",
+          "variant": "GL_coordinated_fully_coalesced"
+        },
+        {
+          "pass_": true,
+          "pattern": "structured",
+          "variant": "U"
+        },
+        {
+          "pass_": true,
+          "pattern": "structured",
+          "variant": "G0"
+        },
+        {
+          "pass_": true,
+          "pattern": "structured",
+          "variant": "GL_coordinated_fully_coalesced"
+        },
+        {
+          "pass_": true,
+          "pattern": "edge",
+          "variant": "U"
+        },
+        {
+          "pass_": true,
+          "pattern": "edge",
+          "variant": "G0"
+        },
+        {
+          "pass_": true,
+          "pattern": "edge",
+          "variant": "GL_coordinated_fully_coalesced"
+        }
+      ],
+      "compiled_programs": [
+        "N01_m4096_n8192:U",
+        "N01_m4096_n8192:G0",
+        "N01_m4096_n8192:GL_coordinated_fully_coalesced"
+      ],
+      "metadata": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(10,)": [],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [],
+          "(6,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(7,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "BlockedLayout(size_per_thread=[4], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+          "(5,)": "1",
+          "(7,)": "128",
+          "(8,)": "4",
+          "(9,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[32, 1], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+        },
+        "JIT_signature": {
+          "BLOCK_COLS": "constexpr",
+          "BLOCK_ROWS": "constexpr",
+          "LINPUT": "constexpr",
+          "LOUT": "constexpr",
+          "input_col_stride": "constexpr",
+          "input_row_stride": "i32",
+          "output_block_stride": "i32",
+          "output_ptr": "*u8",
+          "scale_cols": "i32",
+          "scale_ptr": "*u8",
+          "scale_rows": "i32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "e613cc6d66c50d7f98f457770f2720c716d8e81af64cb29d1318c3bf14ef8476",
+          "kernel.glir": "1a9a578bc9bf73cdee551bccf5f8ea51374055b604f1dcd822602899f387ea82",
+          "kernel.llir": "9fa89f7836e4e386c02d5b3f18d179a06555f47cbcaaa566dff1b3a7901628f7",
+          "kernel.ptx": "e089157c75a658ea8957f27e19cc1217c9fb022589eb58e4efbfaa35c5c99bc9",
+          "kernel.resource.txt": "65ce8883154fee766b2356e52e7a219bb0745209546221ab3a84583c652faabd",
+          "kernel.sass": "d85a6739210636ad1c31623721149a151c05ead8f55d0fb0d094cb253d7114d1",
+          "kernel.ttgir": "e0fa846faaada5e4524157a7c1469b1d139b4960bbcff07c663b6824d6cfbfd9"
+        },
+        "artifact_directory": "artifacts/N01_m4096_n8192_G0",
+        "case": {
+          "BM": 128,
+          "BN": 4,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 8192,
+          "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+          "family": "N01",
+          "followup_role": "footprint",
+          "id": "N01_m4096_n8192",
+          "rows": 4096,
+          "selected_variant": "coordinated_fully_coalesced",
+          "source_function": "triton_scale_swizzle",
+          "stages": 3
+        },
+        "compile_key": "6482ae9352776fd5b2a77c0ede8719d08ab99a22cb13a809790abb36c344ad6b",
+        "compiler_options": {
+          "num_stages": 3,
+          "num_warps": 4
+        },
+        "cubin_SHA256": "e613cc6d66c50d7f98f457770f2720c716d8e81af64cb29d1318c3bf14ef8476",
+        "dynamic_smem_bytes": 0,
+        "effective_layout_audit": {
+          "conversions": [
+            "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked1> -> tensor<512xi8, #blocked1>"
+          ],
+          "encoding_definitions": [
+            "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+          ],
+          "inline_assembly": [],
+          "loads": [
+            "%input_scales = tt.load %input_pointer_18, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #blocked>"
+          ],
+          "requested_layout_constants": {},
+          "reshapes_and_pairs": [
+            "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked1>"
+          ],
+          "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+          "status": "OK",
+          "stores": [
+            "tt.store %output_pointer_27, %0 : tensor<512x!tt.ptr<i8>, #blocked1>"
+          ],
+          "ttgir_SHA256": "e0fa846faaada5e4524157a7c1469b1d139b4960bbcff07c663b6824d6cfbfd9"
+        },
+        "family": "N01",
+        "fixture": {
+          "expected_SHA256": {
+            "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+          },
+          "grid": [
+            32,
+            2048,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+            "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+          ],
+          "inplace": [],
+          "outputs": [
+            "output_ptr"
+          ],
+          "views": {
+            "output_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 1,
+              "shape": [
+                4096,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            },
+            "scale_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 0,
+              "shape": [
+                4096,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            }
+          }
+        },
+        "function_name": "triton_scale_swizzle",
+        "geometry": "N01_m4096_n8192",
+        "global_scratch_size": 0,
+        "num_warps": 4,
+        "resources": {
+          "LOCAL": 0,
+          "REG": 14,
+          "SAMPLER": 0,
+          "SHARED": 0,
+          "STACK": 0,
+          "SURFACE": 0,
+          "TEXTURE": 0
+        },
+        "runtime_argument_names": [
+          "scale_ptr",
+          "scale_rows",
+          "scale_cols",
+          "output_ptr",
+          "input_row_stride",
+          "output_block_stride"
+        ],
+        "specialized_runtime_values": {
+          "input_col_stride": 1
+        },
+        "stage2": false,
+        "tag": "N01_m4096_n8192:G0",
+        "timing_eligible": true,
+        "variant": "G0"
+      },
+      "resources_equal": true,
+      "status": "OK",
+      "upstream": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [],
+          "(6,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(7,)": [],
+          "(8,)": []
+        },
+        "JIT_constants": {
+          "(5,)": "1",
+          "(7,)": "128",
+          "(8,)": "4"
+        },
+        "JIT_signature": {
+          "BLOCK_COLS": "constexpr",
+          "BLOCK_ROWS": "constexpr",
+          "input_col_stride": "constexpr",
+          "input_row_stride": "i32",
+          "output_block_stride": "i32",
+          "output_ptr": "*u8",
+          "scale_cols": "i32",
+          "scale_ptr": "*u8",
+          "scale_rows": "i32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "b4034f25d7aa8888c05eaac8b0aabd0f9683d8025dcd794bfff907b8231b3895",
+          "kernel.llir": "cb80824fcac96f8eb153a8db53363115489e62367b8918de6d291675596129d5",
+          "kernel.ptx": "67024917d76bf1ffccf864947c09b93877d16731e723c3c1338c7c940d10db80",
+          "kernel.resource.txt": "65ce8883154fee766b2356e52e7a219bb0745209546221ab3a84583c652faabd",
+          "kernel.sass": "d85a6739210636ad1c31623721149a151c05ead8f55d0fb0d094cb253d7114d1",
+          "kernel.ttgir": "9b11dd95f201ca263db6aa438fd601c9c8ab580f7a3868a14ed912c2e5fd56a0",
+          "kernel.ttir": "0389cc4d16ab39c101bbef88c5982eaad14e4b8e81051b1893ad585e4b2f06bd"
+        },
+        "artifact_directory": "artifacts/N01_m4096_n8192_U",
+        "case": {
+          "BM": 128,
+          "BN": 4,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 8192,
+          "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+          "family": "N01",
+          "followup_role": "footprint",
+          "id": "N01_m4096_n8192",
+          "rows": 4096,
+          "selected_variant": "coordinated_fully_coalesced",
+          "source_function": "triton_scale_swizzle",
+          "stages": 3
+        },
+        "compile_key": "82c1149f5d6e6e11bdb8c40e780128e990ba2d4bb0ab6bbaf8da377253d40cd8",
+        "compiler_options": {
+          "num_stages": 3,
+          "num_warps": 4
+        },
+        "cubin_SHA256": "b4034f25d7aa8888c05eaac8b0aabd0f9683d8025dcd794bfff907b8231b3895",
+        "dynamic_smem_bytes": 0,
+        "effective_layout_audit": {
+          "conversions": [],
+          "encoding_definitions": [
+            "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+          ],
+          "inline_assembly": [],
+          "loads": [
+            "%input_scales_19 = tt.load %input_scales_18, %mask_12, %cst_2 : tensor<128x4x!tt.ptr<i8>, #blocked>"
+          ],
+          "requested_layout_constants": {},
+          "reshapes_and_pairs": [
+            "%dest_indices_flat = tt.reshape %dest_indices_24 : tensor<128x4xi32, #blocked> -> tensor<512xi32, #blocked1>",
+            "%scales_flat = tt.reshape %input_scales_19 : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked1>"
+          ],
+          "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+          "status": "OK",
+          "stores": [
+            "tt.store %2, %scales_flat : tensor<512x!tt.ptr<i8>, #blocked1>"
+          ],
+          "ttgir_SHA256": "9b11dd95f201ca263db6aa438fd601c9c8ab580f7a3868a14ed912c2e5fd56a0"
+        },
+        "family": "N01",
+        "fixture": {
+          "expected_SHA256": {
+            "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+          },
+          "grid": [
+            32,
+            2048,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+            "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+          ],
+          "inplace": [],
+          "outputs": [
+            "output_ptr"
+          ],
+          "views": {
+            "output_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 1,
+              "shape": [
+                4096,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            },
+            "scale_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 0,
+              "shape": [
+                4096,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            }
+          }
+        },
+        "function_name": "triton_scale_swizzle",
+        "geometry": "N01_m4096_n8192",
+        "global_scratch_size": 0,
+        "num_warps": 4,
+        "resources": {
+          "LOCAL": 0,
+          "REG": 14,
+          "SAMPLER": 0,
+          "SHARED": 0,
+          "STACK": 0,
+          "SURFACE": 0,
+          "TEXTURE": 0
+        },
+        "runtime_argument_names": [
+          "scale_ptr",
+          "scale_rows",
+          "scale_cols",
+          "output_ptr",
+          "input_row_stride",
+          "output_block_stride"
+        ],
+        "specialized_runtime_values": {
+          "input_col_stride": 1
+        },
+        "stage2": false,
+        "tag": "N01_m4096_n8192:U",
+        "timing_eligible": true,
+        "variant": "U"
+      }
+    },
+    {
+      "ABI_and_launch_equal": true,
+      "allocated_sections_equal": true,
+      "case": "N02_k8192_p1024_g128",
+      "checks": [
+        {
+          "pass_": true,
+          "pattern": "finite",
+          "variant": "U"
+        },
+        {
+          "pass_": true,
+          "pattern": "finite",
+          "variant": "G0"
+        },
+        {
+          "pass_": true,
+          "pattern": "finite",
+          "variant": "GL_packed_compute_vec1"
+        },
+        {
+          "pass_": true,
+          "pattern": "structured",
+          "variant": "U"
+        },
+        {
+          "pass_": true,
+          "pattern": "structured",
+          "variant": "G0"
+        },
+        {
+          "pass_": true,
+          "pattern": "structured",
+          "variant": "GL_packed_compute_vec1"
+        },
+        {
+          "pass_": true,
+          "pattern": "edge",
+          "variant": "U"
+        },
+        {
+          "pass_": true,
+          "pattern": "edge",
+          "variant": "G0"
+        },
+        {
+          "pass_": true,
+          "pattern": "edge",
+          "variant": "GL_packed_compute_vec1"
+        }
+      ],
+      "compiled_programs": [
+        "N02_k8192_p1024_g128:U",
+        "N02_k8192_p1024_g128:G0",
+        "N02_k8192_p1024_g128:GL_packed_compute_vec1"
+      ],
+      "metadata": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(10,)": [],
+          "(11,)": [],
+          "(12,)": [],
+          "(13,)": [],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(6,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(7,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+          "(11,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+          "(12,)": "BlockedLayout(size_per_thread=[1, 32], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+          "(13,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+          "(7,)": "32",
+          "(8,)": "32",
+          "(9,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+        },
+        "JIT_signature": {
+          "BLOCK_SIZE_X": "constexpr",
+          "BLOCK_SIZE_Y": "constexpr",
+          "LEXP": "constexpr",
+          "LOUT": "constexpr",
+          "LQ": "constexpr",
+          "LS": "constexpr",
+          "LZ": "constexpr",
+          "group_size": "i32",
+          "num_cols": "i32",
+          "num_rows": "i32",
+          "qweight_ptr": "*i32",
+          "result_ptr": "*fp16",
+          "scales_ptr": "*fp16",
+          "zeros_ptr": "*i32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "089b7ea53147f648c543d41ba809c187f4fb1d4f7b6b5af9c0ce71d08e92e642",
+          "kernel.glir": "17d4151f24e27d83a5c9fde1f32feb6d810c7c055f33a8d1d64dcc3a15dc32e4",
+          "kernel.llir": "e4c4dac53208825aa5a454f0444420fe7d9df34ac86528ced50c25a5dc2ff355",
+          "kernel.ptx": "f74ca1bbea6a65d57599faf1d90ccda7014a61804703dbb9b9ab336fea69c306",
+          "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+          "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+          "kernel.ttgir": "a4341ede82824e58bb90871ba582e6702634af2d3efdf69dd99b646345a02cce"
+        },
+        "artifact_directory": "artifacts/N02_k8192_p1024_g128_G0",
+        "case": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 8192,
+          "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+          "family": "N02",
+          "followup_role": "footprint",
+          "group_size": 128,
+          "id": "N02_k8192_p1024_g128",
+          "packed_cols": 1024,
+          "rows": 8192,
+          "selected_variant": "packed_compute_vec1",
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "compile_key": "be9d69f54bdcbf369b67f618582737cfe1b17c276d2da66ec4882045cb3cf98e",
+        "compiler_options": {
+          "num_stages": 3,
+          "num_warps": 4
+        },
+        "cubin_SHA256": "089b7ea53147f648c543d41ba809c187f4fb1d4f7b6b5af9c0ce71d08e92e642",
+        "dynamic_smem_bytes": 2048,
+        "effective_layout_audit": {
+          "conversions": [
+            "%iweights_24 = ttg.convert_layout %iweights_23 : tensor<32x256xi32, #blocked2> -> tensor<32x256xi32, #blocked2>",
+            "%zeros_51 = ttg.convert_layout %zeros_50 : tensor<32x256xi32, #blocked2> -> tensor<32x256xi32, #blocked2>",
+            "%scales_59 = ttg.convert_layout %scales_58 : tensor<1x256xf16, #blocked3> -> tensor<1x256xf16, #blocked4>",
+            "%difference_61 = ttg.convert_layout %difference : tensor<32x256xf16, #blocked2> -> tensor<32x256xf16, #blocked4>"
+          ],
+          "encoding_definitions": [
+            "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked1 = #ttg.blocked<{sizePerThread = [4, 8], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked2 = #ttg.blocked<{sizePerThread = [1, 32], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked3 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [1, 4], order = [1, 0]}>",
+            "#blocked4 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked5 = #ttg.blocked<{sizePerThread = [1, 4, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+            "#blocked6 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked7 = #ttg.blocked<{sizePerThread = [1, 8, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+            "#blocked8 = #ttg.blocked<{sizePerThread = [1, 16], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked9 = #ttg.blocked<{sizePerThread = [1, 16, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+            "#linear = #ttg.linear<{register = [[0, 1], [1, 0], [2, 0]], lane = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], warp = [[0, 0], [0, 0]], block = []}>"
+          ],
+          "inline_assembly": [],
+          "loads": [
+            "%iweights_18 = tt.load %iweights_17, %masks_11, %cst : tensor<32x32x!tt.ptr<i32>, #blocked>",
+            "%zeros_43 = tt.load %zeros_42, %zero_masks_41, %cst_3 : tensor<1x32x!tt.ptr<i32>, #blocked>",
+            "%scales_58 = tt.load %scales_57, %scale_masks_56, %cst_4 : tensor<1x256x!tt.ptr<f16>, #blocked3>"
+          ],
+          "requested_layout_constants": {},
+          "reshapes_and_pairs": [
+            "%joined = tt.join %iweights_18, %iweights_18 : tensor<32x32xi32, #blocked> -> tensor<32x32x2xi32, #blocked5>",
+            "%iweights_19 = tt.reshape %joined : tensor<32x32x2xi32, #blocked5> -> tensor<32x64xi32, #blocked6>",
+            "%joined_20 = tt.join %iweights_19, %iweights_19 : tensor<32x64xi32, #blocked6> -> tensor<32x64x2xi32, #blocked7>",
+            "%iweights_21 = tt.reshape %joined_20 : tensor<32x64x2xi32, #blocked7> -> tensor<32x128xi32, #blocked8>",
+            "%joined_22 = tt.join %iweights_21, %iweights_21 : tensor<32x128xi32, #blocked8> -> tensor<32x128x2xi32, #blocked9>",
+            "%iweights_23 = tt.reshape %joined_22 : tensor<32x128x2xi32, #blocked9> -> tensor<32x256xi32, #blocked2>",
+            "%reverse_awq_order_tensor_32 = tt.reshape %reverse_awq_order_tensor_31 : tensor<4x2xi32, #linear> -> tensor<8xi32, #ttg.slice<{dim = 0, parent = #blocked1}>>",
+            "%shifts_35 = tt.reshape %shifts_34 : tensor<1024x8xi32, #blocked1> -> tensor<32x256xi32, #blocked2>",
+            "%joined_44 = tt.join %zeros_43, %zeros_43 : tensor<1x32xi32, #blocked> -> tensor<1x32x2xi32, #blocked5>",
+            "%zeros_45 = tt.reshape %joined_44 : tensor<1x32x2xi32, #blocked5> -> tensor<1x64xi32, #blocked6>",
+            "%joined_46 = tt.join %zeros_45, %zeros_45 : tensor<1x64xi32, #blocked6> -> tensor<1x64x2xi32, #blocked7>",
+            "%zeros_47 = tt.reshape %joined_46 : tensor<1x64x2xi32, #blocked7> -> tensor<1x128xi32, #blocked8>",
+            "%joined_48 = tt.join %zeros_47, %zeros_47 : tensor<1x128xi32, #blocked8> -> tensor<1x128x2xi32, #blocked9>",
+            "%zeros_49 = tt.reshape %joined_48 : tensor<1x128x2xi32, #blocked9> -> tensor<1x256xi32, #blocked2>"
+          ],
+          "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+          "status": "OK",
+          "stores": [
+            "tt.store %1, %iweights_62, %result_masks_16 : tensor<32x256x!tt.ptr<f16>, #blocked4>"
+          ],
+          "ttgir_SHA256": "a4341ede82824e58bb90871ba582e6702634af2d3efdf69dd99b646345a02cce"
+        },
+        "family": "N02",
+        "fixture": {
+          "expected_SHA256": {
+            "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+          },
+          "grid": [
+            32,
+            256,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+            "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+            "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+            "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                8192,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                8192,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                64,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                64,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            }
+          }
+        },
+        "function_name": "awq_dequantize_kernel",
+        "geometry": "N02_k8192_p1024_g128",
+        "global_scratch_size": 0,
+        "num_warps": 4,
+        "resources": {
+          "LOCAL": 0,
+          "REG": 72,
+          "SAMPLER": 0,
+          "SHARED": 1024,
+          "STACK": 0,
+          "SURFACE": 0,
+          "TEXTURE": 0
+        },
+        "runtime_argument_names": [
+          "qweight_ptr",
+          "scales_ptr",
+          "zeros_ptr",
+          "group_size",
+          "result_ptr",
+          "num_cols",
+          "num_rows"
+        ],
+        "specialized_runtime_values": {},
+        "stage2": false,
+        "tag": "N02_k8192_p1024_g128:G0",
+        "timing_eligible": true,
+        "variant": "G0"
+      },
+      "resources_equal": true,
+      "status": "OK",
+      "upstream": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(6,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(7,)": [],
+          "(8,)": []
+        },
+        "JIT_constants": {
+          "(7,)": "32",
+          "(8,)": "32"
+        },
+        "JIT_signature": {
+          "BLOCK_SIZE_X": "constexpr",
+          "BLOCK_SIZE_Y": "constexpr",
+          "group_size": "i32",
+          "num_cols": "i32",
+          "num_rows": "i32",
+          "qweight_ptr": "*i32",
+          "result_ptr": "*fp16",
+          "scales_ptr": "*fp16",
+          "zeros_ptr": "*i32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+          "kernel.llir": "8f5a9ee501940442fd9517f79badbea7affeb16e2ba7fbfc3451935968def123",
+          "kernel.ptx": "ae18a95fe4b1c75bae5ad1af5277571566445debdf0338727dce9e0d8ee66823",
+          "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+          "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+          "kernel.ttgir": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e",
+          "kernel.ttir": "eb4bd5439dbe0af9c7a1800a1a08498349faf7ca9cddd53539208f31ddd61e53"
+        },
+        "artifact_directory": "artifacts/N02_k8192_p1024_g128_U",
+        "case": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 8192,
+          "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+          "family": "N02",
+          "followup_role": "footprint",
+          "group_size": 128,
+          "id": "N02_k8192_p1024_g128",
+          "packed_cols": 1024,
+          "rows": 8192,
+          "selected_variant": "packed_compute_vec1",
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "compile_key": "d966654ae804e0e3642cfa99fb3369044130b2dbf5193995f1b3e43e85d3a1b9",
+        "compiler_options": {
+          "num_stages": 3,
+          "num_warps": 4
+        },
+        "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "dynamic_smem_bytes": 2048,
+        "effective_layout_audit": {
+          "conversions": [
+            "%iweights_90 = ttg.convert_layout %scales_89 : tensor<1x256xf16, #blocked2> -> tensor<1x256xf16, #blocked4>",
+            "%iweights_94 = ttg.convert_layout %iweights_93 : tensor<32x256xf16, #blocked1> -> tensor<32x256xf16, #blocked4>"
+          ],
+          "encoding_definitions": [
+            "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked1 = #ttg.blocked<{sizePerThread = [1, 32], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked2 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [1, 4], order = [1, 0]}>",
+            "#blocked3 = #ttg.blocked<{sizePerThread = [4, 8], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked4 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked5 = #ttg.blocked<{sizePerThread = [1, 4, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+            "#blocked6 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked7 = #ttg.blocked<{sizePerThread = [1, 8, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+            "#blocked8 = #ttg.blocked<{sizePerThread = [1, 16], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked9 = #ttg.blocked<{sizePerThread = [1, 16, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+            "#linear = #ttg.linear<{register = [[0, 1], [1, 0], [2, 0]], lane = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], warp = [[0, 0], [0, 0]], block = []}>"
+          ],
+          "inline_assembly": [],
+          "loads": [
+            "%iweights_51 = tt.load %iweights_50, %masks_29, %cst_2 : tensor<32x32x!tt.ptr<i32>, #blocked>",
+            "%zeros_75 = tt.load %zeros_74, %zero_masks_73, %cst : tensor<1x32x!tt.ptr<i32>, #blocked>",
+            "%scales_89 = tt.load %scales_88, %scale_masks_87, %cst_1 : tensor<1x256x!tt.ptr<f16>, #blocked2>"
+          ],
+          "requested_layout_constants": {},
+          "reshapes_and_pairs": [
+            "%c = tt.join %iweights_51, %iweights_51 : tensor<32x32xi32, #blocked> -> tensor<32x32x2xi32, #blocked5>",
+            "%iweights_52 = tt.reshape %c : tensor<32x32x2xi32, #blocked5> -> tensor<32x64xi32, #blocked6>",
+            "%c_53 = tt.join %iweights_52, %iweights_52 : tensor<32x64xi32, #blocked6> -> tensor<32x64x2xi32, #blocked7>",
+            "%iweights_54 = tt.reshape %c_53 : tensor<32x64x2xi32, #blocked7> -> tensor<32x128xi32, #blocked8>",
+            "%c_55 = tt.join %iweights_54, %iweights_54 : tensor<32x128xi32, #blocked8> -> tensor<32x128x2xi32, #blocked9>",
+            "%iweights_56 = tt.reshape %c_55 : tensor<32x128x2xi32, #blocked9> -> tensor<32x256xi32, #blocked1>",
+            "%reverse_awq_order_tensor_64 = tt.reshape %reverse_awq_order_tensor_63 : tensor<4x2xi32, #linear> -> tensor<8xi32, #ttg.slice<{dim = 0, parent = #blocked3}>>",
+            "%shifts_67 = tt.reshape %shifts_66 : tensor<1024x8xi32, #blocked3> -> tensor<32x256xi32, #blocked1>",
+            "%c_76 = tt.join %zeros_75, %zeros_75 : tensor<1x32xi32, #blocked> -> tensor<1x32x2xi32, #blocked5>",
+            "%zeros_77 = tt.reshape %c_76 : tensor<1x32x2xi32, #blocked5> -> tensor<1x64xi32, #blocked6>",
+            "%c_78 = tt.join %zeros_77, %zeros_77 : tensor<1x64xi32, #blocked6> -> tensor<1x64x2xi32, #blocked7>",
+            "%zeros_79 = tt.reshape %c_78 : tensor<1x64x2xi32, #blocked7> -> tensor<1x128xi32, #blocked8>",
+            "%c_80 = tt.join %zeros_79, %zeros_79 : tensor<1x128xi32, #blocked8> -> tensor<1x128x2xi32, #blocked9>",
+            "%zeros_81 = tt.reshape %c_80 : tensor<1x128x2xi32, #blocked9> -> tensor<1x256xi32, #blocked1>"
+          ],
+          "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+          "status": "OK",
+          "stores": [
+            "tt.store %1, %iweights_95, %result_masks_49 : tensor<32x256x!tt.ptr<f16>, #blocked4>"
+          ],
+          "ttgir_SHA256": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e"
+        },
+        "family": "N02",
+        "fixture": {
+          "expected_SHA256": {
+            "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+          },
+          "grid": [
+            32,
+            256,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+            "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+            "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+            "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                8192,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                8192,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                64,
+                8192
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8192,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                64,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            }
+          }
+        },
+        "function_name": "awq_dequantize_kernel",
+        "geometry": "N02_k8192_p1024_g128",
+        "global_scratch_size": 0,
+        "num_warps": 4,
+        "resources": {
+          "LOCAL": 0,
+          "REG": 72,
+          "SAMPLER": 0,
+          "SHARED": 1024,
+          "STACK": 0,
+          "SURFACE": 0,
+          "TEXTURE": 0
+        },
+        "runtime_argument_names": [
+          "qweight_ptr",
+          "scales_ptr",
+          "zeros_ptr",
+          "group_size",
+          "result_ptr",
+          "num_cols",
+          "num_rows"
+        ],
+        "specialized_runtime_values": {},
+        "stage2": false,
+        "tag": "N02_k8192_p1024_g128:U",
+        "timing_eligible": true,
+        "variant": "U"
+      }
+    },
+    {
+      "ABI_and_launch_equal": true,
+      "allocated_sections_equal": true,
+      "case": "N01_tail_stride_m131_n7",
+      "checks": [],
+      "compiled_programs": [],
+      "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_worker.py\", line 81, in run\n    choices = adapter.variants(case, plan)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/nonreduction_survey/quant_adapter.py\", line 204, in variants\n    assert len(result)==8\nAssertionError\n",
+      "metadata": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [],
+          "(10,)": [],
+          "(2,)": [],
+          "(3,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(4,)": [],
+          "(5,)": [],
+          "(6,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(7,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "BlockedLayout(size_per_thread=[4], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])",
+          "(7,)": "128",
+          "(8,)": "4",
+          "(9,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[8, 4], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+        },
+        "JIT_signature": {
+          "BLOCK_COLS": "constexpr",
+          "BLOCK_ROWS": "constexpr",
+          "LINPUT": "constexpr",
+          "LOUT": "constexpr",
+          "input_col_stride": "i32",
+          "input_row_stride": "i32",
+          "output_block_stride": "i32",
+          "output_ptr": "*u8",
+          "scale_cols": "i32",
+          "scale_ptr": "*u8",
+          "scale_rows": "i32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "422eaefdf4d4f189176b1dfda663e1ef9231a5be7423a8c645c79cbacb477265",
+          "kernel.glir": "0b14c5d3b950b0f0dc7a40a908392a718452a543785fa49b7b199fc2dd73ed09",
+          "kernel.llir": "f7556a8eb4e680d126c89c8a3cf167941304694a2bff66f21cbb7dc6be8f14fb",
+          "kernel.ptx": "668c507792d868c838493a014bc6d587321c72a5cf0c86c7e6b790315519bef0",
+          "kernel.resource.txt": "73c497b4b89f5b536cf5f928b50ce3fa6b74a1082142203122096ae565fe4559",
+          "kernel.sass": "a18f3733832bd4bc7fe512b2e048cd71ce40c755edd9e4e9a6e8aaf97846fc56",
+          "kernel.ttgir": "1cd9d726befefe819cca723cdb318c46c4c5705d397b3c0e4692197ed0ad0eec"
+        },
+        "artifact_directory": "artifacts/N01_tail_stride_m131_n7_G0",
+        "case": {
+          "BM": 128,
+          "BN": 4,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "col_stride": 2,
+          "cols": 7,
+          "evidence_scope": "Padded tail and injective positive-stride correctness stress; no performance claim.",
+          "family": "N01",
+          "followup_role": "correctness_only",
+          "id": "N01_tail_stride_m131_n7",
+          "row_stride": 19,
+          "rows": 131,
+          "selected_variant": "all_eight_N01",
+          "source_function": "triton_scale_swizzle",
+          "stages": 3
+        },
+        "compile_key": "849f22e8ea97b8600e20a46aa04488d4e07e7edc893a98cc15951b47a1aa21b7",
+        "compiler_options": {
+          "num_stages": 3,
+          "num_warps": 4
+        },
+        "cubin_SHA256": "422eaefdf4d4f189176b1dfda663e1ef9231a5be7423a8c645c79cbacb477265",
+        "dynamic_smem_bytes": 512,
+        "effective_layout_audit": {
+          "conversions": [
+            "%0 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked2> -> tensor<512xi8, #blocked1>"
+          ],
+          "encoding_definitions": [
+            "#blocked = #ttg.blocked<{sizePerThread = [1, 1], threadsPerWarp = [8, 4], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked1 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>",
+            "#blocked2 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+          ],
+          "inline_assembly": [],
+          "loads": [
+            "%input_scales = tt.load %input_pointer_20, %mask_12, %cst : tensor<128x4x!tt.ptr<i8>, #blocked>"
+          ],
+          "requested_layout_constants": {},
+          "reshapes_and_pairs": [
+            "%scales_flat = tt.reshape %input_scales : tensor<128x4xi8, #blocked> -> tensor<512xi8, #blocked2>"
+          ],
+          "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+          "status": "OK",
+          "stores": [
+            "tt.store %output_pointer_29, %0 : tensor<512x!tt.ptr<i8>, #blocked1>"
+          ],
+          "ttgir_SHA256": "1cd9d726befefe819cca723cdb318c46c4c5705d397b3c0e4692197ed0ad0eec"
+        },
+        "family": "N01",
+        "fixture": {
+          "expected_SHA256": {
+            "output_ptr": "62a8a2445f65061d34bf18198fe75771137b4e50e20116867a099b30ad73970f"
+          },
+          "grid": [
+            2,
+            2,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f77674134f3ec65b2abe9a326f654f9bfbc060d53931795d043e2661ae200b7a",
+            "0ca3bfdeda1ef5036bfa5dad078a9f15724e79cf296bd4388cf786bfaf4195d0"
+          ],
+          "inplace": [],
+          "outputs": [
+            "output_ptr"
+          ],
+          "views": {
+            "output_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 1,
+              "shape": [
+                256,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "scale_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 0,
+              "shape": [
+                131,
+                7
+              ],
+              "storage_offset": 0,
+              "stride": [
+                19,
+                2
+              ]
+            }
+          }
+        },
+        "function_name": "triton_scale_swizzle",
+        "geometry": "N01_tail_stride_m131_n7",
+        "global_scratch_size": 0,
+        "num_warps": 4,
+        "resources": {
+          "LOCAL": 0,
+          "REG": 17,
+          "SAMPLER": 0,
+          "SHARED": 1024,
+          "STACK": 0,
+          "SURFACE": 0,
+          "TEXTURE": 0
+        },
+        "runtime_argument_names": [
+          "scale_ptr",
+          "scale_rows",
+          "scale_cols",
+          "output_ptr",
+          "input_row_stride",
+          "input_col_stride",
+          "output_block_stride"
+        ],
+        "specialized_runtime_values": {},
+        "stage2": false,
+        "tag": "N01_tail_stride_m131_n7:G0",
+        "timing_eligible": false,
+        "variant": "G0"
+      },
+      "resources_equal": true,
+      "status": "FAILED",
+      "upstream": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [],
+          "(2,)": [],
+          "(3,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(4,)": [],
+          "(5,)": [],
+          "(6,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(7,)": [],
+          "(8,)": []
+        },
+        "JIT_constants": {
+          "(7,)": "128",
+          "(8,)": "4"
+        },
+        "JIT_signature": {
+          "BLOCK_COLS": "constexpr",
+          "BLOCK_ROWS": "constexpr",
+          "input_col_stride": "i32",
+          "input_row_stride": "i32",
+          "output_block_stride": "i32",
+          "output_ptr": "*u8",
+          "scale_cols": "i32",
+          "scale_ptr": "*u8",
+          "scale_rows": "i32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "e2505ab66ad6e5800fa46b3def363442d646e7db92572efd7265b44fc4f0d358",
+          "kernel.llir": "52d1d9da2d3d9ac374a3fa5a731afc47b7b1ddabc3ec3f352ad077cfbf823b96",
+          "kernel.ptx": "6a28624a4eb8fce6aef4301f9f001bbaafa650b8aa925eb8553e1c1973021ad0",
+          "kernel.resource.txt": "73c497b4b89f5b536cf5f928b50ce3fa6b74a1082142203122096ae565fe4559",
+          "kernel.sass": "a18f3733832bd4bc7fe512b2e048cd71ce40c755edd9e4e9a6e8aaf97846fc56",
+          "kernel.ttgir": "d47593548e6fab896c370cae0ea2c1b9b88a46868e971494b6da9656621e3afa",
+          "kernel.ttir": "59c9bac8b5a96d5e60c89b46a79fa26d4bac6c008ee2898350ec26449ab93c03"
+        },
+        "artifact_directory": "artifacts/N01_tail_stride_m131_n7_U",
+        "case": {
+          "BM": 128,
+          "BN": 4,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "col_stride": 2,
+          "cols": 7,
+          "evidence_scope": "Padded tail and injective positive-stride correctness stress; no performance claim.",
+          "family": "N01",
+          "followup_role": "correctness_only",
+          "id": "N01_tail_stride_m131_n7",
+          "row_stride": 19,
+          "rows": 131,
+          "selected_variant": "all_eight_N01",
+          "source_function": "triton_scale_swizzle",
+          "stages": 3
+        },
+        "compile_key": "e57f2a8d6c3e97d027edfedd09b73664fbcc615d6c210f434b8cad6a71892381",
+        "compiler_options": {
+          "num_stages": 3,
+          "num_warps": 4
+        },
+        "cubin_SHA256": "e2505ab66ad6e5800fa46b3def363442d646e7db92572efd7265b44fc4f0d358",
+        "dynamic_smem_bytes": 512,
+        "effective_layout_audit": {
+          "conversions": [
+            "%3 = ttg.convert_layout %scales_flat : tensor<512xi8, #blocked3> -> tensor<512xi8, #blocked2>"
+          ],
+          "encoding_definitions": [
+            "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked1 = #ttg.blocked<{sizePerThread = [1, 1], threadsPerWarp = [8, 4], warpsPerCTA = [4, 1], order = [1, 0]}>",
+            "#blocked2 = #ttg.blocked<{sizePerThread = [4], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>",
+            "#blocked3 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [32], warpsPerCTA = [4], order = [0]}>"
+          ],
+          "inline_assembly": [],
+          "loads": [
+            "%input_scales_25 = tt.load %input_scales_24, %mask_16, %cst_2 : tensor<128x4x!tt.ptr<i8>, #blocked1>"
+          ],
+          "requested_layout_constants": {},
+          "reshapes_and_pairs": [
+            "%dest_indices_flat = tt.reshape %dest_indices_30 : tensor<128x4xi32, #blocked> -> tensor<512xi32, #blocked2>",
+            "%scales_flat = tt.reshape %input_scales_25 : tensor<128x4xi8, #blocked1> -> tensor<512xi8, #blocked3>"
+          ],
+          "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+          "status": "OK",
+          "stores": [
+            "tt.store %2, %3 : tensor<512x!tt.ptr<i8>, #blocked2>"
+          ],
+          "ttgir_SHA256": "d47593548e6fab896c370cae0ea2c1b9b88a46868e971494b6da9656621e3afa"
+        },
+        "family": "N01",
+        "fixture": {
+          "expected_SHA256": {
+            "output_ptr": "62a8a2445f65061d34bf18198fe75771137b4e50e20116867a099b30ad73970f"
+          },
+          "grid": [
+            2,
+            2,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f77674134f3ec65b2abe9a326f654f9bfbc060d53931795d043e2661ae200b7a",
+            "0ca3bfdeda1ef5036bfa5dad078a9f15724e79cf296bd4388cf786bfaf4195d0"
+          ],
+          "inplace": [],
+          "outputs": [
+            "output_ptr"
+          ],
+          "views": {
+            "output_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 1,
+              "shape": [
+                256,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "scale_ptr": {
+              "dtype": "uint8",
+              "element_size": 1,
+              "group": 0,
+              "shape": [
+                131,
+                7
+              ],
+              "storage_offset": 0,
+              "stride": [
+                19,
+                2
+              ]
+            }
+          }
+        },
+        "function_name": "triton_scale_swizzle",
+        "geometry": "N01_tail_stride_m131_n7",
+        "global_scratch_size": 0,
+        "num_warps": 4,
+        "resources": {
+          "LOCAL": 0,
+          "REG": 17,
+          "SAMPLER": 0,
+          "SHARED": 1024,
+          "STACK": 0,
+          "SURFACE": 0,
+          "TEXTURE": 0
+        },
+        "runtime_argument_names": [
+          "scale_ptr",
+          "scale_rows",
+          "scale_cols",
+          "output_ptr",
+          "input_row_stride",
+          "input_col_stride",
+          "output_block_stride"
+        ],
+        "specialized_runtime_values": {},
+        "stage2": false,
+        "tag": "N01_tail_stride_m131_n7:U",
+        "timing_eligible": false,
+        "variant": "U"
+      }
+    }
+  ],
+  "status": "NEEDS_ALIGNMENT",
+  "timing_case_ids": [
+    "N01_m4096_n8192",
+    "N02_k8192_p1024_g128"
+  ],
+  "timing_events_created": 0
+}

@@ -1,0 +1,274 @@
+{
+  "case": {
+    "BM": 32,
+    "BN": 32,
+    "W": 4,
+    "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+    "cols": 8192,
+    "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+    "family": "N02",
+    "followup_role": "footprint",
+    "group_size": 128,
+    "id": "N02_k8192_p1024_g128",
+    "packed_cols": 1024,
+    "rows": 8192,
+    "selected_variant": "packed_compute_vec1",
+    "source_function": "awq_dequantize_kernel",
+    "stages": 3
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(7,)": "32",
+        "(8,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "kernel.llir": "8f5a9ee501940442fd9517f79badbea7affeb16e2ba7fbfc3451935968def123",
+        "kernel.ptx": "ae18a95fe4b1c75bae5ad1af5277571566445debdf0338727dce9e0d8ee66823",
+        "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+        "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+        "kernel.ttgir": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e",
+        "kernel.ttir": "eb4bd5439dbe0af9c7a1800a1a08498349faf7ca9cddd53539208f31ddd61e53"
+      },
+      "artifact_directory": "artifacts/N02_k8192_p1024_g128_U",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 8192,
+        "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+        "family": "N02",
+        "followup_role": "footprint",
+        "group_size": 128,
+        "id": "N02_k8192_p1024_g128",
+        "packed_cols": 1024,
+        "rows": 8192,
+        "selected_variant": "packed_compute_vec1",
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "compile_key": "d966654ae804e0e3642cfa99fb3369044130b2dbf5193995f1b3e43e85d3a1b9",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+      "dynamic_smem_bytes": 2048,
+      "effective_layout_audit": {
+        "conversions": [
+          "%iweights_90 = ttg.convert_layout %scales_89 : tensor<1x256xf16, #blocked2> -> tensor<1x256xf16, #blocked4>",
+          "%iweights_94 = ttg.convert_layout %iweights_93 : tensor<32x256xf16, #blocked1> -> tensor<32x256xf16, #blocked4>"
+        ],
+        "encoding_definitions": [
+          "#blocked = #ttg.blocked<{sizePerThread = [1, 4], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked1 = #ttg.blocked<{sizePerThread = [1, 32], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked2 = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 32], warpsPerCTA = [1, 4], order = [1, 0]}>",
+          "#blocked3 = #ttg.blocked<{sizePerThread = [4, 8], threadsPerWarp = [32, 1], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked4 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [1, 32], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked5 = #ttg.blocked<{sizePerThread = [1, 4, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked6 = #ttg.blocked<{sizePerThread = [1, 8], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked7 = #ttg.blocked<{sizePerThread = [1, 8, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#blocked8 = #ttg.blocked<{sizePerThread = [1, 16], threadsPerWarp = [4, 8], warpsPerCTA = [4, 1], order = [1, 0]}>",
+          "#blocked9 = #ttg.blocked<{sizePerThread = [1, 16, 2], threadsPerWarp = [4, 8, 1], warpsPerCTA = [4, 1, 1], order = [2, 1, 0]}>",
+          "#linear = #ttg.linear<{register = [[0, 1], [1, 0], [2, 0]], lane = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], warp = [[0, 0], [0, 0]], block = []}>"
+        ],
+        "inline_assembly": [],
+        "loads": [
+          "%iweights_51 = tt.load %iweights_50, %masks_29, %cst_2 : tensor<32x32x!tt.ptr<i32>, #blocked>",
+          "%zeros_75 = tt.load %zeros_74, %zero_masks_73, %cst : tensor<1x32x!tt.ptr<i32>, #blocked>",
+          "%scales_89 = tt.load %scales_88, %scale_masks_87, %cst_1 : tensor<1x256x!tt.ptr<f16>, #blocked2>"
+        ],
+        "requested_layout_constants": {},
+        "reshapes_and_pairs": [
+          "%c = tt.join %iweights_51, %iweights_51 : tensor<32x32xi32, #blocked> -> tensor<32x32x2xi32, #blocked5>",
+          "%iweights_52 = tt.reshape %c : tensor<32x32x2xi32, #blocked5> -> tensor<32x64xi32, #blocked6>",
+          "%c_53 = tt.join %iweights_52, %iweights_52 : tensor<32x64xi32, #blocked6> -> tensor<32x64x2xi32, #blocked7>",
+          "%iweights_54 = tt.reshape %c_53 : tensor<32x64x2xi32, #blocked7> -> tensor<32x128xi32, #blocked8>",
+          "%c_55 = tt.join %iweights_54, %iweights_54 : tensor<32x128xi32, #blocked8> -> tensor<32x128x2xi32, #blocked9>",
+          "%iweights_56 = tt.reshape %c_55 : tensor<32x128x2xi32, #blocked9> -> tensor<32x256xi32, #blocked1>",
+          "%reverse_awq_order_tensor_64 = tt.reshape %reverse_awq_order_tensor_63 : tensor<4x2xi32, #linear> -> tensor<8xi32, #ttg.slice<{dim = 0, parent = #blocked3}>>",
+          "%shifts_67 = tt.reshape %shifts_66 : tensor<1024x8xi32, #blocked3> -> tensor<32x256xi32, #blocked1>",
+          "%c_76 = tt.join %zeros_75, %zeros_75 : tensor<1x32xi32, #blocked> -> tensor<1x32x2xi32, #blocked5>",
+          "%zeros_77 = tt.reshape %c_76 : tensor<1x32x2xi32, #blocked5> -> tensor<1x64xi32, #blocked6>",
+          "%c_78 = tt.join %zeros_77, %zeros_77 : tensor<1x64xi32, #blocked6> -> tensor<1x64x2xi32, #blocked7>",
+          "%zeros_79 = tt.reshape %c_78 : tensor<1x64x2xi32, #blocked7> -> tensor<1x128xi32, #blocked8>",
+          "%c_80 = tt.join %zeros_79, %zeros_79 : tensor<1x128xi32, #blocked8> -> tensor<1x128x2xi32, #blocked9>",
+          "%zeros_81 = tt.reshape %c_80 : tensor<1x128x2xi32, #blocked9> -> tensor<1x256xi32, #blocked1>"
+        ],
+        "source_scope": "No reduce/scan/dot/atomic/TMA operations in target IR",
+        "status": "OK",
+        "stores": [
+          "tt.store %1, %iweights_95, %result_masks_49 : tensor<32x256x!tt.ptr<f16>, #blocked4>"
+        ],
+        "ttgir_SHA256": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e"
+      },
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+        },
+        "grid": [
+          32,
+          256,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+          "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+          "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+          "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              8192,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              8192,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              64,
+              8192
+            ],
+            "storage_offset": 0,
+            "stride": [
+              8192,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              64,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k8192_p1024_g128",
+      "global_scratch_size": 0,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 72,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k8192_p1024_g128:U",
+      "timing_eligible": true,
+      "variant": "U"
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}
