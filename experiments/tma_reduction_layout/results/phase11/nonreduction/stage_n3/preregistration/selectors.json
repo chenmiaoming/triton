@@ -1,0 +1,143 @@
+{
+  "declared_targets": [
+    {
+      "candidates": [
+        "output_fully_coalesced",
+        "coordinated_fully_coalesced"
+      ],
+      "case": "N01_m4096_n128",
+      "id": "N01_scale_swizzle",
+      "modes": [
+        "software",
+        "warm_application"
+      ],
+      "rationale": "Compare output-friendly ownership alone with coordinated input/output ownership; isolate the conversion cost versus store request grouping.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_output_fully_coalesced",
+        "GL_coordinated_fully_coalesced"
+      ]
+    },
+    {
+      "candidates": [
+        "packed_compute_vec1",
+        "output_vec4"
+      ],
+      "case": "N02_k3584_p448_g128",
+      "id": "N02_awq_dequantize",
+      "modes": [
+        "software",
+        "warm_application"
+      ],
+      "rationale": "Contrast packed-input/expanded-compute ownership with output-only vec4 ownership; inspect load, unpacking, layout conversion and store instructions separately.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_packed_compute_vec1",
+        "GL_output_vec4"
+      ]
+    },
+    {
+      "candidates": [
+        "input_vec1",
+        "paired_vec4"
+      ],
+      "case": "N03_FA_D128",
+      "id": "N03_flash_rope",
+      "modes": [
+        "software",
+        "warm_application"
+      ],
+      "rationale": "Compare input-only vec1 ownership with coordinated input/paired-compute vec4; retain the original rotary arithmetic, output layout and launch configuration.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_input_vec1",
+        "GL_paired_vec4"
+      ]
+    },
+    {
+      "candidates": [
+        "Q_vec1",
+        "QK_vec4"
+      ],
+      "case": "N03_MROPE_D128",
+      "id": "N03_mrope",
+      "modes": [
+        "software",
+        "warm_application"
+      ],
+      "rationale": "Compare Q-only vec1 with coordinated Q/K vec4 input ownership; inspect Q/K handling without changing the in-place rotary operator or trig/output layouts.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_Q_vec1",
+        "GL_QK_vec4"
+      ]
+    },
+    {
+      "candidates": [
+        "v_input_vec2",
+        "v_compute_input"
+      ],
+      "case": "N04_h32_s4096_d128",
+      "cold_rationale": "The large strided QKV input plus FP8 outputs exceed H100 L2 capacity; contrast NCU kernel/cache-all isolation with application/cache-none priming. This is not formal timing.",
+      "id": "N04_fp8_pack",
+      "modes": [
+        "software",
+        "warm_application",
+        "cold_isolated"
+      ],
+      "rationale": "Change V input ownership alone versus keeping V computation in input ownership; inspect BF16 conversion, FP8 quantization, transpose and store grouping. Q/K are fixed.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_v_input_vec2",
+        "GL_v_compute_input"
+      ]
+    },
+    {
+      "candidates": [
+        "feature_vec2",
+        "token_vec2"
+      ],
+      "case": "N05_t2048_h8_d128",
+      "id": "N05_kda_gate",
+      "modes": [
+        "software",
+        "warm_application"
+      ],
+      "rationale": "Hold vec2 fixed and reverse feature-versus-token ownership of input/compute; output/bias ownership, exact elementwise arithmetic and U-only tuned BT/W/stages remain fixed.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_feature_vec2",
+        "GL_token_vec2"
+      ]
+    },
+    {
+      "candidates": [
+        "e2_heads1",
+        "e2_heads4"
+      ],
+      "case": "N06_h32_d128",
+      "id": "N06_kv_cache",
+      "modes": [
+        "software",
+        "warm_application"
+      ],
+      "rationale": "Hold sizePerThread vec2 fixed and redistribute lanes over one versus four heads; inspect token-major loads and HND-strided paged cache stores.",
+      "variants": [
+        "U",
+        "G0",
+        "GL_e2_heads1",
+        "GL_e2_heads4"
+      ]
+    }
+  ],
+  "optional_cold_pack": true,
+  "roles": "U and G0 are independently profiled controls. Identical Gluon candidates may alias only after exact full-CUBIN, ABI, runtime specialization and launch-resource checks.",
+  "selection_basis": "Static case/subtype and declared layout intervention only; no candidate timing files are read.",
+  "timing_read_policy": "This program accepts only a compiler-artifact payload. It never opens timing directories, analysis.json, timing.csv or performance reports."
+}

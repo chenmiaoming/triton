@@ -1,0 +1,234 @@
+{
+  "case": {
+    "BM": 32,
+    "BN": 32,
+    "W": 4,
+    "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+    "cols": 3584,
+    "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+    "family": "N02",
+    "group_size": 128,
+    "id": "N02_k3584_p448_g128",
+    "packed_cols": 448,
+    "rows": 3584,
+    "source_function": "awq_dequantize_kernel",
+    "stages": 3
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(11,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(12,)": "BlockedLayout(size_per_thread=[1, 32], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(13,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(7,)": "32",
+        "(8,)": "32",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[4, 8], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "LEXP": "constexpr",
+        "LOUT": "constexpr",
+        "LQ": "constexpr",
+        "LS": "constexpr",
+        "LZ": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "c77b26742e452f99b6ec6356ebe61e6bb0be542af55c2ace2c51d313a7b164eb",
+        "kernel.glir": "aef71bd0d34f91ed3d79f63167e8c9a7762b92dc260599a285e62d83468c9ff0",
+        "kernel.llir": "474bbbfef47d1a17b77e486be9b6f030ba34ebf694395d21c1c7cfc97c117e9f",
+        "kernel.ptx": "49f799afd44907386e1619364a20654ad024685a85237ba5b180fd20ab4bdd62",
+        "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+        "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+        "kernel.ttgir": "45e71360904a0ca601cbcafd8f68d8ba3d548ca60f07875d6a6dc3907729d61a"
+      },
+      "artifact_directory": "baseline/artifacts/N02_k3584_p448_g128_G0",
+      "baseline_artifact_directory": "artifacts/N02_k3584_p448_g128_G0",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 3584,
+        "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+        "family": "N02",
+        "group_size": 128,
+        "id": "N02_k3584_p448_g128",
+        "packed_cols": 448,
+        "rows": 3584,
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "compile_key": "7ecf32b55f1c9cc65374ad548d5343d11ca03ea59e63e53237ef4022817db61c",
+      "cubin_SHA256": "c77b26742e452f99b6ec6356ebe61e6bb0be542af55c2ace2c51d313a7b164eb",
+      "dynamic_smem_bytes": 2048,
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "b10a3347c8bd1fa85335568b14875834f0d33e9bfe598824bcb3bb6ce70ee30c"
+        },
+        "grid": [
+          14,
+          112,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "85016bcf09cac90310326c2e39cec9eb338597a9b97f618dcb4a50166e4e4954",
+          "ecc22c1a743c3e4df83e300902c48370decd7e43e41722c54a2178f8e4162a94",
+          "d4de598259c593b200831aea93621e5e295b1be7105d452a03301c7a61f7b226",
+          "9a1febd02248bebd32d823edd0e13cacebadfd5af0ee0207a040b59d6dc17a1f"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              3584,
+              448
+            ],
+            "storage_offset": 0,
+            "stride": [
+              448,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              3584,
+              3584
+            ],
+            "storage_offset": 0,
+            "stride": [
+              3584,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              28,
+              3584
+            ],
+            "storage_offset": 0,
+            "stride": [
+              3584,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              28,
+              448
+            ],
+            "storage_offset": 0,
+            "stride": [
+              448,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k3584_p448_g128",
+      "global_scratch_size": 0,
+      "imported_baseline": true,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 72,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k3584_p448_g128:G0",
+      "variant": "G0"
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}

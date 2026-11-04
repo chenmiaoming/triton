@@ -1,0 +1,306 @@
+{
+  "case": {
+    "BM": 64,
+    "BN": 128,
+    "D": 128,
+    "H": 32,
+    "S": 4096,
+    "W": 8,
+    "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+    "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+    "family": "N04",
+    "id": "N04_h32_s4096_d128",
+    "input_format": "fused_token_major_qkv_views",
+    "padded_keys": 4096,
+    "padded_queries": 4096,
+    "source_function": "_pack_qkv",
+    "stages": 3
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "4096",
+        "(11,)": "4096",
+        "(12,)": "32",
+        "(13,)": "64",
+        "(8,)": "128",
+        "(9,)": "12288"
+      },
+      "JIT_signature": {
+        "block_tokens": "constexpr",
+        "head_stride": "constexpr",
+        "heads": "constexpr",
+        "k": "*bf16",
+        "k_fp8": "*fp8e4nv",
+        "padded_keys": "constexpr",
+        "padded_queries": "constexpr",
+        "q": "*bf16",
+        "q_fp8": "*fp8e4nv",
+        "scales": "*fp32",
+        "sequence": "i32",
+        "token_stride": "constexpr",
+        "v": "*bf16",
+        "v_fp8": "*fp8e4nv"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e876a4742466e4729c9ae6efe74ac8c3931394db212d8d167b0fa000d64c02ee",
+        "kernel.llir": "a8acfce4935511e6c1e41108b93e76502faad8066bff08d8fd3837cee3644b69",
+        "kernel.ptx": "d344994920315f41539631719a580d1c689a32d3c6f1f5d7e07a9688db469a81",
+        "kernel.resource.txt": "f33332b39c709b49850a203de63610305cd1fedbd859f7e79affc8f5bbd9adee",
+        "kernel.sass": "f4ec8fd62d2600d82cf84beb110dcf990a72c20b9c9c878574c6c8491f97b03b",
+        "kernel.ttgir": "26f78dcb522887c0524266ba4c72c6e7db192f3c127370d1a6fdb8a2c5fbffc8",
+        "kernel.ttir": "80b6c9725049e2012d92d74e42f5bfcf24684c3bdda751c6a1f2f18852e0753e"
+      },
+      "artifact_directory": "baseline/artifacts/N04_h32_s4096_d128_U",
+      "baseline_artifact_directory": "artifacts/N04_h32_s4096_d128_U",
+      "case": {
+        "BM": 64,
+        "BN": 128,
+        "D": 128,
+        "H": 32,
+        "S": 4096,
+        "W": 8,
+        "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+        "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+        "family": "N04",
+        "id": "N04_h32_s4096_d128",
+        "input_format": "fused_token_major_qkv_views",
+        "padded_keys": 4096,
+        "padded_queries": 4096,
+        "source_function": "_pack_qkv",
+        "stages": 3
+      },
+      "compile_key": "6d10130cbeaf1356ac9d052ec4eb82db15df7492d5215c6970a38d714bfcac66",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 8
+      },
+      "cubin_SHA256": "e876a4742466e4729c9ae6efe74ac8c3931394db212d8d167b0fa000d64c02ee",
+      "dynamic_smem_bytes": 16384,
+      "family": "N04",
+      "fixture": {
+        "expected_SHA256": {
+          "k_fp8": "b290ed8afcf04bc06de97a7a19c4bf3d185e551b2daf3fc0ab81d3729398daff",
+          "q_fp8": "d4e9cd833ac29cc3a68d9c7e172ff3d0acebe8585fb6a1ddf3e62b99f4a35657",
+          "v_fp8": "01dc03de818218b7c65f5781be7729a0b94fb4430e8ae53e0313831f56ef37d6"
+        },
+        "grid": [
+          32,
+          64,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "cc4b7618ac397072cc82f6f26fdb4f9f06feb6731ad33c7a9e1146c10169ad92",
+          "4dd58971fe6dcc0979b2bb390860aece3ef898d20dce5dbbb588743d89b07981",
+          "71d15b1e1ec77e5d0aa3e8eef07d547323fbad38837e12eac36bc423f6f1792f",
+          "71d15b1e1ec77e5d0aa3e8eef07d547323fbad38837e12eac36bc423f6f1792f",
+          "71d15b1e1ec77e5d0aa3e8eef07d547323fbad38837e12eac36bc423f6f1792f"
+        ],
+        "inplace": [],
+        "outputs": [
+          "q_fp8",
+          "k_fp8",
+          "v_fp8"
+        ],
+        "views": {
+          "k": {
+            "dtype": "bfloat16",
+            "element_size": 2,
+            "group": 0,
+            "shape": [
+              32,
+              4096,
+              128
+            ],
+            "storage_offset": 4096,
+            "stride": [
+              128,
+              12288,
+              1
+            ]
+          },
+          "k_fp8": {
+            "dtype": "float8_e4m3fn",
+            "element_size": 1,
+            "group": 3,
+            "shape": [
+              32,
+              4096,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              524288,
+              128,
+              1
+            ]
+          },
+          "q": {
+            "dtype": "bfloat16",
+            "element_size": 2,
+            "group": 0,
+            "shape": [
+              32,
+              4096,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              128,
+              12288,
+              1
+            ]
+          },
+          "q_fp8": {
+            "dtype": "float8_e4m3fn",
+            "element_size": 1,
+            "group": 2,
+            "shape": [
+              32,
+              4096,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              524288,
+              128,
+              1
+            ]
+          },
+          "scales": {
+            "dtype": "float32",
+            "element_size": 4,
+            "group": 1,
+            "shape": [
+              3,
+              32
+            ],
+            "storage_offset": 0,
+            "stride": [
+              32,
+              1
+            ]
+          },
+          "v": {
+            "dtype": "bfloat16",
+            "element_size": 2,
+            "group": 0,
+            "shape": [
+              32,
+              4096,
+              128
+            ],
+            "storage_offset": 8192,
+            "stride": [
+              128,
+              12288,
+              1
+            ]
+          },
+          "v_fp8": {
+            "dtype": "float8_e4m3fn",
+            "element_size": 1,
+            "group": 4,
+            "shape": [
+              32,
+              128,
+              4096
+            ],
+            "storage_offset": 0,
+            "stride": [
+              524288,
+              4096,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "_pack_qkv",
+      "geometry": "N04_h32_s4096_d128",
+      "global_scratch_size": 0,
+      "imported_baseline": true,
+      "num_warps": 8,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 71,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "q",
+        "k",
+        "v",
+        "q_fp8",
+        "k_fp8",
+        "v_fp8",
+        "scales",
+        "sequence"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N04_h32_s4096_d128:U",
+      "variant": "U"
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}

@@ -1,0 +1,3134 @@
+[
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  },
+  {
+    "Triton_imported": false,
+    "compile_calls": 0,
+    "driver_return_codes": [
+      0
+    ],
+    "environment": {
+      "SM_count": 132,
+      "cc": [
+        9,
+        0
+      ],
+      "checked_cuda_calls": [
+        {
+          "api": "cuInit",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGet",
+          "return_code": 0
+        },
+        {
+          "api": "cuCtxCreate_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuStreamCreate",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetName",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetUuid_v2",
+          "return_code": 0
+        },
+        {
+          "api": "cuDriverGetVersion",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        },
+        {
+          "api": "cuDeviceGetAttribute",
+          "return_code": 0
+        }
+      ],
+      "device_limits": {
+        "max_registers_per_block": 65536,
+        "max_registers_per_sm": 65536,
+        "max_shared_memory_per_block_optin": 232448,
+        "max_shared_memory_per_sm": 233472,
+        "max_threads_per_block": 1024,
+        "max_threads_per_sm": 2048,
+        "warp_size": 32
+      },
+      "driver_API_version": 13030,
+      "gpu_uuid": "GPU-b5b6de92-3172-2189-98d1-0d0ccfbed644",
+      "name": "NVIDIA H100 80GB HBM3"
+    },
+    "formal_timing": false,
+    "mode": "warm_application",
+    "profiler_attached": true,
+    "records": [
+      {
+        "binding": {
+          "ABI": [
+            "u64",
+            "u64",
+            "u64",
+            "u64",
+            "u32",
+            "u32",
+            "u32",
+            "u64",
+            "u64"
+          ],
+          "attributes": {
+            "local_bytes": 0,
+            "n_regs": 48,
+            "occupancy_capacity_q": 10,
+            "static_smem_bytes": 0
+          },
+          "cubin_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "direct_launches": 9,
+          "graph_launches": 0,
+          "guards": 9,
+          "loaded_SHA256": "ddf770d556871a0953e83a69123fc8955fbc6234dc6ea6bbbeb5f900ecfc7fd0",
+          "tag": "N03_MROPE_D128:GL_QK_vec4"
+        },
+        "correctness": {
+          "details": [
+            {
+              "actual_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "bitwise_equal": true,
+              "elements": 8388608,
+              "expected_SHA256": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e",
+              "name": "q_ptr",
+              "pass_": true
+            },
+            {
+              "actual_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "bitwise_equal": true,
+              "elements": 2097152,
+              "expected_SHA256": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+              "name": "k_ptr",
+              "pass_": true
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 0
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 1
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 2
+            },
+            {
+              "pass_": true,
+              "readonly_and_inactive_unchanged": true,
+              "storage": 3
+            }
+          ],
+          "guards": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "pass": true
+        },
+        "fixture": {
+          "expected_SHA256": {
+            "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+            "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+            "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+            "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                4096
+              ],
+              "storage_offset": 0,
+              "stride": [
+                4096,
+                1
+              ]
+            }
+          }
+        },
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "inplace_restored_before_each_launch": true,
+        "original_grid": [
+          2048,
+          1,
+          1
+        ],
+        "runtime_arguments_unchanged_from_full_fixture": true,
+        "software_active_masks": {},
+        "tag": "N03_MROPE_D128:GL_QK_vec4"
+      }
+    ],
+    "warmups": 8
+  }
+]

@@ -1,0 +1,488 @@
+{
+  "case": {
+    "BN": 128,
+    "BT": 32,
+    "D": 128,
+    "FLA_USE_FAST_OPS": "0",
+    "H": 8,
+    "T": 2048,
+    "W": 8,
+    "autotune_configs": [
+      {
+        "BT": 32,
+        "W": 4,
+        "stages": 2
+      },
+      {
+        "BT": 32,
+        "W": 4,
+        "stages": 3
+      },
+      {
+        "BT": 32,
+        "W": 8,
+        "stages": 2
+      },
+      {
+        "BT": 32,
+        "W": 8,
+        "stages": 3
+      },
+      {
+        "BT": 32,
+        "W": 16,
+        "stages": 2
+      },
+      {
+        "BT": 32,
+        "W": 16,
+        "stages": 3
+      },
+      {
+        "BT": 32,
+        "W": 32,
+        "stages": 2
+      },
+      {
+        "BT": 32,
+        "W": 32,
+        "stages": 3
+      },
+      {
+        "BT": 64,
+        "W": 4,
+        "stages": 2
+      },
+      {
+        "BT": 64,
+        "W": 4,
+        "stages": 3
+      },
+      {
+        "BT": 64,
+        "W": 8,
+        "stages": 2
+      },
+      {
+        "BT": 64,
+        "W": 8,
+        "stages": 3
+      },
+      {
+        "BT": 64,
+        "W": 16,
+        "stages": 2
+      },
+      {
+        "BT": 64,
+        "W": 16,
+        "stages": 3
+      },
+      {
+        "BT": 64,
+        "W": 32,
+        "stages": 2
+      },
+      {
+        "BT": 64,
+        "W": 32,
+        "stages": 3
+      },
+      {
+        "BT": 128,
+        "W": 4,
+        "stages": 2
+      },
+      {
+        "BT": 128,
+        "W": 4,
+        "stages": 3
+      },
+      {
+        "BT": 128,
+        "W": 8,
+        "stages": 2
+      },
+      {
+        "BT": 128,
+        "W": 8,
+        "stages": 3
+      },
+      {
+        "BT": 128,
+        "W": 16,
+        "stages": 2
+      },
+      {
+        "BT": 128,
+        "W": 16,
+        "stages": 3
+      },
+      {
+        "BT": 128,
+        "W": 32,
+        "stages": 2
+      },
+      {
+        "BT": 128,
+        "W": 32,
+        "stages": 3
+      }
+    ],
+    "autotune_resolved": true,
+    "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+    "configuration_selection": "U-only original menu",
+    "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+    "family": "N05",
+    "id": "N05_t2048_h8_d128",
+    "source_function": "kda_gate_fwd_kernel",
+    "stages": 2
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(10,)": [],
+        "(11,)": [],
+        "(12,)": [],
+        "(13,)": [],
+        "(14,)": [],
+        "(15,)": [],
+        "(16,)": [],
+        "(17,)": [],
+        "(18,)": [],
+        "(19,)": [],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [],
+        "(6,)": [],
+        "(8,)": [],
+        "(9,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "32",
+        "(11,)": "128",
+        "(12,)": "True",
+        "(13,)": "True",
+        "(14,)": "False",
+        "(15,)": "False",
+        "(16,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[2, 16], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+        "(17,)": "SliceLayout(dim=0, parent=BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[]))",
+        "(18,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+        "(19,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+        "(3,)": "None",
+        "(5,)": "None",
+        "(6,)": "None",
+        "(8,)": "8",
+        "(9,)": "128"
+      },
+      "JIT_signature": {
+        "A_log": "*fp32",
+        "BD": "constexpr",
+        "BT": "constexpr",
+        "D": "constexpr",
+        "H": "constexpr",
+        "HAS_A": "constexpr",
+        "HAS_BETA": "constexpr",
+        "HAS_BIAS": "constexpr",
+        "LB": "constexpr",
+        "LC": "constexpr",
+        "LI": "constexpr",
+        "LO": "constexpr",
+        "T": "i32",
+        "USE_LOWER_BOUND": "constexpr",
+        "beta": "constexpr",
+        "dt_bias": "*fp32",
+        "g": "*bf16",
+        "lower_bound": "constexpr",
+        "yb": "constexpr",
+        "yg": "*fp32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e45a5941ee1b6be298d98ca748150d7362baaa0f0e58409e1c0893f9ba830f56",
+        "kernel.glir": "a6fb85c709cf24123c8fca6120e3e88aed722ab7b23c90a80217f7698b15c122",
+        "kernel.llir": "7e64b5141c124f528ffa52457e6dd261c61e62cce9ac74607c36e1df95fd1dbf",
+        "kernel.ptx": "1731c9af163c489e7aeba060517ae2a63f72856d3550033fc0ab27e776f494cf",
+        "kernel.resource.txt": "2c229dda8067e6a015f6963dbef0b55af9ca5a74266c9516761a264f15b4936e",
+        "kernel.sass": "17fafaf71a39e7e4759ecd9371aa0d33e38f54b364b2e16bdf3c9b485f1f9efd",
+        "kernel.ttgir": "ccc3f3d0bfecd237635bbca50724033e3bc823b7d42c3be2500c48794ac2a558"
+      },
+      "artifact_directory": "baseline/artifacts/N05_t2048_h8_d128_G0",
+      "baseline_artifact_directory": "artifacts/N05_t2048_h8_d128_G0",
+      "case": {
+        "BN": 128,
+        "BT": 32,
+        "D": 128,
+        "FLA_USE_FAST_OPS": "0",
+        "H": 8,
+        "T": 2048,
+        "W": 8,
+        "autotune_configs": [
+          {
+            "BT": 32,
+            "W": 4,
+            "stages": 2
+          },
+          {
+            "BT": 32,
+            "W": 4,
+            "stages": 3
+          },
+          {
+            "BT": 32,
+            "W": 8,
+            "stages": 2
+          },
+          {
+            "BT": 32,
+            "W": 8,
+            "stages": 3
+          },
+          {
+            "BT": 32,
+            "W": 16,
+            "stages": 2
+          },
+          {
+            "BT": 32,
+            "W": 16,
+            "stages": 3
+          },
+          {
+            "BT": 32,
+            "W": 32,
+            "stages": 2
+          },
+          {
+            "BT": 32,
+            "W": 32,
+            "stages": 3
+          },
+          {
+            "BT": 64,
+            "W": 4,
+            "stages": 2
+          },
+          {
+            "BT": 64,
+            "W": 4,
+            "stages": 3
+          },
+          {
+            "BT": 64,
+            "W": 8,
+            "stages": 2
+          },
+          {
+            "BT": 64,
+            "W": 8,
+            "stages": 3
+          },
+          {
+            "BT": 64,
+            "W": 16,
+            "stages": 2
+          },
+          {
+            "BT": 64,
+            "W": 16,
+            "stages": 3
+          },
+          {
+            "BT": 64,
+            "W": 32,
+            "stages": 2
+          },
+          {
+            "BT": 64,
+            "W": 32,
+            "stages": 3
+          },
+          {
+            "BT": 128,
+            "W": 4,
+            "stages": 2
+          },
+          {
+            "BT": 128,
+            "W": 4,
+            "stages": 3
+          },
+          {
+            "BT": 128,
+            "W": 8,
+            "stages": 2
+          },
+          {
+            "BT": 128,
+            "W": 8,
+            "stages": 3
+          },
+          {
+            "BT": 128,
+            "W": 16,
+            "stages": 2
+          },
+          {
+            "BT": 128,
+            "W": 16,
+            "stages": 3
+          },
+          {
+            "BT": 128,
+            "W": 32,
+            "stages": 2
+          },
+          {
+            "BT": 128,
+            "W": 32,
+            "stages": 3
+          }
+        ],
+        "autotune_resolved": true,
+        "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+        "configuration_selection": "U-only original menu",
+        "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+        "family": "N05",
+        "id": "N05_t2048_h8_d128",
+        "source_function": "kda_gate_fwd_kernel",
+        "stages": 2
+      },
+      "compile_key": "e04f187696c0bc15a509bfa5dd830ea6753189c55c62f8f92f676d365301a9d8",
+      "cubin_SHA256": "e45a5941ee1b6be298d98ca748150d7362baaa0f0e58409e1c0893f9ba830f56",
+      "dynamic_smem_bytes": 8192,
+      "family": "N05",
+      "fixture": {
+        "expected_SHA256": {
+          "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+        },
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+          "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+          "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+          "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+        ],
+        "inplace": [],
+        "outputs": [
+          "yg"
+        ],
+        "views": {
+          "A_log": {
+            "dtype": "float32",
+            "element_size": 4,
+            "group": 1,
+            "shape": [
+              8
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1
+            ]
+          },
+          "dt_bias": {
+            "dtype": "float32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1
+            ]
+          },
+          "g": {
+            "dtype": "bfloat16",
+            "element_size": 2,
+            "group": 0,
+            "shape": [
+              2048,
+              8,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              128,
+              1
+            ]
+          },
+          "yg": {
+            "dtype": "float32",
+            "element_size": 4,
+            "group": 3,
+            "shape": [
+              2048,
+              8,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              128,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "kda_gate_fwd_kernel",
+      "geometry": "N05_t2048_h8_d128",
+      "global_scratch_size": 0,
+      "imported_baseline": true,
+      "num_warps": 8,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 48,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "g",
+        "A_log",
+        "dt_bias",
+        "yg",
+        "T"
+      ],
+      "specialized_runtime_values": {
+        "beta": null,
+        "lower_bound": null,
+        "yb": null
+      },
+      "stage2": false,
+      "tag": "N05_t2048_h8_d128:G0",
+      "variant": "G0"
+    }
+  ],
+  "mode": "software",
+  "warmups": 8
+}

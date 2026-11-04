@@ -260,6 +260,24 @@ def _profile_binding(binding,selection,mode):
     return actual
 
 
+def _profile_summary_paths(value):
+    """Canonicalize only documented local provenance paths in derived N3 JSON.
+
+    Relative/absolute invocation style must not change counter equality. The
+    targets must exist and resolve to the same files; hashes and all other
+    fields remain untouched.
+    """
+    value=copy.deepcopy(value)
+    for row in value.get('rows',[]):
+        for key in ('report_path','import_path','binding_path','source_path'):
+            if key in row:
+                row[key]=str(n1._path(row[key]).resolve(strict=True))
+    for key in ('reports','NCU_versions'):
+        for row in value.get(key,[]):
+            row['path']=str(n1._path(row['path']).resolve(strict=True))
+    return value
+
+
 def validate_profiles(compiled,n2_protocol,root=c.OUT,attempts=None):
     from . import profile_analyze as pa
     from . import profile_prepare as pp
@@ -346,12 +364,17 @@ def validate_profiles(compiled,n2_protocol,root=c.OUT,attempts=None):
     require(report_count==60,'Incomplete NCU physical reports')
     expected_analysis=pa.analyze(p,stage/'profiles',payload,attempts)
     summary=c.read(stage/'analysis/summary.json')
-    for key,value in expected_analysis.items():
-        require(summary.get(key)==value,'NCU derived summary changed: '+key)
+    expected_canonical=_profile_summary_paths(expected_analysis)
+    summary_canonical=_profile_summary_paths(summary)
+    for key,value in expected_canonical.items():
+        require(summary_canonical.get(key)==value,'NCU derived summary changed: '+key)
     require(c.sha(n1._path(summary['analysis_source']['path']).read_bytes())==summary['analysis_source']['SHA256'],
             'NCU analysis source changed')
     require((stage/'analysis/summary.csv').read_bytes()==pa.csv_bytes(summary,p['metrics']),'NCU summary CSV changed')
-    require((stage/'analysis/metrics.csv').read_bytes()==pa.metric_csv_bytes(summary),'NCU metric CSV changed')
+    # JSON's sorted-key serialization changes selected_metrics dict order.
+    # Rebuild this ordered CSV from the freshly parsed protocol-order result,
+    # as the producer did, rather than from deserialized sorted JSON.
+    require((stage/'analysis/metrics.csv').read_bytes()==pa.metric_csv_bytes(expected_analysis),'NCU metric CSV changed')
     require((stage/'analysis/REPORT.md').read_bytes()==pa.render(summary,p).encode(),'NCU report changed')
     return dict(status='OK',physical_reports=report_count,emitted_replay_bindings=replay_count,
                 logical_reports=summary['logical_report_count'],
