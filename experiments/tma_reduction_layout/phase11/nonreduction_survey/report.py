@@ -46,7 +46,7 @@ def render(result, protocol, accepted_manifest=None):
         path = Path(accepted_manifest)
         lines.append(f'- 已接受编译基线清单：`{path}`；SHA256：`{c.sha(path.read_bytes())}`。编译等价性及 ABI/资源检查以该独立清单和原始编译产物为准。')
     lines += ['', '## 2. 估计量与证据边界', '',
-        '- 主时间：先对每 visit 的 31 个样本取中位数，再对 3×5 个 worker/visit 中位数取算术平均。',
+        f'- 主时间：先对每 visit 的 {protocol["timing"]["samples"]} 个样本取中位数，再对 {protocol["timing"]["workers"]}×{protocol["timing"]["visits"]} 个 worker/visit 中位数取算术平均；同一 case 内采用 `{protocol["timing"].get("sample_order", "variant_blocks")}` 顺序。',
         '- 收益：`100 × (mean(reference) − mean(candidate)) / mean(reference)`；正值表示耗时下降。',
         '- 置信区间：4096 次分层 bootstrap，先重采样 worker、再重采样该 worker 内的 visit；同一 case 的 U/G0/全部候选共用同一组抽样索引。不额外重采样 visit 内原始样本。',
         '- `±3%` 是实际差异门槛。95% 区间完整落入该区间才记为 practical equivalence；完整高于 `+3%` / 低于 `−3%` 才记为 practical improvement / regression，其余为 inconclusive。',
