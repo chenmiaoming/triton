@@ -1,0 +1,378 @@
+{
+  "case": {
+    "BM": 32,
+    "BN": 128,
+    "N": 8192,
+    "P": 96,
+    "W": 4,
+    "family": "C01",
+    "id": "C01_p96_n8192",
+    "layouts": [
+      {
+        "aliases": [
+          "vec1:within"
+        ],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            1
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec1:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            2,
+            2
+          ]
+        },
+        "name": "vec2:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            2
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec2:within"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "name": "vec4:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec4:within"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "name": "vec8:n_first"
+      },
+      {
+        "aliases": [],
+        "layout": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            8,
+            4
+          ],
+          "warps_per_cta": [
+            1,
+            4
+          ]
+        },
+        "name": "vec8:within"
+      }
+    ],
+    "num_stages": 3,
+    "pipeline_M": [
+      128,
+      2048
+    ],
+    "variants": [
+      {
+        "name": "upstream",
+        "pv": "default",
+        "qk": "default",
+        "upstream": true
+      },
+      {
+        "name": "gluon_anchor",
+        "pv": "default",
+        "qk": "default"
+      },
+      {
+        "name": "vec1:n_first",
+        "pv": "vec1:n_first",
+        "qk": "default"
+      },
+      {
+        "name": "vec2:n_first",
+        "pv": "vec2:n_first",
+        "qk": "default"
+      },
+      {
+        "name": "vec2:within",
+        "pv": "vec2:within",
+        "qk": "default"
+      },
+      {
+        "name": "vec4:n_first",
+        "pv": "vec4:n_first",
+        "qk": "default"
+      },
+      {
+        "name": "vec4:within",
+        "pv": "vec4:within",
+        "qk": "default"
+      },
+      {
+        "name": "vec8:n_first",
+        "pv": "vec8:n_first",
+        "qk": "default"
+      },
+      {
+        "name": "vec8:within",
+        "pv": "vec8:within",
+        "qk": "default"
+      },
+      {
+        "name": "vec1:n_first:native",
+        "native": true,
+        "pv": "vec1:n_first",
+        "qk": "default"
+      },
+      {
+        "name": "vec8:n_first:native",
+        "native": true,
+        "pv": "vec8:n_first",
+        "qk": "default"
+      }
+    ]
+  },
+  "metadata": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ]
+      },
+      "JIT_constants": {
+        "(10,)": "True",
+        "(6,)": "32",
+        "(7,)": "128",
+        "(8,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[2, 16], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(9,)": "BlockedLayout(size_per_thread=[1], threads_per_warp=[32], warps_per_cta=[4], order=[0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_M": "constexpr",
+        "BLOCK_SIZE_N": "constexpr",
+        "DB": "*bf16",
+        "DW": "*bf16",
+        "FINAL_DB": "*bf16",
+        "FINAL_DW": "*bf16",
+        "L": "constexpr",
+        "LOUT": "constexpr",
+        "M": "i32",
+        "N": "i32",
+        "NATIVE_OUT": "constexpr"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "e73fc2d6c29272c36df66707ab08cb71fefb745fd9425a8e55f3c96153b7ae61",
+        "kernel.glir": "3878f8a0ce870f3bf144ca156b2e6a00430181266046e5812ec9c0c3fa2593fc",
+        "kernel.llir": "4fd2d5464a18dfffd48d93a256413f4f72025a96feb981088bac6ac68b6c7c15",
+        "kernel.ptx": "4988038b6d5c00c88bf2bdaa952717f2cf50bfc9af149aad29766cf7c1e2db0b",
+        "kernel.resource.txt": "6efc32315a303d101a26d9f456e653c614e9b970f9baf791f3b0cfa6b49f6c38",
+        "kernel.sass": "71e34d6096962469e9a7d8147c90d7878f7db68aa16861231e769cc885ef9186",
+        "kernel.ttgir": "da4335ce15bfc84275a888c4405c2b8740fa3e06b803822a9263799cd1dd453a"
+      },
+      "artifact_directory": "artifacts/program_61",
+      "compile_key": "f728574c0d2fb86c70c2acc1e946aa3bc7250c57bc162d543d51543e2a108aac",
+      "cubin_SHA256": "e73fc2d6c29272c36df66707ab08cb71fefb745fd9425a8e55f3c96153b7ae61",
+      "dynamic_smem_bytes": 1024,
+      "family": "C01",
+      "form_id": "C01_p96_n8192",
+      "function_name": "merge",
+      "geometry": "C01_p96_n8192",
+      "global_scratch_size": 0,
+      "group": "C01_p96_n8192",
+      "native_output": true,
+      "num_warps": 4,
+      "panel": "g3b",
+      "requested_K": null,
+      "requested_input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            4,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "requested_output": {
+        "fields": {
+          "order": [
+            0
+          ],
+          "size_per_thread": [
+            1
+          ],
+          "threads_per_warp": [
+            32
+          ],
+          "warps_per_cta": [
+            4
+          ]
+        },
+        "kind": "blocked"
+      },
+      "role": "merge",
+      "runtime_argument_names": [
+        "DW",
+        "DB",
+        "FINAL_DW",
+        "FINAL_DB",
+        "M",
+        "N"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "stage2_tag": "C01_p96_n8192:stage2",
+      "tag": "C01_p96_n8192:vec8:n_first:native",
+      "variant": {
+        "name": "vec8:n_first:native",
+        "native": true,
+        "pv": "vec8:n_first",
+        "qk": "default"
+      }
+    }
+  ],
+  "mode": "warm_application",
+  "warmups": 8
+}

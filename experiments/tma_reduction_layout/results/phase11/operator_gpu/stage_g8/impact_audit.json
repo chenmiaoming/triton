@@ -1,0 +1,450 @@
+{
+  "affected_modules_SHA256": {
+    "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_gluon.py": "26c4119d9d462e41f9bb49a7364322458e6a2b416e0c11c288bc2da8b65f5020",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a"
+  },
+  "affected_stages": [
+    {
+      "action": "旧生产C06/C02受控Gluon；需重做候选性能和计数归因",
+      "classification": "affected_retest_with_G6_source_graph",
+      "counter_evidence": {
+        "SHA256": "b0809b049f9bf3752626e9deb54b5ec4505145f1e96035a4af713de78e17cf18",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g2/counter_analysis.json"
+      },
+      "old_NCU_kernel_results": 60,
+      "old_NCU_report_files": 12,
+      "old_timing_logical_conditions": 294,
+      "old_timing_physical_conditions": 261,
+      "old_timing_raw_samples": 121365,
+      "protocol": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g2/preregistration/protocol.json",
+      "protocol_SHA256": "be212238972692df8ada25aeeb60a0cb11bff2d0846753de3beeff7994e2a00a",
+      "source_binding": {
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a"
+      },
+      "source_entry": "experiments/tma_reduction_layout/phase11/operator_gpu/production_compile.py",
+      "stage": "stage_g2",
+      "timing_evidence": {
+        "SHA256": "26357919b65b24cadbd20c861b0792e8cf3fcd19767223087fd63173673adee4",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g2/timing_analysis.json"
+      }
+    },
+    {
+      "action": "直接复用G2 CUBIN；计数结论对新源图需重采，不重复计算为新增计时矩阵",
+      "classification": "affected_retest_with_G6_source_graph",
+      "counter_evidence": {
+        "SHA256": "a03408578b2a9d67b868f36cbcf8b2faf34a669a578690a8e0efd41e02d1bbbc",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3a/counter_analysis.json"
+      },
+      "old_NCU_kernel_results": 60,
+      "old_NCU_report_files": 60,
+      "old_timing_logical_conditions": 0,
+      "old_timing_physical_conditions": 0,
+      "old_timing_raw_samples": 0,
+      "protocol": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3a/preregistration/protocol.json",
+      "protocol_SHA256": "2474673e0b558a730021426d8dd499a8ec83f91f43851d02c5f8e1ac9d8fcc9e",
+      "source_binding": {
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a"
+      },
+      "source_entry": "experiments/tma_reduction_layout/phase11/operator_gpu/g3_prepare.py",
+      "stage": "stage_g3a",
+      "validation_evidence": {
+        "SHA256": "7ffd64625281bfb128501fb5a51819b8e66764ba477e41740ff527257767b34b",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3a/final_validation.json"
+      }
+    },
+    {
+      "action": "旧LayerNorm merge及与原dX组合的backward；需重做merge和完整pipeline",
+      "classification": "affected_retest_with_G6_source_graph",
+      "counter_evidence": {
+        "SHA256": "8e18de10fc817ccf15048cb276c196df2a3c1c6a0908012cb345d8f804e0b394",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3b/counter_analysis.json"
+      },
+      "old_NCU_kernel_results": 60,
+      "old_NCU_report_files": 60,
+      "old_timing_logical_conditions": 99,
+      "old_timing_physical_conditions": 90,
+      "old_timing_raw_samples": 41850,
+      "protocol": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3b/preregistration/protocol_v2.json",
+      "protocol_SHA256": "d797370bfde43778c39a5d38194cd184942a2ad84b596e9aae6fb52218176f3f",
+      "source_binding": {
+        "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_gluon.py": "26c4119d9d462e41f9bb49a7364322458e6a2b416e0c11c288bc2da8b65f5020",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a"
+      },
+      "source_entry": "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_compile.py",
+      "stage": "stage_g3b",
+      "timing_evidence": {
+        "SHA256": "7a5e4eef902aa51dfae49c886abaa69ac8d753aedfa0f3f69ee3f80ba34e5b2e",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3b/timing_analysis.json"
+      },
+      "validation_evidence": {
+        "SHA256": "36b4485e7e35f8afdbf350d11fd225eed91113496d3e257d544b3069c3201965",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g3b/final_validation.json"
+      }
+    },
+    {
+      "action": "旧SG PV/QK协同factorial；需在新源图复测相同factorial",
+      "classification": "affected_retest_with_G6_source_graph",
+      "counter_evidence": {
+        "SHA256": "dc90199d80808149b7807b4b44c30a126b360725a5c711205b3687e7a0209df4",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4a/counter_analysis.json"
+      },
+      "old_NCU_kernel_results": 20,
+      "old_NCU_report_files": 20,
+      "old_timing_logical_conditions": 40,
+      "old_timing_physical_conditions": 40,
+      "old_timing_raw_samples": 18600,
+      "protocol": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4a/preregistration/protocol.json",
+      "protocol_SHA256": "83c5b52372bed491050a5a6d1144c36d62ea17cc43734bcb2d8e2268bd92ee60",
+      "source_binding": {
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a"
+      },
+      "source_entry": "experiments/tma_reduction_layout/phase11/operator_gpu/g4_compile.py",
+      "stage": "stage_g4a",
+      "timing_evidence": {
+        "SHA256": "05d7378738998d0ba5a6e2d02959eea30bb632e493a1375496705976592839d3",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4a/timing_analysis.json"
+      },
+      "validation_evidence": {
+        "SHA256": "b4514f0dde21eb32bcc603e0e6f8ffa11a653bb1e2f4fc5edaaa3bd797ce05df",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4a/final_validation.json"
+      }
+    },
+    {
+      "action": "旧actual/B4及target子集；与新G8 fullmatrix重叠可合并覆盖，不能重复计费或挑旧结果",
+      "classification": "affected_retest_with_G6_source_graph",
+      "old_NCU_kernel_results": 0,
+      "old_NCU_report_files": 0,
+      "old_timing_logical_conditions": 84,
+      "old_timing_physical_conditions": 48,
+      "old_timing_raw_samples": 22320,
+      "protocol": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4b/preregistration/protocol.json",
+      "protocol_SHA256": "25f5d43e85617ae26a9bdab1e4e9786caa77e7fd28c60d6ba0ef727b6124f9ca",
+      "source_binding": {
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_controlled.py": "dd48f1025b9de669e2368a18a7037c0774cb2d793678d43f90aa7876ec4340c5",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/sglang_gluon.py": "c60fb1b1278fd2dfb02e76a38170313e52853ed604547a7c00ee5e5086f6f336",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_controlled.py": "d50b90a07ebc1023302bb758d024402e8dbb48b1e5a3733998fc8c6db3b15197",
+        "experiments/tma_reduction_layout/phase11/operator_gpu/vllm_gluon.py": "47275b24f0b787ae160a7175db045063ad698584c87c5a0722a85d6c9fc52d5a"
+      },
+      "source_entry": "experiments/tma_reduction_layout/phase11/operator_gpu/g4_compile.py",
+      "stage": "stage_g4b",
+      "timing_evidence": {
+        "SHA256": "fd4ea30d322636114d005a52355aae5b00a80dc1a15f548b95fcb97d59dab972",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4b/timing_analysis.json"
+      },
+      "validation_evidence": {
+        "SHA256": "42b47b90c83c5de973add36feafdfa9702ee33fe62e9feecbe31e133a87492ad",
+        "path": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g4b/final_validation.json"
+      }
+    }
+  ],
+  "audit": "G8 old-production-Gluon impact boundary",
+  "boundaries": [
+    "Old raw samples/compiler artifacts remain valid evidence of the exact old programs; do not overwrite them.",
+    "Old GL-vs-U totals are not pure layout gains. Old within-Gluon sensitivities describe the old source graph and need new-G6 measurements before production conclusions.",
+    "Independent TMA evidence is not invalidated by this specific production bridge defect; this is not a new proof that every historical U/Gluon program is codegen-equivalent.",
+    "The existing frozen H100 TMA cost model retains its own reported generalization/uncertainty limits; do not refit or relabel it merely because production G0 changed.",
+    "G6 imports only find_seq_idx/cdiv_fn from vllm_controlled; it does not call the old reduce_segments. G6/G7 already establish corrected code/runtime equivalence."
+  ],
+  "independent_CPU_models": [
+    "stage_c3",
+    "stage_c31",
+    "stage_c32",
+    "stage_c33",
+    "stage_c34",
+    "stage_m1"
+  ],
+  "independent_frozen_worker_stages": [
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/kernels.py": "36adb2ffe0bdff0afe2f760edcc135f6d53b20680f7c122122e78ce850bfdfb3"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_b/preregistration/protocol.json",
+      "protocol_SHA256": "f628e25076e2447330cb31498d5368faf77249fdc5811f37779ce55a134937e1",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_b/preregistration/worker_source_snapshot.zip",
+      "source_snapshot_SHA256": "c50e7ce03db37ddca39fddf0d88971cc0e462d0bbc95900202d5b8abc9e533ff",
+      "stage": "stage_b",
+      "verified_source_members": 20
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c1/kernels.py": "503f93c31d6037bf2b6468f83ba712e96aba3fbef461639f4140c07a3d9975f0"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c1/preregistration/protocol.json",
+      "protocol_SHA256": "cdacd1ea90bd285b9f05d7d67181ed2927879f3f13b71dd72602818e83c49a0c",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c1/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "00af67d1668a3a876a4fe78df22aebfe519f7bee64e886ff86021fa10cb16d32",
+      "stage": "stage_c1",
+      "verified_source_members": 12
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c15/kernels.py": "684039f5963636e62889cfa90e3a27fdf1c594f8517f3a400db0c90288293b12"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c15/preregistration/protocol.json",
+      "protocol_SHA256": "5084e6aab2ae6f0dd004376daad622814b8e437ec5909df2a07f27f1eb70743c",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c15/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "e6ffc616a6d229d0f041618178d2cc1087fd4cffe9655a304046bd2d60e3dbe7",
+      "stage": "stage_c15",
+      "verified_source_members": 14
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c16/kernels.py": "ef25444ebe5c439685f4ab0d134902923284b5130320082b01645fe4c37536c9"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c16/preregistration/protocol.json",
+      "protocol_SHA256": "cd18557c6b58324bb5b14156bcdfaa6b06882fc3b56ef1af0535a595d64a84a1",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c16/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "d11e2d3f0bd113432e446295b0289ab4ad00cc51a524522012b15641a03ef2c3",
+      "stage": "stage_c16",
+      "verified_source_members": 14
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "e2af16cab9a25debadea590272a93fc5cae95180bca200d16d594e5853357665"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c2a/preregistration/protocol.json",
+      "protocol_SHA256": "983d43ffa63b61cecb3e1ad17db1aa04165a74571d45d6eb34956628d4ebdc37",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c2a/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "12f4b2a6e2f8864c8ef89757f1d343aaabbfa7b4f69230928a3c631d634758d3",
+      "stage": "stage_c2a",
+      "verified_source_members": 14
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c2b/preregistration/protocol.json",
+      "protocol_SHA256": "f95d61eae293ba461ae975f6c07b8328a46fcb690420d90f691b947bb5a524af",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c2b/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "681cf51e500100a722d6ef695a017a18e7d9aa6ad6d0d0d93e35fe3c684e07ec",
+      "stage": "stage_c2b",
+      "verified_source_members": 14
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "5bac87fcb7afece2b656698f6e2d71dab4cef63c067a3b884009ada4ff6f4afa"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c2c/preregistration/protocol.json",
+      "protocol_SHA256": "3a34cbd4d6936966b20f7c2d92ad00906531e73a863f4aa080a511ee3f3c0f7c",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c2c/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "f77e2eef076bafcc1865a5ab154cb0575830e2ac94bb2c00d37c95cfed5b4b4e",
+      "stage": "stage_c2c",
+      "verified_source_members": 18
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_c2d/preregistration/protocol.json",
+      "protocol_SHA256": "bc97a67d49c3ded57cbba925ce5ad413b1a7c61695f952cba2b0844d3c3ac162",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_c2d/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "af386ac7fef70d47a2f8aa6aeb460334511cf6c0bb8ef6e4a32cb3ebcd5c42a7",
+      "stage": "stage_c2d",
+      "verified_source_members": 17
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_d1/preregistration/protocol.json",
+      "protocol_SHA256": "cab5b0788e305ba06db9ef72f508f9b136f057d147d5d4a73e23ec9a27e97328",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_d1/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "5a17a7415f438c363d68c19ddf932ae9fc2795ab4bbc958cfb7ca84cb9f2d39a",
+      "stage": "stage_d1",
+      "verified_source_members": 22
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64",
+        "experiments/tma_reduction_layout/phase11/m2/kernels.py": "ff7155ab02babf6fef0fb4d218691fb3fa8f3d2cf5cfe1ea13d12221b1bab709"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_m2/preregistration/protocol.json",
+      "protocol_SHA256": "7a86c8f936bcda2bcf4eb7ffdb8d8a41a9fa78383099bcfe7198be3980732e95",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_m2/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "01add80803397ba053ccc7230de1609e679d198aba1c8343f2ec5baf0bc1349d",
+      "stage": "stage_m2",
+      "verified_source_members": 27
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64",
+        "experiments/tma_reduction_layout/phase11/m2/kernels.py": "ff7155ab02babf6fef0fb4d218691fb3fa8f3d2cf5cfe1ea13d12221b1bab709",
+        "experiments/tma_reduction_layout/phase11/m3/kernels.py": "bf0b0a9372db52bfb3b2d9551c2e26db7c83026d9182c8b50f3f78216c99a216"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_m3/preregistration/protocol.json",
+      "protocol_SHA256": "129b958671b880bc2f66ef22c4bbce972c12f4bbc40594ad14afc0ab35a67481",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_m3/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "902c7f00f773e17865b4684e333856c33fc1a5d5db7111471b475c8c9a89fc00",
+      "stage": "stage_m3",
+      "verified_source_members": 32
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64",
+        "experiments/tma_reduction_layout/phase11/m2/kernels.py": "ff7155ab02babf6fef0fb4d218691fb3fa8f3d2cf5cfe1ea13d12221b1bab709",
+        "experiments/tma_reduction_layout/phase11/m3/kernels.py": "bf0b0a9372db52bfb3b2d9551c2e26db7c83026d9182c8b50f3f78216c99a216",
+        "experiments/tma_reduction_layout/phase11/m4/kernels.py": "36aca2821fa54acec7051a18317819e6089e04abfac3394c02ab143b408f16ce"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_m4a/preregistration/protocol.json",
+      "protocol_SHA256": "2b9edb19704ad62613ceb6abd6da76732023cef670b7884cca10fb9cc730e7ac",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_m4a/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "4060c1643110cf44a34c0ce1d53fd8d94f6d61ecd56e24dfddd436566ec11a86",
+      "stage": "stage_m4a",
+      "verified_source_members": 40
+    },
+    {
+      "affected_module_members": [],
+      "classification": "not_affected_by_this_production_G0_defect",
+      "kernel_source_SHA256": {
+        "experiments/tma_reduction_layout/phase11/c16/kernels.py": "970136c86d6bf37121457bb96dc334c10c2ecf3a66d12325f8a70f667d97f5bc",
+        "experiments/tma_reduction_layout/phase11/c2/kernels.py": "b601bcbf18616f03148186be5565c647bb6ed24f89a984887d2c3cbcf68b9ed2",
+        "experiments/tma_reduction_layout/phase11/c2c/kernels.py": "4e62eaa12d85fe27514fa7f867bdd08c08c19900084bc72e5d25094ffc3d7b64",
+        "experiments/tma_reduction_layout/phase11/m2/kernels.py": "ff7155ab02babf6fef0fb4d218691fb3fa8f3d2cf5cfe1ea13d12221b1bab709",
+        "experiments/tma_reduction_layout/phase11/m3/kernels.py": "bf0b0a9372db52bfb3b2d9551c2e26db7c83026d9182c8b50f3f78216c99a216",
+        "experiments/tma_reduction_layout/phase11/m4/kernels.py": "36aca2821fa54acec7051a18317819e6089e04abfac3394c02ab143b408f16ce"
+      },
+      "protocol": "experiments/tma_reduction_layout/results/phase11/stage_m4b/preregistration/protocol.json",
+      "protocol_SHA256": "b23f7d93642e69cb232b912f496df73d504a8c72e56cde8c76249be023275633",
+      "source_snapshot": "experiments/tma_reduction_layout/results/phase11/stage_m4b/preregistration/source_snapshot.zip",
+      "source_snapshot_SHA256": "1e83e88d0486af8f68339287651f488e154952ee27bd3a6ac192825ff89edb0f",
+      "stage": "stage_m4b",
+      "verified_source_members": 41
+    }
+  ],
+  "independent_local_A10": [
+    {
+      "classification": "independent_source_not_invalidated_by_this_defect",
+      "kernel": "experiments/tma_reduction_layout/local_a10/kernels.py",
+      "kernel_SHA256": "deb0f4cc62af192ea4083a513df6079de207b9784c70a71a1e04adb6db3144b0",
+      "protocol": "experiments/tma_reduction_layout/results/local_a10/20261015_gpu0/protocol.json",
+      "protocol_SHA256": "021723ce5473055a583d300428d0862d428f5faca65d1653a92970afe90ffa5e",
+      "pure_Triton_no_Gluon": false,
+      "stage": "local_a10"
+    },
+    {
+      "classification": "independent_source_not_invalidated_by_this_defect",
+      "kernel": "experiments/tma_reduction_layout/local_a10_versions/kernels.py",
+      "kernel_SHA256": "a62b888727df71e0a89b836f6271dd42db7f645b612accbc40a2fc171607d8f7",
+      "protocol": "experiments/tma_reduction_layout/results/local_a10_versions/20261015_gpu0_r2/protocol.json",
+      "protocol_SHA256": "ca00ccc9b4c1cdcd023caf2627f4d7377d76768d0cb33499b27d1ac349c7e185",
+      "pure_Triton_no_Gluon": true,
+      "stage": "local_a10_versions"
+    }
+  ],
+  "mode": "read_only_audit_no_GPU",
+  "semantic_fixture_evidence": {
+    "G1_complete_output_checks": 234,
+    "G1_protocol": "experiments/tma_reduction_layout/results/phase11/operator_gpu/stage_g1/preregistration/fixtures_protocol_v2.json",
+    "G1_protocol_SHA256": "d941a7008d57c5adfa130101258bf779e24542257508c4e6021b2cc01ffbffb4",
+    "classification": "not_affected_by_production_G0_modules; correctness_only_not_performance",
+    "production_adapter_verified": false,
+    "survey_Gluon_kernel": "experiments/tma_reduction_layout/phase11/operator_survey/kernels_gluon.py",
+    "survey_Gluon_kernel_SHA256": "091514dd40389001e3ed7c9a69c7d56f9156f9404ebb7d41d64550cc97f8da55",
+    "survey_protocol": "experiments/tma_reduction_layout/results/phase11/operator_survey_preparation/20261021/preregistration/protocol.json",
+    "survey_protocol_SHA256": "758e40ab9863f840a85931f485fa59b450aa9a3f12c987127f1e590fbe86cb2f",
+    "whole_graph_bridge_verified": false
+  },
+  "source_import_scan": {
+    "direct_imports": [
+      {
+        "line": 16,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_compile.py",
+        "statement": "from .g3b_gluon import merge"
+      },
+      {
+        "line": 31,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g4_compile.py",
+        "statement": "from . import sglang_triton, sglang_controlled, vllm_triton, vllm_controlled"
+      },
+      {
+        "line": 4,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g6_vllm.py",
+        "statement": "from .vllm_controlled import find_seq_idx, cdiv_fn"
+      },
+      {
+        "line": 11,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g3b_bind.py",
+        "statement": "from .g3b_gluon import merge"
+      },
+      {
+        "line": 4,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g5_vllm_aligned.py",
+        "statement": "from .vllm_controlled import find_seq_idx, cdiv_fn"
+      },
+      {
+        "line": 10,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g5_worker.py",
+        "statement": "from . import sglang_triton, sglang_controlled, vllm_triton, vllm_controlled, g3b_triton, g3b_gluon"
+      },
+      {
+        "line": 4,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g5_vllm_literal3.py",
+        "statement": "from .vllm_controlled import find_seq_idx, cdiv_fn"
+      },
+      {
+        "line": 4,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/g5_vllm_literal2.py",
+        "statement": "from .vllm_controlled import find_seq_idx, cdiv_fn"
+      },
+      {
+        "line": 65,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/production_compile.py",
+        "statement": "from . import vllm_controlled, sglang_controlled"
+      },
+      {
+        "line": 105,
+        "path": "experiments/tma_reduction_layout/phase11/operator_gpu/production_compile.py",
+        "statement": "from . import vllm_triton, sglang_triton, vllm_controlled, sglang_controlled"
+      }
+    ],
+    "outside_operator_gpu": [],
+    "warning": "A file listed in prior_manifest or old_evidence_SHA256 is a protected artifact, not automatically an execution dependency."
+  },
+  "status": "COMPLETE",
+  "user_authorization": "User explicitly requested discoveries be remeasured in this round. Root G8 execution uses G6 source graph; this audit itself launches no GPU."
+}

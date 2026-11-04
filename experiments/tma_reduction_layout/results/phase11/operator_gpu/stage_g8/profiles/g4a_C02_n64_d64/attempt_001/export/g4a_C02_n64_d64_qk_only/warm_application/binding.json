@@ -1,0 +1,208 @@
+{
+  "Triton_imported": false,
+  "batch": 8,
+  "compile_calls": 0,
+  "driver_return_codes": [
+    0
+  ],
+  "environment": {
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ],
+    "checked_cuda_calls": [
+      {
+        "api": "cuInit",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGet",
+        "return_code": 0
+      },
+      {
+        "api": "cuCtxCreate_v2",
+        "return_code": 0
+      },
+      {
+        "api": "cuStreamCreate",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetName",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetUuid_v2",
+        "return_code": 0
+      },
+      {
+        "api": "cuDriverGetVersion",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      },
+      {
+        "api": "cuDeviceGetAttribute",
+        "return_code": 0
+      }
+    ],
+    "device_limits": {
+      "max_registers_per_block": 65536,
+      "max_registers_per_sm": 65536,
+      "max_shared_memory_per_block_optin": 232448,
+      "max_shared_memory_per_sm": 233472,
+      "max_threads_per_block": 1024,
+      "max_threads_per_sm": 2048,
+      "warp_size": 32
+    },
+    "driver_API_version": 13030,
+    "gpu_uuid": "GPU-fbdc915d-c05b-737c-5612-9a347abfba95",
+    "name": "NVIDIA H100 80GB HBM3"
+  },
+  "length": 2048,
+  "mode": "warm_application",
+  "records": [
+    {
+      "binding": {
+        "ABI": [
+          "u64",
+          "u64",
+          "u64",
+          "f32",
+          "u64",
+          "u64",
+          "u64",
+          "u64",
+          "u64",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u32",
+          "u64",
+          "u64"
+        ],
+        "attributes": {
+          "local_bytes": 0,
+          "n_regs": 142,
+          "occupancy_capacity_q": 3,
+          "static_smem_bytes": 0
+        },
+        "cubin_SHA256": "f954e6694d81afff9e809288413a9f4353177bba91c75d6cbae9a5c177744829",
+        "direct_launches": 9,
+        "graph_launches": 0,
+        "guards": 9,
+        "loaded_SHA256": "f954e6694d81afff9e809288413a9f4353177bba91c75d6cbae9a5c177744829",
+        "tag": "g4a_C02_n64_d64:qk_only"
+      },
+      "correctness": {
+        "details": [
+          {
+            "canary_pass": true,
+            "input_unchanged": true,
+            "name": "Q",
+            "pass": true
+          },
+          {
+            "canary_pass": true,
+            "input_unchanged": true,
+            "name": "K_Buffer",
+            "pass": true
+          },
+          {
+            "canary_pass": true,
+            "input_unchanged": true,
+            "name": "V_Buffer",
+            "pass": true
+          },
+          {
+            "canary_pass": true,
+            "input_unchanged": true,
+            "name": "kv_indptr",
+            "pass": true
+          },
+          {
+            "canary_pass": true,
+            "input_unchanged": true,
+            "name": "kv_indices",
+            "pass": true
+          },
+          {
+            "canary_pass": true,
+            "input_unchanged": true,
+            "name": "num_kv_splits",
+            "pass": true
+          },
+          {
+            "active_elements": 65536,
+            "actual_SHA256": "13e3345b206d4299afba2a9b18859fa7a2d9fa217be8a6884d8e944f7e60220f",
+            "atol": 2e-05,
+            "canary_pass": true,
+            "complete_elements": 65536,
+            "inactive_output_untouched": true,
+            "max_abs_error": 4.0108612334166516e-09,
+            "name": "Att_Out",
+            "pass": true,
+            "reference_SHA256": "3e59a34296c3f1057b44a438c0c2866b4830a749b1b918c571041ed4b853d085",
+            "rtol": 0.0002
+          },
+          {
+            "active_elements": 1024,
+            "actual_SHA256": "55dc4c8e86c9dda17af0fad0d41c1db8ab036ddc85dd3c283bf23093670d8e5d",
+            "atol": 2e-05,
+            "canary_pass": true,
+            "complete_elements": 1024,
+            "inactive_output_untouched": true,
+            "max_abs_error": 5.76041234268132e-07,
+            "name": "Att_Lse",
+            "pass": true,
+            "reference_SHA256": "333845fbdb5796db46bb5f0ac32ff443c1a95a245076cc19d4b7e972380370dc",
+            "rtol": 0.0002
+          }
+        ],
+        "pass": true
+      },
+      "grid": [
+        8,
+        32,
+        4
+      ],
+      "tag": "g4a_C02_n64_d64:qk_only"
+    }
+  ],
+  "warmups": 8
+}
