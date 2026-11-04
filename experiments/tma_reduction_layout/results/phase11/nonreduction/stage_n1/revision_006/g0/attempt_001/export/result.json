@@ -1,0 +1,280 @@
+{
+  "GPU_allocated": false,
+  "ccache_after": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "ccache_before": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+  "native_rebuilds": 0,
+  "plans": {
+    "N05_t2048_h8_d128": {
+      "bias": {
+        "dim": 0,
+        "kind": "slice",
+        "parent": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "conversions": [
+        "    %b_yg = ttg.convert_layout %b_g : tensor<32x128xbf16, #blocked1> -> tensor<32x128xbf16, #blocked> loc(#loc47)"
+      ],
+      "family": "N05",
+      "inline_asm": [
+        "    %b_yg_58 = tt.elementwise_inline_asm \"{         .reg .pred p;         setp.gt.f32  p, $1, 20.;         @p  mov.f32  $0, $1;         @!p mul.f32            $0, $1, 1.4426950408889634;         @!p ex2.approx.ftz.f32 $0, $0;         @!p add.f32            $0, $0, 1.0;         @!p lg2.approx.ftz.f32 $0, $0;         @!p mul.f32            $0, $0, 0.6931471805599453;     } \" {constraints = \"=r,r\", packed_element = 1 : i32, pure = true} %b_g_55 : tensor<32x128xf32, #blocked> -> tensor<32x128xf32, #blocked> loc(#loc57)"
+      ],
+      "input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "loads": [
+        "    %b_A_6 = tt.load %b_A : !tt.ptr<f32> loc(#loc35)",
+        "    %b_g = tt.load %p_g_41, %m_g_29, %cst_1 : tensor<32x128x!tt.ptr<bf16>, #blocked1> loc(#loc46)",
+        "    %b_g_52 = tt.load %b_g_51, %b_g_49, %cst_0 : tensor<128x!tt.ptr<f32>, #ttg.slice<{dim = 0, parent = #blocked}>> loc(#loc51)"
+      ],
+      "output": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "stores": [
+        "    tt.store %p_yg_45, %b_yg_60, %m_g_30 : tensor<32x128x!tt.ptr<f32>, #blocked> loc(#loc28)"
+      ]
+    },
+    "N05_t2048_h8_d64": {
+      "bias": {
+        "dim": 0,
+        "kind": "slice",
+        "parent": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "conversions": [
+        "    %b_yg = ttg.convert_layout %b_g : tensor<32x64xbf16, #blocked1> -> tensor<32x64xbf16, #blocked> loc(#loc47)"
+      ],
+      "family": "N05",
+      "inline_asm": [
+        "    %b_yg_58 = tt.elementwise_inline_asm \"{         .reg .pred p;         setp.gt.f32  p, $1, 20.;         @p  mov.f32  $0, $1;         @!p mul.f32            $0, $1, 1.4426950408889634;         @!p ex2.approx.ftz.f32 $0, $0;         @!p add.f32            $0, $0, 1.0;         @!p lg2.approx.ftz.f32 $0, $0;         @!p mul.f32            $0, $0, 0.6931471805599453;     } \" {constraints = \"=r,r\", packed_element = 1 : i32, pure = true} %b_g_55 : tensor<32x64xf32, #blocked> -> tensor<32x64xf32, #blocked> loc(#loc57)"
+      ],
+      "input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "loads": [
+        "    %b_A_6 = tt.load %b_A : !tt.ptr<f32> loc(#loc35)",
+        "    %b_g = tt.load %p_g_41, %m_g_29, %cst_1 : tensor<32x64x!tt.ptr<bf16>, #blocked1> loc(#loc46)",
+        "    %b_g_52 = tt.load %b_g_51, %b_g_49, %cst_0 : tensor<64x!tt.ptr<f32>, #ttg.slice<{dim = 0, parent = #blocked}>> loc(#loc51)"
+      ],
+      "output": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "stores": [
+        "    tt.store %p_yg_45, %b_yg_60, %m_g_30 : tensor<32x64x!tt.ptr<f32>, #blocked> loc(#loc28)"
+      ]
+    }
+  },
+  "protocol_SHA256": "091655032569673d06bb843739fa286a0b21ea0a975fac6d7d5f72cf954ab477",
+  "records": [
+    {
+      "case": "N05_t2048_h8_d64",
+      "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/python/triton/language/core.py\", line 43, in wrapper\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/core.py\", line 916, in __add__\n    return add(self, other, sanitize_overflow=True, _semantic=_semantic)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/core.py\", line 43, in wrapper\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/core.py\", line 2883, in add\n    return _semantic.add(x, y, sanitize_overflow)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/semantic.py\", line 255, in add\n    input, other = self.binary_op_type_checking_impl(input, other, True, True)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/semantic.py\", line 194, in binary_op_type_checking_impl\n    lhs, rhs = self.broadcast_impl_value(lhs, rhs)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/language/_semantic.py\", line 251, in broadcast_impl_value\n    ret_shape = self._broadcast_shapes(lhs_shape, rhs_shape)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/language/_semantic.py\", line 174, in _broadcast_shapes\n    raise ValueError(f\"Cannot broadcast, rank mismatch: {lhs_shape}, {rhs_shape}\")\nValueError: Cannot broadcast, rank mismatch: ['32', '64'], ['64']\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/nonreduction_survey/gl_cpu.py\", line 46, in run\n    code=triton.compile(GluonASTSource(fn,sig,const,attrs),target=GPUTarget('cuda',90,32),\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/compiler/compiler.py\", line 307, in compile\n    module = src.make_ir(target, options, codegen_fns, module_map, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/_runtime.py\", line 46, in make_ir\n    module = ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 28:14:\n    # and FP32 output have different coalesced vector widths in this kernel.\n    o_t_out = i_t * BT + gl.arange(0, BT, layout=gl.SliceLayout(1, LO))\n    o_d_out = gl.arange(0, BD, layout=gl.SliceLayout(0, LO))\n    m_g_out = (o_t_out[:, None] < T) & (o_d_out[None, :] < D)\n    p_yg = yg + i_h * D + o_t_out[:, None] * (H * D) + o_d_out[None, :]\n    # Actual U moves BF16 ownership before widening, just as N04 does.\n    b_g = gl.convert_layout(gl.load(p_g, mask=m_g, other=0.0), LC).to(gl.float32)\n    if HAS_BIAS:\n        o_b = i_h * D + gl.arange(0, BD, layout=LB)\n        b_bias = gl.load(dt_bias + o_b, mask=o_b < H * D, other=0.0).to(gl.float32)\n        b_bias = gl.convert_layout(b_bias, gl.SliceLayout(0, LC))\n        b_g = b_g + b_bias\n              ^\nCannot broadcast, rank mismatch: ['32', '64'], ['64']\n",
+      "status": "FAILED"
+    },
+    {
+      "case": "N05_t2048_h8_d128",
+      "error": "Traceback (most recent call last):\n  File \"/opt/triton-src/python/triton/language/core.py\", line 43, in wrapper\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/core.py\", line 916, in __add__\n    return add(self, other, sanitize_overflow=True, _semantic=_semantic)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/core.py\", line 43, in wrapper\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/core.py\", line 2883, in add\n    return _semantic.add(x, y, sanitize_overflow)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/semantic.py\", line 255, in add\n    input, other = self.binary_op_type_checking_impl(input, other, True, True)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/language/semantic.py\", line 194, in binary_op_type_checking_impl\n    lhs, rhs = self.broadcast_impl_value(lhs, rhs)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/language/_semantic.py\", line 251, in broadcast_impl_value\n    ret_shape = self._broadcast_shapes(lhs_shape, rhs_shape)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/language/_semantic.py\", line 174, in _broadcast_shapes\n    raise ValueError(f\"Cannot broadcast, rank mismatch: {lhs_shape}, {rhs_shape}\")\nValueError: Cannot broadcast, rank mismatch: ['32', '128'], ['128']\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/triton-src/experiments/tma_reduction_layout/phase11/nonreduction_survey/gl_cpu.py\", line 46, in run\n    code=triton.compile(GluonASTSource(fn,sig,const,attrs),target=GPUTarget('cuda',90,32),\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/compiler/compiler.py\", line 307, in compile\n    module = src.make_ir(target, options, codegen_fns, module_map, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/triton-src/python/triton/experimental/gluon/_runtime.py\", line 46, in make_ir\n    module = ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 28:14:\n    # and FP32 output have different coalesced vector widths in this kernel.\n    o_t_out = i_t * BT + gl.arange(0, BT, layout=gl.SliceLayout(1, LO))\n    o_d_out = gl.arange(0, BD, layout=gl.SliceLayout(0, LO))\n    m_g_out = (o_t_out[:, None] < T) & (o_d_out[None, :] < D)\n    p_yg = yg + i_h * D + o_t_out[:, None] * (H * D) + o_d_out[None, :]\n    # Actual U moves BF16 ownership before widening, just as N04 does.\n    b_g = gl.convert_layout(gl.load(p_g, mask=m_g, other=0.0), LC).to(gl.float32)\n    if HAS_BIAS:\n        o_b = i_h * D + gl.arange(0, BD, layout=LB)\n        b_bias = gl.load(dt_bias + o_b, mask=o_b < H * D, other=0.0).to(gl.float32)\n        b_bias = gl.convert_layout(b_bias, gl.SliceLayout(0, LC))\n        b_g = b_g + b_bias\n              ^\nCannot broadcast, rank mismatch: ['32', '128'], ['128']\n",
+      "status": "FAILED"
+    }
+  ],
+  "reference_payload_SHA256": "de5e8184e6852adca17425aa1929b758d5160167466b170ba1d6447d26043fa6",
+  "status": "NEEDS_ALIGNMENT"
+}

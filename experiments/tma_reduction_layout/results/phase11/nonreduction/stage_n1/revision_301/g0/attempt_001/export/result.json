@@ -1,0 +1,986 @@
+{
+  "GPU_allocated": false,
+  "ccache_after": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "ccache_before": "autoconf_test\t0\nbad_compiler_arguments\t0\nbad_input_file\t0\nbad_output_file\t0\ncache_miss\t948\ncache_size_kibibyte\t390092\ncalled_for_link\t0\ncalled_for_preprocessing\t0\ncleanups_performed\t0\ncompile_failed\t0\ncompiler_check_failed\t0\ncompiler_produced_empty_output\t0\ncompiler_produced_no_output\t0\ncompiler_produced_stdout\t0\ncould_not_find_compiler\t0\ncould_not_use_modules\t0\ncould_not_use_precompiled_header\t0\ndirect_cache_hit\t1161\ndirect_cache_miss\t1000\ndisabled\t0\nerror_hashing_extra_file\t0\nfiles_in_cache\t1717\ninternal_error\t0\nlocal_storage_hit\t1213\nlocal_storage_miss\t948\nlocal_storage_read_hit\t2599\nlocal_storage_read_miss\t1723\nlocal_storage_write\t1948\nmax_cache_size_kibibyte\t19531250\nmax_files_in_cache\t0\nmissing_cache_file\t0\nmodified_input_file\t0\nmultiple_source_files\t0\nno_input_file\t0\noutput_to_stdout\t0\npreprocessed_cache_hit\t52\npreprocessed_cache_miss\t948\npreprocessor_error\t0\nrecache\t0\nremote_storage_error\t0\nremote_storage_hit\t0\nremote_storage_miss\t0\nremote_storage_read_hit\t0\nremote_storage_read_miss\t0\nremote_storage_timeout\t0\nremote_storage_write\t0\nstats_updated_timestamp\t1791197879\nstats_zeroed_timestamp\t0\nunsupported_code_directive\t0\nunsupported_compiler_option\t0\nunsupported_environment_variable\t0\nunsupported_source_language\t0\n",
+  "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+  "native_rebuilds": 0,
+  "plans": {
+    "N05_t2048_h8_d128": {
+      "bias": {
+        "dim": 0,
+        "kind": "slice",
+        "parent": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "conversions": [
+        "    %b_yg = ttg.convert_layout %b_g : tensor<32x128xbf16, #blocked1> -> tensor<32x128xbf16, #blocked> loc(#loc47)"
+      ],
+      "family": "N05",
+      "inline_asm": [
+        "    %b_yg_58 = tt.elementwise_inline_asm \"{         .reg .pred p;         setp.gt.f32  p, $1, 20.;         @p  mov.f32  $0, $1;         @!p mul.f32            $0, $1, 1.4426950408889634;         @!p ex2.approx.ftz.f32 $0, $0;         @!p add.f32            $0, $0, 1.0;         @!p lg2.approx.ftz.f32 $0, $0;         @!p mul.f32            $0, $0, 0.6931471805599453;     } \" {constraints = \"=r,r\", packed_element = 1 : i32, pure = true} %b_g_55 : tensor<32x128xf32, #blocked> -> tensor<32x128xf32, #blocked> loc(#loc57)"
+      ],
+      "input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              1,
+              32
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "loads": [
+        "    %b_A_6 = tt.load %b_A : !tt.ptr<f32> loc(#loc35)",
+        "    %b_g = tt.load %p_g_41, %m_g_29, %cst_1 : tensor<32x128x!tt.ptr<bf16>, #blocked1> loc(#loc46)",
+        "    %b_g_52 = tt.load %b_g_51, %b_g_49, %cst_0 : tensor<128x!tt.ptr<f32>, #ttg.slice<{dim = 0, parent = #blocked}>> loc(#loc51)"
+      ],
+      "output": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            1,
+            32
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "stores": [
+        "    tt.store %p_yg_45, %b_yg_60, %m_g_30 : tensor<32x128x!tt.ptr<f32>, #blocked> loc(#loc28)"
+      ]
+    },
+    "N05_t2048_h8_d64": {
+      "bias": {
+        "dim": 0,
+        "kind": "slice",
+        "parent": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "conversions": [
+        "    %b_yg = ttg.convert_layout %b_g : tensor<32x64xbf16, #blocked1> -> tensor<32x64xbf16, #blocked> loc(#loc47)"
+      ],
+      "family": "N05",
+      "inline_asm": [
+        "    %b_yg_58 = tt.elementwise_inline_asm \"{         .reg .pred p;         setp.gt.f32  p, $1, 20.;         @p  mov.f32  $0, $1;         @!p mul.f32            $0, $1, 1.4426950408889634;         @!p ex2.approx.ftz.f32 $0, $0;         @!p add.f32            $0, $0, 1.0;         @!p lg2.approx.ftz.f32 $0, $0;         @!p mul.f32            $0, $0, 0.6931471805599453;     } \" {constraints = \"=r,r\", packed_element = 1 : i32, pure = true} %b_g_55 : tensor<32x64xf32, #blocked> -> tensor<32x64xf32, #blocked> loc(#loc57)"
+      ],
+      "input": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            8
+          ],
+          "threads_per_warp": [
+            4,
+            8
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "layouts": {
+        "#blocked": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              4
+            ],
+            "threads_per_warp": [
+              2,
+              16
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        },
+        "#blocked1": {
+          "fields": {
+            "order": [
+              1,
+              0
+            ],
+            "size_per_thread": [
+              1,
+              8
+            ],
+            "threads_per_warp": [
+              4,
+              8
+            ],
+            "warps_per_cta": [
+              8,
+              1
+            ]
+          },
+          "kind": "blocked"
+        }
+      },
+      "loads": [
+        "    %b_A_6 = tt.load %b_A : !tt.ptr<f32> loc(#loc35)",
+        "    %b_g = tt.load %p_g_41, %m_g_29, %cst_1 : tensor<32x64x!tt.ptr<bf16>, #blocked1> loc(#loc46)",
+        "    %b_g_52 = tt.load %b_g_51, %b_g_49, %cst_0 : tensor<64x!tt.ptr<f32>, #ttg.slice<{dim = 0, parent = #blocked}>> loc(#loc51)"
+      ],
+      "output": {
+        "fields": {
+          "order": [
+            1,
+            0
+          ],
+          "size_per_thread": [
+            1,
+            4
+          ],
+          "threads_per_warp": [
+            2,
+            16
+          ],
+          "warps_per_cta": [
+            8,
+            1
+          ]
+        },
+        "kind": "blocked"
+      },
+      "stores": [
+        "    tt.store %p_yg_45, %b_yg_60, %m_g_30 : tensor<32x64x!tt.ptr<f32>, #blocked> loc(#loc28)"
+      ]
+    }
+  },
+  "protocol_SHA256": "ffbbd9b0b37a3ec563e1782005053fc7f1214dc47ccb8a2a8cf0bb9596eb54d5",
+  "records": [
+    {
+      "ABI_and_launch_equal": true,
+      "allocated_sections_equal": true,
+      "case": "N05_t2048_h8_d64",
+      "metadata": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(10,)": [],
+          "(11,)": [],
+          "(12,)": [],
+          "(13,)": [],
+          "(14,)": [],
+          "(15,)": [],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [],
+          "(6,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "32",
+          "(11,)": "64",
+          "(12,)": "True",
+          "(13,)": "True",
+          "(14,)": "False",
+          "(15,)": "False",
+          "(16,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[4, 8], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+          "(17,)": "SliceLayout(dim=0, parent=BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[2, 16], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[]))",
+          "(18,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[2, 16], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+          "(19,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[2, 16], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+          "(3,)": "None",
+          "(5,)": "None",
+          "(6,)": "None",
+          "(8,)": "8",
+          "(9,)": "64"
+        },
+        "JIT_signature": {
+          "A_log": "*fp32",
+          "BD": "constexpr",
+          "BT": "constexpr",
+          "D": "constexpr",
+          "H": "constexpr",
+          "HAS_A": "constexpr",
+          "HAS_BETA": "constexpr",
+          "HAS_BIAS": "constexpr",
+          "LB": "constexpr",
+          "LC": "constexpr",
+          "LI": "constexpr",
+          "LO": "constexpr",
+          "T": "i32",
+          "USE_LOWER_BOUND": "constexpr",
+          "beta": "constexpr",
+          "dt_bias": "*fp32",
+          "g": "*bf16",
+          "lower_bound": "constexpr",
+          "yb": "constexpr",
+          "yg": "*fp32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "1ad6ae62a6ef79368e0f79513ba13bea875a22ee2f5cfe613072576485e3701c",
+          "kernel.glir": "aede4fdf8341d8e5d5ab6700844a681dc956aaf2b0fe3749bc728bda88e2ab0f",
+          "kernel.llir": "30874d8648c252aa21fe68a2d202b3c8bcebaa808c8052033ce001e0d01d6a83",
+          "kernel.ptx": "247e1aa92f728d63182d133f3a7cea789d99b3aa5cff08e6427f5b5d8e0ab62e",
+          "kernel.resource.txt": "6db8c1544af98f4f31ff4b30569909a5553e3653d9f4e25a8b80a38d9440397b",
+          "kernel.sass": "c46b97389b6c54c2ac072831681630c45e5747cfdbd3e3afa27d06828fe260f4",
+          "kernel.ttgir": "b62ede6696883a6addf5985f026420b9fd4b4ca656148cdaa01a0ab923baffb7"
+        },
+        "artifact_directory": "artifacts/N05_t2048_h8_d64_G0",
+        "case": {
+          "BN": 64,
+          "BT": 32,
+          "D": 64,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d64",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "compile_key": "d8b55dd949c5b9bf2d7ba286315799117a6f7c0a5229338fe3ba469bd38eb12f",
+        "cubin_SHA256": "1ad6ae62a6ef79368e0f79513ba13bea875a22ee2f5cfe613072576485e3701c",
+        "dynamic_smem_bytes": 4096,
+        "family": "N05",
+        "function_name": "kda_gate_fwd_kernel",
+        "geometry": "N05_t2048_h8_d64",
+        "global_scratch_size": 0,
+        "num_warps": 8,
+        "runtime_argument_names": [
+          "g",
+          "A_log",
+          "dt_bias",
+          "yg",
+          "T"
+        ],
+        "specialized_runtime_values": {
+          "beta": null,
+          "lower_bound": null,
+          "yb": null
+        },
+        "stage2": false,
+        "tag": "N05_t2048_h8_d64:G0"
+      },
+      "resources_equal": true,
+      "status": "OK",
+      "upstream": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(10,)": [],
+          "(11,)": [],
+          "(12,)": [],
+          "(13,)": [],
+          "(14,)": [],
+          "(15,)": [],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [],
+          "(6,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "32",
+          "(11,)": "64",
+          "(12,)": "True",
+          "(13,)": "True",
+          "(14,)": "False",
+          "(15,)": "False",
+          "(3,)": "None",
+          "(5,)": "None",
+          "(6,)": "None",
+          "(8,)": "8",
+          "(9,)": "64"
+        },
+        "JIT_signature": {
+          "A_log": "*fp32",
+          "BD": "constexpr",
+          "BT": "constexpr",
+          "D": "constexpr",
+          "H": "constexpr",
+          "HAS_A": "constexpr",
+          "HAS_BETA": "constexpr",
+          "HAS_BIAS": "constexpr",
+          "T": "i32",
+          "USE_LOWER_BOUND": "constexpr",
+          "beta": "constexpr",
+          "dt_bias": "*fp32",
+          "g": "*bf16",
+          "lower_bound": "constexpr",
+          "yb": "constexpr",
+          "yg": "*fp32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "b0d3bb5bf7376c6e657811c7f59158eb2f5e53efb54eb1f00bf82b8b9b73d28b",
+          "kernel.llir": "85ada8fc3235d267b25303f65b480b065cc66aa2ac73278e7f3825e4d5c9d81d",
+          "kernel.ptx": "c64024d514a279a02849cb30c4ce9afb78812fb743a3ee033fd6a443788aa450",
+          "kernel.resource.txt": "6db8c1544af98f4f31ff4b30569909a5553e3653d9f4e25a8b80a38d9440397b",
+          "kernel.sass": "c46b97389b6c54c2ac072831681630c45e5747cfdbd3e3afa27d06828fe260f4",
+          "kernel.ttgir": "938c3782045b0ba9df6f726ef6004e9ec8593988e2c3778bbdb73e4587a1c1ea",
+          "kernel.ttir": "36c0ce45acb4fee0cfa64041689faf6f60668e7b2a1206d4c8da064287dc20c4"
+        },
+        "artifact_directory": "artifacts/N05_t2048_h8_d64_config_2_U",
+        "compile_key": "14376770a3ed230b6293686959b625f6f701f7e4b972718d28bf1631d54dde30",
+        "cubin_SHA256": "b0d3bb5bf7376c6e657811c7f59158eb2f5e53efb54eb1f00bf82b8b9b73d28b",
+        "dynamic_smem_bytes": 4096,
+        "family": "N05",
+        "function_name": "kda_gate_fwd_kernel",
+        "geometry": "N05_t2048_h8_d64",
+        "global_scratch_size": 0,
+        "num_warps": 8,
+        "runtime_argument_names": [
+          "g",
+          "A_log",
+          "dt_bias",
+          "yg",
+          "T"
+        ],
+        "specialized_runtime_values": {
+          "beta": null,
+          "lower_bound": null,
+          "yb": null
+        },
+        "stage2": false,
+        "tag": "N05_t2048_h8_d64:config_2:U"
+      }
+    },
+    {
+      "ABI_and_launch_equal": true,
+      "allocated_sections_equal": true,
+      "case": "N05_t2048_h8_d128",
+      "metadata": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(10,)": [],
+          "(11,)": [],
+          "(12,)": [],
+          "(13,)": [],
+          "(14,)": [],
+          "(15,)": [],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [],
+          "(6,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "32",
+          "(11,)": "128",
+          "(12,)": "True",
+          "(13,)": "True",
+          "(14,)": "False",
+          "(15,)": "False",
+          "(16,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[2, 16], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+          "(17,)": "SliceLayout(dim=0, parent=BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[]))",
+          "(18,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+          "(19,)": "BlockedLayout(size_per_thread=[1, 4], threads_per_warp=[1, 32], warps_per_cta=[8, 1], order=[1, 0], cga_layout=[])",
+          "(3,)": "None",
+          "(5,)": "None",
+          "(6,)": "None",
+          "(8,)": "8",
+          "(9,)": "128"
+        },
+        "JIT_signature": {
+          "A_log": "*fp32",
+          "BD": "constexpr",
+          "BT": "constexpr",
+          "D": "constexpr",
+          "H": "constexpr",
+          "HAS_A": "constexpr",
+          "HAS_BETA": "constexpr",
+          "HAS_BIAS": "constexpr",
+          "LB": "constexpr",
+          "LC": "constexpr",
+          "LI": "constexpr",
+          "LO": "constexpr",
+          "T": "i32",
+          "USE_LOWER_BOUND": "constexpr",
+          "beta": "constexpr",
+          "dt_bias": "*fp32",
+          "g": "*bf16",
+          "lower_bound": "constexpr",
+          "yb": "constexpr",
+          "yg": "*fp32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "e45a5941ee1b6be298d98ca748150d7362baaa0f0e58409e1c0893f9ba830f56",
+          "kernel.glir": "a6fb85c709cf24123c8fca6120e3e88aed722ab7b23c90a80217f7698b15c122",
+          "kernel.llir": "7e64b5141c124f528ffa52457e6dd261c61e62cce9ac74607c36e1df95fd1dbf",
+          "kernel.ptx": "1731c9af163c489e7aeba060517ae2a63f72856d3550033fc0ab27e776f494cf",
+          "kernel.resource.txt": "2c229dda8067e6a015f6963dbef0b55af9ca5a74266c9516761a264f15b4936e",
+          "kernel.sass": "17fafaf71a39e7e4759ecd9371aa0d33e38f54b364b2e16bdf3c9b485f1f9efd",
+          "kernel.ttgir": "ccc3f3d0bfecd237635bbca50724033e3bc823b7d42c3be2500c48794ac2a558"
+        },
+        "artifact_directory": "artifacts/N05_t2048_h8_d128_G0",
+        "case": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "compile_key": "dcb2ff5df51b7c9fc0d1f9137f521ae110d983332a556c0ab18602e6c9381e84",
+        "cubin_SHA256": "e45a5941ee1b6be298d98ca748150d7362baaa0f0e58409e1c0893f9ba830f56",
+        "dynamic_smem_bytes": 8192,
+        "family": "N05",
+        "function_name": "kda_gate_fwd_kernel",
+        "geometry": "N05_t2048_h8_d128",
+        "global_scratch_size": 0,
+        "num_warps": 8,
+        "runtime_argument_names": [
+          "g",
+          "A_log",
+          "dt_bias",
+          "yg",
+          "T"
+        ],
+        "specialized_runtime_values": {
+          "beta": null,
+          "lower_bound": null,
+          "yb": null
+        },
+        "stage2": false,
+        "tag": "N05_t2048_h8_d128:G0"
+      },
+      "resources_equal": true,
+      "status": "OK",
+      "upstream": {
+        "JIT_attributes": {
+          "(0,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(1,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(10,)": [],
+          "(11,)": [],
+          "(12,)": [],
+          "(13,)": [],
+          "(14,)": [],
+          "(15,)": [],
+          "(2,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(3,)": [],
+          "(4,)": [
+            [
+              "tt.divisibility",
+              16
+            ]
+          ],
+          "(5,)": [],
+          "(6,)": [],
+          "(8,)": [],
+          "(9,)": []
+        },
+        "JIT_constants": {
+          "(10,)": "32",
+          "(11,)": "128",
+          "(12,)": "True",
+          "(13,)": "True",
+          "(14,)": "False",
+          "(15,)": "False",
+          "(3,)": "None",
+          "(5,)": "None",
+          "(6,)": "None",
+          "(8,)": "8",
+          "(9,)": "128"
+        },
+        "JIT_signature": {
+          "A_log": "*fp32",
+          "BD": "constexpr",
+          "BT": "constexpr",
+          "D": "constexpr",
+          "H": "constexpr",
+          "HAS_A": "constexpr",
+          "HAS_BETA": "constexpr",
+          "HAS_BIAS": "constexpr",
+          "T": "i32",
+          "USE_LOWER_BOUND": "constexpr",
+          "beta": "constexpr",
+          "dt_bias": "*fp32",
+          "g": "*bf16",
+          "lower_bound": "constexpr",
+          "yb": "constexpr",
+          "yg": "*fp32"
+        },
+        "artifact_SHA256": {
+          "kernel.cubin": "3f5bd9abe4dfbdfb4aa52354039f7f59ab598344b7c4d01ef7f1bd630a92a7ce",
+          "kernel.llir": "3aa099f69a366a501c5b2d26ddb35f75e1a3dff321417349839ec535d2657a61",
+          "kernel.ptx": "7a867f8f3db83aa4f0fb4a4f2e6b8f6aacb08f6845834cd09a2c81938bbd4841",
+          "kernel.resource.txt": "2c229dda8067e6a015f6963dbef0b55af9ca5a74266c9516761a264f15b4936e",
+          "kernel.sass": "17fafaf71a39e7e4759ecd9371aa0d33e38f54b364b2e16bdf3c9b485f1f9efd",
+          "kernel.ttgir": "4d515de34d3d1cad1d29d89eaf322d1f119b0e9ddeeaee8b263af30647a92917",
+          "kernel.ttir": "41bb44f84083f012f7c365f0b4e20c639bb9a33e0c820854badb6f2ac05af694"
+        },
+        "artifact_directory": "artifacts/N05_t2048_h8_d128_config_2_U",
+        "compile_key": "022e7b6d4ba61187e0850b6d264c0110a4ea6d2950471c808e3903a0c3103e00",
+        "cubin_SHA256": "3f5bd9abe4dfbdfb4aa52354039f7f59ab598344b7c4d01ef7f1bd630a92a7ce",
+        "dynamic_smem_bytes": 8192,
+        "family": "N05",
+        "function_name": "kda_gate_fwd_kernel",
+        "geometry": "N05_t2048_h8_d128",
+        "global_scratch_size": 0,
+        "num_warps": 8,
+        "runtime_argument_names": [
+          "g",
+          "A_log",
+          "dt_bias",
+          "yg",
+          "T"
+        ],
+        "specialized_runtime_values": {
+          "beta": null,
+          "lower_bound": null,
+          "yb": null
+        },
+        "stage2": false,
+        "tag": "N05_t2048_h8_d128:config_2:U"
+      }
+    }
+  ],
+  "reference_payload_SHA256": "de5e8184e6852adca17425aa1929b758d5160167466b170ba1d6447d26043fa6",
+  "status": "OK"
+}
