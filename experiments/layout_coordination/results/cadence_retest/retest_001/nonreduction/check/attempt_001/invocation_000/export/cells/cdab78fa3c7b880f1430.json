@@ -1,0 +1,1227 @@
+{
+  "cells": [
+    {
+      "aliases": [],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "U",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:U",
+      "visits": []
+    },
+    {
+      "aliases": [
+        "N03_MROPE_D64:GL_K_vec2",
+        "N03_MROPE_D64:GL_Q_vec8"
+      ],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "G0",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:G0",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:GL_Q_vec1",
+      "visits": []
+    },
+    {
+      "aliases": [
+        "N03_MROPE_D64:GL_QK_vec2"
+      ],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:GL_Q_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:GL_Q_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:GL_K_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N03_MROPE_D64:GL_QK_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N03_MROPE_D64",
+        "case_metadata": {
+          "D": 64,
+          "KH": 8,
+          "QH": 32,
+          "T": 2048,
+          "W": 4,
+          "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+          "family": "N03",
+          "id": "N03_MROPE_D64",
+          "inplace": true,
+          "interleaved": false,
+          "layout_rank": 2,
+          "neox": true,
+          "operator": "mrope",
+          "rotary_dim": 64,
+          "sections": [
+            8,
+            12,
+            12
+          ],
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+            "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+          },
+          "grid": [
+            2048,
+            1,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+            "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+            "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+            "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+          ],
+          "inplace": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "outputs": [
+            "q_ptr",
+            "k_ptr"
+          ],
+          "views": {
+            "cos_sin_cache_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 2,
+              "shape": [
+                8192,
+                64
+              ],
+              "storage_offset": 0,
+              "stride": [
+                64,
+                1
+              ]
+            },
+            "k_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                2048,
+                512
+              ],
+              "storage_offset": 0,
+              "stride": [
+                512,
+                1
+              ]
+            },
+            "positions_ptr": {
+              "dtype": "int64",
+              "element_size": 8,
+              "group": 3,
+              "shape": [
+                3,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            },
+            "q_ptr": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N03",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N03_MROPE_D64",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          2048,
+          1,
+          1
+        ],
+        "id": "N03_MROPE_D64",
+        "inplace_groups": 2,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 7,
+        "source": "n2"
+      },
+      "role": "U_repeat",
+      "sham_of": "N03_MROPE_D64:U",
+      "tag": "N03_MROPE_D64:U:repeat",
+      "visits": []
+    }
+  ],
+  "context": {
+    "case": "N03_MROPE_D64",
+    "case_metadata": {
+      "D": 64,
+      "KH": 8,
+      "QH": 32,
+      "T": 2048,
+      "W": 4,
+      "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+      "family": "N03",
+      "id": "N03_MROPE_D64",
+      "inplace": true,
+      "interleaved": false,
+      "layout_rank": 2,
+      "neox": true,
+      "operator": "mrope",
+      "rotary_dim": 64,
+      "sections": [
+        8,
+        12,
+        12
+      ],
+      "stages": 3
+    },
+    "expected_fixture": {
+      "expected_SHA256": {
+        "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+        "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+      },
+      "grid": [
+        2048,
+        1,
+        1
+      ],
+      "initial_storage_SHA256": [
+        "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+        "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+        "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+        "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+      ],
+      "inplace": [
+        "q_ptr",
+        "k_ptr"
+      ],
+      "outputs": [
+        "q_ptr",
+        "k_ptr"
+      ],
+      "views": {
+        "cos_sin_cache_ptr": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 2,
+          "shape": [
+            8192,
+            64
+          ],
+          "storage_offset": 0,
+          "stride": [
+            64,
+            1
+          ]
+        },
+        "k_ptr": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 1,
+          "shape": [
+            2048,
+            512
+          ],
+          "storage_offset": 0,
+          "stride": [
+            512,
+            1
+          ]
+        },
+        "positions_ptr": {
+          "dtype": "int64",
+          "element_size": 8,
+          "group": 3,
+          "shape": [
+            3,
+            2048
+          ],
+          "storage_offset": 0,
+          "stride": [
+            2048,
+            1
+          ]
+        },
+        "q_ptr": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 0,
+          "shape": [
+            2048,
+            2048
+          ],
+          "storage_offset": 0,
+          "stride": [
+            2048,
+            1
+          ]
+        }
+      }
+    },
+    "family": "N03",
+    "fresh_check_patterns": [
+      "finite"
+    ],
+    "geometry": "N03_MROPE_D64",
+    "graph_oracle_readback_required": true,
+    "grid": [
+      2048,
+      1,
+      1
+    ],
+    "id": "N03_MROPE_D64",
+    "inplace_groups": 2,
+    "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+    "logical_programs": 10,
+    "original_three_pattern_eligibility": {
+      "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+      "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+    },
+    "physical_programs": 7,
+    "source": "n2"
+  },
+  "orders": []
+}

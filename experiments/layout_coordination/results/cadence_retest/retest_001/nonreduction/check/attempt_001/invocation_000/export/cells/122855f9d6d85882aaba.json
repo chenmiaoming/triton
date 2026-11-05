@@ -1,0 +1,1486 @@
+{
+  "cells": [
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "U",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:U",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "G0",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:G0",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_weight_load_vec1",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_weight_load_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_packed_compute_vec1",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_packed_compute_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_output_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_output_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_output_lane_rows2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N02_k1024_p128_g128:GL_scale_load_output_encoding",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N02_k1024_p128_g128",
+        "case_metadata": {
+          "BM": 32,
+          "BN": 32,
+          "W": 4,
+          "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+          "cols": 1024,
+          "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+          "family": "N02",
+          "group_size": 128,
+          "id": "N02_k1024_p128_g128",
+          "packed_cols": 128,
+          "rows": 1024,
+          "source_function": "awq_dequantize_kernel",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+          },
+          "grid": [
+            4,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+            "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+            "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+            "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+          ],
+          "inplace": [],
+          "outputs": [
+            "result_ptr"
+          ],
+          "views": {
+            "qweight_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 0,
+              "shape": [
+                1024,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            },
+            "result_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 3,
+              "shape": [
+                1024,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "scales_ptr": {
+              "dtype": "float16",
+              "element_size": 2,
+              "group": 1,
+              "shape": [
+                8,
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                1
+              ]
+            },
+            "zeros_ptr": {
+              "dtype": "int32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N02",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N02_k1024_p128_g128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "id": "N02_k1024_p128_g128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "U_repeat",
+      "sham_of": "N02_k1024_p128_g128:U",
+      "tag": "N02_k1024_p128_g128:U:repeat",
+      "visits": []
+    }
+  ],
+  "context": {
+    "case": "N02_k1024_p128_g128",
+    "case_metadata": {
+      "BM": 32,
+      "BN": 32,
+      "W": 4,
+      "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+      "cols": 1024,
+      "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+      "family": "N02",
+      "group_size": 128,
+      "id": "N02_k1024_p128_g128",
+      "packed_cols": 128,
+      "rows": 1024,
+      "source_function": "awq_dequantize_kernel",
+      "stages": 3
+    },
+    "expected_fixture": {
+      "expected_SHA256": {
+        "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+      },
+      "grid": [
+        4,
+        32,
+        1
+      ],
+      "initial_storage_SHA256": [
+        "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+        "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+        "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+        "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+      ],
+      "inplace": [],
+      "outputs": [
+        "result_ptr"
+      ],
+      "views": {
+        "qweight_ptr": {
+          "dtype": "int32",
+          "element_size": 4,
+          "group": 0,
+          "shape": [
+            1024,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            128,
+            1
+          ]
+        },
+        "result_ptr": {
+          "dtype": "float16",
+          "element_size": 2,
+          "group": 3,
+          "shape": [
+            1024,
+            1024
+          ],
+          "storage_offset": 0,
+          "stride": [
+            1024,
+            1
+          ]
+        },
+        "scales_ptr": {
+          "dtype": "float16",
+          "element_size": 2,
+          "group": 1,
+          "shape": [
+            8,
+            1024
+          ],
+          "storage_offset": 0,
+          "stride": [
+            1024,
+            1
+          ]
+        },
+        "zeros_ptr": {
+          "dtype": "int32",
+          "element_size": 4,
+          "group": 2,
+          "shape": [
+            8,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            128,
+            1
+          ]
+        }
+      }
+    },
+    "family": "N02",
+    "fresh_check_patterns": [
+      "finite"
+    ],
+    "geometry": "N02_k1024_p128_g128",
+    "graph_oracle_readback_required": true,
+    "grid": [
+      4,
+      32,
+      1
+    ],
+    "id": "N02_k1024_p128_g128",
+    "inplace_groups": 0,
+    "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+    "logical_programs": 10,
+    "original_three_pattern_eligibility": {
+      "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+      "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+    },
+    "physical_programs": 10,
+    "source": "n2"
+  },
+  "orders": []
+}

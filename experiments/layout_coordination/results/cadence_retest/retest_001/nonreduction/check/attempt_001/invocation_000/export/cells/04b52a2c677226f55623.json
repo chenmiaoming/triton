@@ -1,0 +1,2974 @@
+{
+  "cells": [
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "U",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:U",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "G0",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:G0",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_feature_vec1",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_feature_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_feature_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_feature_vec8",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_token_vec1",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_token_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_token_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N05_t2048_h8_d128:GL_token_vec8",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N05_t2048_h8_d128",
+        "case_metadata": {
+          "BN": 128,
+          "BT": 32,
+          "D": 128,
+          "FLA_USE_FAST_OPS": "0",
+          "H": 8,
+          "T": 2048,
+          "W": 8,
+          "autotune_configs": [
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 32,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 64,
+              "W": 32,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 4,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 8,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 16,
+              "stages": 3
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 2
+            },
+            {
+              "BT": 128,
+              "W": 32,
+              "stages": 3
+            }
+          ],
+          "autotune_resolved": true,
+          "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+          "configuration_selection": "U-only original menu",
+          "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+          "family": "N05",
+          "id": "N05_t2048_h8_d128",
+          "source_function": "kda_gate_fwd_kernel",
+          "stages": 2
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+          },
+          "grid": [
+            64,
+            8,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+            "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+            "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+            "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+          ],
+          "inplace": [],
+          "outputs": [
+            "yg"
+          ],
+          "views": {
+            "A_log": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "dt_bias": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 2,
+              "shape": [
+                1024
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1
+              ]
+            },
+            "g": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            },
+            "yg": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 3,
+              "shape": [
+                2048,
+                8,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                1024,
+                128,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N05",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N05_t2048_h8_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          64,
+          8,
+          1
+        ],
+        "id": "N05_t2048_h8_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "U_repeat",
+      "sham_of": "N05_t2048_h8_d128:U",
+      "tag": "N05_t2048_h8_d128:U:repeat",
+      "visits": []
+    }
+  ],
+  "context": {
+    "case": "N05_t2048_h8_d128",
+    "case_metadata": {
+      "BN": 128,
+      "BT": 32,
+      "D": 128,
+      "FLA_USE_FAST_OPS": "0",
+      "H": 8,
+      "T": 2048,
+      "W": 8,
+      "autotune_configs": [
+        {
+          "BT": 32,
+          "W": 4,
+          "stages": 2
+        },
+        {
+          "BT": 32,
+          "W": 4,
+          "stages": 3
+        },
+        {
+          "BT": 32,
+          "W": 8,
+          "stages": 2
+        },
+        {
+          "BT": 32,
+          "W": 8,
+          "stages": 3
+        },
+        {
+          "BT": 32,
+          "W": 16,
+          "stages": 2
+        },
+        {
+          "BT": 32,
+          "W": 16,
+          "stages": 3
+        },
+        {
+          "BT": 32,
+          "W": 32,
+          "stages": 2
+        },
+        {
+          "BT": 32,
+          "W": 32,
+          "stages": 3
+        },
+        {
+          "BT": 64,
+          "W": 4,
+          "stages": 2
+        },
+        {
+          "BT": 64,
+          "W": 4,
+          "stages": 3
+        },
+        {
+          "BT": 64,
+          "W": 8,
+          "stages": 2
+        },
+        {
+          "BT": 64,
+          "W": 8,
+          "stages": 3
+        },
+        {
+          "BT": 64,
+          "W": 16,
+          "stages": 2
+        },
+        {
+          "BT": 64,
+          "W": 16,
+          "stages": 3
+        },
+        {
+          "BT": 64,
+          "W": 32,
+          "stages": 2
+        },
+        {
+          "BT": 64,
+          "W": 32,
+          "stages": 3
+        },
+        {
+          "BT": 128,
+          "W": 4,
+          "stages": 2
+        },
+        {
+          "BT": 128,
+          "W": 4,
+          "stages": 3
+        },
+        {
+          "BT": 128,
+          "W": 8,
+          "stages": 2
+        },
+        {
+          "BT": 128,
+          "W": 8,
+          "stages": 3
+        },
+        {
+          "BT": 128,
+          "W": 16,
+          "stages": 2
+        },
+        {
+          "BT": 128,
+          "W": 16,
+          "stages": 3
+        },
+        {
+          "BT": 128,
+          "W": 32,
+          "stages": 2
+        },
+        {
+          "BT": 128,
+          "W": 32,
+          "stages": 3
+        }
+      ],
+      "autotune_resolved": true,
+      "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+      "configuration_selection": "U-only original menu",
+      "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+      "family": "N05",
+      "id": "N05_t2048_h8_d128",
+      "source_function": "kda_gate_fwd_kernel",
+      "stages": 2
+    },
+    "expected_fixture": {
+      "expected_SHA256": {
+        "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+      },
+      "grid": [
+        64,
+        8,
+        1
+      ],
+      "initial_storage_SHA256": [
+        "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+        "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+        "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+        "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+      ],
+      "inplace": [],
+      "outputs": [
+        "yg"
+      ],
+      "views": {
+        "A_log": {
+          "dtype": "float32",
+          "element_size": 4,
+          "group": 1,
+          "shape": [
+            8
+          ],
+          "storage_offset": 0,
+          "stride": [
+            1
+          ]
+        },
+        "dt_bias": {
+          "dtype": "float32",
+          "element_size": 4,
+          "group": 2,
+          "shape": [
+            1024
+          ],
+          "storage_offset": 0,
+          "stride": [
+            1
+          ]
+        },
+        "g": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 0,
+          "shape": [
+            2048,
+            8,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            1024,
+            128,
+            1
+          ]
+        },
+        "yg": {
+          "dtype": "float32",
+          "element_size": 4,
+          "group": 3,
+          "shape": [
+            2048,
+            8,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            1024,
+            128,
+            1
+          ]
+        }
+      }
+    },
+    "family": "N05",
+    "fresh_check_patterns": [
+      "finite"
+    ],
+    "geometry": "N05_t2048_h8_d128",
+    "graph_oracle_readback_required": true,
+    "grid": [
+      64,
+      8,
+      1
+    ],
+    "id": "N05_t2048_h8_d128",
+    "inplace_groups": 0,
+    "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+    "logical_programs": 10,
+    "original_three_pattern_eligibility": {
+      "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+      "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+    },
+    "physical_programs": 10,
+    "source": "n2"
+  },
+  "orders": []
+}

@@ -1,0 +1,2218 @@
+{
+  "cells": [
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "U",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:U",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "G0",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:G0",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_input_vec1",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_input_vec2",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_input_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_input_vec8",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_compute_input",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_compute_token_vec4",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_compute_token_vec8",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "GL",
+      "sham_of": null,
+      "tag": "N04_h8_s2048_d128:GL_v_compute_token_vec32",
+      "visits": []
+    },
+    {
+      "aliases": [],
+      "context": {
+        "case": "N04_h8_s2048_d128",
+        "case_metadata": {
+          "BM": 64,
+          "BN": 128,
+          "D": 128,
+          "H": 8,
+          "S": 2048,
+          "W": 8,
+          "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+          "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+          "family": "N04",
+          "id": "N04_h8_s2048_d128",
+          "input_format": "fused_token_major_qkv_views",
+          "padded_keys": 2048,
+          "padded_queries": 2048,
+          "source_function": "_pack_qkv",
+          "stages": 3
+        },
+        "expected_fixture": {
+          "expected_SHA256": {
+            "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+            "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+            "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+          },
+          "grid": [
+            8,
+            32,
+            1
+          ],
+          "initial_storage_SHA256": [
+            "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+            "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+            "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+          ],
+          "inplace": [],
+          "outputs": [
+            "q_fp8",
+            "k_fp8",
+            "v_fp8"
+          ],
+          "views": {
+            "k": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 1024,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "k_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 3,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "q": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "q_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 2,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                128,
+                1
+              ]
+            },
+            "scales": {
+              "dtype": "float32",
+              "element_size": 4,
+              "group": 1,
+              "shape": [
+                3,
+                8
+              ],
+              "storage_offset": 0,
+              "stride": [
+                8,
+                1
+              ]
+            },
+            "v": {
+              "dtype": "bfloat16",
+              "element_size": 2,
+              "group": 0,
+              "shape": [
+                8,
+                2048,
+                128
+              ],
+              "storage_offset": 2048,
+              "stride": [
+                128,
+                3072,
+                1
+              ]
+            },
+            "v_fp8": {
+              "dtype": "float8_e4m3fn",
+              "element_size": 1,
+              "group": 4,
+              "shape": [
+                8,
+                128,
+                2048
+              ],
+              "storage_offset": 0,
+              "stride": [
+                262144,
+                2048,
+                1
+              ]
+            }
+          }
+        },
+        "family": "N04",
+        "fresh_check_patterns": [
+          "finite"
+        ],
+        "geometry": "N04_h8_s2048_d128",
+        "graph_oracle_readback_required": true,
+        "grid": [
+          8,
+          32,
+          1
+        ],
+        "id": "N04_h8_s2048_d128",
+        "inplace_groups": 0,
+        "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+        "logical_programs": 10,
+        "original_three_pattern_eligibility": {
+          "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+          "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+        },
+        "physical_programs": 10,
+        "source": "n2"
+      },
+      "role": "U_repeat",
+      "sham_of": "N04_h8_s2048_d128:U",
+      "tag": "N04_h8_s2048_d128:U:repeat",
+      "visits": []
+    }
+  ],
+  "context": {
+    "case": "N04_h8_s2048_d128",
+    "case_metadata": {
+      "BM": 64,
+      "BN": 128,
+      "D": 128,
+      "H": 8,
+      "S": 2048,
+      "W": 8,
+      "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+      "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+      "family": "N04",
+      "id": "N04_h8_s2048_d128",
+      "input_format": "fused_token_major_qkv_views",
+      "padded_keys": 2048,
+      "padded_queries": 2048,
+      "source_function": "_pack_qkv",
+      "stages": 3
+    },
+    "expected_fixture": {
+      "expected_SHA256": {
+        "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+        "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+        "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+      },
+      "grid": [
+        8,
+        32,
+        1
+      ],
+      "initial_storage_SHA256": [
+        "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+        "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+        "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+        "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+        "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+      ],
+      "inplace": [],
+      "outputs": [
+        "q_fp8",
+        "k_fp8",
+        "v_fp8"
+      ],
+      "views": {
+        "k": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 0,
+          "shape": [
+            8,
+            2048,
+            128
+          ],
+          "storage_offset": 1024,
+          "stride": [
+            128,
+            3072,
+            1
+          ]
+        },
+        "k_fp8": {
+          "dtype": "float8_e4m3fn",
+          "element_size": 1,
+          "group": 3,
+          "shape": [
+            8,
+            2048,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            262144,
+            128,
+            1
+          ]
+        },
+        "q": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 0,
+          "shape": [
+            8,
+            2048,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            128,
+            3072,
+            1
+          ]
+        },
+        "q_fp8": {
+          "dtype": "float8_e4m3fn",
+          "element_size": 1,
+          "group": 2,
+          "shape": [
+            8,
+            2048,
+            128
+          ],
+          "storage_offset": 0,
+          "stride": [
+            262144,
+            128,
+            1
+          ]
+        },
+        "scales": {
+          "dtype": "float32",
+          "element_size": 4,
+          "group": 1,
+          "shape": [
+            3,
+            8
+          ],
+          "storage_offset": 0,
+          "stride": [
+            8,
+            1
+          ]
+        },
+        "v": {
+          "dtype": "bfloat16",
+          "element_size": 2,
+          "group": 0,
+          "shape": [
+            8,
+            2048,
+            128
+          ],
+          "storage_offset": 2048,
+          "stride": [
+            128,
+            3072,
+            1
+          ]
+        },
+        "v_fp8": {
+          "dtype": "float8_e4m3fn",
+          "element_size": 1,
+          "group": 4,
+          "shape": [
+            8,
+            128,
+            2048
+          ],
+          "storage_offset": 0,
+          "stride": [
+            262144,
+            2048,
+            1
+          ]
+        }
+      }
+    },
+    "family": "N04",
+    "fresh_check_patterns": [
+      "finite"
+    ],
+    "geometry": "N04_h8_s2048_d128",
+    "graph_oracle_readback_required": true,
+    "grid": [
+      8,
+      32,
+      1
+    ],
+    "id": "N04_h8_s2048_d128",
+    "inplace_groups": 0,
+    "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+    "logical_programs": 10,
+    "original_three_pattern_eligibility": {
+      "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+      "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+    },
+    "physical_programs": 10,
+    "source": "n2"
+  },
+  "orders": []
+}

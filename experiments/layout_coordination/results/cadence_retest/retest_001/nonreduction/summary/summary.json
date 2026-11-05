@@ -1,0 +1,3151 @@
+{
+  "interpretation": [
+    "This is derived postprocessing of frozen measurements, not a newly selected cost model or sampling protocol.",
+    "A support transition means a difference in pointwise CI resolution between two execution contexts. It does not prove the old gain was caused by idle or that a new gain would hold under every real workload.",
+    "Old N4/G8 CI-supported thresholds use their actual stored confidence intervals. Legacy/anchor published point slopes do not acquire invented old confidence intervals.",
+    "All losing, unchanged and control-inconclusive outcomes remain in the source analyses. Aliases do not create additional independent observations.",
+    "Each suite has three independently allocated formal GPU workers. Raw sample counts and logical comparison counts are not independent GPU counts."
+  ],
+  "raw_target_samples": 139500,
+  "reports": {
+    "nonreduction": {
+      "baseline_and_candidate_visit_drift": {
+        "G0": {
+          "spread_above_10_percent": 0,
+          "spread_above_3_percent": 1,
+          "spread_percent": {
+            "count": 48,
+            "max": 4.441914156958493,
+            "mean": 1.0432016597078102,
+            "median": 0.9621677094385328,
+            "min": 0.0,
+            "p05": 0.04237320384266498,
+            "p95": 2.43812234150513
+          },
+          "worker_cells": 48
+        },
+        "GL": {
+          "spread_above_10_percent": 0,
+          "spread_above_3_percent": 5,
+          "spread_percent": {
+            "count": 306,
+            "max": 5.346986197367687,
+            "mean": 0.8932476843253174,
+            "median": 0.7777025740675403,
+            "min": 0.0,
+            "p05": 0.28268603243645773,
+            "p95": 2.048666430585888
+          },
+          "worker_cells": 306
+        },
+        "U": {
+          "spread_above_10_percent": 0,
+          "spread_above_3_percent": 1,
+          "spread_percent": {
+            "count": 48,
+            "max": 4.5662117144249725,
+            "mean": 1.0153620673621693,
+            "median": 0.9491010260581301,
+            "min": 0.0,
+            "p05": 0.14919145532384825,
+            "p95": 2.2879762795382086
+          },
+          "worker_cells": 48
+        },
+        "U_repeat": {
+          "spread_above_10_percent": 0,
+          "spread_above_3_percent": 0,
+          "spread_percent": {
+            "count": 48,
+            "max": 2.471479537646748,
+            "mean": 0.9619518906604346,
+            "median": 0.9299364737733851,
+            "min": 0.0,
+            "p05": 0.02821464413699682,
+            "p95": 2.2607149223315535
+          },
+          "worker_cells": 48
+        }
+      },
+      "cadence": {
+        "boundary": "Host gaps exclude GPU-side primes, which execute after submission and before target events. Long host gaps remain in data; no sample is filtered.",
+        "cell_worker_median_gap_us": {
+          "count": 450,
+          "max": 1160.2694999999999,
+          "mean": 1100.6593055555556,
+          "median": 1099.10975,
+          "min": 1084.4765,
+          "p05": 1088.8476249999999,
+          "p95": 1115.6060499999999
+        },
+        "maximum_observed_gap_us": 200420.996,
+        "minimum_observed_gap_us": 1006.581,
+        "observations_below_requested": 0,
+        "requested_minimum_host_gap_us": 1000.0
+      },
+      "contexts": 16,
+      "details": {
+        "N4_new_supported": 2,
+        "N4_old_supported": 3,
+        "N4_support_transitions": {
+          "neither_resolved": 11,
+          "new_controls_inconclusive": 1,
+          "retained": 2
+        },
+        "N5_frozen_large_shape_choices": [
+          {
+            "context": {
+              "case": "N01_m4096_n8192",
+              "case_metadata": {
+                "BM": 128,
+                "BN": 4,
+                "W": 4,
+                "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+                "cols": 8192,
+                "evidence_scope": "Same pinned scale-rearrangement kernel at a larger synthetic footprint; no production dispatch claim.",
+                "family": "N01",
+                "followup_role": "footprint",
+                "id": "N01_m4096_n8192",
+                "rows": 4096,
+                "selected_variant": "coordinated_fully_coalesced",
+                "source_function": "triton_scale_swizzle",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "output_ptr": "16895f98a21248f8f40f4974d53c7678e1b391e70780e6a07d825afca205f0b3"
+                },
+                "grid": [
+                  32,
+                  2048,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "381f5431f3e4f40f61580aee2afadb0b771720a52b12f92dff4f5be82636821a",
+                  "a81769f54ef2025c08b27e6994620cf37a71f1a81cba65be0a66da20cf8e7c32"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "output_ptr"
+                ],
+                "views": {
+                  "output_ptr": {
+                    "dtype": "uint8",
+                    "element_size": 1,
+                    "group": 1,
+                    "shape": [
+                      4096,
+                      8192
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8192,
+                      1
+                    ]
+                  },
+                  "scale_ptr": {
+                    "dtype": "uint8",
+                    "element_size": 1,
+                    "group": 0,
+                    "shape": [
+                      4096,
+                      8192
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8192,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N01",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N01_m4096_n8192",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                32,
+                2048,
+                1
+              ],
+              "id": "N01_m4096_n8192",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 3,
+              "original_three_pattern_eligibility": {
+                "SHA256": "32541479bdd644f7ac8dd9d97229c815ce720551c6205898c57cfb0deae55ba5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n5_timing/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 3,
+              "source": "n5"
+            },
+            "context_id": "N01_m4096_n8192",
+            "gain_vs_G0_point_change_pp": -0.17357759497835268,
+            "gain_vs_U_point_change_pp": -0.026327042852418714,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                7.768722031540683,
+                7.85126082445509
+              ],
+              "classification": "practical_improvement",
+              "estimate": 7.809034585030199
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                7.845831048263157,
+                7.929578595940648
+              ],
+              "classification": "practical_improvement",
+              "estimate": 7.887100109070508
+            },
+            "new_strict_dual_improvement": true,
+            "old_dual_lower_above_3_percent": true,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                7.869538556175227,
+                8.14542510684405
+              ],
+              "estimate": 7.982612180008552
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                7.8003214379415144,
+                8.036382127170969
+              ],
+              "estimate": 7.913427151922927
+            },
+            "old_source": "stage_n5_timing",
+            "representative_tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced",
+            "support_transition": "retained",
+            "tag": "N01_m4096_n8192:GL_coordinated_fully_coalesced"
+          },
+          {
+            "context": {
+              "case": "N02_k8192_p1024_g128",
+              "case_metadata": {
+                "BM": 32,
+                "BN": 32,
+                "W": 4,
+                "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+                "cols": 8192,
+                "evidence_scope": "Same pinned AWQ dequantization kernel at a larger footprint; not AWQ GEMM or whole-model performance.",
+                "family": "N02",
+                "followup_role": "footprint",
+                "group_size": 128,
+                "id": "N02_k8192_p1024_g128",
+                "packed_cols": 1024,
+                "rows": 8192,
+                "selected_variant": "packed_compute_vec1",
+                "source_function": "awq_dequantize_kernel",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "result_ptr": "00af78b3cb26b8966534ed914e3655e578063719f2a415700979008a53e14e2a"
+                },
+                "grid": [
+                  32,
+                  256,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "866c39b26937e19de1e8eaa585a68b6e11b9df498b2847e98452c5ff4ce30a1a",
+                  "5bc0503ce5c38915413f0ffed77e59df681ed50b93d5fcad5161c71ccd7c634f",
+                  "bd98b9ad911b04f15afc0ec98ede1fa28a280d3d72693469fe97bd191a39df62",
+                  "a4e482f970f98c44a758a5d8a47a4f999ceba5711850e40cb7704565ae5e28ee"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "result_ptr"
+                ],
+                "views": {
+                  "qweight_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 0,
+                    "shape": [
+                      8192,
+                      1024
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      1
+                    ]
+                  },
+                  "result_ptr": {
+                    "dtype": "float16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      8192,
+                      8192
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8192,
+                      1
+                    ]
+                  },
+                  "scales_ptr": {
+                    "dtype": "float16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      64,
+                      8192
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8192,
+                      1
+                    ]
+                  },
+                  "zeros_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 2,
+                    "shape": [
+                      64,
+                      1024
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N02",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N02_k8192_p1024_g128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                32,
+                256,
+                1
+              ],
+              "id": "N02_k8192_p1024_g128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 3,
+              "original_three_pattern_eligibility": {
+                "SHA256": "32541479bdd644f7ac8dd9d97229c815ce720551c6205898c57cfb0deae55ba5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n5_timing/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 3,
+              "source": "n5"
+            },
+            "context_id": "N02_k8192_p1024_g128",
+            "gain_vs_G0_point_change_pp": 0.13709638413121406,
+            "gain_vs_U_point_change_pp": 0.04549497656520107,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                -2.0933886838545837,
+                -1.4004546944227312
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -1.7512783062551518
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                -2.195348415725076,
+                -1.603509644902643
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -1.9095047960577682
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                -2.087318017396185,
+                -1.6763127452126292
+              ],
+              "estimate": -1.8883746903863659
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                -2.112673099834716,
+                -1.7949487530996022
+              ],
+              "estimate": -1.9549997726229693
+            },
+            "old_source": "stage_n5_timing",
+            "representative_tag": "N02_k8192_p1024_g128:GL_packed_compute_vec1",
+            "support_transition": "neither_resolved",
+            "tag": "N02_k8192_p1024_g128:GL_packed_compute_vec1"
+          }
+        ],
+        "frozen_N4_choices": [
+          {
+            "context": {
+              "case": "N01_m11008_n128",
+              "case_metadata": {
+                "BM": 128,
+                "BN": 4,
+                "W": 4,
+                "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+                "cols": 128,
+                "evidence_scope": "Optional torchao Triton scale-rearrangement backend; no scale calculation.",
+                "family": "N01",
+                "id": "N01_m11008_n128",
+                "rows": 11008,
+                "source_function": "triton_scale_swizzle",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "output_ptr": "5063c0f70122955eb60dde5d30d5b2081d2b798f95f0c5d4a256309d092210cc"
+                },
+                "grid": [
+                  86,
+                  32,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "8a6da98d5007b94c8ae7e3682ddf63e58f1c096872255893c9995abb2f46fe74",
+                  "6f78a7ce66d0c90493e3d7966d157dec50f4b8b799017cf81c506f4e50ecd5d4"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "output_ptr"
+                ],
+                "views": {
+                  "output_ptr": {
+                    "dtype": "uint8",
+                    "element_size": 1,
+                    "group": 1,
+                    "shape": [
+                      11008,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  },
+                  "scale_ptr": {
+                    "dtype": "uint8",
+                    "element_size": 1,
+                    "group": 0,
+                    "shape": [
+                      11008,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N01",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N01_m11008_n128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                86,
+                32,
+                1
+              ],
+              "id": "N01_m11008_n128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N01_m11008_n128",
+            "gain_vs_G0_point_change_pp": -0.796099056500851,
+            "gain_vs_U_point_change_pp": 0.06600371474580147,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                4.392905872026259,
+                5.190743573109988
+              ],
+              "classification": "practical_improvement",
+              "estimate": 4.783854295644868
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                5.388406257330919,
+                6.2912824011798385
+              ],
+              "classification": "practical_improvement",
+              "estimate": 5.8163898921102835
+            },
+            "new_strict_dual_improvement": true,
+            "old_dual_lower_above_3_percent": true,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                5.1531912514544,
+                6.331277845609618
+              ],
+              "estimate": 5.579953352145719
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                5.020732667831543,
+                6.347401691032336
+              ],
+              "estimate": 5.750386177364482
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N01_m11008_n128:GL_coordinated_fully_coalesced",
+            "support_transition": "retained",
+            "tag": "N01_m11008_n128:GL_coordinated_fully_coalesced"
+          },
+          {
+            "context": {
+              "case": "N01_m4096_n128",
+              "case_metadata": {
+                "BM": 128,
+                "BN": 4,
+                "W": 4,
+                "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+                "cols": 128,
+                "evidence_scope": "Optional torchao Triton scale-rearrangement backend; no scale calculation.",
+                "family": "N01",
+                "id": "N01_m4096_n128",
+                "rows": 4096,
+                "source_function": "triton_scale_swizzle",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "output_ptr": "e089cbe011dc512a1fa8fbdd2b5afcef509666d5048ef43840e49807a5f3c36c"
+                },
+                "grid": [
+                  32,
+                  32,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "5e1d86de77090d60804662f64a692d01ded628c517f628b70981971d7e337499",
+                  "d934d97153c8ad048dd9fa2c72a0111c9bc542597a4375d88eb34e81e25630b5"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "output_ptr"
+                ],
+                "views": {
+                  "output_ptr": {
+                    "dtype": "uint8",
+                    "element_size": 1,
+                    "group": 1,
+                    "shape": [
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  },
+                  "scale_ptr": {
+                    "dtype": "uint8",
+                    "element_size": 1,
+                    "group": 0,
+                    "shape": [
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N01",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N01_m4096_n128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                32,
+                32,
+                1
+              ],
+              "id": "N01_m4096_n128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N01_m4096_n128",
+            "gain_vs_G0_point_change_pp": -0.568038536255663,
+            "gain_vs_U_point_change_pp": 1.4236292608283638,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                2.4442893614036723,
+                3.5471327407277458
+              ],
+              "classification": "inconclusive",
+              "estimate": 3.0476815717026104
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                2.7323727591340354,
+                5.345811840608998
+              ],
+              "classification": "inconclusive",
+              "estimate": 3.898002896046215
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                3.298031636091831,
+                4.011979556701686
+              ],
+              "estimate": 3.6157201079582735
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                1.9429816269069742,
+                3.0895026232297673
+              ],
+              "estimate": 2.474373635217851
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N01_m4096_n128:GL_coordinated_fully_coalesced",
+            "support_transition": "neither_resolved",
+            "tag": "N01_m4096_n128:GL_coordinated_fully_coalesced"
+          },
+          {
+            "context": {
+              "case": "N02_k1024_p128_g128",
+              "case_metadata": {
+                "BM": 32,
+                "BN": 32,
+                "W": 4,
+                "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+                "cols": 1024,
+                "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+                "family": "N02",
+                "group_size": 128,
+                "id": "N02_k1024_p128_g128",
+                "packed_cols": 128,
+                "rows": 1024,
+                "source_function": "awq_dequantize_kernel",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+                },
+                "grid": [
+                  4,
+                  32,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+                  "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+                  "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+                  "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "result_ptr"
+                ],
+                "views": {
+                  "qweight_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 0,
+                    "shape": [
+                      1024,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  },
+                  "result_ptr": {
+                    "dtype": "float16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      1024,
+                      1024
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      1
+                    ]
+                  },
+                  "scales_ptr": {
+                    "dtype": "float16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      8,
+                      1024
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      1
+                    ]
+                  },
+                  "zeros_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 2,
+                    "shape": [
+                      8,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N02",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N02_k1024_p128_g128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                4,
+                32,
+                1
+              ],
+              "id": "N02_k1024_p128_g128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N02_k1024_p128_g128",
+            "gain_vs_G0_point_change_pp": 0.9826378218072644,
+            "gain_vs_U_point_change_pp": -0.42813391493134834,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "inconclusive_U_G0",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                4.187107511777739,
+                6.592290637344961
+              ],
+              "classification": "practical_improvement",
+              "estimate": 5.7488904549505575
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                3.5373666212918096,
+                4.025201533007819
+              ],
+              "classification": "practical_improvement",
+              "estimate": 3.795924946365763
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": true,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                4.473084310746581,
+                5.090892119675699
+              ],
+              "estimate": 4.766252633143293
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                3.4424692296596264,
+                4.906141136165516
+              ],
+              "estimate": 4.224058861297111
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N02_k1024_p128_g128:GL_packed_compute_vec1",
+            "support_transition": "new_controls_inconclusive",
+            "tag": "N02_k1024_p128_g128:GL_packed_compute_vec1"
+          },
+          {
+            "context": {
+              "case": "N02_k3584_p448_g128",
+              "case_metadata": {
+                "BM": 32,
+                "BN": 32,
+                "W": 4,
+                "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+                "cols": 3584,
+                "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+                "family": "N02",
+                "group_size": 128,
+                "id": "N02_k3584_p448_g128",
+                "packed_cols": 448,
+                "rows": 3584,
+                "source_function": "awq_dequantize_kernel",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "result_ptr": "b10a3347c8bd1fa85335568b14875834f0d33e9bfe598824bcb3bb6ce70ee30c"
+                },
+                "grid": [
+                  14,
+                  112,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "85016bcf09cac90310326c2e39cec9eb338597a9b97f618dcb4a50166e4e4954",
+                  "ecc22c1a743c3e4df83e300902c48370decd7e43e41722c54a2178f8e4162a94",
+                  "d4de598259c593b200831aea93621e5e295b1be7105d452a03301c7a61f7b226",
+                  "9a1febd02248bebd32d823edd0e13cacebadfd5af0ee0207a040b59d6dc17a1f"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "result_ptr"
+                ],
+                "views": {
+                  "qweight_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 0,
+                    "shape": [
+                      3584,
+                      448
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      448,
+                      1
+                    ]
+                  },
+                  "result_ptr": {
+                    "dtype": "float16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      3584,
+                      3584
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      3584,
+                      1
+                    ]
+                  },
+                  "scales_ptr": {
+                    "dtype": "float16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      28,
+                      3584
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      3584,
+                      1
+                    ]
+                  },
+                  "zeros_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 2,
+                    "shape": [
+                      28,
+                      448
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      448,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N02",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N02_k3584_p448_g128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                14,
+                112,
+                1
+              ],
+              "id": "N02_k3584_p448_g128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N02_k3584_p448_g128",
+            "gain_vs_G0_point_change_pp": 1.1551341786655263,
+            "gain_vs_U_point_change_pp": 0.7045212954664386,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                6.919781181144344,
+                7.261677362612762
+              ],
+              "classification": "practical_improvement",
+              "estimate": 7.074032566204829
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                6.85174094631037,
+                7.425529006344171
+              ],
+              "classification": "practical_improvement",
+              "estimate": 7.126233939878161
+            },
+            "new_strict_dual_improvement": true,
+            "old_dual_lower_above_3_percent": true,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                5.584493052417397,
+                6.295033268051352
+              ],
+              "estimate": 5.918898387539302
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                6.092531150015394,
+                6.793116636127859
+              ],
+              "estimate": 6.4217126444117225
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N02_k3584_p448_g128:GL_packed_compute_vec1",
+            "support_transition": "retained",
+            "tag": "N02_k3584_p448_g128:GL_packed_compute_vec1"
+          },
+          {
+            "context": {
+              "case": "N03_FA_D128",
+              "case_metadata": {
+                "B": 4,
+                "BLOCK_H": 2,
+                "BLOCK_M": 8,
+                "D": 128,
+                "H": 32,
+                "S": 2048,
+                "W": 4,
+                "caller_configuration": "Original wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+                "family": "N03",
+                "id": "N03_FA_D128",
+                "inplace": false,
+                "interleaved": true,
+                "layout_rank": 3,
+                "operator": "flash_rope",
+                "rotary_dim": 128,
+                "stages": 3,
+                "varlen": false
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "OUT": "c7b044b843f745393ce1ba55bfa1d01c3fca3634005ea79aef1108edc13d2e8f"
+                },
+                "grid": [
+                  16,
+                  256,
+                  4
+                ],
+                "initial_storage_SHA256": [
+                  "413ab565acb9418d79681a279023c97fa71e786250b2a1188d26ccfea4d9859c",
+                  "fde346f6bce5cd7483e09eb98e0d4d68b69ef3c3136e7ecd318ffd850a5f88f2",
+                  "a3188e13b5ddc49d8a03529e17b02aebcecda9c3c0fda6d45b8033494811b87e",
+                  "2188b7a3ad221e6c50a371b5828f408a7f09ec6c8fd9d42d64df3fadb87de004"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "OUT"
+                ],
+                "views": {
+                  "COS": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 2,
+                    "shape": [
+                      2112,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      64,
+                      1
+                    ]
+                  },
+                  "OUT": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      4,
+                      2048,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8388608,
+                      4096,
+                      128,
+                      1
+                    ]
+                  },
+                  "SIN": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      2112,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      64,
+                      1
+                    ]
+                  },
+                  "X": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      4,
+                      2048,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8388608,
+                      4096,
+                      128,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N03",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N03_FA_D128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                16,
+                256,
+                4
+              ],
+              "id": "N03_FA_D128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 9,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 7,
+              "source": "n2"
+            },
+            "context_id": "N03_FA_D128",
+            "gain_vs_G0_point_change_pp": -0.7030405380619849,
+            "gain_vs_U_point_change_pp": -0.7868007249636837,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                -0.7306045868493184,
+                0.4618745151522132
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -0.1344274304806655
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                -0.6217326022265807,
+                0.6371678132071406
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -0.033573253479544096
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                0.2994799046622642,
+                0.8458675045370438
+              ],
+              "estimate": 0.5686131075813193
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                0.554001306303548,
+                0.9583655320158349
+              ],
+              "estimate": 0.7532274714841396
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N03_FA_D128:GL_paired_vec4",
+            "support_transition": "neither_resolved",
+            "tag": "N03_FA_D128:GL_paired_vec4"
+          },
+          {
+            "context": {
+              "case": "N03_FA_D64",
+              "case_metadata": {
+                "B": 4,
+                "BLOCK_H": 2,
+                "BLOCK_M": 8,
+                "D": 64,
+                "H": 32,
+                "S": 2048,
+                "W": 4,
+                "caller_configuration": "Original wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+                "family": "N03",
+                "id": "N03_FA_D64",
+                "inplace": false,
+                "interleaved": true,
+                "layout_rank": 3,
+                "operator": "flash_rope",
+                "rotary_dim": 64,
+                "stages": 3,
+                "varlen": false
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "OUT": "62855e9064b3ea387508013c8c8f280fa4e2d6a83dba5e04bf18022653250226"
+                },
+                "grid": [
+                  16,
+                  256,
+                  4
+                ],
+                "initial_storage_SHA256": [
+                  "726493b82516c9bfee763dc13e70e75988dfc6cea292b91de01da8501a70ff2a",
+                  "de9e2ff7ad708e7dbc20a3f6cad89743913f0cb9f1ba3060fa7bbf2ca9b138a2",
+                  "138c0ebfc401b9f11f10b573778b5371488fcdc127bfa644ab84b10a6fe235a7",
+                  "01824d7dbaf4b169dc3cff212661664070b8f50b2cb1597fdc852c02549df69e"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "OUT"
+                ],
+                "views": {
+                  "COS": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 2,
+                    "shape": [
+                      2112,
+                      32
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      32,
+                      1
+                    ]
+                  },
+                  "OUT": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      4,
+                      2048,
+                      32,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4194304,
+                      2048,
+                      64,
+                      1
+                    ]
+                  },
+                  "SIN": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      2112,
+                      32
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      32,
+                      1
+                    ]
+                  },
+                  "X": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      4,
+                      2048,
+                      32,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4194304,
+                      2048,
+                      64,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N03",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N03_FA_D64",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                16,
+                256,
+                4
+              ],
+              "id": "N03_FA_D64",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 9,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 7,
+              "source": "n2"
+            },
+            "context_id": "N03_FA_D64",
+            "gain_vs_G0_point_change_pp": 0.6256846011588516,
+            "gain_vs_U_point_change_pp": 0.48741592838883946,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                0.07236115282814276,
+                0.8965118677581638
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.3563707053564282
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                0.09794011465187277,
+                0.7998392001544287
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.333699789306628
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                -0.4389888916365299,
+                -0.11118339413100045
+              ],
+              "estimate": -0.26931389580242343
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                -0.36792520342767804,
+                0.09619342771121575
+              ],
+              "estimate": -0.15371613908221143
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N03_FA_D64:GL_paired_vec4",
+            "support_transition": "neither_resolved",
+            "tag": "N03_FA_D64:GL_paired_vec4"
+          },
+          {
+            "context": {
+              "case": "N03_MROPE_D128",
+              "case_metadata": {
+                "D": 128,
+                "KH": 8,
+                "QH": 32,
+                "T": 2048,
+                "W": 4,
+                "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+                "family": "N03",
+                "id": "N03_MROPE_D128",
+                "inplace": true,
+                "interleaved": false,
+                "layout_rank": 2,
+                "neox": true,
+                "operator": "mrope",
+                "rotary_dim": 128,
+                "sections": [
+                  16,
+                  24,
+                  24
+                ],
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "k_ptr": "50362ad31e9c4ba8cbb4bf0f70123a31ddb87fcc43a1402fcdbbce36a8ab6b2e",
+                  "q_ptr": "260bce381311fc573a92eaa1a2261c4f8445e0b0bbc2c8f627800fd5f863db5e"
+                },
+                "grid": [
+                  2048,
+                  1,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "30e238db110d3140183d1130b4edef6d8a1785efefc2ce3d7dcf23ba4d656442",
+                  "d7568b7d8c48467babf5f47646f37cd0a51c198345bf0db4e8dbd52db77606f8",
+                  "b4066bb09336f2df8e4310de3333a24681728c4185a186e10b32a8446bfd1b3a",
+                  "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+                ],
+                "inplace": [
+                  "q_ptr",
+                  "k_ptr"
+                ],
+                "outputs": [
+                  "q_ptr",
+                  "k_ptr"
+                ],
+                "views": {
+                  "cos_sin_cache_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 2,
+                    "shape": [
+                      8192,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      1
+                    ]
+                  },
+                  "k_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      2048,
+                      1024
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      1
+                    ]
+                  },
+                  "positions_ptr": {
+                    "dtype": "int64",
+                    "element_size": 8,
+                    "group": 3,
+                    "shape": [
+                      3,
+                      2048
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      2048,
+                      1
+                    ]
+                  },
+                  "q_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      4096
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4096,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N03",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N03_MROPE_D128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                2048,
+                1,
+                1
+              ],
+              "id": "N03_MROPE_D128",
+              "inplace_groups": 2,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 7,
+              "source": "n2"
+            },
+            "context_id": "N03_MROPE_D128",
+            "gain_vs_G0_point_change_pp": -1.1408134503741902,
+            "gain_vs_U_point_change_pp": -0.108607016032092,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                0.8817299710549032,
+                2.3364991824479917
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 1.4818041918500755
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                0.5753750293365446,
+                1.9181854621931556
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 1.115485786239579
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                2.059623205540667,
+                3.227044249966136
+              ],
+              "estimate": 2.6226176422242657
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                0.5932029405215549,
+                1.838030447808366
+              ],
+              "estimate": 1.224092802271671
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N03_MROPE_D128:GL_QK_vec2",
+            "support_transition": "neither_resolved",
+            "tag": "N03_MROPE_D128:GL_QK_vec2"
+          },
+          {
+            "context": {
+              "case": "N03_MROPE_D64",
+              "case_metadata": {
+                "D": 64,
+                "KH": 8,
+                "QH": 32,
+                "T": 2048,
+                "W": 4,
+                "caller_configuration": "Original CUDA wrapper omits num_warps/num_stages; verify pinned compiler defaults are 4/3.",
+                "family": "N03",
+                "id": "N03_MROPE_D64",
+                "inplace": true,
+                "interleaved": false,
+                "layout_rank": 2,
+                "neox": true,
+                "operator": "mrope",
+                "rotary_dim": 64,
+                "sections": [
+                  8,
+                  12,
+                  12
+                ],
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "k_ptr": "06a44ccadd24b5d08cedca7054609af05703629a2222738f2f52364dc0111c9e",
+                  "q_ptr": "f112114fb8b99bbee64e92cff1385854a8b4f615416091d74ca95f43ad7cee24"
+                },
+                "grid": [
+                  2048,
+                  1,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "1b3e7696c7c105227e3ec5a34534875b106c5c0b3411596ecc0c3d6c6d51b698",
+                  "eb1532d1542146e0d1092a5c7bd20fbc1c1c220fed8879a7892cfe24e28ca1b3",
+                  "b57b917ae0415ec7cf57e53526d462e5cb3fa3723730fdc06f955e2c9a3103c9",
+                  "263e7ef30ff30bcacb6a120bd5c82ed7776f9cf209476fa6b86df18d8dca4b6b"
+                ],
+                "inplace": [
+                  "q_ptr",
+                  "k_ptr"
+                ],
+                "outputs": [
+                  "q_ptr",
+                  "k_ptr"
+                ],
+                "views": {
+                  "cos_sin_cache_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 2,
+                    "shape": [
+                      8192,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      64,
+                      1
+                    ]
+                  },
+                  "k_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      2048,
+                      512
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      1
+                    ]
+                  },
+                  "positions_ptr": {
+                    "dtype": "int64",
+                    "element_size": 8,
+                    "group": 3,
+                    "shape": [
+                      3,
+                      2048
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      2048,
+                      1
+                    ]
+                  },
+                  "q_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      2048
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      2048,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N03",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N03_MROPE_D64",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                2048,
+                1,
+                1
+              ],
+              "id": "N03_MROPE_D64",
+              "inplace_groups": 2,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 7,
+              "source": "n2"
+            },
+            "context_id": "N03_MROPE_D64",
+            "gain_vs_G0_point_change_pp": 0.0,
+            "gain_vs_U_point_change_pp": 1.6092306609939238,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                0.0,
+                0.0
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.0
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                0.3393209057589284,
+                0.8452829438764745
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.6210493115795612
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                0.0,
+                0.0
+              ],
+              "estimate": 0.0
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                -2.1855263884584386,
+                -0.10822291888979528
+              ],
+              "estimate": -0.9881813494143624
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N03_MROPE_D64:G0",
+            "support_transition": "neither_resolved",
+            "tag": "N03_MROPE_D64:GL_K_vec2"
+          },
+          {
+            "context": {
+              "case": "N04_h32_s4096_d128",
+              "case_metadata": {
+                "BM": 64,
+                "BN": 128,
+                "D": 128,
+                "H": 32,
+                "S": 4096,
+                "W": 8,
+                "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+                "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+                "family": "N04",
+                "id": "N04_h32_s4096_d128",
+                "input_format": "fused_token_major_qkv_views",
+                "padded_keys": 4096,
+                "padded_queries": 4096,
+                "source_function": "_pack_qkv",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "k_fp8": "b290ed8afcf04bc06de97a7a19c4bf3d185e551b2daf3fc0ab81d3729398daff",
+                  "q_fp8": "d4e9cd833ac29cc3a68d9c7e172ff3d0acebe8585fb6a1ddf3e62b99f4a35657",
+                  "v_fp8": "01dc03de818218b7c65f5781be7729a0b94fb4430e8ae53e0313831f56ef37d6"
+                },
+                "grid": [
+                  32,
+                  64,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "cc4b7618ac397072cc82f6f26fdb4f9f06feb6731ad33c7a9e1146c10169ad92",
+                  "4dd58971fe6dcc0979b2bb390860aece3ef898d20dce5dbbb588743d89b07981",
+                  "71d15b1e1ec77e5d0aa3e8eef07d547323fbad38837e12eac36bc423f6f1792f",
+                  "71d15b1e1ec77e5d0aa3e8eef07d547323fbad38837e12eac36bc423f6f1792f",
+                  "71d15b1e1ec77e5d0aa3e8eef07d547323fbad38837e12eac36bc423f6f1792f"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "q_fp8",
+                  "k_fp8",
+                  "v_fp8"
+                ],
+                "views": {
+                  "k": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      32,
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 4096,
+                    "stride": [
+                      128,
+                      12288,
+                      1
+                    ]
+                  },
+                  "k_fp8": {
+                    "dtype": "float8_e4m3fn",
+                    "element_size": 1,
+                    "group": 3,
+                    "shape": [
+                      32,
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      524288,
+                      128,
+                      1
+                    ]
+                  },
+                  "q": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      32,
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      12288,
+                      1
+                    ]
+                  },
+                  "q_fp8": {
+                    "dtype": "float8_e4m3fn",
+                    "element_size": 1,
+                    "group": 2,
+                    "shape": [
+                      32,
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      524288,
+                      128,
+                      1
+                    ]
+                  },
+                  "scales": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 1,
+                    "shape": [
+                      3,
+                      32
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      32,
+                      1
+                    ]
+                  },
+                  "v": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      32,
+                      4096,
+                      128
+                    ],
+                    "storage_offset": 8192,
+                    "stride": [
+                      128,
+                      12288,
+                      1
+                    ]
+                  },
+                  "v_fp8": {
+                    "dtype": "float8_e4m3fn",
+                    "element_size": 1,
+                    "group": 4,
+                    "shape": [
+                      32,
+                      128,
+                      4096
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      524288,
+                      4096,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N04",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N04_h32_s4096_d128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                32,
+                64,
+                1
+              ],
+              "id": "N04_h32_s4096_d128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N04_h32_s4096_d128",
+            "gain_vs_G0_point_change_pp": 0.1859397801241076,
+            "gain_vs_U_point_change_pp": 0.14342135072921197,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                -0.003486542546616509,
+                0.45079012930048584
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.22818692866033788
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                -0.18185971939993142,
+                0.3812807490260633
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.10290097592208633
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                -0.15333169390392254,
+                0.2898369551646233
+              ],
+              "estimate": 0.04224714853623026
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                -0.22486025151465638,
+                0.13378491486488048
+              ],
+              "estimate": -0.040520374807125656
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N04_h32_s4096_d128:GL_v_input_vec8",
+            "support_transition": "neither_resolved",
+            "tag": "N04_h32_s4096_d128:GL_v_input_vec8"
+          },
+          {
+            "context": {
+              "case": "N04_h8_s2048_d128",
+              "case_metadata": {
+                "BM": 64,
+                "BN": 128,
+                "D": 128,
+                "H": 8,
+                "S": 2048,
+                "W": 8,
+                "caller_defaults": "Original pack caller sets num_warps=8 and leaves num_stages at pinned CUDA default 3.",
+                "evidence_scope": "Standalone fixed-external-scale SM120-origin FP8 pack. H100 is a portability experiment, not its original attention backend.",
+                "family": "N04",
+                "id": "N04_h8_s2048_d128",
+                "input_format": "fused_token_major_qkv_views",
+                "padded_keys": 2048,
+                "padded_queries": 2048,
+                "source_function": "_pack_qkv",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "k_fp8": "78e0554a3676f1dd51d9df19993efd56962664280b22c0101b5be47ce445d966",
+                  "q_fp8": "bf44d4bc9577b6a9d7ba601bb85cccbec06f236257e93a4e45f4f33043ff13b7",
+                  "v_fp8": "bad90795716a1686ee2fb8228d1ba23a0f994ca9f2c0b5a546f2ec50bdeaff28"
+                },
+                "grid": [
+                  8,
+                  32,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "f4dc29a6149cdd3633738b0d72335c1a17207e4e68ee8f8d01e2d8ea26201476",
+                  "4e18f046e3b391a1f2760096fde87c9f48add2a795db112ffe1eb17b376cf930",
+                  "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+                  "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf",
+                  "9d5be9089f7dfd25715f334f9461709cfddaaa6d2ea9b80c2289fc23f151b9bf"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "q_fp8",
+                  "k_fp8",
+                  "v_fp8"
+                ],
+                "views": {
+                  "k": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      8,
+                      2048,
+                      128
+                    ],
+                    "storage_offset": 1024,
+                    "stride": [
+                      128,
+                      3072,
+                      1
+                    ]
+                  },
+                  "k_fp8": {
+                    "dtype": "float8_e4m3fn",
+                    "element_size": 1,
+                    "group": 3,
+                    "shape": [
+                      8,
+                      2048,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      262144,
+                      128,
+                      1
+                    ]
+                  },
+                  "q": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      8,
+                      2048,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      128,
+                      3072,
+                      1
+                    ]
+                  },
+                  "q_fp8": {
+                    "dtype": "float8_e4m3fn",
+                    "element_size": 1,
+                    "group": 2,
+                    "shape": [
+                      8,
+                      2048,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      262144,
+                      128,
+                      1
+                    ]
+                  },
+                  "scales": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 1,
+                    "shape": [
+                      3,
+                      8
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8,
+                      1
+                    ]
+                  },
+                  "v": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      8,
+                      2048,
+                      128
+                    ],
+                    "storage_offset": 2048,
+                    "stride": [
+                      128,
+                      3072,
+                      1
+                    ]
+                  },
+                  "v_fp8": {
+                    "dtype": "float8_e4m3fn",
+                    "element_size": 1,
+                    "group": 4,
+                    "shape": [
+                      8,
+                      128,
+                      2048
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      262144,
+                      2048,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N04",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N04_h8_s2048_d128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                8,
+                32,
+                1
+              ],
+              "id": "N04_h8_s2048_d128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N04_h8_s2048_d128",
+            "gain_vs_G0_point_change_pp": -0.09484667224958881,
+            "gain_vs_U_point_change_pp": 0.7695652448494238,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                -1.0547289946789522,
+                0.039898437500844805
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -0.5174677940942569
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                -0.8038288949411901,
+                0.5459023534163209
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -0.07926403532650177
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                -0.7649867049971742,
+                -0.049475935227660195
+              ],
+              "estimate": -0.4226211218446681
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                -1.2066160832394865,
+                -0.5497421834399561
+              ],
+              "estimate": -0.8488292801759255
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N04_h8_s2048_d128:GL_v_input_vec8",
+            "support_transition": "neither_resolved",
+            "tag": "N04_h8_s2048_d128:GL_v_input_vec8"
+          },
+          {
+            "context": {
+              "case": "N05_t2048_h8_d128",
+              "case_metadata": {
+                "BN": 128,
+                "BT": 32,
+                "D": 128,
+                "FLA_USE_FAST_OPS": "0",
+                "H": 8,
+                "T": 2048,
+                "W": 8,
+                "autotune_configs": [
+                  {
+                    "BT": 32,
+                    "W": 4,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 4,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 32,
+                    "W": 8,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 8,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 32,
+                    "W": 16,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 16,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 32,
+                    "W": 32,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 32,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 4,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 4,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 8,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 8,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 16,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 16,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 32,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 32,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 4,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 4,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 8,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 8,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 16,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 16,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 32,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 32,
+                    "stages": 3
+                  }
+                ],
+                "autotune_resolved": true,
+                "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+                "configuration_selection": "U-only original menu",
+                "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+                "family": "N05",
+                "id": "N05_t2048_h8_d128",
+                "source_function": "kda_gate_fwd_kernel",
+                "stages": 2
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "yg": "586e14ff323af1c54830f1f0c974d9b23c6f0dc61be92e24d46dcd204f0dd211"
+                },
+                "grid": [
+                  64,
+                  8,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "09006abadb59a8378dffdccbf7dd4606e1301f4753f8b219940a453a0e35f037",
+                  "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+                  "f241463aadaa7818c4451c58fb76daea5841aa706f067c9f4699528d6c670cf6",
+                  "fc5edecbbcefdb7b677dcb3b66db2eb2f4fc8e7b948e7395327bf88295179398"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "yg"
+                ],
+                "views": {
+                  "A_log": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 1,
+                    "shape": [
+                      8
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1
+                    ]
+                  },
+                  "dt_bias": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 2,
+                    "shape": [
+                      1024
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1
+                    ]
+                  },
+                  "g": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      8,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      128,
+                      1
+                    ]
+                  },
+                  "yg": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 3,
+                    "shape": [
+                      2048,
+                      8,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1024,
+                      128,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N05",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N05_t2048_h8_d128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                64,
+                8,
+                1
+              ],
+              "id": "N05_t2048_h8_d128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N05_t2048_h8_d128",
+            "gain_vs_G0_point_change_pp": -0.31878739304232795,
+            "gain_vs_U_point_change_pp": -0.17135752434440032,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                2.5106111085239435,
+                3.666710759096298
+              ],
+              "classification": "inconclusive",
+              "estimate": 3.08853625362302
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                3.9482636524106374,
+                4.21580755722356
+              ],
+              "classification": "practical_improvement",
+              "estimate": 4.102146670739102
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                2.988585172510577,
+                3.8751511589264385
+              ],
+              "estimate": 3.407323646665348
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                3.301488176419555,
+                5.20275404199978
+              ],
+              "estimate": 4.273504195083502
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N05_t2048_h8_d128:GL_feature_vec4",
+            "support_transition": "neither_resolved",
+            "tag": "N05_t2048_h8_d128:GL_feature_vec4"
+          },
+          {
+            "context": {
+              "case": "N05_t2048_h8_d64",
+              "case_metadata": {
+                "BN": 64,
+                "BT": 32,
+                "D": 64,
+                "FLA_USE_FAST_OPS": "0",
+                "H": 8,
+                "T": 2048,
+                "W": 8,
+                "autotune_configs": [
+                  {
+                    "BT": 32,
+                    "W": 4,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 4,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 32,
+                    "W": 8,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 8,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 32,
+                    "W": 16,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 16,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 32,
+                    "W": 32,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 32,
+                    "W": 32,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 4,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 4,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 8,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 8,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 16,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 16,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 64,
+                    "W": 32,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 64,
+                    "W": 32,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 4,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 4,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 8,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 8,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 16,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 16,
+                    "stages": 3
+                  },
+                  {
+                    "BT": 128,
+                    "W": 32,
+                    "stages": 2
+                  },
+                  {
+                    "BT": 128,
+                    "W": 32,
+                    "stages": 3
+                  }
+                ],
+                "autotune_resolved": true,
+                "caller_defaults": "Resolve the original full BT/W/stages set using U alone before G0 or GL; no layout timings select this configuration.",
+                "configuration_selection": "U-only original menu",
+                "evidence_scope": "Forward standalone KDA gate with A/bias, no beta, no chunk-cumsum or backward. FP32 output.",
+                "family": "N05",
+                "id": "N05_t2048_h8_d64",
+                "source_function": "kda_gate_fwd_kernel",
+                "stages": 2
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "yg": "956120cc82da3367e9ee83f660e35f462c39278a0327639a6f3083dd10339dc0"
+                },
+                "grid": [
+                  64,
+                  8,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "45cda4ed3579d8d3082bc8efcfbfd7a487510bb4c8d00e88bc498092cb71fdc0",
+                  "3d2bf7020f9ed9d588c11c012f720ed7eafd5592e8ed96862b029f43756ea92d",
+                  "4ce04fdb240534c1963eb9f16dc8413e993fba6503839e3a98e911689ccbca12",
+                  "c61b01772c6ed82a2333eb3a4e83e6bc9507c4bf984c522e38bdb11991de894b"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "yg"
+                ],
+                "views": {
+                  "A_log": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 1,
+                    "shape": [
+                      8
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1
+                    ]
+                  },
+                  "dt_bias": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 2,
+                    "shape": [
+                      512
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1
+                    ]
+                  },
+                  "g": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      64,
+                      1
+                    ]
+                  },
+                  "yg": {
+                    "dtype": "float32",
+                    "element_size": 4,
+                    "group": 3,
+                    "shape": [
+                      2048,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      64,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N05",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N05_t2048_h8_d64",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                64,
+                8,
+                1
+              ],
+              "id": "N05_t2048_h8_d64",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N05_t2048_h8_d64",
+            "gain_vs_G0_point_change_pp": 0.18755602865689092,
+            "gain_vs_U_point_change_pp": -0.9122364003304138,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                1.6415430412010785,
+                2.471169347327648
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 2.0919819237332358
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                1.415486260360123,
+                2.1884118944565687
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 1.7985013853580951
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                1.2419093955825729,
+                2.7222730880348536
+              ],
+              "estimate": 1.9044258950763449
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                2.361741153761765,
+                3.0776195954437413
+              ],
+              "estimate": 2.710737785688509
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N05_t2048_h8_d64:GL_feature_vec4",
+            "support_transition": "neither_resolved",
+            "tag": "N05_t2048_h8_d64:GL_feature_vec4"
+          },
+          {
+            "context": {
+              "case": "N06_h32_d128",
+              "case_metadata": {
+                "D": 128,
+                "H": 32,
+                "T": 2048,
+                "W": 4,
+                "block_size": 16,
+                "caller_options": "W/stages omitted upstream; pinned backend defaults",
+                "family": "N06",
+                "id": "N06_h32_d128",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "key_cache_ptr": "c40b0fc059f02c6a9ee5d3a21633f504b4ecc653e587402a6c22eeb4c5b5011a",
+                  "value_cache_ptr": "f1a00e8a2780f2adbc3177a0a53aab0545abe90c7e04d39ff151d608f5e3cbf2"
+                },
+                "grid": [
+                  2048,
+                  8,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "e39fcf2a3170e762eef805b7b599d47645ca9ef8fe7fa68eb4a0500a0f2a50c5",
+                  "73c7fa2e0b48a6a13c57f3f9b0980913819849f26f97a998c881990762088007",
+                  "83be18a887b7f16f8db2d8f6767eecdf3067646236c65d0a493d50679fb04a09",
+                  "83be18a887b7f16f8db2d8f6767eecdf3067646236c65d0a493d50679fb04a09",
+                  "437954fb8f5ca722ba51dcaab15f379a99bb3f7b1b85c47273081a729f3127b6"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "key_cache_ptr",
+                  "value_cache_ptr"
+                ],
+                "views": {
+                  "k_scale_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4096,
+                      128,
+                      1
+                    ]
+                  },
+                  "key_cache_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 2,
+                    "shape": [
+                      129,
+                      16,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      65536,
+                      128,
+                      2048,
+                      1
+                    ]
+                  },
+                  "key_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4096,
+                      128,
+                      1
+                    ]
+                  },
+                  "slot_mapping_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 4,
+                    "shape": [
+                      2048
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1
+                    ]
+                  },
+                  "v_scale_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4096,
+                      128,
+                      1
+                    ]
+                  },
+                  "value_cache_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      129,
+                      16,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      65536,
+                      128,
+                      2048,
+                      1
+                    ]
+                  },
+                  "value_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      2048,
+                      32,
+                      128
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      4096,
+                      128,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N06",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N06_h32_d128",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                2048,
+                8,
+                1
+              ],
+              "id": "N06_h32_d128",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N06_h32_d128",
+            "gain_vs_G0_point_change_pp": -0.3022765491890142,
+            "gain_vs_U_point_change_pp": -0.635620895354506,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                -0.0596410321870646,
+                0.4129775796408836
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.22358088249334113
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                -0.14149627438837772,
+                0.31747508504805355
+              ],
+              "classification": "practically_equivalent",
+              "estimate": 0.13799316401573058
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                0.41340682563297537,
+                0.6440891106077442
+              ],
+              "estimate": 0.5258574316823553
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                0.6328901502439699,
+                0.9071368362361109
+              ],
+              "estimate": 0.7736140593702366
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N06_h32_d128:GL_e4_heads1",
+            "support_transition": "neither_resolved",
+            "tag": "N06_h32_d128:GL_e4_heads1"
+          },
+          {
+            "context": {
+              "case": "N06_h8_d64",
+              "case_metadata": {
+                "D": 64,
+                "H": 8,
+                "T": 2048,
+                "W": 4,
+                "block_size": 16,
+                "caller_options": "W/stages omitted upstream; pinned backend defaults",
+                "family": "N06",
+                "id": "N06_h8_d64",
+                "stages": 3
+              },
+              "expected_fixture": {
+                "expected_SHA256": {
+                  "key_cache_ptr": "095c62a96fdca119676fcc07bd6bf8498b3d7bc246779925a973c10245b38bd5",
+                  "value_cache_ptr": "4443805982f95a2cf40fe86efb5583b3dbf676e5dabf4a0b398beb7b1b111ea2"
+                },
+                "grid": [
+                  2048,
+                  2,
+                  1
+                ],
+                "initial_storage_SHA256": [
+                  "11acd6d09d657b26adfee00d1f5e7b15f0601a326be636dec2ff2ea46d5bc843",
+                  "291024fba434319d9e656c7b1d5ef44fcbc4c1668a851ad196d347c275dc923e",
+                  "3944a76dfaa168f5a1a691334956b429090d28c6e168537fab58e072454ee85c",
+                  "3944a76dfaa168f5a1a691334956b429090d28c6e168537fab58e072454ee85c",
+                  "b4d7605c489ea8cc191050c091ce46d424205c31123af4a5e6fbf70825cf09d2"
+                ],
+                "inplace": [],
+                "outputs": [
+                  "key_cache_ptr",
+                  "value_cache_ptr"
+                ],
+                "views": {
+                  "k_scale_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      64,
+                      1
+                    ]
+                  },
+                  "key_cache_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 2,
+                    "shape": [
+                      129,
+                      16,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8192,
+                      64,
+                      1024,
+                      1
+                    ]
+                  },
+                  "key_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      64,
+                      1
+                    ]
+                  },
+                  "slot_mapping_ptr": {
+                    "dtype": "int32",
+                    "element_size": 4,
+                    "group": 4,
+                    "shape": [
+                      2048
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      1
+                    ]
+                  },
+                  "v_scale_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 0,
+                    "shape": [
+                      2048,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      64,
+                      1
+                    ]
+                  },
+                  "value_cache_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 3,
+                    "shape": [
+                      129,
+                      16,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      8192,
+                      64,
+                      1024,
+                      1
+                    ]
+                  },
+                  "value_ptr": {
+                    "dtype": "bfloat16",
+                    "element_size": 2,
+                    "group": 1,
+                    "shape": [
+                      2048,
+                      8,
+                      64
+                    ],
+                    "storage_offset": 0,
+                    "stride": [
+                      512,
+                      64,
+                      1
+                    ]
+                  }
+                }
+              },
+              "family": "N06",
+              "fresh_check_patterns": [
+                "finite"
+              ],
+              "geometry": "N06_h8_d64",
+              "graph_oracle_readback_required": true,
+              "grid": [
+                2048,
+                2,
+                1
+              ],
+              "id": "N06_h8_d64",
+              "inplace_groups": 0,
+              "inplace_restore": "Immutable GPU snapshot copied before every prime and target; copies precede measured start event.",
+              "logical_programs": 10,
+              "original_three_pattern_eligibility": {
+                "SHA256": "406751546898dd82bfb23db461d4db5ed5f6965baab46f4696bb74d9d89fc5d5",
+                "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n2/check/attempt_001/invocation_000/export/result.json"
+              },
+              "physical_programs": 10,
+              "source": "n2"
+            },
+            "context_id": "N06_h8_d64",
+            "gain_vs_G0_point_change_pp": -0.06284959047737737,
+            "gain_vs_U_point_change_pp": -1.4156550917988975,
+            "interpretation": "Threshold-resolution change across separately sampled execution contexts, not a paired causal old/new effect.",
+            "new_control_status": "validated",
+            "new_gain_vs_G0_percent": {
+              "CI95": [
+                -2.166114533106712,
+                -0.29133599125366144
+              ],
+              "classification": "practically_equivalent",
+              "estimate": -1.3983119463827658
+            },
+            "new_gain_vs_U_percent": {
+              "CI95": [
+                -3.104217589891133,
+                -1.2324963026619062
+              ],
+              "classification": "inconclusive",
+              "estimate": -1.9629689064525857
+            },
+            "new_strict_dual_improvement": false,
+            "old_dual_lower_above_3_percent": false,
+            "old_gain_vs_G0_percent": {
+              "CI95": [
+                -1.887262383232236,
+                -0.7345128161811179
+              ],
+              "estimate": -1.3354623559053884
+            },
+            "old_gain_vs_U_percent": {
+              "CI95": [
+                -1.5662256503977292,
+                0.436450489819949
+              ],
+              "estimate": -0.5473138146536882
+            },
+            "old_source": "stage_n4",
+            "representative_tag": "N06_h8_d64:GL_e2_heads4",
+            "support_transition": "neither_resolved",
+            "tag": "N06_h8_d64:GL_e2_heads4"
+          }
+        ]
+      },
+      "final_validators": [
+        {
+          "SHA256": "30419974ffddf01b29c42c27b5f83619b2438760f63a8450063f34ff06f43b5c",
+          "path": "/home/chenmiaoming/triton-exp/experiments/layout_coordination/results/cadence_retest/retest_001/nonreduction/validation_final.json"
+        }
+      ],
+      "raw_samples": 139500,
+      "summary": {
+        "U_G0_pairs": 16,
+        "U_G0_practically_equivalent": 15,
+        "candidate_rows": 112,
+        "logical_rows": 160,
+        "physical_U_G0_pairs": 16,
+        "physical_rows": 150,
+        "physical_sham_rows": 16,
+        "sham_comparisons": 16,
+        "sham_practically_equivalent": 16,
+        "strict_practical_improvements": 10
+      }
+    }
+  },
+  "source_inputs": [
+    {
+      "SHA256": "8cf28d737e32409c18b11d4a1ec1661a6fabcb599003dbe4ad0a5a1b9d6082f7",
+      "path": "/home/chenmiaoming/triton-exp/experiments/layout_coordination/results/cadence_retest/retest_001/preregistration/protocol.json"
+    },
+    {
+      "SHA256": "fbf2e384bad4b5c1a25b14b4e18623f098b7a779c34bfe32daa39a06f34b0c4b",
+      "path": "/home/chenmiaoming/triton-exp/experiments/layout_coordination/cadence_retest/summary.py"
+    },
+    {
+      "SHA256": "4762801742e0e41b14fd3f0e2a5203e980823953bd3e6de16d6c4a5b97e748b7",
+      "path": "/home/chenmiaoming/triton-exp/experiments/layout_coordination/cadence_retest/analyze.py"
+    },
+    {
+      "SHA256": "87a2a0ebe7edc914ac7554d390a9efc7dbbc25bc08eaeb2d790161db96a11ee4",
+      "path": "/home/chenmiaoming/triton-exp/experiments/layout_coordination/results/cadence_retest/retest_001/nonreduction/analysis/analysis.json"
+    },
+    {
+      "SHA256": "30419974ffddf01b29c42c27b5f83619b2438760f63a8450063f34ff06f43b5c",
+      "path": "/home/chenmiaoming/triton-exp/experiments/layout_coordination/results/cadence_retest/retest_001/nonreduction/validation_final.json"
+    },
+    {
+      "SHA256": "eafd435668c44e6eb41118b19fa38ddfc65abc57a9d8d50f55dfdb9ed03be39f",
+      "path": "/home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n4/analysis/analysis.json"
+    },
+    {
+      "SHA256": "433caa07d44685dabd9f8b60ee1e48456a269987f278c16e20f63d6f182f6244",
+      "path": "/home/chenmiaoming/triton-exp/experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n5_timing/analysis/analysis.json"
+    }
+  ],
+  "status": "OK",
+  "suites": [
+    "nonreduction"
+  ]
+}
