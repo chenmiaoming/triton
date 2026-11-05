@@ -1,0 +1,312 @@
+{
+  "cases": [
+    {
+      "BM": 32,
+      "BN": 32,
+      "W": 4,
+      "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+      "cols": 1024,
+      "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+      "family": "N02",
+      "group_size": 128,
+      "id": "N02_k1024_p128_g128",
+      "packed_cols": 128,
+      "rows": 1024,
+      "source_function": "awq_dequantize_kernel",
+      "stages": 3
+    }
+  ],
+  "compiler_calls": 0,
+  "native_rebuilds": 0,
+  "programs": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(7,)": "32",
+        "(8,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "kernel.llir": "8f5a9ee501940442fd9517f79badbea7affeb16e2ba7fbfc3451935968def123",
+        "kernel.ptx": "ae18a95fe4b1c75bae5ad1af5277571566445debdf0338727dce9e0d8ee66823",
+        "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+        "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+        "kernel.ttgir": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e",
+        "kernel.ttir": "eb4bd5439dbe0af9c7a1800a1a08498349faf7ca9cddd53539208f31ddd61e53"
+      },
+      "artifact_directory": "baseline/artifacts/N02_k1024_p128_g128_U",
+      "baseline_artifact_directory": "artifacts/N02_k1024_p128_g128_U",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 1024,
+        "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+        "family": "N02",
+        "group_size": 128,
+        "id": "N02_k1024_p128_g128",
+        "packed_cols": 128,
+        "rows": 1024,
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "compile_key": "d966654ae804e0e3642cfa99fb3369044130b2dbf5193995f1b3e43e85d3a1b9",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+      "dynamic_smem_bytes": 2048,
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+        },
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+          "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+          "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+          "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              1024,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              128,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              1024,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              8,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              8,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              128,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k1024_p128_g128",
+      "global_scratch_size": 0,
+      "imported_baseline": true,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 72,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k1024_p128_g128:U",
+      "variant": "U"
+    }
+  ],
+  "provenance": {
+    "allocated_ELF_sections": [
+      {
+        "SHA256": "2b73f6b3cd6cd9f97ccbbedc2fa1904331b916b2ace865882f72ddd083c79b04",
+        "flags": 66,
+        "name": ".nv.constant0.ENTRY",
+        "size": 592,
+        "type": 1
+      },
+      {
+        "SHA256": null,
+        "flags": 67,
+        "name": ".nv.shared.ENTRY",
+        "size": 1024,
+        "type": 8
+      },
+      {
+        "SHA256": null,
+        "flags": 3,
+        "name": ".nv.shared.reserved.ENTRY",
+        "size": 0,
+        "type": 8
+      },
+      {
+        "SHA256": "405e32e0e5a877016d32a09bbaa40f495bffa3cacf155f39503857978bbae5ff",
+        "flags": 6,
+        "name": ".text.ENTRY",
+        "size": 8832,
+        "type": 1
+      }
+    ],
+    "artifact_files_SHA256": {
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.cubin": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.llir": "8f5a9ee501940442fd9517f79badbea7affeb16e2ba7fbfc3451935968def123",
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.ptx": "ae18a95fe4b1c75bae5ad1af5277571566445debdf0338727dce9e0d8ee66823",
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.ttgir": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e",
+      "baseline/artifacts/N02_k1024_p128_g128_U/kernel.ttir": "eb4bd5439dbe0af9c7a1800a1a08498349faf7ca9cddd53539208f31ddd61e53",
+      "baseline/artifacts/N02_k1024_p128_g128_U/metadata.json": "e394509c13b90c7440a60012a967d356920ec0b1576bb6618636ac44830d0a9a"
+    },
+    "canonical_CUBIN_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+    "canonical_artifact_directory": "baseline/artifacts/N02_k1024_p128_g128_U",
+    "original_metadata_preserved": true,
+    "reference_driver_binding": {
+      "binding": {
+        "ABI": [
+          "u64",
+          "u64",
+          "u64",
+          "u32",
+          "u64",
+          "u32",
+          "u32",
+          "u64",
+          "u64"
+        ],
+        "attributes": {
+          "local_bytes": 0,
+          "n_regs": 72,
+          "occupancy_capacity_q": 7,
+          "static_smem_bytes": 0
+        },
+        "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "direct_launches": 1,
+        "graph_launches": 390,
+        "guards": 391,
+        "loaded_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "tag": "N02_k1024_p128_g128:U"
+      },
+      "source": {
+        "SHA256": "4565db2d111f38a0ce2f00cdd79ca134a615a32017f43a184cd78c369c56b6c5",
+        "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n4/timing/attempt_001/invocation_001/export/result.json"
+      }
+    },
+    "scope": "One original U function for one fixed AWQ shape; A/B are observation labels, not programs.",
+    "source_payload": {
+      "SHA256": "06b7efb0b163df0231e0a8f204d07640aeaaa5c8cf61a4a5a772331c6a218b69",
+      "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n4/selection/selected_payload.zip"
+    },
+    "source_protocol": {
+      "SHA256": "b026d53bd624e4069bb06f117e8af02ce34b63c109a2cb23e6b1b64483ba4099",
+      "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n4/preregistration/protocol.json"
+    },
+    "source_tag": "N02_k1024_p128_g128:U"
+  },
+  "status": "OK"
+}
