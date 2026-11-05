@@ -1,0 +1,96 @@
+{
+  "CPU_only": true,
+  "GPU_allocations": 0,
+  "autotune_policy": "All original BT/W/stages configurations are exported by the adapter for U-only resolution before G0.",
+  "extractions": [
+    {
+      "SHA256": "f3e83902942991c3320c367c69dcf80fe0c0a26f2468069cbdbf7a627edf4109",
+      "functions": [
+        {
+          "body_SHA256": "7f2f74498678b99527e9a599a8e738cbda8097aec55eaa4149032f4a3f0b0d2b",
+          "exact_AST_body": true,
+          "exact_signature": true,
+          "function": "_divide_rn",
+          "original_line": 28
+        },
+        {
+          "body_SHA256": "3b009260bb33418f4125c8e6c5bc654a974ff2e997b2b0206c5b3b486d60eba3",
+          "exact_AST_body": true,
+          "exact_signature": true,
+          "function": "_load_tile",
+          "original_line": 40
+        },
+        {
+          "body_SHA256": "65629bcfc964496147af18a66c2fa6b60780882b878c4d1841fa14bb7e739f4f",
+          "exact_AST_body": true,
+          "exact_signature": true,
+          "function": "_quantize",
+          "original_line": 54
+        },
+        {
+          "body_SHA256": "e0e8cca36e34c88ae78f35265fce548861a792fcd7ef506b4b4279f82b2e5a03",
+          "exact_AST_body": true,
+          "exact_signature": true,
+          "function": "_pack_qkv",
+          "original_line": 115
+        }
+      ],
+      "group": "pack",
+      "local": "pack_original.py"
+    },
+    {
+      "SHA256": "3160337930a91a0ba5bddd4085ff8766239dcf89aead92f70dfe50eb3c29a338",
+      "functions": [
+        {
+          "body_SHA256": "024badc6507acbebc8c7bb3a96f407015fbf7329669367f13c02f2eda16dfece",
+          "exact_AST_body": true,
+          "exact_signature": true,
+          "function": "kda_gate_fwd_kernel",
+          "original_line": 117
+        }
+      ],
+      "group": "gate",
+      "local": "gate_original.py"
+    }
+  ],
+  "gate_helper_policy": "Exact NVIDIA softplus/softplus_nv, pack=1; exact FLA default exp with FLA_USE_FAST_OPS=0.",
+  "removed_host_decorators": [
+    "triton.heuristics",
+    "fla_cache_autotune"
+  ],
+  "sources": [
+    {
+      "SHA256": "304e28625c440ef6e17cc91cc8164a562d743f31d1aceddb557fb529cd5a8130",
+      "github_blob_SHA": "19d96269f912ae59a99a78d2edccbccd22b80621",
+      "local": "pack_fused_prep_pinned.py",
+      "ref": "fd19cfb660f42bd3ceb6df7598bd343572e30d2c",
+      "repository": "sgl-project/sglang",
+      "upstream_url": "https://github.com/sgl-project/sglang/blob/fd19cfb660f42bd3ceb6df7598bd343572e30d2c/python/sglang/kernels/ops/attention/fp8_fa_sm120/fused_prep.py"
+    },
+    {
+      "SHA256": "e28c4903d5b36e95f93b3097d6fd874df5249d77aa6f99253c1741ce08d8f534",
+      "github_blob_SHA": "5c1df57fd5a3f2baaacae82ff6e2520139c309c3",
+      "local": "gate_gate_pinned.py",
+      "ref": "9e82a80fdaefcd7c9cc3da51ea36d6a9e1587bd1",
+      "repository": "fla-org/flash-linear-attention",
+      "upstream_url": "https://github.com/fla-org/flash-linear-attention/blob/9e82a80fdaefcd7c9cc3da51ea36d6a9e1587bd1/fla/ops/kda/gate.py"
+    },
+    {
+      "SHA256": "b36b5796abf6a75e216dd60aedb2804b16290c1a7dac75c91fc84b7ed72266f2",
+      "github_blob_SHA": "2052828995fa1f80bb595bff8232fcf78465e964",
+      "local": "gate_softplus_pinned.py",
+      "ref": "9e82a80fdaefcd7c9cc3da51ea36d6a9e1587bd1",
+      "repository": "fla-org/flash-linear-attention",
+      "upstream_url": "https://github.com/fla-org/flash-linear-attention/blob/9e82a80fdaefcd7c9cc3da51ea36d6a9e1587bd1/fla/ops/utils/softplus.py"
+    },
+    {
+      "SHA256": "18cfb14ed285d6f4cc664b2d7e2e471d322fc897594eb13c61d179978bc50d0f",
+      "github_blob_SHA": "c62c0b3d5d0225dcb67278a8c96ec6db291cd233",
+      "local": "gate_op_pinned.py",
+      "ref": "9e82a80fdaefcd7c9cc3da51ea36d6a9e1587bd1",
+      "repository": "fla-org/flash-linear-attention",
+      "upstream_url": "https://github.com/fla-org/flash-linear-attention/blob/9e82a80fdaefcd7c9cc3da51ea36d6a9e1587bd1/fla/ops/utils/op.py"
+    }
+  ],
+  "status": "OK"
+}

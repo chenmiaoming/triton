@@ -1,0 +1,722 @@
+{
+  "GPU": "H100!",
+  "GPU_configuration_writes": false,
+  "adaptive": true,
+  "base_image": "im-qzTUZumWu2JXjWic8K82cZ",
+  "cases": [
+    {
+      "BM": 32,
+      "BN": 32,
+      "W": 4,
+      "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+      "cols": 1024,
+      "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+      "family": "N02",
+      "group_size": 128,
+      "id": "N02_k1024_p128_g128",
+      "packed_cols": 128,
+      "rows": 1024,
+      "source_function": "awq_dequantize_kernel",
+      "stages": 3
+    }
+  ],
+  "clock_control": "unlocked",
+  "compiler": "20d9d98fead78c2f65e1b3ba5a7881d86a836dad",
+  "compiler_calls": 0,
+  "conditions": [
+    "fast_gap",
+    "idle_20ms",
+    "idle_then_same_prime",
+    "idle_then_disjoint_prime"
+  ],
+  "correctness": {
+    "patterns": [
+      "finite",
+      "structured",
+      "edge"
+    ],
+    "post_timing_pattern": "finite"
+  },
+  "execution": {
+    "disjoint_primer": "One untimed full-grid GL kernel uses a different function and separate allocations for every input/output/scratch. Target pointers, scalars, shape, grid and graph remain unchanged.",
+    "guards": "Both modules guarded before/after blocks; no per-observation file/hash/copy.",
+    "order": "Deterministic counterbalanced condition rotations and reversals; seeded random A/B order per observation round.",
+    "prewarm": "Initial balanced two-second activity from both graphs; eight fixed condition-specific warmups per block.",
+    "same_primer": "One untimed execution of the target graph before the unchanged timed target graph.",
+    "target_graph_node_types": [
+      0,
+      7,
+      7
+    ],
+    "target_unchanged": true
+  },
+  "expected_fixture": {
+    "expected_SHA256": {
+      "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+    },
+    "grid": [
+      4,
+      32,
+      1
+    ],
+    "initial_storage_SHA256": [
+      "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+      "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+      "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+      "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+    ],
+    "inplace": [],
+    "outputs": [
+      "result_ptr"
+    ],
+    "views": {
+      "qweight_ptr": {
+        "dtype": "int32",
+        "element_size": 4,
+        "group": 0,
+        "shape": [
+          1024,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          128,
+          1
+        ]
+      },
+      "result_ptr": {
+        "dtype": "float16",
+        "element_size": 2,
+        "group": 3,
+        "shape": [
+          1024,
+          1024
+        ],
+        "storage_offset": 0,
+        "stride": [
+          1024,
+          1
+        ]
+      },
+      "scales_ptr": {
+        "dtype": "float16",
+        "element_size": 2,
+        "group": 1,
+        "shape": [
+          8,
+          1024
+        ],
+        "storage_offset": 0,
+        "stride": [
+          1024,
+          1
+        ]
+      },
+      "zeros_ptr": {
+        "dtype": "int32",
+        "element_size": 4,
+        "group": 2,
+        "shape": [
+          8,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          128,
+          1
+        ]
+      }
+    }
+  },
+  "frozen_at_UTC": "2026-11-05T06:04:08.784403+00:00",
+  "interpretation": "Adaptive mechanism diagnostic, not a new layout comparison or a retrospective causal explanation of historical visits. Nominal sampled clocks do not measure microsecond effective-clock/gating transitions.",
+  "motivating_run": {
+    "SHA256": "445e02d15f5568c264bf8f113b34301df9e2507afdf6efb93c19977850d0479b",
+    "path": "experiments/layout_coordination/results/clock_control/same_program_001/preregistration/protocol.json"
+  },
+  "motivation": "Prior same-shape diagnostic found a 20ms-idle slowdown without sampled nominal-clock variation. This follow-up tests whether one untimed kernel on disjoint data and distinct code restores target timing.",
+  "native_SHA256": "fc5f2ad73f9f8c8ab31c3a01b8124329ccec391cdc5dbf2dafb2d42778cf6adb",
+  "native_rebuilds": 0,
+  "parent_HEAD": "bcc0142d2fa2566edf01f7ec25680e61d1825690",
+  "payload_SHA256": "b85b02f45f02df85ee869684309fdd6da3b474fbc1984481db15dd64b56cb888",
+  "phase": "same_program_wake_followup",
+  "profile": "chenmiaoming",
+  "program_roles": [
+    "target",
+    "primer"
+  ],
+  "programs": [
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(7,)": "32",
+        "(8,)": "32"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "kernel.llir": "8f5a9ee501940442fd9517f79badbea7affeb16e2ba7fbfc3451935968def123",
+        "kernel.ptx": "ae18a95fe4b1c75bae5ad1af5277571566445debdf0338727dce9e0d8ee66823",
+        "kernel.resource.txt": "d22fda994bfad36602ec3a6f0259278229aec8107c1f0a2ca73e5a31bccdf319",
+        "kernel.sass": "fd3bdedd1853a14fc14f05d9be689369baa93eeb9c7fcacd8c782aa072728e5c",
+        "kernel.ttgir": "ec56ef008cb8219476d944df4e415fb4f85662fb40ea74a92b97ce7584c4d60e",
+        "kernel.ttir": "eb4bd5439dbe0af9c7a1800a1a08498349faf7ca9cddd53539208f31ddd61e53"
+      },
+      "artifact_directory": "baseline/artifacts/N02_k1024_p128_g128_U",
+      "baseline_artifact_directory": "artifacts/N02_k1024_p128_g128_U",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 1024,
+        "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+        "family": "N02",
+        "group_size": 128,
+        "id": "N02_k1024_p128_g128",
+        "packed_cols": 128,
+        "rows": 1024,
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "compile_key": "d966654ae804e0e3642cfa99fb3369044130b2dbf5193995f1b3e43e85d3a1b9",
+      "compiler_options": {
+        "num_stages": 3,
+        "num_warps": 4
+      },
+      "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+      "dynamic_smem_bytes": 2048,
+      "family": "N02",
+      "fixture": {
+        "expected_SHA256": {
+          "result_ptr": "54702854b95a9567bdd4e86a3b0fc1708da8880e15f304f7a8c44704d9357ce6"
+        },
+        "grid": [
+          4,
+          32,
+          1
+        ],
+        "initial_storage_SHA256": [
+          "0610f98b87931abcc02a43a4f627bbb17dae47a48e402849d7c6dc60f65344d5",
+          "7f51456166499629217d22d75ac7fcee86a526516cdfa74ad5fa5599c29c459e",
+          "81263356dfbb69923166262f8321b4d08a3749d035a5d8b8a090afeb15411e66",
+          "fee32ce195bec2c295fc4ff06ab703abb69945119d93d97d74a275110824cdc6"
+        ],
+        "inplace": [],
+        "outputs": [
+          "result_ptr"
+        ],
+        "views": {
+          "qweight_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 0,
+            "shape": [
+              1024,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              128,
+              1
+            ]
+          },
+          "result_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 3,
+            "shape": [
+              1024,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "scales_ptr": {
+            "dtype": "float16",
+            "element_size": 2,
+            "group": 1,
+            "shape": [
+              8,
+              1024
+            ],
+            "storage_offset": 0,
+            "stride": [
+              1024,
+              1
+            ]
+          },
+          "zeros_ptr": {
+            "dtype": "int32",
+            "element_size": 4,
+            "group": 2,
+            "shape": [
+              8,
+              128
+            ],
+            "storage_offset": 0,
+            "stride": [
+              128,
+              1
+            ]
+          }
+        }
+      },
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k1024_p128_g128",
+      "global_scratch_size": 0,
+      "imported_baseline": true,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 72,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k1024_p128_g128:U",
+      "variant": "U"
+    },
+    {
+      "JIT_attributes": {
+        "(0,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(1,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(2,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(3,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(4,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(5,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(6,)": [
+          [
+            "tt.divisibility",
+            16
+          ]
+        ],
+        "(7,)": [],
+        "(8,)": []
+      },
+      "JIT_constants": {
+        "(10,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(11,)": "BlockedLayout(size_per_thread=[1, 2], threads_per_warp=[1, 32], warps_per_cta=[1, 4], order=[1, 0], cga_layout=[])",
+        "(12,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(13,)": "BlockedLayout(size_per_thread=[1, 8], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])",
+        "(7,)": "32",
+        "(8,)": "32",
+        "(9,)": "BlockedLayout(size_per_thread=[1, 1], threads_per_warp=[1, 32], warps_per_cta=[4, 1], order=[1, 0], cga_layout=[])"
+      },
+      "JIT_signature": {
+        "BLOCK_SIZE_X": "constexpr",
+        "BLOCK_SIZE_Y": "constexpr",
+        "LEXP": "constexpr",
+        "LOUT": "constexpr",
+        "LQ": "constexpr",
+        "LS": "constexpr",
+        "LZ": "constexpr",
+        "group_size": "i32",
+        "num_cols": "i32",
+        "num_rows": "i32",
+        "qweight_ptr": "*i32",
+        "result_ptr": "*fp16",
+        "scales_ptr": "*fp16",
+        "zeros_ptr": "*i32"
+      },
+      "artifact_SHA256": {
+        "kernel.cubin": "3535b0db7aa29e5e2022e8a76cca615eb707c51a230675e40ecd16d53a338582",
+        "kernel.glir": "4b5befe08490d25e91908196d1d4ad1a721a124e0b97cb5d8ed7f1df371c4f74",
+        "kernel.llir": "37069730bbc0c7bab69dac295ad35015b435a857b1ae44aedc35a3ae068bca25",
+        "kernel.ptx": "4a017690eb82645356054fe25ba8f4c755cde7a8d7b5ccaf824a9d08f5b407d0",
+        "kernel.resource.txt": "9f3e9b85fcf1a019010216f972a79356ec897bd3bc0c97c9bc3ae4670d894b6d",
+        "kernel.sass": "8637b76a4f36638d55ee9861b2963e0d7911f42f509f9352c466f659b6ed52ad",
+        "kernel.ttgir": "12666f2686bc38568b73665f496eb8b036b5e50ce125ad1fdcb8b10f4233927b"
+      },
+      "artifact_directory": "artifacts/N02_k1024_p128_g128_GL_packed_compute_vec1",
+      "case": {
+        "BM": 32,
+        "BN": 32,
+        "W": 4,
+        "caller_defaults": "Original caller omits warp/stage options; pinned CUDA defaults are 4/3.",
+        "cols": 1024,
+        "evidence_scope": "Optional VLLM_USE_TRITON_AWQ dequantization backend; not AWQ GEMM.",
+        "family": "N02",
+        "group_size": 128,
+        "id": "N02_k1024_p128_g128",
+        "packed_cols": 128,
+        "rows": 1024,
+        "source_function": "awq_dequantize_kernel",
+        "stages": 3
+      },
+      "choice": {
+        "name": "packed_compute_vec1",
+        "plan_override": {
+          "expanded": {
+            "fields": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                8
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "kind": "blocked"
+          },
+          "qweight": {
+            "fields": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "kind": "blocked"
+          },
+          "zeros": {
+            "fields": {
+              "order": [
+                1,
+                0
+              ],
+              "size_per_thread": [
+                1,
+                1
+              ],
+              "threads_per_warp": [
+                1,
+                32
+              ],
+              "warps_per_cta": [
+                4,
+                1
+              ]
+            },
+            "kind": "blocked"
+          }
+        }
+      },
+      "compile_key": "260f9b91f2151f0d8990dbac028f48cde77205a06c3baa4a018233fc389c0f72",
+      "cubin_SHA256": "3535b0db7aa29e5e2022e8a76cca615eb707c51a230675e40ecd16d53a338582",
+      "dynamic_smem_bytes": 512,
+      "family": "N02",
+      "function_name": "awq_dequantize_kernel",
+      "geometry": "N02_k1024_p128_g128",
+      "global_scratch_size": 0,
+      "imported_baseline": false,
+      "num_warps": 4,
+      "resources": {
+        "LOCAL": 0,
+        "REG": 40,
+        "SAMPLER": 0,
+        "SHARED": 1024,
+        "STACK": 0,
+        "SURFACE": 0,
+        "TEXTURE": 0
+      },
+      "runtime_argument_names": [
+        "qweight_ptr",
+        "scales_ptr",
+        "zeros_ptr",
+        "group_size",
+        "result_ptr",
+        "num_cols",
+        "num_rows"
+      ],
+      "specialized_runtime_values": {},
+      "stage2": false,
+      "tag": "N02_k1024_p128_g128:GL_packed_compute_vec1",
+      "variant": "GL_packed_compute_vec1"
+    }
+  ],
+  "protected_file_count": 50156,
+  "protected_inventory_SHA256": "344938fb990556514b9b4062664ed08074be53aad0e9b7ba93193fac529f1224",
+  "protected_inventory_path": "preregistration/protected_SHA256.json",
+  "reference_driver_bindings": {
+    "primer": {
+      "binding": {
+        "ABI": [
+          "u64",
+          "u64",
+          "u64",
+          "u32",
+          "u64",
+          "u32",
+          "u32",
+          "u64",
+          "u64"
+        ],
+        "attributes": {
+          "local_bytes": 0,
+          "n_regs": 40,
+          "occupancy_capacity_q": 12,
+          "static_smem_bytes": 0
+        },
+        "cubin_SHA256": "3535b0db7aa29e5e2022e8a76cca615eb707c51a230675e40ecd16d53a338582",
+        "direct_launches": 1,
+        "graph_launches": 390,
+        "guards": 391,
+        "loaded_SHA256": "3535b0db7aa29e5e2022e8a76cca615eb707c51a230675e40ecd16d53a338582",
+        "tag": "N02_k1024_p128_g128:GL_packed_compute_vec1"
+      },
+      "source": {
+        "SHA256": "4565db2d111f38a0ce2f00cdd79ca134a615a32017f43a184cd78c369c56b6c5",
+        "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n4/timing/attempt_001/invocation_001/export/result.json"
+      }
+    },
+    "target": {
+      "binding": {
+        "ABI": [
+          "u64",
+          "u64",
+          "u64",
+          "u32",
+          "u64",
+          "u32",
+          "u32",
+          "u64",
+          "u64"
+        ],
+        "attributes": {
+          "local_bytes": 0,
+          "n_regs": 72,
+          "occupancy_capacity_q": 7,
+          "static_smem_bytes": 0
+        },
+        "cubin_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "direct_launches": 1,
+        "graph_launches": 390,
+        "guards": 391,
+        "loaded_SHA256": "cd5dad8709d09c326f4f9e703fe28f76586f5589ddf8ab1a29e02c15debedd6d",
+        "tag": "N02_k1024_p128_g128:U"
+      },
+      "source": {
+        "SHA256": "4565db2d111f38a0ce2f00cdd79ca134a615a32017f43a184cd78c369c56b6c5",
+        "path": "experiments/tma_reduction_layout/results/phase11/nonreduction/stage_n4/timing/attempt_001/invocation_001/export/result.json"
+      }
+    }
+  },
+  "snapshot": "snapshot",
+  "source_SHA256": {
+    "experiments/layout_coordination/clock_control/analysis.py": "fbbaf2d949fc6fc998effbb37073bcf207218858d5c469ee1e8f68abd9785252",
+    "experiments/layout_coordination/clock_control/audit.py": "bc5d8108f04cd4f2d11429f6e16e3fcef3aefb8eb6d1ff6c9cac5bfbc2b4c09b",
+    "experiments/layout_coordination/clock_control/probe_run.py": "ab44f7bb8fd1539e7f113dae0bbfd463bfee5d9a66ef9b00228a763979b0bc05",
+    "experiments/layout_coordination/clock_control/same_program_prepare.py": "4cef461faec9d7703f9ad0742fb4b930d1735d9ed5b706fc7640bf3b214c50f7",
+    "experiments/layout_coordination/clock_control/same_program_run.py": "4438830c971a09ff1f52f4a49f62b6d240fc526c95ef382188b2168e3afd784c",
+    "experiments/layout_coordination/clock_control/same_program_validate.py": "41e2a3c85c88f94a020410a7960a3174de984ea593835702a34d8c23d6abdb4c",
+    "experiments/layout_coordination/clock_control/same_program_worker.py": "adeb12254d6e4fdc813d6f9939294d231d7831b56fa091200756f6cbc44307cb",
+    "experiments/layout_coordination/clock_control/telemetry.py": "28374b359057046a696afb046c08507010af6de22d5b7b2479b25dcc3764cbbc",
+    "experiments/layout_coordination/clock_control/wake_analysis.py": "039ad2638e97a238a50a1276059a12acd2f9a8f09fe087567a9ba9b5abcf61c9",
+    "experiments/layout_coordination/clock_control/wake_prepare.py": "8af1403af1fe7adb3a13314aacfae8a36e5332b40c0a153c5a2040d9da806511",
+    "experiments/layout_coordination/clock_control/wake_run.py": "9f41f863af19721b02f6fd50c879cf5ca8539e03a8c31191e202e435d7fdcf82",
+    "experiments/layout_coordination/clock_control/wake_validate.py": "dd3609b682b435a7e278a0c779825eb14525f033db86771e4a081964f278a21a",
+    "experiments/layout_coordination/clock_control/wake_worker.py": "9c82ba516fdd31f53836a2e0cc1beedc68da1b5c126966e1ad9d120c1a9097d7",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/analyze.py": "eb5d0fa5aa9b3385ceb97440a3cb482a937229a4e75964cbe6f3d66c4f591a81",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/bind_g0_worker.py": "1e20a0fea4d2b4b26a2024939b96f0d27523c7450f8948630a2c1e0e7250f3c1",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/bind_worker.py": "14aea5f821bc90c5ed26a6a1a5eb93e18e41f17928670a6c2657d05de9d7b639",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/bundle_baselines.py": "a78f2aa4598c2fb44933b4f25bcbe06874284fa02e7b29c48a29cf5ebf558759",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/bundle_upstream.py": "09add912c69fcb9b4aa1328cb77997bae17118739ed9e9bfdc06c676e8696d5a",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/cache_adapter.py": "159fd81d9dd404d20e667092636ecc6302d6ff01f1f62f0308b674a89d59104f",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/cache_gluon.py": "39c095653c2e35c404483052159820da601dfc4f924eceacc4a4aa121de738ed",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/candidate_compile.py": "db896dc173c367d1480afded4873e673c8a7a541998510ad35f313951914ba8a",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/common.py": "2eb687f31e3e58f2a941361de609746190c25ee6038ed3727af2d7108176ad51",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/complete_validate.py": "90e55c9a8b6034b1f137a96abcc6e6e1ba0c2b4a24d9506929659232fa5cb76b",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/confirm_prepare.py": "8df07deecd5346c378568cda2f636239bd2d4ec4376e5694677cbbde24b0a3a4",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/confirm_report.py": "3d27a0d6858c96ff59c3224e41274a3cc1b7dbc0087f0065dbc66a850f4393e8",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/elf.py": "12678d569121dde4ab003822d10a739f233b0c764da8a5860018af057c0f9688",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/export.py": "3d89b665637b3ad8a06f344bff222219661bfc57a023da2b8233176aae771c35",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/final_validate.py": "ca300aabdf28e355ba581d4bdb641bb6279b5bd7741460fc5c89c9ffe2771e10",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/fixtures.py": "de24000fc10f1abc9584d62fd081f111f503ded4c965a40803106243b4cf7977",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/gl_cpu.py": "f3d768d1760c588639d23ccb209c0c953333e7cdb6e49e2c8be7132d13d5d8e0",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/measure_run.py": "d50bbcd99c395f43d22cec0ef06bcd3eb9ed296da10478f20d8c6aed9ac920aa",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n1_report.py": "10acc8a4469f32842e3e685e79b956ead8f723ff76d46251738132aaef418352",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_prepare.py": "0a2861a2192c259582663f58938dcf3626bb0fa6507f74bfdf94f3e468999774",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_profile_analyze.py": "0f09045510118e8dd379cb8438ff592a7e968642010eb559eef07e70fcb7ed46",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_profile_prepare.py": "58dc197564b119b66d19f2f4f63ad8d55294467b99d78033d5523454f55f7e1b",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_profile_run.py": "a2f34f19cf977728fb04fb6be91357a99f5d8d290329ae72a3e246892261c546",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_report.py": "80e6ce582cc38aa3ead0b1dd64df59467def5a4534d5353aef315f4f766bfed9",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_run.py": "52294969c7b1e006f0784b9201aa2159e3a10a1a982a24929dfad1d102a94cca",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/n5_worker.py": "69f5d4dd2c2a8a09912c897901a67c0a7a03773e04a072647e4a8b39e033c881",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/pack_gate_adapter.py": "2537b09a26963113b9b62cd1b36b5bbfe8b5ac70b4b04a219444cc8c0d4fc396",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/pack_gate_gluon.py": "0042bb60746cd5e771a1e53c19007c3c2e5c517db4c84846d53bdc863abaa66f",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/plot_confirmation.py": "5febee293e9912a1157d79e5d3a3c5af4bfef263df0822d4e1baa6f6cc9e71ad",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/prepare.py": "3b5f469c53a8beb43fc8266515e17193399b90da948e2df0ed441b6ad9b4cf33",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/prepare_measure.py": "03635458791f767e98b4f2302fd925d45fcf1b73d971960acbc40eae5285fe79",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/profile_analyze.py": "b7ed4b02eba9ca3bc207c448abc89766390ba7e190c818b9424fd7654484f10c",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/profile_one.py": "d084d5c7d8635d3b364864ce262854e3763d6b42da2e4598e7dfe0a90c121968",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/profile_prepare.py": "a64fd46cf47930f6302470f30723e9929c3b3b8ce4d8e6b45420e96ad89633b7",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/profile_run.py": "a0bcbc8be854a3fea7bb1ec376787cce6bf200273404adf84fef9c816ce246fa",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/profile_supplement_analyze.py": "bd0690951001d2a4876d680ba6baa31d980d4885222478b096f7e6ee71a17ca0",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/profile_supplement_prepare.py": "dbdbea77d1525c211314055787674b5865760752a03192fb83b9dd1dceeadb09",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/quant_adapter.py": "5ecf5982c21a5db6828823968f373fcfa69f2cd79315fcfe154392a361862823",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/quant_gluon.py": "e20220591224d7ea2488da49ed6c9ffab7779735ad9f908a3fe6a65324dd1111",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/report.py": "fe8d35f719dab10534c880ccd57741990d8ab3e37c644b1ab99490cb5f8ee681",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/rotary_adapter.py": "2e053f712dae072059f6c997dd3810a44fb640daf9749d77c85420bc84b5fd6c",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/rotary_gluon.py": "f7da2c47d35f34b5897aaf2839e7f916b57587dae8aef7e3c5aa7a2c29633efc",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/run.py": "584bcdb51da3f05cf45ab629b8dbb4be18932d0e2f4ed4804a830ad4d1edf188",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/runtime.py": "9c55d71704ca07d062a20e03beb1765c7d0ba7ac7f5e9f2550f220d00f15205d",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/cache_ops_original.py": "d2dbd0f5f916a624741cad98d55c82263ba5c617d0003f24cdd9d1b292592870",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/cache_provenance.json": "6120afa346e010fa8f2ee8d762fe22e6508f0625015a2498501df304f1069117",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/cache_upstream.py": "62ed181e8c318b9d925f5aa2c89b087f20ec90a5f975aafd2b4bbd4736d8f23c",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/gate_gate_pinned.py": "e28c4903d5b36e95f93b3097d6fd874df5249d77aa6f99253c1741ce08d8f534",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/gate_op_pinned.py": "18cfb14ed285d6f4cc664b2d7e2e471d322fc897594eb13c61d179978bc50d0f",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/gate_original.py": "3160337930a91a0ba5bddd4085ff8766239dcf89aead92f70dfe50eb3c29a338",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/gate_softplus_pinned.py": "b36b5796abf6a75e216dd60aedb2804b16290c1a7dac75c91fc84b7ed72266f2",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/pack_fused_prep_pinned.py": "304e28625c440ef6e17cc91cc8164a562d743f31d1aceddb557fb529cd5a8130",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/pack_gate_build_extract.py": "0f5664c9fff0ffce8ff441365b3f366fe7fc810537f37a78ec313e56279c881e",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/pack_gate_provenance.json": "38dfbc08fc7dba0c30aa721e8bc1a4024c241d39a2d87c2dbdfcec8412940c9f",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/pack_gate_source_metadata.json": "ba9d3eaad8f38699813d87973970bcc111673627cda3c23cd5acb1954edde463",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/pack_original.py": "f3e83902942991c3320c367c69dcf80fe0c0a26f2468069cbdbf7a627edf4109",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/quant_original.py": "e25a014153929cfa011ef7bffed930b9c3f5e654943fad706d3effe83eece609",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/quant_provenance.json": "4d33a1e36f1031f6ca2e9111dcb4586f2e166af0f8c24ff8b509e2e5ed3c2a0b",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/quant_torchao_upstream.py": "0c80e39c101025436b3a9623d7dc1a98ede90d0639833c18801109d5c1a912ef",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/quant_vllm_upstream.py": "7d11fdad7e630d2a90b5d99cad7c31b4fb501222b14d474f900266b6f5bfce78",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/rotary_flash_kernel.py": "8e13f5e32fd57926ad717f297842e2cf6b7c63b90595f4641b4709e3c0675b91",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/rotary_flash_upstream.py": "d2037e623854c702fb075784fe4292d4a89d6b9ac1ae33cab3d6788f8f94f240",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/rotary_mrope_kernel.py": "255fc8e34a40298e9486f90c7dddf44ab93e2af5162db3f59c9ec1ef3afb59c0",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/rotary_provenance.json": "dfbc68e32c6bba40a7341e02c1cbbb79554f111db0b7d9f1ea8d20183228bc95",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/sources/rotary_sglang_upstream.py": "3cb279c4e10cb1b87695d51894b5c03dcd27282afdc2f5f819adddb17955095a",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/static_review.py": "380615e4468e029faea4e4b72d09e492996fd0ef4476f9b880e7e569b9d7ed3f",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/summary_report.py": "b9754ad0071d5b471b99a13bb6f2e8a4136c782964de3811a379282644bf77fe",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/tune_worker.py": "f9ec5b137e47159fe81b148b6c5faa0e6d230de4f0e6a44dec5974bedbc05d58",
+    "experiments/tma_reduction_layout/phase11/nonreduction_survey/validate.py": "2631e7a9e4de6c5e1b71b8316de6e6b87697345b3d8d9885c234058044415b74",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/common.py": "ce256c605c35afa55a2a6bc62eb6ca6a3bdb9986315d0d986ce189cd34511b9f",
+    "experiments/tma_reduction_layout/phase11/operator_gpu/driver.py": "656632259024b2edbd8ad56820350097a844885bfc35fc1859f1cae66e824cb4",
+    "experiments/tma_reduction_layout/phase4/exact_cuda.py": "5d779bdffff72994718bade103b98fe0cb9930bcf3299ae71309116b19a38024",
+    "experiments/tma_reduction_layout/phase8/launch.py": "55bb0831f8a14699fc4a9a5d05bb43d82a22f1a1a6f36d9a1ca31009e0d9622b"
+  },
+  "stage": "same_program_wake_followup",
+  "timing": {
+    "bootstrap_replicates": 8192,
+    "idle_seconds": 0.02,
+    "practical_threshold_percent": 3,
+    "prewarm_seconds": 2.0,
+    "samples": 31,
+    "seed": 20261106,
+    "telemetry_period_s": 0.01,
+    "visits": 12,
+    "warmups": 8,
+    "workers": 3
+  },
+  "variants": [
+    "A",
+    "B"
+  ]
+}
