@@ -6,6 +6,7 @@
 - [源码及证据核查](reference_audit.json)：固定版本、文件指纹和 AWQ 信息边界实例。
 - [分支更名记录](branch_rename.json)：旧分支与新分支的对应关系。
 - [已完成的非规约实验](../tma_reduction_layout/results/phase11/nonreduction/SUMMARY.md)：N1–N5 的全部结果入口。
+- [Modal H100 锁频权限实测](results/clock_control/probe_001/REPORT.md)：三台 worker 的实际拒绝结果；[匹配复测草案](clock_control/MATCHED_RETEST_PLAN.md) 尚未执行。
 
 本目录是新的规划入口。旧实验目录、原始样本、compiler artifacts、协议和历史名称保留原样。
-本次仅完成分支更名、只读源码审计和方案重写；没有运行新 GPU 实验、修改 C++ 或提交 PR。
+改名/重规划提交仅做只读源码审计；之后按用户要求新增了 GPU 锁频权限探针。探针未执行 kernel 计时；没有修改 C++ 或提交 PR。
