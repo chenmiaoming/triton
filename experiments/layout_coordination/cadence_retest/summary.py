@@ -131,7 +131,7 @@ def legacy(result,protocol):
         if row['worker_visit_medians_us'] is None:
             continue
         ctx = next(c['context'] for c in result['context_summaries'] if c['context_id']==row['context_id'])
-        context = {**ctx,'geometry':f"M{ctx['M']}_N{ctx['N']}_w{ctx['W']}|q{ctx['q']}"}
+        context = {**ctx,'geometry':f"M{ctx['M']}_N{ctx['N']}_w{ctx['W']}|{ctx['vector']}|{ctx['consumer']}|q{ctx['q']}"}
         contexts[row['context_id']] = context
         role = 'control' if ':control:' in row['tag'] else row['role']
         cells[row['context_id'],row['tag']] = dict(role=role,array=np.asarray(row['worker_visit_medians_us']))
